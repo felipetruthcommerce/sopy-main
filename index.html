@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;800;900&display=swap">
 
   <!-- Pré-carrega o vídeo principal para start mais rápido (mp4). Adicione também webm quando disponível. -->
-  <link rel="preload" href="assets/videos/hero.mp4" type="video/mp4" />
+  <link rel="preload" href="assets/videos/hero.mp4" as="video" type="video/mp4" />
 
   <!-- Ícone / Favicon (opcional) -->
     <link rel="icon" href="assets/favicon.png" type="image/png" />
@@ -2069,26 +2069,7 @@ body.theme-aqua {
 
 
   <body class="theme-citrus"> <!-- theme-aqua | theme-citrus (toggle via JS) -->
-    <!-- ===================== LOADER ===================== -->
-    <div id="loader" aria-hidden="true">
-      <div class="loader-overlay">
-        <div class="loader-block"></div>
-        <div class="loader-block"></div>
-      </div>
 
-      <div class="loader-center">
-        <div class="loader-counter" aria-label="Progresso">
-          <span class="count-prefix">0</span>
-          <span id="loader-count">0</span>
-        </div>
-
-        <!-- Linha vertical que cresce -->
-        <div class="loader-divider" aria-hidden="true"></div>
-
-        <!-- Círculo que vai expandir para revelar o vídeo -->
-        <div class="loader-circle" aria-hidden="true"></div>
-      </div>
-    </div>
 
 
     <!-- Barra de progresso removida -->
@@ -2098,13 +2079,13 @@ body.theme-aqua {
       <section id="hero" class="hero section--full">
         <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="hero-media">
-          <video id="heroVideo" class="hero-video" muted playsinline preload="auto" poster="assets/images/5.png">
+          <video id="heroVideo" class="hero-video" muted playsinline preload="auto">
             <!-- Quando tiver uma versão WebM otimizada, adicione como primeira source -->
             <!-- <source src="assets/videos/hero.webm" type="video/webm" /> -->
             <source src="assets/videos/hero.mp4" type="video/mp4" />
           </video>
           <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader -->
-          <img class="hero-poster" src="assets/images/5.png" alt="" aria-hidden="true" />
+          <img class="hero-poster" src="assets/images/video-capa.jpg" alt="" aria-hidden="true" />
         </div>
 
         <div class="hero-content">
@@ -2152,7 +2133,7 @@ body.theme-aqua {
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <video src="/assets/videos/video.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <video src="assets/videos/video.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
               </div>
             </div>
             <div class="text-column">
@@ -2166,7 +2147,7 @@ body.theme-aqua {
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <video src="/assets/videos/video (1).mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <video src="assets/videos/video (1).mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
 
               </div>
             </div>
@@ -2181,7 +2162,7 @@ body.theme-aqua {
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <video src="/assets/videos/video (2).mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+                <video src="assets/videos/video (2).mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
 
               </div>
             </div>
@@ -2196,7 +2177,7 @@ body.theme-aqua {
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <img src="/assets/images/casa.jpg" alt="Família usando produtos seguros">
+                <img src="assets/images/casa.jpg" alt="Família usando produtos seguros">
               </div>
             </div>
             <div class="text-column">
@@ -2414,6 +2395,49 @@ body.theme-aqua {
 
 
     <script>
+        // SOPY asset base helper: allows rewriting relative asset paths when HTML is injected remotely
+        (function(){
+          const guessBase = () => {
+            // If running inside Nuvemshop, prefer absolute "/assets/" root; otherwise keep relative
+            const isNuvem = /lojavirtualnuvem\.|nuvemshop\./i.test(location.hostname);
+            return isNuvem ? '/assets/' : '';
+          };
+          const BASE = window.SOPY_ASSETS_BASE || guessBase();
+          const ABS_PROTOCOL = /^(https?:)?\/\//i;
+          const ABS_SPECIAL  = /^(data:|blob:)/i;
+          function normalize(p){
+            if (!p) return p;
+            // keep absolute, data, blob and already-rooted /assets/
+            if (ABS_PROTOCOL.test(p) || ABS_SPECIAL.test(p) || p.startsWith('/assets/')) return p;
+            // collapse leading ./ and ensure single 'assets/' prefix
+            const cleaned = p.replace(/^\.\//, '').replace(/^\/?assets\//, 'assets/');
+            return BASE ? (BASE.endsWith('/') ? BASE : BASE + '/') + cleaned.replace(/^\//,'') : cleaned;
+          }
+          window.SOPY = Object.assign(window.SOPY || {}, {
+            assetBase: BASE,
+            assetUrl: normalize,
+            rewriteDomAssets(){
+              const pairs = [
+                ['img', 'src'],
+                ['video', 'src'],
+                ['source', 'src'],
+                ['link[rel="preload"]', 'href']
+              ];
+              pairs.forEach(([sel, attr])=>{
+                document.querySelectorAll(sel + '['+attr+']').forEach(el=>{
+                  const val = el.getAttribute(attr);
+                  const next = normalize(val);
+                  if (next && next !== val) el.setAttribute(attr, next);
+                });
+              });
+            }
+          });
+          // Try early, and again after DOM ready
+          try { window.SOPY.rewriteDomAssets(); } catch {}
+          document.addEventListener('DOMContentLoaded', () => {
+            try { window.SOPY.rewriteDomAssets(); } catch {}
+          });
+        })();
         (function(){
   // Parallax Vertical com Cobertura (escopado para a seção sustentabilidade)
   document.addEventListener('DOMContentLoaded', () => {
@@ -2824,7 +2848,7 @@ try { lenis.stop(); } catch { }
 document.body.classList.add('is-loading');
 
 /* =========================
-   2) Loader 0â†’100 + Circle Reveal
+  2) Loader 0→100 + Circle Reveal
 ========================= */
 const loaderEl = document.getElementById("loader");
 const countEl = document.getElementById("loader-count");
@@ -2882,40 +2906,41 @@ if (loaderEl) {
   loaderEl.style.setProperty("--r", "0px");
 }
 // Timeline do loader: mais lenta e sÃ³ entÃ£o comeÃ§amos o vÃ­deo
-tlLoader
-  // contagem 0 â†’ 100 (mais demorada)
-  .to(loaderObj, {
-    n: 100,
-    duration: 3.4,
-    onUpdate: () => {
-      const v = Math.round(loaderObj.n);
-      if (countEl) countEl.textContent = v;
-      if (countPrefixEl) countPrefixEl.style.display = "none";
-      // HÃ­brido: dispara o play quando chegar em ~80% do loader (mÃ¡scara ainda cobre)
-      if (!preplayTriggered && loaderObj.n >= 90) {
-        preplayTriggered = true;
-        attachPosterHide();
-        tryPlay();
-      }
-    },
-  })
-  // esconder o contador antes da gota
-  .to(".loader-counter", { autoAlpha: 0, y: -10, duration: 0.32, ease: "power2.in" })
-  // gota transparente (mÃ¡scara radial)
-  .fromTo(
-    { r: 0 },
-    { r: 0 },
-    {
-      r: Math.hypot(window.innerWidth, window.innerHeight),
-      duration: 1.1,
-      ease: "power3.inOut",
-      onUpdate: function () {
-        if (loaderEl) loaderEl.style.setProperty("--r", this.targets()[0].r + "px");
-      },
+// contagem 0 → 100 (mais demorada)
+tlLoader.to(loaderObj, {
+  n: 100,
+  duration: 3.4,
+  onUpdate: () => {
+    const v = Math.round(loaderObj.n);
+    if (countEl) countEl.textContent = v;
+    if (countPrefixEl) countPrefixEl.style.display = "none";
+    if (!preplayTriggered && loaderObj.n >= 90) {
+      preplayTriggered = true;
+      attachPosterHide();
+      tryPlay();
     }
-  )
-  // esconder loader e entÃ£o iniciar o vÃ­deo
-  .to(loaderEl, {
+  },
+});
+// esconder o contador antes da gota (somente se existir)
+if (document.querySelector('.loader-counter')) {
+  tlLoader.to('.loader-counter', { autoAlpha: 0, y: -10, duration: 0.32, ease: 'power2.in' });
+}
+// gota transparente (máscara radial)
+tlLoader.fromTo(
+  { r: 0 },
+  { r: 0 },
+  {
+    r: Math.hypot(window.innerWidth, window.innerHeight),
+    duration: 1.1,
+    ease: 'power3.inOut',
+    onUpdate: function () {
+      if (loaderEl) loaderEl.style.setProperty('--r', this.targets()[0].r + 'px');
+    },
+  }
+);
+// esconder loader e então iniciar o vídeo (somente se existir loader)
+if (loaderEl) {
+  tlLoader.to(loaderEl, {
     autoAlpha: 0,
     duration: 0.35,
     onComplete: () => {
@@ -2923,14 +2948,20 @@ tlLoader
         attachPosterHide();
         tryPlay();
       }
-      // libera o scroll apÃ³s o loader
       document.body.classList.remove('is-loading');
       try { lenis.start(); } catch { }
       window.scrollTo(0, 0);
     },
-  })
-  // configura reveals sÃ³ apÃ³s o loader
-  .add(() => {
+  });
+} else {
+  // sem loader no DOM: finalize estado básico
+  tlLoader.add(() => {
+    document.body.classList.remove('is-loading');
+    try { lenis.start(); } catch {}
+  });
+}
+// configura reveals só após o loader
+tlLoader.add(() => {
     // Inicia apenas o Osmo Masked Reveal global (exceto hero)
   // animações de texto removidas globalmente por solicitação
   if (typeof ScrollTrigger !== "undefined") try { ScrollTrigger.refresh(true); } catch {}
@@ -2954,17 +2985,23 @@ tlLoader
         });
       }
     } catch (e) { console.warn('CTA ScrollTrigger init failed', e); }
-  })
-  // entrada suave dos elementos do hero (sem filtro pesado no vÃ­deo)
-  .from(".nav, .hero .sopy-btn", {
-    y: -16,
-    autoAlpha: 0,
-    duration: 0.6,
-    ease: "power2.out",
-    stagger: 0.08,
-  })
-  // Footer overlap animation - slide up to cover previous section
-  .add(() => {
+});
+// entrada suave: só anima se existir alvo
+(() => {
+  const sels = ['.nav', '.hero .sopy-btn'];
+  const existing = sels.filter(s => document.querySelector(s));
+  if (existing.length) {
+    tlLoader.from(existing.join(', '), {
+      y: -16,
+      autoAlpha: 0,
+      duration: 0.6,
+      ease: 'power2.out',
+      stagger: 0.08,
+    });
+  }
+})();
+// Footer overlap animation - slide up to cover previous section
+tlLoader.add(() => {
     const footer = document.querySelector('.page-footer');
     if (footer && typeof ScrollTrigger !== 'undefined') {
       ScrollTrigger.create({
@@ -2979,7 +3016,7 @@ tlLoader
         invalidateOnRefresh: true
       });
     }
-  });
+});
 
 
 /* =========================
@@ -3779,7 +3816,7 @@ function swapModel(theme = "aqua") {
   currentTheme3D = theme;
   if (!THREE_READY || !capsuleGroup) { pendingThemeForModel = theme; return; }
 
-  const url = MODELS[theme] || MODELS.aqua;
+  const url = (window.SOPY && SOPY.assetUrl) ? SOPY.assetUrl(MODELS[theme] || MODELS.aqua) : (MODELS[theme] || MODELS.aqua);
   const key = `${theme}:${url}`;
   if (currentModelKey === key) return; // jÃ¡ estÃ¡ carregado
 
