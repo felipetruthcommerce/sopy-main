@@ -30,7 +30,7 @@
 
 
 
-.btn, .btn-primary, .btn-outline {
+.sopy-btn, .sopy-btn-primary, .sopy-btn-outline {
   letter-spacing: 0.02em;
   padding-left: 2.2em;
   padding-right: 2.2em;
@@ -92,7 +92,6 @@ body {
   background: #0D1B2A; /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  cursor: none; /* usamos o cursor customizado */
 }
 
 /* Bloqueia scroll durante o loading */
@@ -109,10 +108,7 @@ img, video { display: block; max-width: 100%; }
 /* Acessibilidade */
 :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
-/* Sempre usar o cursor customizado (cÃ­rculo) tambÃ©m em elementos interativos */
-a, button, .btn, [role="button"], input[type="button"], input[type="submit"], input[type="reset"], .nav a, .product-actions button {
-  cursor: none !important;
-}
+/* interactive elements keep their default cursors (no global custom cursor) */
 
 /* ========== TOKENS DE TEMA ========== */
 :root {
@@ -468,8 +464,8 @@ body.nav-hidden .site-header {
 .nav-links a { color: var(--text); font-weight: 500; font-size: .95rem; opacity: .85; transition: opacity .2s ease; }
 .nav-links a:hover { opacity: 1; }
 
-/* ========== BOTÃ•ES ========== */
-.btn {
+/* ========== BOTÃ•ES SOPY ========== */
+.sopy-btn {
   --_bg: var(--brand);
   --_fg: #fff;
   --_bd: var(--brand);
@@ -482,7 +478,7 @@ body.nav-hidden .site-header {
   overflow: hidden;
 }
 
-.btn::before {
+.sopy-btn::before {
   content: "";
   position: absolute;
   left: var(--xPos, 50%);
@@ -496,25 +492,25 @@ body.nav-hidden .site-header {
   z-index: 0;
 }
 
-.btn:hover::before {
+.sopy-btn:hover::before {
   width: 400px;
   height: 400px;
 }
 
-.btn * {
+.sopy-btn * {
   position: relative;
   z-index: 1;
 }
 
-.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
-.btn:active { transform: translateY(0); box-shadow: none; }
+.sopy-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
+.sopy-btn:active { transform: translateY(0); box-shadow: none; }
 
-.btn-ghost {
+.sopy-btn-ghost {
   --_bg: rgba(255,255,255,.7);
   --_fg: var(--brand);
   --_bd: rgba(0,0,0,0);
 }
-.btn-outline {
+.sopy-btn-outline {
   --_bg: transparent;
   --_fg: var(--brand);
   --_bd: var(--brand);
@@ -584,7 +580,7 @@ body.nav-hidden .site-header {
 }
 .hero-content p { max-width: 780px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
 .hero section, .hero { color: #fff; }
-.hero .btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
+.hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
 .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
 /* Espuma/seam sutil entre hero e seÃ§Ã£o seguinte */
@@ -643,22 +639,7 @@ body.nav-hidden .site-header {
   display: none; /* oculto para evitar segundo cÃ­rculo visÃ­vel */
 }
 
-/* ========== CURSOR OPCIONAL ========== */
-.cursor {
-  position: fixed;
-  z-index: 999999; /* garantido acima de tudo */
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.85);
-  background: rgba(255,255,255,0.06);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.12);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  mix-blend-mode: normal; /* normal é mais previsível em vários fundos */
-  transition: opacity .12s linear, transform .08s linear;
-}
+/* custom cursor removed to use default system cursor */
 
 /* ========== 3D (CAPSULE PIN) ========== */
 .capsule3d { background: var(--surface); }
@@ -811,7 +792,7 @@ body.theme-aqua .capsule-3d-cta {
   font-size: 0.9rem; 
   line-height: 1.4;
 }
-.capsule-3d-cta .product-cta { 
+.capsule-3d-cta .sopy-product-cta { 
   width: 100%;
   background: rgba(255,255,255,0.2);
   color: #ffffff;
@@ -825,12 +806,12 @@ body.theme-aqua .capsule-3d-cta {
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 }
-.capsule-3d-cta .product-cta:hover {
+.capsule-3d-cta .sopy-product-cta:hover {
   background: rgba(255,255,255,0.3);
   border-color: rgba(255,255,255,0.5);
 }
 .capsule-3d-cta .product-copy { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.06rem; line-height: 1.6; }
-.capsule-3d-cta .product-cta { display: inline-block; pointer-events: auto; }
+.capsule-3d-cta .sopy-product-cta { display: inline-block; pointer-events: auto; }
 .capsule-3d-cta.is-visible { opacity: 1; visibility: visible; }
 
 @media (max-width: 900px) {
@@ -1633,7 +1614,7 @@ body.theme-citrus #faq .faq-accordion {
   .footer-inner { flex-direction: column; gap: 8px; }
   .hero-ctas { width: 100%; justify-content: center; }
   .fragrance-toggle { right: 12px; bottom: 12px; padding: 6px; }
-  .btn { width: 100%; }
+  .sopy-btn { width: 100%; }
   /* Make hero title very bold and multi-line; reduce video seam */
   :root { --mask-start: 62%; --seam-height: 16vh; }
   /* Force the hero to start content near the top on small screens */
@@ -1756,8 +1737,8 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-left .tc-title{ font-size: clamp(28px, 4vw, 44px); line-height:1.12; letter-spacing:.2px; margin:0 0 16px; font-weight:800 }
 .tc-sub{ color:#cfd6d8; max-width:44ch; margin:0 0 24px }
 .tc-cta{ display:flex; gap:14px; flex-wrap:wrap }
-/* Match header CTA (.btn) spacing/behavior */
-.tc-btn{
+/* Match header CTA (sopy-btn) spacing/behavior */
+.sopy-tc-btn{
   --_bg: var(--brand);
   --_fg: #fff;
   --_bd: var(--brand);
@@ -1770,23 +1751,23 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   overflow:hidden;
 }
 
-.tc-btn::before{
+.sopy-tc-btn::before{
   content:"";
   position:absolute; left:var(--xPos, 50%); top:var(--yPos, 50%);
   transform:translate(-50%, -50%);
   width:0; height:0; background-color:rgba(255,255,255,0.15);
   border-radius:50%; transition: width 1.5s ease, height 1.5s ease; z-index:0;
 }
-.tc-btn *{ position:relative; z-index:1; }
-.tc-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
-.tc-btn:active{ transform: translateY(0); box-shadow: none; }
-.tc-btn:hover::before{ width:400px; height:400px; }
-.tc-btn:focus-visible{ outline:2px solid #fff2; outline-offset:2px }
+.sopy-tc-btn *{ position:relative; z-index:1; }
+.sopy-tc-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
+.sopy-tc-btn:active{ transform: translateY(0); box-shadow: none; }
+.sopy-tc-btn:hover::before{ width:400px; height:400px; }
+.sopy-tc-btn:focus-visible{ outline:2px solid #fff2; outline-offset:2px }
 /* Keep the visual variant similar but on top of header-like base */
-.tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
-.tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
-.tc-btn--ghost{ background: transparent; color:#e9e9ee; border:1px solid rgba(255,255,255,0.06) }
-.tc-btn--ghost:hover{ background: rgba(255,255,255,0.02) }
+.sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
+.sopy-tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
+.sopy-tc-btn--ghost{ background: transparent; color:#e9e9ee; border:1px solid rgba(255,255,255,0.06) }
+.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.02) }
 
 .tc-right{ position:relative; min-width:0 }
 .tc-topActions{ display:none !important }
@@ -2109,18 +2090,6 @@ body.theme-aqua {
       </div>
     </div>
 
-    <!-- ===================== NAV ===================== -->
-    <header class="site-header">
-      <nav class="nav">
-        <a class="nav-logo" href="#hero" aria-label="Sopy - Início">
-          <img src="assets/images/sopy_letters_only.png" alt="Sopy" />
-        </a>
-
-        <div class="nav-cta">
-          <a class="btn btn-primary" href="/comprar.html">Comprar agora</a>
-        </div>
-      </nav>
-    </header>
 
     <!-- Barra de progresso removida -->
 
@@ -2163,7 +2132,7 @@ body.theme-aqua {
             <h3 class="product-title" data-aqua="AQUA BLU" data-citrus="CITRUS LUSH">CITRUS LUSH</h3>
             <p class="product-price" data-aqua="R$ 120,00" data-citrus="R$ 120,00">R$ 120,00</p>
             <p class="product-copy" data-aqua="Cápsulas ultra concentradas com enzimas que dissolvem 100% e protegem as fibras. Para todas as máquinas." data-citrus="Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
-            <button class="btn product-cta" data-aqua="EXPLORE AQUA BLU" data-citrus="EXPLORE CITRUS LUSH">EXPLORE CITRUS LUSH</button>
+            <button class="sopy-btn sopy-product-cta" data-aqua="EXPLORE AQUA BLU" data-citrus="EXPLORE CITRUS LUSH">EXPLORE CITRUS LUSH</button>
           </div>
         </div>
         <!-- decorative bubbles container: created by JS -->
@@ -2334,8 +2303,8 @@ body.theme-aqua {
             <h2 class="tc-title">Clientes que amam a Sopy</h2>
             <p class="tc-sub">Veja o que a galera diz sobre praticidade, perfume e resultado. Depoimentos reais de quem já usa no dia a dia.</p>
             <div class="tc-cta">
-              <a href="/comprar.html" class="tc-btn tc-btn--primary">Comprar agora</a>
-              <a href="#beneficios" class="tc-btn tc-btn--ghost">Ver benefícios</a>
+              <a href="/comprar.html" class="sopy-tc-btn sopy-tc-btn--primary">Comprar agora</a>
+              <a href="#beneficios" class="sopy-tc-btn sopy-tc-btn--ghost">Ver benefícios</a>
             </div>
           </div>
 
@@ -2403,53 +2372,7 @@ body.theme-aqua {
       </section>
     </main>
 
-    <!-- ===================== FOOTER (page-footer with theme colors) ===================== -->
-    <footer class="page-footer">
-      <div class="footer-inner">
-        <div class="footer-left">
-          <div class="footer-brand">
-            <a class="nav-logo" href="#hero" aria-label="Sopy - Início">
-              <img src="assets/images/sopy_letters_only.png" alt="Sopy" />
-            </a>
-            <p class="footer-desc">Revolucionando a forma como você lava suas roupas, com a praticidade e o poder de limpeza que a sua vida moderna exige</p>
-          </div>
-
-          <div class="footer-social" aria-hidden="false">
-           
-            <a href="#" aria-label="YouTube 2" class="social-link">
-              <svg fill="#000000" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>youtube</title> <path d="M12.932 20.459v-8.917l7.839 4.459zM30.368 8.735c-0.354-1.301-1.354-2.307-2.625-2.663l-0.027-0.006c-3.193-0.406-6.886-0.638-10.634-0.638-0.381 0-0.761 0.002-1.14 0.007l0.058-0.001c-0.322-0.004-0.701-0.007-1.082-0.007-3.748 0-7.443 0.232-11.070 0.681l0.434-0.044c-1.297 0.363-2.297 1.368-2.644 2.643l-0.006 0.026c-0.4 2.109-0.628 4.536-0.628 7.016 0 0.088 0 0.176 0.001 0.263l-0-0.014c-0 0.074-0.001 0.162-0.001 0.25 0 2.48 0.229 4.906 0.666 7.259l-0.038-0.244c0.354 1.301 1.354 2.307 2.625 2.663l0.027 0.006c3.193 0.406 6.886 0.638 10.634 0.638 0.38 0 0.76-0.002 1.14-0.007l-0.058 0.001c0.322 0.004 0.702 0.007 1.082 0.007 3.749 0 7.443-0.232 11.070-0.681l-0.434 0.044c1.298-0.362 2.298-1.368 2.646-2.643l0.006-0.026c0.399-2.109 0.627-4.536 0.627-7.015 0-0.088-0-0.176-0.001-0.263l0 0.013c0-0.074 0.001-0.162 0.001-0.25 0-2.48-0.229-4.906-0.666-7.259l0.038 0.244z"></path> </g></svg>
-            </a>
-            <a href="#" aria-label="Instagram" class="social-link">
-              <svg fill="#000000" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path d="M20.445 5h-8.891A6.559 6.559 0 0 0 5 11.554v8.891A6.559 6.559 0 0 0 11.554 27h8.891a6.56 6.56 0 0 0 6.554-6.555v-8.891A6.557 6.557 0 0 0 20.445 5zm4.342 15.445a4.343 4.343 0 0 1-4.342 4.342h-8.891a4.341 4.341 0 0 1-4.341-4.342v-8.891a4.34 4.34 0 0 1 4.341-4.341h8.891a4.342 4.342 0 0 1 4.341 4.341l.001 8.891z"></path><path d="M16 10.312c-3.138 0-5.688 2.551-5.688 5.688s2.551 5.688 5.688 5.688 5.688-2.551 5.688-5.688-2.55-5.688-5.688-5.688zm0 9.163a3.475 3.475 0 1 1-.001-6.95 3.475 3.475 0 0 1 .001 6.95zM21.7 8.991a1.363 1.363 0 1 1-1.364 1.364c0-.752.51-1.364 1.364-1.364z"></path></g></svg>
-            </a>
-            <a href="#" aria-label="TikTok" class="social-link">
-              <svg fill="#000000" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>tiktok</title> <path d="M16.656 1.029c1.637-0.025 3.262-0.012 4.886-0.025 0.054 2.031 0.878 3.859 2.189 5.213l-0.002-0.002c1.411 1.271 3.247 2.095 5.271 2.235l0.028 0.002v5.036c-1.912-0.048-3.71-0.489-5.331-1.247l0.082 0.034c-0.784-0.377-1.447-0.764-2.077-1.196l0.052 0.034c-0.012 3.649 0.012 7.298-0.025 10.934-0.103 1.853-0.719 3.543-1.707 4.954l0.020-0.031c-1.652 2.366-4.328 3.919-7.371 4.011l-0.014 0c-0.123 0.006-0.268 0.009-0.414 0.009-1.73 0-3.347-0.482-4.725-1.319l0.040 0.023c-2.508-1.509-4.238-4.091-4.558-7.094l-0.004-0.041c-0.025-0.625-0.037-1.25-0.012-1.862 0.49-4.779 4.494-8.476 9.361-8.476 0.547 0 1.083 0.047 1.604 0.136l-0.056-0.008c0.025 1.849-0.050 3.699-0.050 5.548-0.423-0.153-0.911-0.242-1.42-0.242-1.868 0-3.457 1.194-4.045 2.861l-0.009 0.030c-0.133 0.427-0.21 0.918-0.21 1.426 0 0.206 0.013 0.41 0.037 0.61l-0.002-0.024c0.332 2.046 2.086 3.59 4.201 3.59 0.061 0 0.121-0.001 0.181-0.004l-0.009 0c1.463-0.044 2.733-0.831 3.451-1.994l0.010-0.018c0.267-0.372 0.45-0.822 0.511-1.311l0.001-0.014c0.125-2.237 0.075-4.461 0.087-6.698 0.012-5.036-0.012-10.060 0.025-15.083z"></path> </g></svg>
-            </a>
-          </div>
-        </div>
-
-        <div class="footer-cols cols">
-          <div class="col-sitemap">
-            <strong>Mapa do Site</strong>
-            <a href="#">Home</a>
-            <a href="#beneficios">Benefícios</a>
-            <a href="#horizontal-scroll-section">Como usar</a>
-            <a href="#sustentabilidade">Sustentabilidade</a>
-            <a href="#testemunhos">Depoimentos</a>
-            <a href="#faq">Perguntas Frequentes</a>
-            <a href="#contato">Contato</a>
-          </div>
-
-          <div class="col-legal">
-            <strong>Legal</strong>
-            <a href="#">Políticas de Privacidade</a>
-            <a href="#">Termos de Serviço</a>
-          </div>
-        </div>
-
-        <p class="legal">© 2025 Sopy</p>
-      </div>
-    </footer>
+   
 
     <!-- ========== LIBS: GSAP + PLUGINS ========== -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -2471,8 +2394,6 @@ body.theme-aqua {
     <!-- ========== JS do projeto (vamos escrever em seguida) ========== -->
 
     <noscript>Ative o JavaScript para ver as animações e a cápsula 3D.</noscript>
-    <!-- Cursor global: colocado no final do body para garantir stacking acima de seções -->
-    <div class="cursor" aria-hidden="true"></div>
     <!-- Fragrance toggle moved to global scope so it stays visible on all sections -->
     <div class="product-toggle-container">
       <input type="checkbox" id="product-toggle" class="pod-toggle-checkbox">
@@ -2666,7 +2587,7 @@ const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
    Button Ripple Effect
 ========================= */
 function setupButtonRipples() {
-  const buttons = document.querySelectorAll('.btn');
+  const buttons = document.querySelectorAll('.sopy-btn');
 
   buttons.forEach(btn => {
     btn.addEventListener('mousemove', (event) => {
@@ -2729,7 +2650,7 @@ window.addEventListener('load', function() {
   const titles = document.querySelectorAll('h1:not(#hero *), h2:not(#hero *), h3:not(#hero *), h4:not(#hero *), .tc-title, .tc-sub');
   const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .subtitle, .card-label, .footer-desc');
   // Buttons only (exclude FAQ links entirely to keep them clickable)
-  const buttons = document.querySelectorAll('.btn:not(#hero *), .tc-btn:not(#hero *)');
+  const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
 
   console.log(`Found: ${titles.length} titles, ${paragraphs.length} paragraphs, ${buttons.length} buttons`);
     
@@ -3035,7 +2956,7 @@ tlLoader
     } catch (e) { console.warn('CTA ScrollTrigger init failed', e); }
   })
   // entrada suave dos elementos do hero (sem filtro pesado no vÃ­deo)
-  .from(".nav, .hero .btn", {
+  .from(".nav, .hero .sopy-btn", {
     y: -16,
     autoAlpha: 0,
     duration: 0.6,
@@ -3981,7 +3902,7 @@ function setTheme(theme) {
   const productTitle = document.querySelector('.product-title');
   const productCopy = document.querySelector('.product-copy');
   const productPrice = document.querySelector('.product-price');
-  const productCta = document.querySelector('.product-cta');
+  const productCta = document.querySelector('.sopy-product-cta');
   
   if (productTitle) {
     productTitle.textContent = theme === 'citrus' ? productTitle.getAttribute('data-citrus') : productTitle.getAttribute('data-aqua');
@@ -4092,9 +4013,9 @@ document.addEventListener('DOMContentLoaded', () => {
 /* =========================
    7) Comprar (placeholder)
 ========================= */
-document.querySelectorAll('[data-action="buy"]').forEach((btn) => {
+document.querySelectorAll('[data-action="sopy-buy"]').forEach((btn) => {
   btn.addEventListener("click", () => {
-    const card = btn.closest(".product-card");
+    const card = btn.closest(".sopy-product-card");
     const sku = card?.dataset?.sku || "sopy";
     // aqui vocÃª integra com carrinho/Nuvemshop ou redireciona:
     console.log("Comprar SKU:", sku);
@@ -4102,46 +4023,7 @@ document.querySelectorAll('[data-action="buy"]').forEach((btn) => {
   });
 });
 
-/* =========================
-   8) Cursor opcional no hero
-========================= */
-const cursor = document.querySelector(".cursor");
-if (cursor) {
-  let mx = 0, my = 0; // mouse position
-  let cx = 0, cy = 0; // cursor position for smoothing
-  let raf;
-
-  const update = () => {
-    cx += (mx - cx) * 0.25;
-    cy += (my - cy) * 0.25;
-    cursor.style.left = cx + "px";
-    cursor.style.top = cy + "px";
-    raf = requestAnimationFrame(update);
-  };
-
-  const show = () => gsap.to(cursor, { autoAlpha: 1, duration: 0.15 });
-  const hide = () => gsap.to(cursor, { autoAlpha: 0, duration: 0.15 });
-
-  // Aparece em todo o documento, usando pointermove para melhor compatibilidade com touch/pen
-  document.addEventListener("pointermove", (e) => {
-    if (e.pointerType === 'touch') return; // não mostra cursor em touch
-    mx = e.clientX;
-    my = e.clientY;
-    if (!raf) raf = requestAnimationFrame(update);
-    show();
-  }, { passive: true });
-
-  // Esconde quando a aba perde foco (melhor que mouseleave em alguns browsers)
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { hide(); cancelAnimationFrame(raf); raf = null; }
-  });
-
-  // magnet nos botões: leve escala
-  gsap.utils.toArray(".btn, a, button").forEach((el) => {
-    el.addEventListener("mouseenter", () => gsap.to(cursor, { scale: 1.25, duration: 0.15 }));
-    el.addEventListener("mouseleave", () => gsap.to(cursor, { scale: 1, duration: 0.15 }));
-  });
-}
+// Custom cursor removed: using default system cursor everywhere.
 
 /* =========================
    9) Safety: inicia tema default
