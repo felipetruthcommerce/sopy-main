@@ -303,7 +303,7 @@ p[class*="split"], .section-header[class*="split"] {
 }
 
 /* Replacement card styles from the user's sample (scoped under #beneficios) */
-#beneficios .cards-container {
+#beneficios .sopy-benefits-grid {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -314,16 +314,16 @@ p[class*="split"], .section-header[class*="split"] {
   margin: 0 auto;
 }
 
-#beneficios .column {
+#beneficios .sopy-benefits-col {
   display: flex;
   flex-direction: column;
   gap: 30px;
   flex: 1;
 }
 
-#beneficios .column:nth-child(2) { margin-top: 120px; }
+#beneficios .sopy-benefits-col:nth-child(2) { margin-top: 120px; }
 
-#beneficios .card {
+#beneficios .sopy-benefits-card {
   background-color: rgba(255,255,255,0.04);
   border-radius: 20px;
   padding: 50px;
@@ -336,13 +336,13 @@ p[class*="split"], .section-header[class*="split"] {
   border: 1px solid rgba(255,255,255,0.06);
 }
 
-#beneficios .card-content { position: relative; z-index: 2; display:flex; flex-direction: column; justify-content: space-between; height:100%; }
+#beneficios .sopy-benefits-card-content { position: relative; z-index: 2; display:flex; flex-direction: column; justify-content: space-between; height:100%; }
 
 #beneficios .card-number { font-size: 5rem; font-weight: 500; color: var(--muted); }
 
-#beneficios .card-label { font-size: 1rem; font-weight: 500; color: #d1d1d1; align-self: flex-end; text-transform: uppercase; }
+#beneficios .sopy-benefits-card-label { font-size: 1rem; font-weight: 500; color: #d1d1d1; align-self: flex-end; text-transform: uppercase; }
 
-#beneficios .card-blob {
+#beneficios .sopy-benefits-card-blob {
   background-color: white;
   height: 400px;
   width: 400px;
@@ -355,21 +355,21 @@ p[class*="split"], .section-header[class*="split"] {
   pointer-events: none;
 }
 
-#beneficios .card:hover .card-blob { opacity: 0.7; }
+#beneficios .sopy-benefits-card:hover .sopy-benefits-card-blob { opacity: 0.7; }
 
-#beneficios .column:nth-child(1) .card:nth-child(1) .card-blob { background-color: #e84a4a; }
-#beneficios .column:nth-child(1) .card:nth-child(2) .card-blob { background-color: #4a86e8; }
-#beneficios .column:nth-child(2) .card:nth-child(1) .card-blob { background-color: #4ae8a4; }
-#beneficios .column:nth-child(2) .card:nth-child(2) .card-blob { background-color: #e8c54a; }
+#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card:nth-child(1) .sopy-benefits-card-blob { background-color: #e84a4a; }
+#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card:nth-child(2) .sopy-benefits-card-blob { background-color: #4a86e8; }
+#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card:nth-child(1) .sopy-benefits-card-blob { background-color: #4ae8a4; }
+#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card:nth-child(2) .sopy-benefits-card-blob { background-color: #e8c54a; }
 
 @media (max-width: 768px) {
-  #beneficios .cards-container { flex-direction: column; align-items: center; width: 90%; }
-  #beneficios .column:nth-child(2) { margin-top: 0; }
-  #beneficios .column { width: 100%; }
+  #beneficios .sopy-benefits-grid { flex-direction: column; align-items: center; width: 90%; }
+  #beneficios .sopy-benefits-col:nth-child(2) { margin-top: 0; }
+  #beneficios .sopy-benefits-col { width: 100%; }
 }
 
 /* ===================== New SVG sizing & theme-aware color for beneficios cards ===================== */
-#beneficios .card-icon {
+#beneficios .sopy-benefits-card-icon {
   width: clamp(64px, 8vw, 140px); /* larger icons that scale with viewport */
   height: auto; /* preserve svg aspect */
   display: block;
@@ -379,25 +379,25 @@ p[class*="split"], .section-header[class*="split"] {
 }
 
 /* allow customizing icon color via a CSS variable so themes can override easily */
-#beneficios .card {
+#beneficios .sopy-benefits-card {
   --icon: var(--brand);
   color: var(--icon); /* SVG stroke uses currentColor */
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
-body.theme-citrus #beneficios .card { --icon: var(--brand-dark); }
-body.theme-aqua #beneficios .card { --icon: var(--brand); }
+body.theme-citrus #beneficios .sopy-benefits-card { --icon: var(--brand-dark); }
+body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 
 /* Ensure titles and labels have good contrast when icons change */
-#beneficios .card-title { color: #fff; font-size: 1.25rem; margin: 0 0 8px 0; }
-#beneficios .card-label { color: rgba(255,255,255,0.85); font-weight: 700; letter-spacing: .08em; }
+#beneficios .sopy-benefits-card-title { color: #fff; font-size: 1.25rem; margin: 0 0 8px 0; }
+#beneficios .sopy-benefits-card-label { color: rgba(255,255,255,0.85); font-weight: 700; letter-spacing: .08em; }
 
 /* Make sure the blob stays behind content and doesn't cover the icon area on large screens */
-#beneficios .card-blob { transform: translate(40%, -10%); }
+#beneficios .sopy-benefits-card-blob { transform: translate(40%, -10%); }
 
 @media (max-width: 900px) {
-  #beneficios .card { padding: 32px; height: auto; }
-  #beneficios .card-icon { width: 72px; margin-bottom: 12px; }
+  #beneficios .sopy-benefits-card { padding: 32px; height: auto; }
+  #beneficios .sopy-benefits-card-icon { width: 72px; margin-bottom: 12px; }
 }
 
 
@@ -976,7 +976,7 @@ body.theme-aqua .capsule-3d-cta {
 .benefit-item h3 { font-size: .98rem; color: var(--text); }
 
 /* ========== COMO USAR (Horizontal Scroll) ========== */
-.horizontal-scroll-section {
+.sopy-how-section {
   height: 100vh;            /* ocupa toda a viewport */
   position: relative;
   overflow: hidden;
@@ -984,18 +984,18 @@ body.theme-aqua .capsule-3d-cta {
   padding: 0;               /* sem padding para centralizar perfeitamente */
 }
 
-.how-title { display: none; }
+.sopy-how-title { display: none; }
 /* Hide mobile slider by default (desktop) */
-.cu-stack{ display:none; }
+.sopy-how-stack{ display:none; }
 
-.horizontal-track {
+.sopy-how-track {
   display: flex;
   position: relative; /* GSAP pinna a seção, não o track */
   height: 100vh;      /* ocupa toda a viewport conforme solicitado */
   will-change: transform; /* performance */
 }
 
-.background-text {
+.sopy-how-background-text {
   position: absolute;
   inset: 0;
   display: grid; place-items: center;
@@ -1007,7 +1007,7 @@ body.theme-aqua .capsule-3d-cta {
   pointer-events: none;
 }
 
-.panel {
+.sopy-how-panel {
   flex: 0 0 100vw;   /* cada painel ocupa 100% da largura da viewport */
   height: 100vh;     /* cada painel usa a altura inteira da viewport */
   display: flex;
@@ -1020,15 +1020,15 @@ body.theme-aqua .capsule-3d-cta {
 }
 
 @media (max-width: 768px){
-  .horizontal-track{ height: 78vh; }
+  .sopy-how-track{ height: 78vh; }
 }
 
 /* todos os painéis centralizados verticalmente, sem offsets */
-.panel:nth-child(2),
-.panel:nth-child(3),
-.panel:nth-child(4) { align-self: center; padding: 0; }
+.sopy-how-panel:nth-child(2),
+.sopy-how-panel:nth-child(3),
+.sopy-how-panel:nth-child(4) { align-self: center; padding: 0; }
 
-.panel-content {
+.sopy-how-card {
   /* Glassmorphism: translucent surface with blur */
   background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
   border: 1px solid rgba(255,255,255,0.10);
@@ -1047,7 +1047,7 @@ body.theme-aqua .capsule-3d-cta {
 }
 
 @supports ((-webkit-backdrop-filter: blur(0)) or (backdrop-filter: blur(0))) {
-  .panel-content {
+  .sopy-how-card {
     -webkit-backdrop-filter: blur(8px) saturate(1.06);
     backdrop-filter: blur(8px) saturate(1.06);
     background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
@@ -1056,21 +1056,21 @@ body.theme-aqua .capsule-3d-cta {
 }
 
 /* Slight hover lift for desktop to emphasize glass cards */
-.panel-content:hover {
+.sopy-how-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 48px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.02);
 }
 
 /* Theme tweaks so glass reads well on both brand backgrounds */
-body.theme-citrus .panel-content,
-body.theme-aqua .panel-content {
+body.theme-citrus .sopy-how-card,
+body.theme-aqua .sopy-how-card {
   /* on strong brand backgrounds, keep the glass slightly lighter */
   background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
   border: 1px solid rgba(255,255,255,0.12);
   color: var(--muted);
 }
 
-.panel-number {
+.sopy-how-step-number {
   background-color: var(--brand);
   color: #fff;
   border: 2px solid rgba(255, 255, 255, 0.9);
@@ -1086,7 +1086,7 @@ body.theme-aqua .panel-content {
   flex-shrink: 0;
 }
 
-.panel-content p {
+.sopy-how-card p {
   margin: 0;
   font-size: 1.05rem;
   line-height: 1.6;
@@ -1094,7 +1094,7 @@ body.theme-aqua .panel-content {
   color: #fff;
 }
 
-.progress-bar {
+.sopy-how-progress {
   position: fixed;
   left: 50%;
   bottom: 32px;                 /* como a referência sugere */
@@ -1110,12 +1110,12 @@ body.theme-aqua .panel-content {
   transition: opacity 0.34s cubic-bezier(.22,1,.36,1);
 }
 
-.progress-bar.visible {
+.sopy-how-progress.visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-.progress-dot {
+.sopy-how-progress-dot {
   width: 36px;
   height: 36px;
   background-color: rgba(255, 255, 255, 0.18);
@@ -1126,7 +1126,7 @@ body.theme-aqua .panel-content {
   background-position: center;
   background-size: 18px 18px;
 }
-.progress-dot {
+.sopy-how-progress-dot {
   width: 10px;
   height: 10px;
   background-color: rgba(255, 255, 255, 0.4); /* dots discretos */
@@ -1136,8 +1136,8 @@ body.theme-aqua .panel-content {
               background-color .25s ease, transform .2s ease;
 }
 
-.progress-dot.active { background-color: rgba(255,255,255,0.28); border-color: transparent; transform: translateY(-2px); filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
-.progress-dot.active {
+.sopy-how-progress-dot.active { background-color: rgba(255,255,255,0.28); border-color: transparent; transform: translateY(-2px); filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
+.sopy-how-progress-dot.active {
   width: 56px;           /* pílula longa */
   height: 12px;
   border-radius: 999px;
@@ -1891,7 +1891,7 @@ body.theme-aqua {
 
 /* Tablet e mobile: Como usar */
 @media (max-width: 900px) {
-  .horizontal-scroll-section {
+  .sopy-how-section {
     min-height: 100vh; /* manter 100vh como pedido */
     height: 100vh;
     padding: clamp(20px, 6.5vw, 32px) 0 80px; /* espaço para dots */
@@ -1900,7 +1900,7 @@ body.theme-aqua {
     position: relative;
   }
 
-  .how-title {
+  .sopy-how-title {
     display: block;
     color: #fff;
     font-weight: 800;
@@ -1914,32 +1914,32 @@ body.theme-aqua {
   }
 
   /* hide original track on mobile; we use cu-stack slider */
-  .horizontal-track { display: none !important; }
+  .sopy-how-track { display: none !important; }
 
-  .background-text {
+  .sopy-how-background-text {
     display: none; /* esconder o texto de fundo no mobile; usamos o how-title */
   }
 
   /* Slider like testimonials */
-  .cu-stack{ display:block; position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; margin: 4px 12px 0; height: 36vh; min-height: 240px }
-  .cu-stack.cu-grabbing{ cursor:grabbing }
-  .cu-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding: 14px; box-shadow: 0 12px 34px rgba(6,10,12,0.28); min-height: 160px; color:#fff }
-  .cu-stack .cu-card{ position:absolute !important; inset: 14px 20px 18px 20px !important }
-  .cu-card .panel-content{ background: transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important }
-  .cu-card .panel-number{ width: 30px; height:30px; font-size:.82rem; margin-bottom: 6px; }
-  .cu-card p{ font-size: .9rem; line-height: 1.5 }
+  .sopy-how-stack{ display:block; position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; margin: 4px 12px 0; height: 36vh; min-height: 240px }
+  .sopy-how-stack.sopy-how-grabbing{ cursor:grabbing }
+  .sopy-how-mobile-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding: 14px; box-shadow: 0 12px 34px rgba(6,10,12,0.28); min-height: 160px; color:#fff }
+  .sopy-how-stack .sopy-how-mobile-card{ position:absolute !important; inset: 14px 20px 18px 20px !important }
+  .sopy-how-mobile-card .sopy-how-card{ background: transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important }
+  .sopy-how-mobile-card .sopy-how-step-number{ width: 30px; height:30px; font-size:.82rem; margin-bottom: 6px; }
+  .sopy-how-mobile-card p{ font-size: .9rem; line-height: 1.5 }
 
 
 @media (max-width: 600px) {
-  .cu-stack{ height: 34vh; min-height: 200px }
-  .cu-card{ padding: 12px; border-radius: 18px; min-height: 150px }
-  .cu-stack .cu-card{ inset: 10px 14px 14px 14px !important }
-  .cu-card p{ font-size: .88rem }
+  .sopy-how-stack{ height: 34vh; min-height: 200px }
+  .sopy-how-mobile-card{ padding: 12px; border-radius: 18px; min-height: 150px }
+  .sopy-how-stack .sopy-how-mobile-card{ inset: 10px 14px 14px 14px !important }
+  .sopy-how-mobile-card p{ font-size: .88rem }
 
   /* Larger heading on very small screens */
-  .how-title{ font-size: clamp(4.2rem, 15.5vw, 5.8rem); max-width: 10ch; }
+  .sopy-how-title{ font-size: clamp(4.2rem, 15.5vw, 5.8rem); max-width: 10ch; }
 }
-  .panel {
+  .sopy-how-panel {
     width: 85vw;
     min-width: 85vw;
     height: auto;
@@ -1949,7 +1949,7 @@ body.theme-aqua {
     flex-shrink: 0;
   }
 
-  .panel-content {
+  .sopy-how-card {
     max-width: 100%;
     margin: 0 auto;
     padding: 28px 22px 32px;
@@ -1959,31 +1959,31 @@ body.theme-aqua {
     box-shadow: 0 10px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
   }
 
-  .panel-number { width: 36px; height: 36px; font-size: 0.9rem; margin-bottom: 14px; }
-  .panel-content p { font-size: 1rem; }
+  .sopy-how-step-number { width: 36px; height: 36px; font-size: 0.9rem; margin-bottom: 14px; }
+  .sopy-how-card p { font-size: 1rem; }
 }
 
 @media (max-width: 600px) {
-  .horizontal-scroll-section {
+  .sopy-how-section {
     padding: 22px 0 64px;
   }
 
-  .horizontal-track {
+  .sopy-how-track {
     padding: 0 16px;
     gap: 14px;
   }
 
-  .panel {
+  .sopy-how-panel {
     width: 88vw;
     min-width: 88vw;
   }
 
-  .panel-content {
+  .sopy-how-card {
     padding: 22px 18px 28px;
     border-radius: 18px;
   }
 
-  .background-text {
+  .sopy-how-background-text {
     font-size: clamp(1.6rem, 6.5vw, 2.1rem);
     margin-bottom: 16px;
   }
@@ -1991,7 +1991,7 @@ body.theme-aqua {
 
 /* Progress dots position for mobile within the section */
 @media (max-width: 900px) {
-  .progress-bar {
+  .sopy-how-progress {
     position: absolute;
     bottom: 18px;
     left: 50%;
@@ -2190,87 +2190,87 @@ body.theme-aqua {
 
 
       <!-- ===================== COMO USAR ===================== -->
-    <section class="horizontal-scroll-section">
-    <h2 class="how-title" aria-hidden="false">TRES PASSOS. SÓ POR NA MAQUINA</h2>
-    <div class="horizontal-track">
-      <div class="background-text">TRES PASSOS. SÓ POR NA MAQUINA</div>
+        <section class="sopy-how-section">
+        <h2 class="sopy-how-title" aria-hidden="false">TRES PASSOS. SÓ POR NA MAQUINA</h2>
+        <div class="sopy-how-track">
+          <div class="sopy-how-background-text">TRES PASSOS. SÓ POR NA MAQUINA</div>
 
-      <div class="panel">
-        <div class="panel-content">
-          <div class="panel-number">01</div>
-          <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
+          <div class="sopy-how-panel">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">01</div>
+              <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
+            </div>
+          </div>
+          <div class="sopy-how-panel">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">02</div>
+              <p>Coloque direto no tambor, antes das roupas.</p>
+            </div>
+          </div>
+          <div class="sopy-how-panel">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">03</div>
+              <p>Inicie o ciclo — a cápsula dissolve 100%</p>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="panel">
-        <div class="panel-content">
-          <div class="panel-number">02</div>
-          <p>Coloque direto no tambor, antes das roupas.</p>
+        <div class="sopy-how-progress">
+          <div class="sopy-how-progress-dot"></div>
+          <div class="sopy-how-progress-dot"></div>
+          <div class="sopy-how-progress-dot"></div>
         </div>
-      </div>
-      <div class="panel">
-        <div class="panel-content">
-          <div class="panel-number">03</div>
-          <p>Inicie o ciclo — a cápsula dissolve 100%</p>
-        </div>
-      </div>
-    </div>
-    <div class="progress-bar">
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-      <div class="progress-dot"></div>
-    </div>
-    </section>
+        </section>
 
 
-    <!-- ===================== BENEFÍCIOS ===================== -->
-      <section id="beneficios" class="benefits section">
+  <!-- ===================== BENEFÍCIOS ===================== -->
+    <section id="beneficios" class="sopy-benefits-section section">
     <header class="section-header">
         <h2>Resultados que você vê e sente</h2>
         <p>A tecnologia Sopy em cada cápsula.</p>
     </header>
-    <div class="cards-container">
-        <div class="column">
-            <div class="card">
-                <div class="card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+  <div class="sopy-benefits-grid">
+    <div class="sopy-benefits-col">
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
                         <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>
                     </svg>
-                    <h3 class="card-title">Remove Manchas Profundas</h3>
-                    <p class="card-label">PODER DAS ENZIMAS</p>
+          <h3 class="sopy-benefits-card-title">Remove Manchas Profundas</h3>
+          <p class="sopy-benefits-card-label">PODER DAS ENZIMAS</p>
                 </div>
-                <div class="card-blob"></div>
+        <div class="sopy-benefits-card-blob"></div>
             </div>
-            <div class="card">
-                <div class="card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
                         <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
                     </svg>
-                    <h3 class="card-title">Cores Vibrantes por Mais Tempo</h3>
-                    <p class="card-label">PROTEÇÃO DAS FIBRAS</p>
+          <h3 class="sopy-benefits-card-title">Cores Vibrantes por Mais Tempo</h3>
+          <p class="sopy-benefits-card-label">PROTEÇÃO DAS FIBRAS</p>
                 </div>
-                <div class="card-blob"></div>
+        <div class="sopy-benefits-card-blob"></div>
             </div>
         </div>
-        <div class="column">
-            <div class="card">
-                <div class="card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+    <div class="sopy-benefits-col">
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
                         <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
                     </svg>
-                    <h3 class="card-title">Tudo em Uma Cápsula</h3>
-                    <p class="card-label">PRATICIDADE</p>
+          <h3 class="sopy-benefits-card-title">Tudo em Uma Cápsula</h3>
+          <p class="sopy-benefits-card-label">PRATICIDADE</p>
                 </div>
-                <div class="card-blob"></div>
+        <div class="sopy-benefits-card-blob"></div>
             </div>
-            <div class="card">
-                <div class="card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="card-icon">
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
                         <path d="m10 20-1.25-2.5L6 18"/><path d="M10 4 8.75 6.5 6 6"/><path d="m14 20 1.25-2.5L18 18"/><path d="m14 4 1.25 2.5L18 6"/><path d="m17 21-3-6h-4"/><path d="m17 3-3 6 1.5 3"/><path d="M2 12h6.5L10 9"/><path d="m20 10-1.5 2 1.5 2"/><path d="M22 12h-6.5L14 15"/><path d="m4 10 1.5 2L4 14"/><path d="m7 21 3-6-1.5-3"/><path d="m7 3 3 6h4"/>
                     </svg>
-                    <h3 class="card-title">Para Todas as Máquinas</h3>
-                    <p class="card-label">ÁGUA FRIA E QUENTE</p>
+          <h3 class="sopy-benefits-card-title">Para Todas as Máquinas</h3>
+          <p class="sopy-benefits-card-label">ÁGUA FRIA E QUENTE</p>
                 </div>
-                <div class="card-blob"></div>
+        <div class="sopy-benefits-card-blob"></div>
             </div>
         </div>
     </div>
@@ -2672,7 +2672,7 @@ window.addEventListener('load', function() {
     
   // Obter TODOS os elementos de texto exceto os do hero
   const titles = document.querySelectorAll('h1:not(#hero *), h2:not(#hero *), h3:not(#hero *), h4:not(#hero *), .tc-title, .tc-sub');
-  const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .subtitle, .card-label, .footer-desc');
+  const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .subtitle, .sopy-benefits-card-label, .footer-desc');
   // Buttons only (exclude FAQ links entirely to keep them clickable)
   const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
 
@@ -3052,10 +3052,10 @@ tlLoader.add(() => {
    COMO USAR — Horizontal Scroll (GSAP)
 ========================= */
 document.addEventListener('DOMContentLoaded', () => {
-  const section = document.querySelector('.horizontal-scroll-section');
-  const track = section?.querySelector('.horizontal-track');
-  const panels = track ? Array.from(track.children).filter(el => el.classList.contains('panel')) : [];
-  const dots = document.querySelectorAll('.progress-bar .progress-dot');
+  const section = document.querySelector('.sopy-how-section');
+  const track = section?.querySelector('.sopy-how-track');
+  const panels = track ? Array.from(track.children).filter(el => el.classList.contains('sopy-how-panel')) : [];
+  const dots = document.querySelectorAll('.sopy-how-progress .sopy-how-progress-dot');
   if (!section || !track || panels.length === 0 || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
   // Define a largura do track conforme nº de painéis em pixels para medição precisa
@@ -3078,10 +3078,10 @@ document.addEventListener('DOMContentLoaded', () => {
       scrub: 0.6,
       invalidateOnRefresh: true,
       onRefresh: setTrackWidth,
-      onEnter: () => document.querySelector('.progress-bar')?.classList.add('visible'),
-      onEnterBack: () => document.querySelector('.progress-bar')?.classList.add('visible'),
-      onLeave: () => document.querySelector('.progress-bar')?.classList.remove('visible'),
-      onLeaveBack: () => document.querySelector('.progress-bar')?.classList.remove('visible'),
+      onEnter: () => document.querySelector('.sopy-how-progress')?.classList.add('visible'),
+      onEnterBack: () => document.querySelector('.sopy-how-progress')?.classList.add('visible'),
+      onLeave: () => document.querySelector('.sopy-how-progress')?.classList.remove('visible'),
+      onLeaveBack: () => document.querySelector('.sopy-how-progress')?.classList.remove('visible'),
       onUpdate: self => {
         if (!dots || dots.length === 0) return;
         const steps = dots.length;
@@ -3994,9 +3994,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!benefitsSection) return;
 
   // Hover blob follow
-  const cards = benefitsSection.querySelectorAll('.card');
+  const cards = benefitsSection.querySelectorAll('.sopy-benefits-card');
   cards.forEach(card => {
-    const blob = card.querySelector('.card-blob');
+    const blob = card.querySelector('.sopy-benefits-card-blob');
     if (!blob) return;
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -4014,9 +4014,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.__gsapPluginsRegistered = true;
       }
 
-      gsap.from("#beneficios .column:nth-child(1) .card", {
+      gsap.from("#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card", {
         scrollTrigger: {
-          trigger: "#beneficios .cards-container",
+          trigger: "#beneficios .sopy-benefits-grid",
           start: "top 80%",
           end: "center 70%",
           scrub: 0.3,
@@ -4028,9 +4028,9 @@ document.addEventListener('DOMContentLoaded', () => {
         stagger: 0.2
       });
 
-      gsap.from("#beneficios .column:nth-child(2) .card", {
+      gsap.from("#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card", {
         scrollTrigger: {
-          trigger: "#beneficios .cards-container",
+          trigger: "#beneficios .sopy-benefits-grid",
           start: "top 50%",
           end: "center 30%",
           scrub: 1,
