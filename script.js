@@ -1,58 +1,38 @@
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
-    // Vamos adicionar os blocos aqui um por um
-
-    // FAQ accordion toggle functionality
-    document.addEventListener('DOMContentLoaded', () => {
-  const allAccordions = document.querySelectorAll('#faq .sopy-faq-accordion');
-
-  allAccordions.forEach(accordion => {
-    const titleLink = accordion.querySelector('.sopy-title a');
+    // ===================================
+    //  BLOCO DO FAQ (CORRIGIDO)
+    // ===================================
     
-    if (titleLink) {
-      titleLink.addEventListener('click', (event) => {
-        event.preventDefault(); // Impede o comportamento padr3o do link
+    // ❌ A linha com 'DOMContentLoaded' foi REMOVIDA daqui.
 
-        // click coords relative to the clicked accordion
-        const rect = accordion.getBoundingClientRect();
-        const clickX = event.clientX - rect.left; // px from left of card
-        const clickY = event.clientY - rect.top;  // px from top of card
+    const allAccordions = document.querySelectorAll('#faq .sopy-faq-accordion');
+    console.log(`[FAQ] Encontrados ${allAccordions.length} itens de accordion.`); // Adicionei um log para depuração
 
-        // Close other open accordions toward the click point (compute coords relative to each)
-        allAccordions.forEach(acc => {
-          if (acc === accordion) return;
-          if (acc.classList.contains('open')) {
-            const r = acc.getBoundingClientRect();
-            const x = event.clientX - r.left;
-            const y = event.clientY - r.top;
-            acc.style.setProperty('--circle-x', `${x}px`);
-            acc.style.setProperty('--circle-y', `${y}px`);
-            // force reflow so the CSS var is applied before starting the close animation
-            // eslint-disable-next-line no-unused-expressions
-            acc.offsetWidth;
-            acc.classList.remove('open');
-          }
-        });
+    allAccordions.forEach(accordion => {
+        const titleLink = accordion.querySelector('.sopy-title a');
 
-        const isOpen = accordion.classList.contains('open');
+        if (titleLink) {
+            titleLink.addEventListener('click', (event) => {
+                event.preventDefault();
 
-        // Set the click origin for the clicked accordion
-        accordion.style.setProperty('--circle-x', `${clickX}px`);
-        accordion.style.setProperty('--circle-y', `${clickY}px`);
-        // force reflow so the CSS var is applied before toggling class
-        // eslint-disable-next-line no-unused-expressions
-        accordion.offsetWidth;
+                // Close other open accordions
+                allAccordions.forEach(acc => {
+                    if (acc !== accordion && acc.classList.contains('open')) {
+                        acc.classList.remove('open');
+                    }
+                });
 
-        if (isOpen) {
-          // close this accordion toward the click point
-          accordion.classList.remove('open');
-        } else {
-          // open this accordion from the click point
-          accordion.classList.add('open');
+                // Toggle the clicked accordion
+                accordion.classList.toggle('open');
+            });
         }
-      });
-    }
-  });
-});
+    });
+
+    // ❌ O fechamento do 'DOMContentLoaded' também foi REMOVIDO.
+    
+    // (A sua lógica original para a animação do círculo é mais complexa, 
+    // comece com esta versão simplificada de abrir/fechar. 
+    // Se funcionar, podemos reintroduzir a animação do círculo depois.)
 }
