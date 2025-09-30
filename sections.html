@@ -1,0 +1,300 @@
+<main>
+      <section id="hero" class="sopy-hero sopy-section--full">
+        <!-- Vídeo que será revelado pelo circle-reveal -->
+        <div class="sopy-hero-media">
+          <video id="heroVideo" class="sopy-hero-video" muted playsinline preload="auto">
+            <!-- Quando tiver uma versão WebM otimizada, adicione como primeira source -->
+            <!-- <source src="assets/videos/hero.webm" type="video/webm" ../> -->
+            <source src="assets/videos/hero.mp4" type="video/mp4" />
+          </video>
+          <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader -->
+          <img class="sopy-hero-poster" src="assets/images/video-capa.jpg" alt="" aria-hidden="true" />
+        </div>
+
+        <div class="sopy-hero-content">
+          <h1>
+            LIMPEZA PODEROSA. <br>ZERO ESFORÇO.
+          </h1>
+
+        </div>
+
+      </section>
+
+      <!-- ===================== SEÇÃO 3D (PIN) ===================== -->
+      <section id="capsula-3d" class="sopy-capsule3d sopy-section--full" aria-label="Cápsula 3D interativa">
+        <!-- Canvas Three.js será injetado aqui -->
+        <div id="three-container"></div>
+
+        <!-- Título posicionado sobre o objeto 3D -->
+        <div class="sopy-capsule3d-title-over">
+          <h2>Tecnologia que dissolve 100%</h2>
+        </div>
+
+        <!-- Bloco de produto que aparece/alinhará ao final da seção 3D -->
+        <div class="capsule-3d-cta" aria-hidden="true">
+          <div class="capsule-3d-cta-inner">
+            <h3 class="product-title" data-aqua="AQUA BLU" data-citrus="CITRUS LUSH">CITRUS LUSH</h3>
+            <p class="product-price" data-aqua="R$ 120,00" data-citrus="R$ 120,00">R$ 120,00</p>
+            <p class="product-copy" data-aqua="Cápsulas ultra concentradas com enzimas que dissolvem 100% e protegem as fibras. Para todas as máquinas." data-citrus="Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
+            <button class="sopy-btn sopy-product-cta" data-aqua="EXPLORE AQUA BLU" data-citrus="EXPLORE CITRUS LUSH">EXPLORE CITRUS LUSH</button>
+          </div>
+        </div>
+        <!-- decorative bubbles container: created by JS -->
+        <div class="sopy-capsule-bubbles" aria-hidden="true"></div>
+      </section>
+
+      <!-- ===================== SUSTENTABILIDADE (Parallax - estrutura do template) ===================== -->
+      <div id="sustentabilidade" class="scroll-container sustainability-parallax">
+        <section class="fullscreen-panel intro-panel">
+          <div>
+            <h1>SUSTENTABILIDADE</h1>
+            <p>Nossa tecnologia ecológica para um futuro mais limpo</p>
+          </div>
+        </section>
+
+        <section class="fullscreen-panel" data-layout="left-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <video src="assets/videos/video-praia.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>Menos Plástico</h2>
+              <p>Nossas embalagens usam 70% menos plástico que produtos comuns, reduzindo significativamente o impacto ambiental e a poluição dos oceanos.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="fullscreen-panel" data-layout="right-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <video src="assets/videos/video-riacho.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>100% Biodegradável</h2>
+              <p>Desenvolvemos uma fórmula completamente biodegradável que não deixa resíduos químicos prejudiciais após o uso, protegendo nossos ecossistemas.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="fullscreen-panel" data-layout="left-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <video src="assets/videos/video-coelho.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>Vegan & Cruelty Free</h2>
+              <p>Produtos 100% veganos e livres de testes em animais, certificados internacionalmente e desenvolvidos com ingredientes de origem ética.</p>
+            </div>
+          </div>
+        </section>
+          
+        <section class="fullscreen-panel" data-layout="right-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <img src="assets/images/casa.jpg" alt="Família usando produtos seguros">
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>Segurança Familiar</h2>
+              <p>Segurança garantida para toda a família, incluindo crianças e bebês. Fórmula hipoalergênica e testada dermatologicamente para os mais sensíveis.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      <!-- ===================== COMO USAR ===================== -->
+        <section class="sopy-how-section">
+        <h2 class="sopy-how-title" aria-hidden="false">TRES PASSOS. SÓ POR NA MAQUINA</h2>
+        
+        <!-- Mobile Stack Slider -->
+        <div class="sopy-how-stack">
+          <div class="sopy-how-mobile-card">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">01</div>
+              <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
+            </div>
+          </div>
+          <div class="sopy-how-mobile-card">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">02</div>
+              <p>Coloque direto no tambor, antes das roupas.</p>
+            </div>
+          </div>
+          <div class="sopy-how-mobile-card">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">03</div>
+              <p>Inicie o ciclo — a cápsula dissolve 100%</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="sopy-how-track">
+          <div class="sopy-how-background-text">TRES PASSOS. SÓ POR NA MAQUINA</div>
+
+          <div class="sopy-how-panel">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">01</div>
+              <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
+            </div>
+          </div>
+          <div class="sopy-how-panel">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">02</div>
+              <p>Coloque direto no tambor, antes das roupas.</p>
+            </div>
+          </div>
+          <div class="sopy-how-panel">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">03</div>
+              <p>Inicie o ciclo — a cápsula dissolve 100%</p>
+            </div>
+          </div>
+        </div>
+        <div class="sopy-how-progress">
+          <div class="sopy-how-progress-dot"></div>
+          <div class="sopy-how-progress-dot"></div>
+          <div class="sopy-how-progress-dot"></div>
+        </div>
+        </section>
+
+
+  <!-- ===================== BENEFÍCIOS ===================== -->
+    <section id="beneficios" class="sopy-benefits-section sopy-section">
+    <header class="sopy-section-header">
+        <h2>Resultados que você vê e sente</h2>
+        <p>A tecnologia Sopy em cada cápsula.</p>
+    </header>
+  <div class="sopy-benefits-grid">
+    <div class="sopy-benefits-col">
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
+                        <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>
+                    </svg>
+          <h3 class="sopy-benefits-card-title">Remove Manchas Profundas</h3>
+          <p class="sopy-benefits-card-label">PODER DAS ENZIMAS</p>
+                </div>
+        <div class="sopy-benefits-card-blob"></div>
+            </div>
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
+                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+                    </svg>
+          <h3 class="sopy-benefits-card-title">Cores Vibrantes por Mais Tempo</h3>
+          <p class="sopy-benefits-card-label">PROTEÇÃO DAS FIBRAS</p>
+                </div>
+        <div class="sopy-benefits-card-blob"></div>
+            </div>
+        </div>
+    <div class="sopy-benefits-col">
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
+                        <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
+                    </svg>
+          <h3 class="sopy-benefits-card-title">Tudo em Uma Cápsula</h3>
+          <p class="sopy-benefits-card-label">PRATICIDADE</p>
+                </div>
+        <div class="sopy-benefits-card-blob"></div>
+            </div>
+      <div class="sopy-benefits-card">
+        <div class="sopy-benefits-card-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
+                        <path d="m10 20-1.25-2.5L6 18"/><path d="M10 4 8.75 6.5 6 6"/><path d="m14 20 1.25-2.5L18 18"/><path d="m14 4 1.25 2.5L18 6"/><path d="m17 21-3-6h-4"/><path d="m17 3-3 6 1.5 3"/><path d="M2 12h6.5L10 9"/><path d="m20 10-1.5 2 1.5 2"/><path d="M22 12h-6.5L14 15"/><path d="m4 10 1.5 2L4 14"/><path d="m7 21 3-6-1.5-3"/><path d="m7 3 3 6h4"/>
+                    </svg>
+          <h3 class="sopy-benefits-card-title">Para Todas as Máquinas</h3>
+          <p class="sopy-benefits-card-label">ÁGUA FRIA E QUENTE</p>
+                </div>
+        <div class="sopy-benefits-card-blob"></div>
+            </div>
+        </div>
+    </div>
+</section>
+    
+      
+      <!-- ===================== DEPOIMENTOS (tc-testimonials) ===================== -->
+      <section id="testemunhos" class="tc-testimonials" aria-label="Depoimentos de clientes">
+        <div class="tc-wrap">
+          <div class="tc-left">
+            <h2 class="tc-title">Clientes que amam a Sopy</h2>
+            <p class="tc-sub">Veja o que a galera diz sobre praticidade, perfume e resultado. Depoimentos reais de quem já usa no dia a dia.</p>
+            <div class="tc-cta">
+              <a href="/comprar.html" class="sopy-tc-btn sopy-tc-btn--primary">Comprar agora</a>
+              <a href="#beneficios" class="sopy-tc-btn sopy-tc-btn--ghost">Ver benefícios</a>
+            </div>
+          </div>
+
+          <div class="tc-right">
+            <div class="tc-topActions" aria-hidden="true">
+              <button class="tc-nav tc-prev" aria-label="Anterior"></button>
+              <button class="tc-nav tc-next" aria-label="Próximo"></button>
+            </div>
+
+            <article class="tc-card" aria-live="polite">
+              <div class="tc-quoteMark" aria-hidden="true">“</div>
+              <p class="tc-quote"></p>
+              <footer class="tc-cardFoot">
+                <div class="tc-author">
+                  <img class="tc-avatar" src="" alt="" />
+                  <div>
+                    <span class="tc-name"></span>
+                    <span class="tc-role"></span>
+                  </div>
+                </div>
+                <div class="tc-rating" aria-label="Avaliação">
+                  <div class="tc-stars" aria-hidden="true"></div>
+                  <span class="tc-score"></span>
+                </div>
+              </footer>
+            </article>
+
+            <div class="tc-dots" role="tablist" aria-label="Páginas de depoimentos"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== FAQ ===================== -->
+      <section id="faq" class="sopy-faq sopy-section"  aria-label="Perguntas frequentes">
+        <header class="sopy-section-header">
+          <h2>Perguntas frequentes</h2>
+        </header>
+
+        <section class="sopy-faq-accordion" id="faq-q1">
+          <h3 class="sopy-title"><a href="#faq-q1">Funciona em água fria?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
+              <p>Sim. A fórmula foi pensada para atuar em todas as temperaturas.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="sopy-faq-accordion" id="faq-q2">
+          <h3 class="sopy-title"><a href="#faq-q2">Posso usar com roupas de bebê?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
+              <p>Sim. Siga o ciclo indicado pelo fabricante da máquina e da roupa.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="sopy-faq-accordion" id="faq-q3">
+          <h3 class="sopy-title"><a href="#faq-q3">Dissolve no ciclo rápido?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
+              <p>Sim, a película é hidrossolúvel e dissolve completamente.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
