@@ -8,13 +8,34 @@
           const ABS_PROTOCOL = /^(https?:)?\/\//i;
           const ABS_SPECIAL  = /^(data:|blob:)/i;
           function normalize(p){
-            if (!p) return p;
-            // keep absolute, data, blob and already-rooted /assets/
-            if (ABS_PROTOCOL.test(p) || ABS_SPECIAL.test(p) || p.startsWith('/assets/')) return p;
-            // collapse leading ./ and ensure single 'assets/' prefix
-            const cleaned = p.replace(/^\.\//, '').replace(/^\/?assets\//, 'assets/');
-            return BASE ? (BASE.endsWith('/') ? BASE : BASE + '/') + cleaned.replace(/^\//,'') : cleaned;
-          }
+  if (!p) return p;
+
+  const ABS_PROTOCOL = /^(https?:)?\/\//i;
+  const ABS_SPECIAL  = /^(data:|blob:)/i;
+  if (ABS_PROTOCOL.test(p) || ABS_SPECIAL.test(p)) return p;
+
+  // Mantém raiz /assets/ da Nuvemshop
+  if (p.startsWith('/assets/')) return p;
+
+  // Remove './' e slashes múltiplos
+  const cleaned = p.replace(/^\.\/+/, '').replace(/^\/+/, '');
+
+  // Se já começa com 'assets/', só prefixe slash quando BASE for '/assets/'.
+  if (cleaned.startsWith('assets/')) {
+    // BASE pode ser '' (fora da Nuvemshop) ou '/assets/'
+    return BASE ? (BASE.endsWith('/') ? BASE : BASE + '/') + cleaned.replace(/^assets\//, BASE.includes('/assets') ? '' : 'assets/')
+                : cleaned;
+  }
+
+  // Caso genérico: junte BASE + cleaned sem gerar // ou /assets/assets
+  if (BASE) {
+    const left  = BASE.endsWith('/') ? BASE.slice(0, -1) : BASE;
+    const right = cleaned.replace(/^\/+/, '');
+    return left + '/' + right;
+  }
+
+  return cleaned;
+}
           window.SOPY = Object.assign(window.SOPY || {}, {
             assetBase: BASE,
             assetUrl: normalize,
@@ -170,7 +191,29 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-/* =========================
+
+function bootAnimations() {
+  console.log("[SOPY] Comando recebido. Iniciando animações e interatividade...");
+
+  // 1. Adiciona a classe do tema ao body
+  document.body.classList.add('theme-citrus');
+
+  // 2. Usa a ferramenta que definimos para corrigir os caminhos das imagens/vídeos
+  // Esta função PRECISA rodar aqui, pois o HTML já vai estar na página
+  if (window.SOPY && typeof window.SOPY.rewriteDomAssets === 'function') {
+    window.SOPY.rewriteDomAssets();
+    console.log("[SOPY] Caminhos de assets reescritos.");
+  }
+
+  // 3. A PARTIR DAQUI, COLOQUE TODO O RESTO DO SEU CÓDIGO
+  // Todo o código que inicia animações, sliders, accordions, etc.
+  // Exemplo:
+  // initHeroAnimation();
+  // initFaqAccordion();
+  // initTestimonialsSlider();
+  // document.querySelector('#meu-botao').addEventListener('click', () => { ... }); 
+
+  /* =========================
   1) GSAP Setup + Lenis (limpo)
   Safe plugin registration: register only after window.onload so CDNs have a chance to load.
 ========================= */
@@ -1878,5 +1921,9 @@ window.start3DScrollAnimation = start3DScrollAnimation; // para debug
     }
   });
 })();
+
+
+  console.log("[SOPY] Animações e eventos configurados.");
+}
 
 
