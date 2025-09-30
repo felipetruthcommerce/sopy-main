@@ -339,15 +339,17 @@ function bootAnimations() {
         const track = testimonialsSection.querySelector('.tc-testimonials-track');
         const cards = track ? Array.from(track.querySelectorAll('.tc-testimonial-card')) : [];
 
-        // Criar progress wrap igual ao Como Usar (fixo na tela)
-        let tcProgressWrap = document.querySelector('.tc-progress-wrap');
+        // Criar progress wrap dentro da própria seção (para evitar aparecer em outras seções)
+        // e seguir o mesmo comportamento de visibilidade do Como Usar (.visible)
+        let tcProgressWrap = testimonialsSection.querySelector('.tc-progress-wrap');
         if (!tcProgressWrap) {
             tcProgressWrap = document.createElement('div');
             tcProgressWrap.className = 'tc-progress-wrap';
-            document.body.appendChild(tcProgressWrap);
+            // inserir no final da seção para manter o escopo visual
+            testimonialsSection.appendChild(tcProgressWrap);
         }
-        
-        // Criar dots dinâmicos
+
+        // Limpa e cria dots dinâmicos dentro do wrap da seção
         tcProgressWrap.innerHTML = '';
         cards.forEach((_, i) => {
             const dot = document.createElement('div');
@@ -355,7 +357,7 @@ function bootAnimations() {
             dot.setAttribute('data-index', i);
             tcProgressWrap.appendChild(dot);
         });
-        
+
         const dots = tcProgressWrap.querySelectorAll('.tc-progress-dot');
 
         if (track && cards.length > 0) {
@@ -381,7 +383,7 @@ function bootAnimations() {
 
                 // Animação horizontal igual ao Como Usar
                 gsap.timeline({
-                    defaults: { duration: 0.6, ease: 'power2.out' },
+                    defaults: { duration: 0.2, ease: 'power2.out' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
@@ -473,14 +475,29 @@ function bootAnimations() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        tcProgressWrap.style.opacity = '1';
+                        tcProgressWrap.classList.add('visible');
                     } else {
-                        tcProgressWrap.style.opacity = '0';
+                        tcProgressWrap.classList.remove('visible');
                     }
                 });
             }, { threshold: 0.3 });
-            
+
             observer.observe(testimonialsSection);
+
+            // If GSAP ScrollTrigger is available, prefer it for more accurate enter/leave visibility
+            try {
+                if (typeof ScrollTrigger !== 'undefined') {
+                    ScrollTrigger.create({
+                        trigger: testimonialsSection,
+                        start: 'top 40%',
+                        end: 'bottom 40%',
+                        onEnter: () => tcProgressWrap.classList.add('visible'),
+                        onEnterBack: () => tcProgressWrap.classList.add('visible'),
+                        onLeave: () => tcProgressWrap.classList.remove('visible'),
+                        onLeaveBack: () => tcProgressWrap.classList.remove('visible')
+                    });
+                }
+            } catch (e) { /* ignore if ScrollTrigger isn't present */ }
 
         } else {
             console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
