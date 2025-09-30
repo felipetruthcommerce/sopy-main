@@ -81,5 +81,128 @@ function bootAnimations() {
     } else {
         console.log('[BENEFÍCIOS] Seção #beneficios não encontrada.');
     }
+
+
+    // ===================================
+    //  BLOCO COMO USAR (DESKTOP E MOBILE) + BARRA DE PROGRESSO
+    // ===================================
+
+    // --- Parte 1: Lógica para a seção "Como Usar" ---
+    const howSection = document.querySelector('.sopy-how-section');
+    if (howSection) {
+        console.log('[COMO USAR] Seção encontrada. Verificando versão Desktop/Mobile...');
+
+        // Lógica para DESKTOP (Scroll Horizontal com GSAP)
+        if (window.matchMedia("(min-width: 1024px)").matches) {
+            console.log('[COMO USAR] ...ativando modo Desktop.');
+            const track = howSection.querySelector('.sopy-how-track');
+            const panels = track ? Array.from(track.querySelectorAll('.sopy-how-panel')) : [];
+            const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+
+            if (track && panels.length > 0) {
+                const getDistance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+                gsap.to(track, {
+                    x: () => -getDistance(),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: howSection,
+                        start: 'top top',
+                        end: () => `+=${getDistance()}`,
+                        pin: true,
+                        scrub: 0.6,
+                        invalidateOnRefresh: true,
+                        onUpdate: self => {
+                            if (!dots || dots.length === 0) return;
+                            const steps = dots.length;
+                            const idx = Math.min(steps - 1, Math.round(self.progress * (steps - 1)));
+                            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                        }
+                    }
+                });
+            }
+        }
+        // Lógica para MOBILE (Slider de Toque)
+        else {
+            console.log('[COMO USAR] ...ativando modo Mobile.');
+            const stack = howSection.querySelector('.sopy-how-stack');
+            const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
+            const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+
+            if (stack && cards.length > 0) {
+                // (Seu código de slider de toque vai aqui, sem o DOMContentLoaded)
+                // Colei e ajustei seu código abaixo:
+                let currentIndex = 0;
+                let isDragging = false;
+                let startX = 0;
+                let currentX = 0;
+
+                const updateCardsPosition = (animate = true) => {
+                    cards.forEach((card, index) => {
+                        const offset = (index - currentIndex) * card.offsetWidth;
+                        gsap.to(card, {
+                            x: offset,
+                            duration: animate ? 0.4 : 0,
+                            ease: 'power2.out'
+                        });
+                    });
+                    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                };
+
+                const onDragStart = (e) => {
+                    isDragging = true;
+                    startX = e.touches ? e.touches[0].clientX : e.clientX;
+                    stack.style.cursor = 'grabbing';
+                };
+
+                const onDragMove = (e) => {
+                    if (!isDragging) return;
+                    currentX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const diff = currentX - startX;
+                    cards.forEach((card, index) => {
+                        const offset = (index - currentIndex) * card.offsetWidth + diff;
+                        gsap.set(card, { x: offset });
+                    });
+                };
+
+                const onDragEnd = () => {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    stack.style.cursor = 'grab';
+                    const diff = currentX - startX;
+                    if (Math.abs(diff) > 50) { // Threshold
+                        if (diff < 0 && currentIndex < cards.length - 1) {
+                            currentIndex++;
+                        } else if (diff > 0 && currentIndex > 0) {
+                            currentIndex--;
+                        }
+                    }
+                    updateCardsPosition();
+                };
+
+                stack.addEventListener('mousedown', onDragStart);
+                window.addEventListener('mousemove', onDragMove);
+                window.addEventListener('mouseup', onDragEnd);
+                stack.addEventListener('touchstart', onDragStart, { passive: true });
+                window.addEventListener('touchmove', onDragMove);
+                window.addEventListener('touchend', onDragEnd);
+
+                updateCardsPosition(false); // Posição inicial
+            }
+        }
+    }
+
+    // --- Parte 2: Lógica para a Barra de Progresso Global ---
+    const bar = document.querySelector('.page-progress-bar');
+    if (bar && window.lenis) { // Só executa se a barra e o Lenis existirem
+        console.log('[PROGRESSO] Barra de progresso da página ativada.');
+        const updateProgress = () => {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const y = window.lenis.scroll;
+            const p = docHeight > 0 ? y / docHeight : 0;
+            bar.style.transform = `scaleX(${p})`;
+        };
+        window.lenis.on('scroll', updateProgress);
+    }
     
 } // Fim da função bootAnimations

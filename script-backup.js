@@ -1859,38 +1859,38 @@ document.body.classList.add("theme-citrus");
 /* =========================
    Header: aparece no início e ao rolar pra cima; some ao rolar pra baixo
 ========================= */
-(function autoHideHeader() {
-  const header = document.querySelector('.sopy-site-header');
-  if (!header) return;
+// (function autoHideHeader() {
+//   const header = document.querySelector('.sopy-site-header');
+//   if (!header) return;
 
-  const showNav = () => document.body.classList.remove('nav-hidden');
-  const hideNav = () => document.body.classList.add('nav-hidden');
+//   const showNav = () => document.body.classList.remove('nav-hidden');
+//   const hideNav = () => document.body.classList.add('nav-hidden');
 
-  // Visível no início (hero aberto)
-  showNav();
+//   // Visível no início (hero aberto)
+//   showNav();
 
-  let lastY = 0;
-  // Usamos o Lenis para obter a posição de scroll suavizada
-  lenis.on('scroll', (e) => {
-    const y = e.scroll;
-    // Sempre mostrar no topo da página
-    if (y <= 10) { showNav(); lastY = y; return; }
+//   let lastY = 0;
+//   // Usamos o Lenis para obter a posição de scroll suavizada
+//   lenis.on('scroll', (e) => {
+//     const y = e.scroll;
+//     // Sempre mostrar no topo da página
+//     if (y <= 10) { showNav(); lastY = y; return; }
 
-    const goingDown = y > lastY;
-    if (goingDown) hideNav(); else showNav();
-    lastY = y;
-  });
-})();
+//     const goingDown = y > lastY;
+//     if (goingDown) hideNav(); else showNav();
+//     lastY = y;
+//   });
+// })();
 
-// Substitui o animate padrão por animateWithScroll assim que o modelo 3D estiver carregado
-function start3DScrollAnimation() {
-  running = true;
-  if (rafId) cancelAnimationFrame(rafId);
-  rafId = requestAnimationFrame(animateWithScroll);
-}
-// Chame start3DScrollAnimation() após o modelo ser carregado ou fallback criado
-// Exemplo: após swapModel ou createFallbackModel, chame start3DScrollAnimation();
-window.start3DScrollAnimation = start3DScrollAnimation; // para debug
+// // Substitui o animate padrão por animateWithScroll assim que o modelo 3D estiver carregado
+// function start3DScrollAnimation() {
+//   running = true;
+//   if (rafId) cancelAnimationFrame(rafId);
+//   rafId = requestAnimationFrame(animateWithScroll);
+// }
+// // Chame start3DScrollAnimation() após o modelo ser carregado ou fallback criado
+// // Exemplo: após swapModel ou createFallbackModel, chame start3DScrollAnimation();
+// window.start3DScrollAnimation = start3DScrollAnimation; // para debug
 
 
 
@@ -1899,28 +1899,28 @@ window.start3DScrollAnimation = start3DScrollAnimation; // para debug
    Faz o footer se mover levemente pra cima enquanto entra na viewport,
    criando a impressão de que sobrepõe a seção anterior.
 ========================= */
-(function footerParallax() {
-  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  const footer = document.querySelector('.sopy-site-footer');
-  if (!footer) return;
+// (function footerParallax() {
+//   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+//   const footer = document.querySelector('.sopy-site-footer');
+//   if (!footer) return;
 
-  // Inicialmente empurra o footer para baixo (para criar o movimento de subida)
-  gsap.set(footer, { yPercent: 10 });
+//   // Inicialmente empurra o footer para baixo (para criar o movimento de subida)
+//   gsap.set(footer, { yPercent: 10 });
 
-  ScrollTrigger.create({
-    trigger: footer,
-    start: 'top bottom', // quando o topo do footer encontra a base da viewport
-    end: 'bottom top',   // até o final do footer sair do topo
-    scrub: 1.2,
-    invalidateOnRefresh: true,
-    onUpdate: self => {
-      // Normaliza progress entre 0 e 1
-      const p = clamp(self.progress, 0, 1);
-      // Interpola yPercent de 10 -> 0 para dar a sensação de subida
-      gsap.to(footer, { yPercent: (1 - p) * 10, duration: 0.6, ease: 'power2.out' });
-    }
-  });
-})();
+//   ScrollTrigger.create({
+//     trigger: footer,
+//     start: 'top bottom', // quando o topo do footer encontra a base da viewport
+//     end: 'bottom top',   // até o final do footer sair do topo
+//     scrub: 1.2,
+//     invalidateOnRefresh: true,
+//     onUpdate: self => {
+//       // Normaliza progress entre 0 e 1
+//       const p = clamp(self.progress, 0, 1);
+//       // Interpola yPercent de 10 -> 0 para dar a sensação de subida
+//       gsap.to(footer, { yPercent: (1 - p) * 10, duration: 0.6, ease: 'power2.out' });
+//     }
+//   });
+// })();
 
 
   console.log("[SOPY] Animações e eventos configurados.");
