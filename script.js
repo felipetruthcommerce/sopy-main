@@ -1,6 +1,21 @@
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
+       // ===================================
+    //  INICIALIZAÇÃO DO LENIS (SCROLL SUAVE)
+    // ===================================
+    // (Seu código do Lenis aqui)
+    const lenis = new Lenis();
+    window.lenis = lenis;
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    console.log('[LENIS] Scroll suave inicializado.');
+
+
+
+
+
     // ===================================
     //  BLOCO 2: EFEITO PARALLAX (SUSTENTABILIDADE)
     // ===================================
@@ -571,16 +586,6 @@ function bootAnimations() {
         console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
 
-   // ===================================
-    //  INICIALIZAÇÃO DO LENIS (SCROLL SUAVE)
-    // ===================================
-    // (Seu código do Lenis aqui)
-    const lenis = new Lenis();
-    window.lenis = lenis;
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-    console.log('[LENIS] Scroll suave inicializado.');
 
 
    
