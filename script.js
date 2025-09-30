@@ -92,17 +92,39 @@ function bootAnimations() {
     if (howSection) {
         console.log('[COMO USAR] Seção encontrada. Verificando versão Desktop/Mobile...');
 
-        // Lógica para DESKTOP (Scroll Horizontal com GSAP)
-        if (window.matchMedia("(min-width: 1024px)").matches) {
-            console.log('[COMO USAR] ...ativando modo Desktop.');
-            const track = howSection.querySelector('.sopy-how-track');
-            const panels = track ? Array.from(track.querySelectorAll('.sopy-how-panel')) : [];
-            const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+        const track = howSection.querySelector('.sopy-how-track');
+        const panels = track ? Array.from(track.querySelectorAll('.sopy-how-panel')) : [];
+        const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+        const progressWrap = howSection.querySelector('.sopy-how-progress');
+        const progressPill = progressWrap ? progressWrap.querySelector('.sopy-how-progress-pill') : null;
+        const bgText = howSection.querySelector('.sopy-how-bg-text');
 
-            if (track && panels.length > 0) {
-                const getDistance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+            // Fallback: position cards for mobile-only experience
+            if (!window.matchMedia('(min-width:1024px)').matches) {
+                const stack = howSection.querySelector('.sopy-how-stack');
+                if (stack) {
+                    // Simple fallback positioning
+                    Array.from(stack.querySelectorAll('.sopy-how-mobile-card')).forEach((c, i) => c.style.transform = `translateX(${i * 100}%)`);
+                }
+            }
+        } else {
+            // Utility: set track width explicit so getDistance is accurate and background text can span
+            const setTrackWidth = () => {
+                if (!track) return;
+                track.style.width = `${Math.max(1, panels.length) * window.innerWidth}px`;
+                // make background text span the same visual area (in vw) so it "ocupa o scroll"
+                if (bgText) {
+                    bgText.style.width = `${panels.length * 100}vw`;
+                }
+            };
+            setTrackWidth();
 
-                gsap.to(track, {
+            const getDistance = () => track ? Math.max(0, track.scrollWidth - window.innerWidth) : 0;
+
+            // DESKTOP: horizontal pin with progress inside the section + bg text horizontal
+            if (window.matchMedia('(min-width:1024px)').matches && track && panels.length > 0) {
+                const tween = gsap.to(track, {
                     x: () => -getDistance(),
                     ease: 'none',
                     scrollTrigger: {
@@ -112,97 +134,166 @@ function bootAnimations() {
                         pin: true,
                         scrub: 0.6,
                         invalidateOnRefresh: true,
+                        onRefresh: () => {
+                            setTrackWidth();
+                        },
+                        onEnter: () => progressWrap?.classList.add('visible'),
+                        onEnterBack: () => progressWrap?.classList.add('visible'),
+                        onLeave: () => progressWrap?.classList.remove('visible'),
+                        onLeaveBack: () => progressWrap?.classList.remove('visible'),
                         onUpdate: self => {
-                            if (!dots || dots.length === 0) return;
-                            const steps = dots.length;
-                            const idx = Math.min(steps - 1, Math.round(self.progress * (steps - 1)));
-                            dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                            // dots
+                            if (dots && dots.length) {
+                                const steps = dots.length;
+                                const idx = Math.min(steps - 1, Math.max(0, Math.round(self.progress * (steps - 1))));
+                                dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                            }
+
+                            // section progress pill (0..1)
+                            if (progressPill) {
+                                const p = Math.max(0, Math.min(1, self.progress));
+                                progressPill.style.transform = `scaleX(${p})`;
+                            }
+
+                            // background text parallax/occupy effect: move proportionally to scroll but slightly slower
+                            if (bgText) {
+                                const bgMax = Math.max(0, bgText.scrollWidth - window.innerWidth);
+                                const x = bgMax * self.progress; // 0 -> bgMax
+                                bgText.style.transform = `translateX(${-x}px)`;
+                            }
                         }
                     }
                 });
+
+                // refresh handlers
+                window.addEventListener('resize', () => {
+                    setTrackWidth();
+                    try { ScrollTrigger.refresh(); } catch (e) {}
+                });
             }
-        }
-        // Lógica para MOBILE (Slider de Toque)
-        else {
-            console.log('[COMO USAR] ...ativando modo Mobile.');
-            const stack = howSection.querySelector('.sopy-how-stack');
-            const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
-            const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
 
-            if (stack && cards.length > 0) {
-                // (Seu código de slider de toque vai aqui, sem o DOMContentLoaded)
-                // Colei e ajustei seu código abaixo:
-                let currentIndex = 0;
-                let isDragging = false;
-                let startX = 0;
-                let currentX = 0;
-
-                const updateCardsPosition = (animate = true) => {
-                    cards.forEach((card, index) => {
-                        const offset = (index - currentIndex) * card.offsetWidth;
-                        gsap.to(card, {
-                            x: offset,
-                            duration: animate ? 0.4 : 0,
-                            ease: 'power2.out'
+            // MOBILE: Touch slider with snapping and dots
+            if (!window.matchMedia('(min-width:1024px)').matches) {
+                const stack = howSection.querySelector('.sopy-how-stack');
+                const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
+                const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+                if (stack && cards.length) {
+                    let currentIndex = 0;
+                    let isAnimating = false;
+                    // Position cards
+                    const positionCards = (animate = true) => {
+                        const gap = 24;
+                        const containerWidth = stack.clientWidth;
+                        cards.forEach((card, index) => {
+                            const offset = (index - currentIndex) * (containerWidth + gap);
+                            if (typeof gsap !== 'undefined') {
+                                gsap.to(card, { x: offset, duration: animate ? 0.4 : 0, ease: 'power2.out' });
+                            } else {
+                                card.style.transform = `translateX(${offset}px)`;
+                            }
                         });
-                    });
-                    dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
-                };
-
-                const onDragStart = (e) => {
-                    isDragging = true;
-                    startX = e.touches ? e.touches[0].clientX : e.clientX;
-                    stack.style.cursor = 'grabbing';
-                };
-
-                const onDragMove = (e) => {
-                    if (!isDragging) return;
-                    currentX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const diff = currentX - startX;
-                    cards.forEach((card, index) => {
-                        const offset = (index - currentIndex) * card.offsetWidth + diff;
-                        gsap.set(card, { x: offset });
-                    });
-                };
-
-                const onDragEnd = () => {
-                    if (!isDragging) return;
-                    isDragging = false;
-                    stack.style.cursor = 'grab';
-                    const diff = currentX - startX;
-                    if (Math.abs(diff) > 50) { // Threshold
-                        if (diff < 0 && currentIndex < cards.length - 1) {
-                            currentIndex++;
-                        } else if (diff > 0 && currentIndex > 0) {
-                            currentIndex--;
+                        // update dots
+                        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                        // update section progress pill as fraction
+                        if (progressPill) {
+                            const p = cards.length > 1 ? currentIndex / (cards.length - 1) : 0;
+                            progressPill.style.transform = `scaleX(${p})`;
                         }
-                    }
-                    updateCardsPosition();
-                };
+                    };
 
-                stack.addEventListener('mousedown', onDragStart);
-                window.addEventListener('mousemove', onDragMove);
-                window.addEventListener('mouseup', onDragEnd);
-                stack.addEventListener('touchstart', onDragStart, { passive: true });
-                window.addEventListener('touchmove', onDragMove);
-                window.addEventListener('touchend', onDragEnd);
+                    const slideTo = (index) => {
+                        if (isAnimating || index === currentIndex) return;
+                        const target = Math.max(0, Math.min(cards.length - 1, index));
+                        isAnimating = true;
+                        currentIndex = target;
+                        positionCards();
+                        setTimeout(() => { isAnimating = false; }, 400);
+                    };
 
-                updateCardsPosition(false); // Posição inicial
+                    // touch handlers
+                    let isDragging = false;
+                    let startX = 0;
+                    let startY = 0;
+                    let deltaX = 0;
+
+                    const handleStart = (e) => {
+                        if (isAnimating) return;
+                        isDragging = true;
+                        startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                        startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                        deltaX = 0;
+                        stack.classList.add('sopy-how-grabbing');
+                        if (e.type === 'mousedown') e.preventDefault();
+                    };
+
+                    const handleMove = (e) => {
+                        if (!isDragging) return;
+                        const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                        const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                        deltaX = currentX - startX;
+                        const deltaY = Math.abs(currentY - startY);
+                        if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
+                            e.preventDefault();
+                            const gap = 24;
+                            const containerWidth = stack.clientWidth;
+                            cards.forEach((card, index) => {
+                                const baseOffset = (index - currentIndex) * (containerWidth + gap);
+                                const offset = baseOffset + deltaX;
+                                if (typeof gsap !== 'undefined') gsap.set(card, { x: offset }); else card.style.transform = `translateX(${offset}px)`;
+                            });
+                        }
+                    };
+
+                    const handleEnd = () => {
+                        if (!isDragging) return;
+                        isDragging = false;
+                        stack.classList.remove('sopy-how-grabbing');
+                        const threshold = stack.clientWidth * 0.2;
+                        if (Math.abs(deltaX) > threshold) {
+                            const direction = deltaX > 0 ? -1 : 1;
+                            slideTo(currentIndex + direction);
+                        } else {
+                            positionCards();
+                        }
+                    };
+
+                    // listeners
+                    stack.addEventListener('touchstart', handleStart, { passive: false });
+                    stack.addEventListener('touchmove', handleMove, { passive: false });
+                    stack.addEventListener('touchend', handleEnd);
+                    stack.addEventListener('mousedown', handleStart);
+                    document.addEventListener('mousemove', handleMove);
+                    document.addEventListener('mouseup', handleEnd);
+
+                    // dots
+                    dots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
+
+                    // init
+                    positionCards(false);
+                    let resizeTimeout;
+                    window.addEventListener('resize', () => { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(() => positionCards(false), 100); });
+                }
             }
         }
     }
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---
-    const bar = document.querySelector('.page-progress-bar');
-    if (bar && window.lenis) { // Só executa se a barra e o Lenis existirem
-        console.log('[PROGRESSO] Barra de progresso da página ativada.');
-        const updateProgress = () => {
+    // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
+    const pageBar = document.querySelector('.page-progress-bar');
+    const pageCirc = document.querySelector('.progress-circle-bar');
+    if (pageBar || pageCirc) {
+        const CIRCUMFERENCE = 2 * Math.PI * 45; // raio 45 do SVG
+        const updatePageProgress = () => {
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const y = window.lenis.scroll;
-            const p = docHeight > 0 ? y / docHeight : 0;
-            bar.style.transform = `scaleX(${p})`;
+            const y = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop || 0);
+            const p = docHeight > 0 ? Math.max(0, Math.min(1, y / docHeight)) : 0;
+            if (pageBar) pageBar.style.transform = `scaleX(${p})`;
+            if (pageCirc) pageCirc.style.strokeDashoffset = `${CIRCUMFERENCE * (1 - p)}`;
         };
-        window.lenis.on('scroll', updateProgress);
+        try { if (window.lenis) window.lenis.on('scroll', updatePageProgress); } catch(e){}
+        window.addEventListener('resize', updatePageProgress);
+        // init
+        updatePageProgress();
     }
     
 } // Fim da função bootAnimations
