@@ -49,34 +49,62 @@ function bootAnimations() {
             }
         });
 
-        // GSAP entrance animations
-        gsap.from("#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card", {
-            scrollTrigger: {
-                trigger: "#beneficios .sopy-benefits-grid",
-                start: "top 80%",
-                end: "center 70%",
-                scrub: 0.3,
-            },
-            y: 50,
-            x: -250,
-            rotation: -20,
-            opacity: 0,
-            stagger: 0.2
-        });
+        // GSAP entrance animations - funciona em desktop e mobile
+        if (window.matchMedia('(min-width: 1024px)').matches) {
+            // Desktop: animações com ScrollTrigger scrub
+            gsap.from("#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card", {
+                scrollTrigger: {
+                    trigger: "#beneficios .sopy-benefits-grid",
+                    start: "top 80%",
+                    end: "center 50%",
+                    scrub: 0.3,
+                },
+                y: 50,
+                x: -250,
+                rotation: -20,
+                opacity: 0,
+                stagger: 0.2
+            });
 
-        gsap.from("#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card", {
-            scrollTrigger: {
-                trigger: "#beneficios .sopy-benefits-grid",
-                start: "top 80%",
-                end: "center 70%",
-                scrub: 0.3,
-            },
-            y: 50,
-            x: 250,
-            rotation: 20,
-            opacity: 0,
-            stagger: 0.2
-        });
+            gsap.from("#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card", {
+                scrollTrigger: {
+                    trigger: "#beneficios .sopy-benefits-grid",
+                    start: "top 80%",
+                    end: "center 50%",
+                    scrub: 0.3,
+                },
+                y: 50,
+                x: 250,
+                rotation: 20,
+                opacity: 0,
+                stagger: 0.2
+            });
+        } else {
+            // Mobile: animações simples sem scrub
+            gsap.from("#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card", {
+                scrollTrigger: {
+                    trigger: "#beneficios .sopy-benefits-grid",
+                    start: "top 90%",
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+
+            gsap.from("#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card", {
+                scrollTrigger: {
+                    trigger: "#beneficios .sopy-benefits-grid",
+                    start: "top 90%",
+                },
+                y: 30,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power2.out'
+            });
+        }
 
     } else {
         console.log('[BENEFÍCIOS] Seção #beneficios não encontrada.');
@@ -172,7 +200,7 @@ function bootAnimations() {
                 });
             }
 
-            // MOBILE: Touch slider with snapping and dots
+            // MOBILE: Touch slider independente do scroll - só touch/drag
             if (!window.matchMedia('(min-width:1024px)').matches) {
                 const stack = howSection.querySelector('.sopy-how-stack');
                 const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
@@ -180,6 +208,10 @@ function bootAnimations() {
                 if (stack && cards.length) {
                     let currentIndex = 0;
                     let isAnimating = false;
+                    
+                    // Mostrar progress bar no mobile também
+                    if (progressWrap) progressWrap.classList.add('visible');
+                    
                     // Position cards
                     const positionCards = (animate = true) => {
                         const gap = 24;
@@ -187,9 +219,10 @@ function bootAnimations() {
                         cards.forEach((card, index) => {
                             const offset = (index - currentIndex) * (containerWidth + gap);
                             if (typeof gsap !== 'undefined') {
-                                gsap.to(card, { x: offset, duration: animate ? 0.4 : 0, ease: 'power2.out' });
+                                gsap.to(card, { x: offset, opacity: index === currentIndex ? 1 : 0.7, duration: animate ? 0.4 : 0, ease: 'power2.out' });
                             } else {
                                 card.style.transform = `translateX(${offset}px)`;
+                                card.style.opacity = index === currentIndex ? 1 : 0.7;
                             }
                         });
                         // update dots
@@ -294,6 +327,152 @@ function bootAnimations() {
         window.addEventListener('resize', updatePageProgress);
         // init
         updatePageProgress();
+    }
+
+    // ===================================
+    //  BLOCO DOS DEPOIMENTOS (CORRIGIDO)
+    // ===================================
+    const testimonialsSection = document.getElementById('depoimentos');
+    if (testimonialsSection) {
+        console.log('[DEPOIMENTOS] Seção encontrada. Inicializando slider...');
+        
+        const track = testimonialsSection.querySelector('.tc-testimonials-track');
+        const cards = track ? Array.from(track.querySelectorAll('.tc-testimonial-card')) : [];
+        const dots = testimonialsSection.querySelectorAll('.tc-testimonials-dots .tc-dot');
+        
+        if (track && cards.length > 0) {
+            let currentIndex = 0;
+            let isAnimating = false;
+            let autoInterval;
+            let pendingSteps = 0;
+            const MAX_PENDING = 3;
+            
+            const slideTo = (index) => {
+                if (isAnimating || pendingSteps >= MAX_PENDING) return;
+                if (index === currentIndex) return;
+                
+                const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
+                pendingSteps++;
+                isAnimating = true;
+                
+                const currentCard = cards[currentIndex];
+                const targetCard = cards[targetIndex];
+                const direction = targetIndex > currentIndex ? 1 : -1;
+                const cardWidth = currentCard.offsetWidth;
+                
+                // Clear auto interval
+                if (autoInterval) {
+                    clearInterval(autoInterval);
+                    autoInterval = null;
+                }
+                
+                // Animation
+                gsap.timeline({
+                    defaults: { duration: 0.6, ease: 'power2.out' },
+                    onComplete: () => {
+                        currentIndex = targetIndex;
+                        isAnimating = false;
+                        pendingSteps = Math.max(0, pendingSteps - 1);
+                        
+                        // Update dots
+                        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                        
+                        // Restart auto-play after 1s delay
+                        setTimeout(() => {
+                            if (!autoInterval) {
+                                autoInterval = setInterval(() => {
+                                    if (!isAnimating) {
+                                        slideTo((currentIndex + 1) % cards.length);
+                                    }
+                                }, 9000);
+                            }
+                        }, 1000);
+                    }
+                })
+                .to(currentCard, { x: -direction * cardWidth, opacity: 0 }, 0)
+                .fromTo(targetCard, 
+                    { x: direction * cardWidth, opacity: 0 },
+                    { x: 0, opacity: 1 }, 0
+                );
+            };
+            
+            // Dot clicks
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => slideTo(index));
+            });
+            
+            // Touch/Drag support
+            let isDragging = false;
+            let startX = 0;
+            let deltaX = 0;
+            
+            const handleStart = (e) => {
+                if (isAnimating) return;
+                isDragging = true;
+                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                deltaX = 0;
+                track.style.cursor = 'grabbing';
+            };
+            
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                deltaX = currentX - startX;
+                
+                // Live preview drag
+                const currentCard = cards[currentIndex];
+                if (currentCard) {
+                    gsap.set(currentCard, { x: deltaX });
+                }
+            };
+            
+            const handleEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                track.style.cursor = 'grab';
+                
+                const threshold = track.clientWidth * 0.18; // 18% threshold
+                
+                if (Math.abs(deltaX) > threshold) {
+                    const direction = deltaX > 0 ? -1 : 1;
+                    slideTo(currentIndex + direction);
+                } else {
+                    // Snap back
+                    const currentCard = cards[currentIndex];
+                    if (currentCard) {
+                        gsap.to(currentCard, { x: 0, duration: 0.3, ease: 'power2.out' });
+                    }
+                }
+            };
+            
+            // Event listeners
+            track.addEventListener('mousedown', handleStart);
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+            track.addEventListener('touchstart', handleStart, { passive: true });
+            track.addEventListener('touchmove', handleMove, { passive: false });
+            track.addEventListener('touchend', handleEnd);
+            
+            // Initial setup
+            cards.forEach((card, index) => {
+                if (index !== currentIndex) {
+                    gsap.set(card, { x: card.offsetWidth, opacity: 0 });
+                } else {
+                    gsap.set(card, { x: 0, opacity: 1 });
+                }
+            });
+            
+            dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+            
+            // Start auto-play
+            autoInterval = setInterval(() => {
+                if (!isAnimating) {
+                    slideTo((currentIndex + 1) % cards.length);
+                }
+            }, 9000);
+        }
+    } else {
+        console.log('[DEPOIMENTOS] Seção #depoimentos não encontrada.');
     }
     
 } // Fim da função bootAnimations
