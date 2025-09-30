@@ -518,7 +518,230 @@ function bootAnimations() {
     console.log('[LENIS] Scroll suave inicializado.');
 
 
-    /* =========================
+   /* =========================
+   4) Seção 3D â€“ cápsula
+========================= */
+let THREE_READY = typeof THREE !== "undefined";
+let renderer, scene, camera, capsuleGroup, rafId, running = true;
+let threeEntered = false;
+let gelA, gelB, gelC; // materiais para trocar cores
+const threeWrap = document.getElementById("three-container");
+// Hover state needs to be shared across animation loops
+let hover = { x: 0, y: 0 };
+
+// Intensidades do movimento
+const THREE_CONFIG = {
+  baseRotSpeed: 0,     // sem rotação automática
+  floatAmp: 0,         // sem flutuação automática
+  tiltLerp: 0,         // sem tilt automático
+  tiltRangeX: 0,
+  tiltRangeY: 0,
+};
+
+// Modelos por tema (se um arquivo não existir, cai em fallback ou no modelo default)
+const MODELS = {
+  aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
+  citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
+};
+let currentTheme3D = "citrus";
+let currentModelKey = null; // 'theme:url'
+let pendingThemeForModel = null;
+
+const COLORS = {
+  // Aqua Blu: #083DA6 (dark), #076DF2 (brand), #0C87F2 (secondary), #1DDDF2 (accent)
+  aqua: { a: 0x076DF2, b: 0x0C87F2, c: 0x1DDDF2 },
+  // Citrus Lush: #5FD97E (brand), #91D9A3 (secondary), #167312 (dark), #D7D9D2 (accent-neutral)
+  citrus: { a: 0x5FD97E, b: 0x91D9A3, c: 0xD7D9D2 },
+};
+
+function initThree() {
+  if (!THREE_READY) return;
+  if (!threeWrap) return;
+
+  scene = new THREE.Scene();
+  scene.background = null;
+
+  const w = threeWrap.clientWidth;
+  const h = threeWrap.clientHeight;
+
+  // Force minimum dimensions if container is too small
+  const finalW = Math.max(w, 400);
+  const finalH = Math.max(h, 300);
+
+  camera = new THREE.PerspectiveCamera(45, finalW / finalH, 0.1, 100);
+  camera.position.set(0, 0, 4.2);
+
+  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(clamp(window.devicePixelRatio, 1, 1.75));
+  renderer.setSize(finalW, finalH);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  threeWrap.appendChild(renderer.domElement);
+
+  // luzes
+  const amb = new THREE.AmbientLight(0xffffff, 1.2);
+  scene.add(amb);
+
+  const key = new THREE.DirectionalLight(0xffffff, 1.0);
+  key.position.set(3, 4, 2);
+  scene.add(key);
+
+  const fill = new THREE.DirectionalLight(0xffffff, 0.8);
+  fill.position.set(-3, -1, 3);
+  scene.add(fill);
+
+  // grupo base
+  capsuleGroup = new THREE.Group();
+  scene.add(capsuleGroup);
+
+  // Define orientação inicial vertical
+  capsuleGroup.rotation.set(0, 0, 0);
+
+  // Se após um tempo razoável ainda não há objeto, cria fallback e inicia animação
+  setTimeout(() => {
+    if (capsuleGroup.children.length === 0) {
+      console.warn("Nenhum objeto 3D carregado até agora. Inserindo fallback...");
+      createFallbackModel(currentTheme3D);
+      ensureEnter3D();
+    }
+  }, 1200);
+
+  // carrega o modelo do tema atual (ou pendente)
+  const themeToLoad = pendingThemeForModel || currentTheme3D;
+  swapModel(themeToLoad);
+  // Inicia animação de scroll assim que o modelo for carregado
+  start3DScrollAnimation();
+  window.addEventListener("resize", onResizeThree);
+}
+
+function enter3D() {
+  // animação de entrada
+  capsuleGroup.scale.set(0, 0, 0);
+  gsap.to(capsuleGroup.scale, { x: 1, y: 1, z: 1, duration: 1, ease: "power2.out", delay: 0.1 });
+
+  // pin da seção 3D (temporariamente desabilitado para testar scroll)
+  if (typeof ScrollTrigger !== "undefined") {
+    ScrollTrigger.create({
+      trigger: "#capsula-3d",
+      start: "top top",
+      end: "+=100%",
+      pin: false, // Desabilitado temporariamente
+      scrub: false,
+    });
+  }
+
+  // flutuação + rotação
+  const state = { t: 0 };
+
+  function animate() {
+    if (!running) { rafId = null; return; }
+    state.t += 0.016;
+    const floatY = Math.sin(state.t * 1.6) * THREE_CONFIG.floatAmp;
+    capsuleGroup.position.y = floatY;
+
+    // rotação contínua leve + tilt do mouse
+    capsuleGroup.rotation.y += THREE_CONFIG.baseRotSpeed;
+    capsuleGroup.rotation.x += (hover.y - capsuleGroup.rotation.x) * THREE_CONFIG.tiltLerp;
+    capsuleGroup.rotation.z += (hover.x - capsuleGroup.rotation.z) * THREE_CONFIG.tiltLerp;
+
+    renderer.render(scene, camera);
+    rafId = requestAnimationFrame(animate);
+  }
+  animate();
+
+  // mouse tilt
+  threeWrap.addEventListener("mousemove", (e) => {
+    const r = threeWrap.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width;
+    const ny = (e.clientY - r.top) / r.height;
+    hover.x = (nx - 0.5) * THREE_CONFIG.tiltRangeX;
+    hover.y = (0.5 - ny) * THREE_CONFIG.tiltRangeY;
+  });
+
+  // pausa quando fora de viewport (economia)
+  const io = new IntersectionObserver(
+    (ents) => ents.forEach((en) => {
+      const wasRunning = running;
+      running = en.isIntersecting;
+      if (running && !rafId) {
+        rafId = requestAnimationFrame(animate);
+      }
+    }),
+    { threshold: 0.05 }
+  );
+  io.observe(threeWrap);
+}
+
+// ========== 3D Scroll Down Effect ==========
+// Faz o objeto 3D descer conforme o scroll na seção 3D
+function animateWithScroll() {
+  if (!running || !capsuleGroup) { rafId = null; return; }
+  // Pega uma área maior que inclui a div intermediária antes da seção 3D
+  const section = document.getElementById('capsula-3d');
+  if (!section) { rafId = null; return; }
+  const sectionRect = section.getBoundingClientRect();
+  const sectionTop = window.scrollY + sectionRect.top;
+  const sectionHeight = section.offsetHeight;
+  const winH = window.innerHeight;
+  
+  // Expande a área de trigger para começar mais cedo (na div intermediária)
+  const expandedStart = sectionTop - winH; // Começa 1 viewport antes da seção 3D
+  const expandedHeight = sectionHeight + winH; // Área total expandida
+  
+  // Progresso baseado na área expandida
+  const scrollY = window.scrollY || window.pageYOffset;
+  let progress = clamp((scrollY - expandedStart) / expandedHeight, 0, 1);
+  // Limita o progresso máximo para parar antes do final da seção
+  // reduzimos para 0.6 para que o objeto e o card parem ainda mais cedo
+  progress = Math.min(progress, 0.6);
+  
+  // Posição Y controlada por scroll com easing e leve oscilação ("dança")
+  const yStart = 15.0; // início alto
+  const yEnd = -9.5;   // ligeiramente mais alto no final para alinhar com o CTA
+  // easing suave (easeInOutSine)
+  const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
+  let yBase = yStart + (yEnd - yStart) * e;
+  // oscilação sutil no meio do caminho (amplitude reduzida nas extremidades)
+  const midFactor = 1 - Math.abs(progress - 0.5) * 2; // 0 -> 1 -> 0
+  const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
+  capsuleGroup.position.y = yBase + yWiggle;
+
+  // Rotação: mapeia o progresso da seção para uma rotação completa de 360°
+  // mantendo as pequenas oscilações já existentes em X e Z e adicionando
+  // um pequeno componente de 'wiggle' em Y sobre a rotação principal.
+  const rx = 0.08 * Math.sin(progress * Math.PI * 5);
+  const ry = 0.06 * Math.sin(progress * Math.PI * 3 + 0.6);
+  const rz = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
+
+  // O progresso foi limitado acima (max 0.6) para parar antes do fim da seção.
+  // Normalizamos para 0..1 para mapear para 0..2PI (uma volta completa).
+  const normalizedSpin = clamp(progress / 0.6, 0, 1);
+  const spin = normalizedSpin * Math.PI * 2; // 360deg em radianos
+
+  // Aplica rotação: Y recebe a volta completa + um pequeno ry para manter vivacidade
+  capsuleGroup.rotation.set(rx, spin + ry, rz);
+  renderer.render(scene, camera);
+  rafId = requestAnimationFrame(animateWithScroll);
+}
+// Substitui o animate padrão por esse após o modelo estar pronto
+rafId = requestAnimationFrame(animateWithScroll);
+
+function ensureEnter3D() {
+  if (threeEntered) return;
+  threeEntered = true;
+  enter3D();
+}
+
+function onResizeThree() {
+  if (!renderer || !camera) return;
+  const w = Math.max(threeWrap.clientWidth, 400);
+  const h = Math.max(threeWrap.clientHeight, 300);
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+
+/* =========================
    3D Interactive Bubbles with Explosion Effects
    Creates realistic floating bubbles with click interactions and particle explosions.
    Uses Three.js with HDRI lighting for photorealistic materials.
@@ -1022,119 +1245,82 @@ function clearNonFallbackChildren() {
   toRemove.forEach((obj) => capsuleGroup.remove(obj));
 }
 
+/* =========================
+   5) Fragrance Toggle (tema + materiais)
+========================= */
+const toggleBtns = gsap.utils.toArray(".fragrance-toggle .toggle-option");
+function setTheme(theme) {
+  document.body.classList.toggle("theme-citrus", theme === "citrus");
+  document.body.classList.toggle("theme-aqua", theme === "aqua");
 
+  const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
 
-    
-    // ==========================================================
-    //  BLOCO FINAL: 3D E TOGGLE DE TEMA (ELES DEPENDEM UM DO OUTRO)
-    // ==========================================================
+  if (gelA && gelB && gelC) {
+    const toCol = (mat, hex) => {
+      const c = new THREE.Color(hex);
+      gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+    };
+    toCol(gelA, pal.a);
+    toCol(gelB, pal.b);
+    toCol(gelC, pal.c);
 
-    // Variáveis da cena 3D que precisam ser acessíveis por outras funções
-    let gelA, gelB, gelC, capsuleGroup, COLORS; 
+    gsap.fromTo(
+      capsuleGroup.scale,
+      { x: 1, y: 1, z: 1 },
+      { x: 1.04, y: 1.04, z: 1.04, yoyo: true, repeat: 1, duration: 0.18, ease: "power2.inOut" }
+    );
+  }
 
-    // --- Função para configurar o Toggle ---
-    function initThemeToggle() {
-        console.log('[TOGGLE] Inicializando toggle de fragrância...');
+  // Update product card text based on theme
+  const productTitle = document.querySelector('.product-title');
+  const productCopy = document.querySelector('.product-copy');
+  const productPrice = document.querySelector('.product-price');
+  const productCta = document.querySelector('.sopy-product-cta');
+  
+  if (productTitle) {
+    productTitle.textContent = theme === 'citrus' ? productTitle.getAttribute('data-citrus') : productTitle.getAttribute('data-aqua');
+  }
+  if (productCopy) {
+    productCopy.textContent = theme === 'citrus' ? productCopy.getAttribute('data-citrus') : productCopy.getAttribute('data-aqua');
+  }
+  if (productPrice) {
+    productPrice.textContent = theme === 'citrus' ? productPrice.getAttribute('data-citrus') : productPrice.getAttribute('data-aqua');
+  }
+  if (productCta) {
+    productCta.textContent = theme === 'citrus' ? productCta.getAttribute('data-citrus') : productCta.getAttribute('data-aqua');
+  }
 
-        // Objeto de cores (coloque seus valores hexadecimais aqui)
-        COLORS = {
-            citrus: { a: '#ffdd00', b: '#ffaa00', c: '#ffffff' },
-            aqua:   { a: '#00aaff', b: '#0077cc', c: '#ffffff' }
-        };
+  // Troca o modelo 3D para o tema
+  swapModel(theme);
+}
+toggleBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (btn.classList.contains("is-active")) return;
+    toggleBtns.forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    const theme = btn.dataset.theme === "citrus" ? "citrus" : "aqua";
+    setTheme(theme);
+  });
+});
 
-        function setTheme(theme) {
-            document.body.classList.toggle("theme-citrus", theme === "citrus");
-            document.body.classList.toggle("theme-aqua", theme === "aqua");
-
-            const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
-
-            if (gelA && gelB && gelC) {
-                const toCol = (mat, hex) => {
-                    const c = new THREE.Color(hex);
-                    gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
-                };
-                toCol(gelA, pal.a);
-                toCol(gelB, pal.b);
-                toCol(gelC, pal.c);
-            }
-
-            // Atualiza o texto do card de produto
-            const productCard = document.querySelector('.capsule-3d-cta');
-            if(productCard) {
-                const fields = [['.product-title', 'textContent'], ['.product-copy', 'textContent'], ['.product-price', 'textContent'], ['.sopy-product-cta', 'textContent']];
-                fields.forEach(([selector, prop]) => {
-                    const el = productCard.querySelector(selector);
-                    if(el) el[prop] = el.getAttribute(`data-${theme}`);
-                });
-            }
-            
-            // Troca o modelo 3D (a função swapModel deve estar dentro do seu código 3D)
-            if (typeof swapModel === 'function') {
-                swapModel(theme);
-            }
-        }
-
-        // Listeners para os botões
-        const productToggle = document.getElementById('product-toggle');
-        if (productToggle) {
-            productToggle.addEventListener('change', function() {
-                const theme = productToggle.checked ? 'aqua' : 'citrus';
-                setTheme(theme);
-            });
-        }
-        
-        // Dispara o tema inicial (ex: citrus)
-        setTheme('citrus'); 
+// Toggle animado de produtos: troca tema do site
+const productToggle = document.getElementById('product-toggle');
+if (productToggle) {
+  productToggle.addEventListener('change', function() {
+    if (productToggle.checked) {
+      document.body.classList.add('theme-aqua');
+      document.body.classList.remove('theme-citrus');
+    } else {
+      document.body.classList.add('theme-citrus');
+      document.body.classList.remove('theme-aqua');
     }
-
-    // --- Função para iniciar o 3D ---
-    function initThree() {
-        console.log('[3D] Inicializando cena Three.js...');
-        
-        //
-        // AQUI VAI TODO O SEU CÓDIGO DE CONFIGURAÇÃO DA CENA 3D
-        // (câmera, renderer, luzes, etc.)
-        //
-        
-        const loader = new THREE.GLTFLoader();
-        
-        // Dentro do seu código 3D, você terá a função que carrega/troca o modelo
-        window.swapModel = function(theme) {
-            const modelPath = theme === 'citrus' 
-                ? 'URL_DO_SEU_MODELO_CITRUS.glb' 
-                : 'URL_DO_SEU_MODELO_AQUA.glb';
-
-            loader.load(
-                modelPath,
-                function (gltf) {
-                    // SEU CÓDIGO que processa o modelo carregado...
-                    // Exemplo:
-                    // scene.add(gltf.scene);
-                    // capsuleGroup = gltf.scene;
-                    // gelA = gltf.scene.getObjectByName('Gel_A').material;
-                    // ...etc
-                    console.log(`[3D] Modelo ${theme} carregado com sucesso.`);
-
-                    // ✅ CHAMADA CRÍTICA: Só inicia o Toggle DEPOIS que o primeiro modelo carregou
-                    // Usamos uma flag para garantir que só rode uma vez
-                    if (!window.themeToggleInitialized) {
-                        initThemeToggle();
-                        window.themeToggleInitialized = true;
-                    }
-                },
-                undefined, // onProgress (não precisamos no momento)
-                function (error) {
-                    console.error('[3D] Falha ao carregar modelo:', error);
-                }
-            );
-        };
-        
-        // Inicia o carregamento do primeiro modelo
-        swapModel('citrus');
+    // Se existir função setTheme/theme 3D, chame aqui
+    if (typeof setTheme === 'function') {
+      setTheme(productToggle.checked ? 'aqua' : 'citrus');
     }
+  });
+}
 
-    // Inicia o processo do 3D (que por sua vez iniciará o Toggle)
-    initThree();
 
     
     
