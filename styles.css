@@ -1146,7 +1146,7 @@ body.theme-aqua .sopy-how-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: transparent !important; /* allow section theme background to show through */
+  /* Remove transparent !important to allow theme-specific solid backgrounds */
 }
 
 /* Container flexível para o conteúdo do painel */
@@ -1632,7 +1632,7 @@ body.theme-aqua #como-usar {
 
 
 body.theme-aqua #sustentabilidade {
-  background: #0D1B2A; /* aqua theme: set to requested blue */
+  background: #083DA6; /* deeper blue base for better contrast with panels */
 }
 
 body.theme-aqua #testemunhos {
@@ -1661,7 +1661,7 @@ body.theme-citrus #fragrancias {
 }
 
 body.theme-citrus #sustentabilidade {
-  background: #5FD97E; /* updated to requested green for both themes  1B4332*/
+  background: #167312; /* deeper green base for better contrast with panels */
 }
 
 body.theme-citrus #testemunhos {
@@ -1677,13 +1677,30 @@ body.theme-citrus #capsula-3d {
 
 }
 
-/* Ensure panels inside the sustainability section use a solid background matching the section theme */
+/* Ensure panels inside the sustainability section use solid backgrounds for proper stacking effect */
 body.theme-aqua #sustentabilidade .fullscreen-panel {
-  background-color: #0D1B2A !important; /* solid blue for aqua theme */
+  background-color: #0D1B2A !important; /* solid dark blue for aqua theme */
 }
 
 body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #1B4332 !important; /* solid green for citrus theme */
+  background-color: #1B4332 !important; /* solid dark green for citrus theme */
+}
+
+/* Alternative: Use the exact colors from the sustainability content themes */
+body.theme-aqua #sustentabilidade .fullscreen-panel:nth-child(1) {
+  background-color: #0F4C75 !important; /* deeper blue for first panel */
+}
+
+body.theme-aqua #sustentabilidade .fullscreen-panel:nth-child(2) {
+  background-color: #0D1B2A !important; /* darker blue for second panel */
+}
+
+body.theme-citrus #sustentabilidade .fullscreen-panel:nth-child(1) {
+  background-color: #2D5016 !important; /* deeper green for first panel */
+}
+
+body.theme-citrus #sustentabilidade .fullscreen-panel:nth-child(2) {
+  background-color: #1B4332 !important; /* darker green for second panel */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
