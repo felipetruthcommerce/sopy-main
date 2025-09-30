@@ -37,11 +37,11 @@
 }
 /* -------------------------------------------------------
    SOPY â€“ styles.css
-   Reset + Tokens + Layout + States para animaÃ§Ãµes GSAP
+   Reset + Tokens + Layout + States para animações GSAP
    (HTML: a estrutura que te enviei)
 ------------------------------------------------------- */
 
-/* ========== RESET BÃSICO ========== */
+/* ========== RESET BÁSICO ========== */
 *,
 *::before,
 *::after { box-sizing: border-box; }
@@ -100,7 +100,7 @@ body.is-loading {
   height: 100vh;
 }
 
-/* Links e botÃµes */
+/* Links e botões */
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 img, video { display: block; max-width: 100%; }
@@ -129,7 +129,7 @@ img, video { display: block; max-width: 100%; }
   --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(7,109,242,.18), transparent),
               radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
   /* Water seam controls */
-  --mask-start: 52%;   /* onde comeÃ§a a desvanecer o vÃ­deo (45â€“60%) */
+  --mask-start: 52%;   /* onde começa a desvanecer o vídeo (45â€“60%) */
   --seam-height: 22vh; /* altura da zona de mistura (15â€“30vh) */
 }
 
@@ -163,23 +163,23 @@ h3 { font-size: clamp(1.25rem, 2.4vw, 1.4rem); margin: 0; }
 p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--text); margin: 0; }
 .muted { color: var(--muted); font-size: 1.03rem; line-height: 1.6; }
 
-/* ========== GRID & SEÃ‡Ã•ES ========== */
+/* ========== GRID & SEÇÕES ========== */
 .sopy-section { 
   padding: clamp(56px, 8vw, 96px) clamp(16px, 5vw, 64px); 
   position: relative; 
   min-height: 100vh; /* volta para 100vh */
   display: flex; 
   flex-direction: column; 
-  justify-content: center; /* centraliza verticalmente o conteÃºdo */
-  z-index: 3; /* garante que seÃ§Ãµes apÃ³s o hero cubram o vÃ­deo sticky */
+  justify-content: center; /* centraliza verticalmente o conteúdo */
+  z-index: 3; /* garante que seções após o hero cubram o vídeo sticky */
 }
 .sopy-section--full { 
   height: 100vh; /* volta para 100vh */
   position: relative; 
-  overflow: visible; /* nÃ£o clipe para permitir sticky e sobreposiÃ§Ã£o */
+  overflow: visible; /* não clipe para permitir sticky e sobreposição */
   display: flex; 
   align-items: center; 
-  justify-content: center; /* centraliza conteÃºdo */
+  justify-content: center; /* centraliza conteúdo */
 }
 
 /* Benefícios - big 2x2 cards */
@@ -426,7 +426,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   line-height: 0.95;
   letter-spacing: 0;
 }
-/* transiÃ§Ã£o suave para o header aparecer/sumir */
+/* transição suave para o header aparecer/sumir */
 .sopy-site-header { 
   transition: opacity .25s ease, transform .25s ease, background .25s ease;
   position: fixed;
@@ -464,7 +464,7 @@ body.nav-hidden .sopy-site-header {
 .sopy-nav-links a { color: var(--text); font-weight: 500; font-size: .95rem; opacity: .85; transition: opacity .2s ease; }
 .sopy-nav-links a:hover { opacity: 1; }
 
-/* ========== BOTÃ•ES SOPY ========== */
+/* ========== BOTÕES SOPY ========== */
 .sopy-btn {
   --_bg: var(--brand);
   --_fg: #fff;
@@ -583,7 +583,7 @@ body.nav-hidden .sopy-site-header {
 .sopy-hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
 .sopy-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* Espuma/seam sutil entre hero e seÃ§Ã£o seguinte */
+/* Espuma/seam sutil entre hero e seção seguinte */
 #hero::after {
   content: "";
   position: absolute; left: 0; right: 0; bottom: calc(-1 * var(--seam-height) * 0.5); height: var(--seam-height);
@@ -598,9 +598,9 @@ body.nav-hidden .sopy-site-header {
   position: fixed; inset: 0; z-index: 1000; background: transparent; /* fundo vem do ::before mascarado */
   color: #fff; display: grid; place-items: center; pointer-events: none;
 }
-/* MÃ¡scara tipo "gota": cria um furo circular que revela o vÃ­deo ao fundo */
+/* Máscara tipo "gota": cria um furo circular que revela o vídeo ao fundo */
 #loader {
-  /* variÃ¡veis controladas via JS/GSAP */
+  /* variáveis controladas via JS/GSAP */
   --r: 0px;      /* raio da gota */
   --cx: 50vw;    /* centro X */
   --cy: 50vh;    /* centro Y */
@@ -610,9 +610,9 @@ body.nav-hidden .sopy-site-header {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0; /* fica atrÃ¡s do conteÃºdo do loader */
+  z-index: 0; /* fica atrás do conteúdo do loader */
   background: var(--brand-dark);
-  /* Dentro do raio -> transparente (revela o vÃ­deo); fora -> sÃ³lido (escuro) */
+  /* Dentro do raio -> transparente (revela o vídeo); fora -> sólido (escuro) */
   -webkit-mask: radial-gradient(circle at var(--cx) var(--cy), transparent 0 var(--r), black calc(var(--r) + 1px) 100%);
   mask: radial-gradient(circle at var(--cx) var(--cy), transparent 0 var(--r), black calc(var(--r) + 1px) 100%);
   pointer-events: none;
@@ -635,8 +635,8 @@ body.nav-hidden .sopy-site-header {
   width: 240px; aspect-ratio: 1; border-radius: 50%;
   border: 2px solid rgba(255,255,255,.35);
   box-shadow: inset 0 0 80px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.2);
-  transform: scale(0); /* nÃ£o usamos mais para o reveal, sÃ³ efeito visual se quiser */
-  display: none; /* oculto para evitar segundo cÃ­rculo visÃ­vel */
+  transform: scale(0); /* não usamos mais para o reveal, só efeito visual se quiser */
+  display: none; /* oculto para evitar segundo círculo visível */
 }
 
 /* custom cursor removed to use default system cursor */
@@ -650,13 +650,13 @@ body.nav-hidden .sopy-site-header {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background:
     linear-gradient(to bottom,
-      #a6d1df 0%,  /* azul claro da superfÃ­cie */
+      #a6d1df 0%,  /* azul claro da superfície */
       #6fb8c4 38%,
       #2a7f95 80%,
       #166277 100%);
 }
 #capsula-3d::after {
-  /* bolhinhas discretas na seÃ§Ã£o deep (sob o canvas) */
+  /* bolhinhas discretas na seção deep (sob o canvas) */
   content: "";
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image: radial-gradient(circle at 30% 75%, rgba(255,255,255,.22) 0 1px, transparent 2px);
@@ -694,7 +694,7 @@ body.nav-hidden .sopy-site-header {
   z-index: 3;
 }
 .sopy-capsule3d::before {
-  /* bolhinhas discretas na seÃ§Ã£o deep (sob o canvas) */
+  /* bolhinhas discretas na seção deep (sob o canvas) */
   content: "";
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background-image: radial-gradient(circle at 30% 75%, rgba(255,255,255,.22) 0 1px, transparent 2px);
@@ -1148,14 +1148,14 @@ body.theme-aqua .sopy-how-card {
 /* Ícones dos passos (ajuste os SVGs conforme quiser) */
 /* dots sem ícones (apenas pílula no ativo) */
 
-/* ========== VÃDEO SECUNDÃRIO ========== */
+/* ========== VÃDEO SECUNDÁRIO ========== */
 .sopy-section--video .video-wrap {
   width: min(1100px, 94%); margin: 0 auto; border-radius: 16px; overflow: clip;
   border: 1px solid var(--line); box-shadow: var(--shadow); background: #000;
 }
 .sopy-section--video video { width: 100%; height: auto; }
 
-/* ========== FRAGRÃ‚NCIAS ========== */
+/* ========== FRAGRÂNCIAS ========== */
 .fragrance-grid {
   width: min(1200px, 94%); margin: 0 auto;
   display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 3vw, 24px);
@@ -1167,13 +1167,7 @@ body.theme-aqua .sopy-how-card {
 }
 .fragrance-card img { width: min(380px, 88%); height: auto; }
 
-/* ========== SUSTENTABILIDADE (Parallax Vertical com Zoom/Cobertura) ========== */
-.sustainability-parallax { 
-  position: relative;
-  width: 100%;
-  background: #1a1a1a; /* igual ao teste.html */
-  /* altura é configurada via JavaScript: (painéis + 1) * 100vh */
-}
+
 
 /* Painel em tela cheia com posição sticky */
 .sustainability-parallax .fullscreen-panel {
@@ -1585,7 +1579,7 @@ body.theme-citrus #faq .sopy-faq-accordion {
 /* ========== STATES PARA REVEALS (GSAP SplitText) ========== */
 /* (remoção) estilos de reveal por linhas/palavras */
 
-/* Nav e botÃµes no hero (entrada suave) â€“ serÃ£o animados no JS */
+/* Nav e botões no hero (entrada suave) â€“ serão animados no JS */
 .hero .btn,
 .sopy-nav { will-change: transform, opacity; }
 
@@ -1633,12 +1627,12 @@ body.theme-citrus #faq .sopy-faq-accordion {
   }
 }
 
-/* ========== REDUÃ‡ÃƒO DE MOVIMENTO (acessibilidade) ========== */
+/* ========== REDUÇÃƒO DE MOVIMENTO (acessibilidade) ========== */
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 
-/* ========== UTILITÃRIOS ========== */
+/* ========== UTILITÁRIOS ========== */
 .sopy-hide { display: none !important; }
 .sopy-center { text-align: center; }
 .sopy-max-w { width: min(1100px, 94%); margin-inline: auto; }
@@ -1653,14 +1647,14 @@ body.theme-citrus #faq .sopy-faq-accordion {
   position: fixed; right: 18px; bottom: 18px; z-index: 60;
   display: grid; place-items: center; width: 56px; height: 56px;
   border-radius: 999rem; border: none; background: transparent;
-  box-shadow: none; cursor: default; pointer-events: none; /* nÃ£o intercepta scroll/click */
+  box-shadow: none; cursor: default; pointer-events: none; /* não intercepta scroll/click */
 }
 .sopy-scroll-to-top .sopy-arrow-up { position: absolute; font-size: 16px; color: var(--brand-dark); opacity: 0; transition: opacity .2s ease; }
 .progress-circle { transform: rotate(-90deg); }
 .progress-circle-bg { stroke: rgba(0,0,0,.08); }
 .progress-circle-bar { stroke: var(--brand); stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset .08s linear; }
 
-/* ========== SEÃ‡Ã•ES COM FUNDO TEMÃTICO (CORES FORTES) ========== */
+/* ========== SEÇÕES COM FUNDO TEMÁTICO (CORES FORTES) ========== */
 /* AQUA â€” blocos fortes e contrastantes */
 body.theme-aqua #beneficios {
   background: #0D1B2A; /* brand */
@@ -1687,7 +1681,7 @@ body.theme-aqua #capsula-3d {
   background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(103, 167, 194, 1) 93%, rgba(64, 154, 192, 1) 100%);
 }
 
-/* CITRUS â€” verdes fortes com neutros escuros para variaÃ§Ã£o */
+/* CITRUS â€” verdes fortes com neutros escuros para variação */
 body.theme-citrus #beneficios {
   background: #1B4332; /* brand */
 }
@@ -2732,7 +2726,7 @@ function setupButtonRipples() {
   });
 }
 
-// Inicializar ripples apÃ³s DOM estar pronto
+// Inicializar ripples após DOM estar pronto
 document.addEventListener('DOMContentLoaded', setupButtonRipples);
 
 /* =========================
@@ -2966,14 +2960,14 @@ const blocks = []; // overlay blocks removed
 const heroVideo = document.getElementById("heroVideo");
 const heroPoster = document.querySelector(".sopy-hero-poster");
 
-// Garantimos que o vÃ­deo NÃƒO inicie antes do loader terminar
+// Garantimos que o vídeo NÃƒO inicie antes do loader terminar
 if (heroVideo) {
   try {
     heroVideo.muted = true;
     heroVideo.playsInline = true;
     heroVideo.setAttribute("preload", "auto");
     heroVideo.pause();
-    // opcional: resetar para o inÃ­cio
+    // opcional: resetar para o início
     heroVideo.currentTime = 0;
   } catch { }
 }
@@ -2982,7 +2976,7 @@ if (heroVideo) {
 const loaderObj = { n: 0 };
 const tlLoader = gsap.timeline({ defaults: { ease: "hop" } });
 
-// Helpers para prÃ©-tocar e esconder poster
+// Helpers para pré-tocar e esconder poster
 let listenersAttached = false;
 function hidePoster() {
   if (heroPoster) heroPoster.classList.add("is-hidden");
@@ -2998,7 +2992,7 @@ function attachPosterHide() {
   };
   heroVideo.addEventListener("playing", onPlay, { once: true });
   heroVideo.addEventListener("timeupdate", onTime);
-  // Se jÃ¡ estiver tocando, resolve imediatamente
+  // Se já estiver tocando, resolve imediatamente
   if (!heroVideo.paused && heroVideo.currentTime > 0) hidePoster();
 }
 function tryPlay() {
@@ -3006,13 +3000,13 @@ function tryPlay() {
 }
 let preplayTriggered = false;
 
-// preparar mÃ¡scara da gota (centro da tela)
+// preparar máscara da gota (centro da tela)
 if (loaderEl) {
   loaderEl.style.setProperty("--cx", "50%");
   loaderEl.style.setProperty("--cy", "50%");
   loaderEl.style.setProperty("--r", "0px");
 }
-// Timeline do loader: mais lenta e sÃ³ entÃ£o comeÃ§amos o vÃ­deo
+// Timeline do loader: mais lenta e só então começamos o vídeo
 // contagem 0 → 100 (mais demorada)
 tlLoader.to(loaderObj, {
   n: 100,
@@ -3127,7 +3121,7 @@ tlLoader.add(() => {
 
 
 /* =========================
-   Scroll Progress (barra + cÃ­rculo) + Voltar ao topo
+   Scroll Progress (barra + círculo) + Voltar ao topo
 ========================= */
 (function scrollProgress() {
   // Escopo apenas para o indicador global (se existir). Não tocar na barra da seção "como usar".
@@ -3146,14 +3140,14 @@ tlLoader.add(() => {
     if (circ) circ.style.strokeDashoffset = CIRCUMFERENCE * (1 - p);
   };
 
-  // Lenis emite evento de scroll; usamos tambÃ©m resize
+  // Lenis emite evento de scroll; usamos também resize
   lenis.on('scroll', update);
   window.addEventListener('resize', update);
 
   // init
   update();
 })();
-// reveals e UI do hero agora sÃ£o iniciados pelo tlLoader acima
+// reveals e UI do hero agora são iniciados pelo tlLoader acima
 
 /* =========================
    COMO USAR — Horizontal Scroll (GSAP)
@@ -3350,7 +3344,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* =========================
-   4) SeÃ§Ã£o 3D â€“ cÃ¡psula
+   4) Seção 3D â€“ cápsula
 ========================= */
 let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, rafId, running = true;
@@ -3369,7 +3363,7 @@ const THREE_CONFIG = {
   tiltRangeY: 0,
 };
 
-// Modelos por tema (se um arquivo nÃ£o existir, cai em fallback ou no modelo default)
+// Modelos por tema (se um arquivo não existir, cai em fallback ou no modelo default)
 const MODELS = {
   aqua: "assets/models/compressed_1758509853615_aqua.glb",
   citrus: "assets/models/compressed_1758509855927_citrus.glb",
@@ -3428,10 +3422,10 @@ function initThree() {
   // Define orientação inicial vertical
   capsuleGroup.rotation.set(0, 0, 0);
 
-  // Se apÃ³s um tempo razoÃ¡vel ainda nÃ£o hÃ¡ objeto, cria fallback e inicia animaÃ§Ã£o
+  // Se após um tempo razoável ainda não há objeto, cria fallback e inicia animação
   setTimeout(() => {
     if (capsuleGroup.children.length === 0) {
-      console.warn("Nenhum objeto 3D carregado atÃ© agora. Inserindo fallback...");
+      console.warn("Nenhum objeto 3D carregado até agora. Inserindo fallback...");
       createFallbackModel(currentTheme3D);
       ensureEnter3D();
     }
@@ -3440,17 +3434,17 @@ function initThree() {
   // carrega o modelo do tema atual (ou pendente)
   const themeToLoad = pendingThemeForModel || currentTheme3D;
   swapModel(themeToLoad);
-  // Inicia animaÃ§Ã£o de scroll assim que o modelo for carregado
+  // Inicia animação de scroll assim que o modelo for carregado
   start3DScrollAnimation();
   window.addEventListener("resize", onResizeThree);
 }
 
 function enter3D() {
-  // animaÃ§Ã£o de entrada
+  // animação de entrada
   capsuleGroup.scale.set(0, 0, 0);
   gsap.to(capsuleGroup.scale, { x: 1, y: 1, z: 1, duration: 1, ease: "power2.out", delay: 0.1 });
 
-  // pin da seÃ§Ã£o 3D (temporariamente desabilitado para testar scroll)
+  // pin da seção 3D (temporariamente desabilitado para testar scroll)
   if (typeof ScrollTrigger !== "undefined") {
     ScrollTrigger.create({
       trigger: "#capsula-3d",
@@ -3461,7 +3455,7 @@ function enter3D() {
     });
   }
 
-  // flutuaÃ§Ã£o + rotaÃ§Ã£o
+  // flutuação + rotação
   const state = { t: 0 };
 
   function animate() {
@@ -3470,7 +3464,7 @@ function enter3D() {
     const floatY = Math.sin(state.t * 1.6) * THREE_CONFIG.floatAmp;
     capsuleGroup.position.y = floatY;
 
-    // rotaÃ§Ã£o contÃ­nua leve + tilt do mouse
+    // rotação contínua leve + tilt do mouse
     capsuleGroup.rotation.y += THREE_CONFIG.baseRotSpeed;
     capsuleGroup.rotation.x += (hover.y - capsuleGroup.rotation.x) * THREE_CONFIG.tiltLerp;
     capsuleGroup.rotation.z += (hover.x - capsuleGroup.rotation.z) * THREE_CONFIG.tiltLerp;
@@ -3504,7 +3498,7 @@ function enter3D() {
 }
 
 // ========== 3D Scroll Down Effect ==========
-// Faz o objeto 3D descer conforme o scroll na seÃ§Ã£o 3D
+// Faz o objeto 3D descer conforme o scroll na seção 3D
 function animateWithScroll() {
   if (!running || !capsuleGroup) { rafId = null; return; }
   // Pega uma área maior que inclui a div intermediária antes da seção 3D
@@ -3554,7 +3548,7 @@ function animateWithScroll() {
   renderer.render(scene, camera);
   rafId = requestAnimationFrame(animateWithScroll);
 }
-// Substitui o animate padrÃ£o por esse apÃ³s o modelo estar pronto
+// Substitui o animate padrão por esse após o modelo estar pronto
 rafId = requestAnimationFrame(animateWithScroll);
 
 function ensureEnter3D() {
@@ -4012,13 +4006,13 @@ window.addEventListener('resize', () => {
   try { initCapsuleBubbles(); } catch (e) { }
 });
 
-// Lazy-init Three.js: sÃ³ quando a seÃ§Ã£o 3D entrar na viewport
+// Lazy-init Three.js: só quando a seção 3D entrar na viewport
 (function lazyInitThree() {
   const target = document.getElementById("capsula-3d");
   if (!target) return;
 
   const triggerInit = () => {
-    if (renderer) return; // jÃ¡ iniciado
+    if (renderer) return; // já iniciado
     const ensure = () => {
       if (!THREE_READY && typeof THREE !== "undefined") THREE_READY = true;
       if (THREE_READY) {
@@ -4031,7 +4025,7 @@ window.addEventListener('resize', () => {
     ensure();
   };
 
-  // Usa IntersectionObserver para nÃ£o depender do ScrollTrigger aqui
+  // Usa IntersectionObserver para não depender do ScrollTrigger aqui
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
       if (en.isIntersecting) triggerInit();
@@ -4039,13 +4033,13 @@ window.addEventListener('resize', () => {
   }, { threshold: 0.15 });
   io.observe(target);
 
-  // Se preferir, tambÃ©m inicia ao tocar na Ã¢ncora via hash
+  // Se preferir, também inicia ao tocar na Ã¢ncora via hash
   window.addEventListener("hashchange", () => {
     if (location.hash === "#capsula-3d") triggerInit();
   });
 })();
 
-// Fallback simples caso o GLB nÃ£o carregue
+// Fallback simples caso o GLB não carregue
 function createFallbackModel(theme = "aqua") {
   if (!capsuleGroup || !THREE_READY) return;
   const isCitrus = theme === "citrus";
@@ -4069,7 +4063,7 @@ function swapModel(theme = "aqua") {
 
   const url = (window.SOPY && SOPY.assetUrl) ? SOPY.assetUrl(MODELS[theme] || MODELS.aqua) : (MODELS[theme] || MODELS.aqua);
   const key = `${theme}:${url}`;
-  if (currentModelKey === key) return; // jÃ¡ estÃ¡ carregado
+  if (currentModelKey === key) return; // já está carregado
 
   const loader = new THREE.GLTFLoader();
   if (THREE.DRACOLoader) {
@@ -4125,7 +4119,7 @@ function normalizeAndAddModel(model) {
   const target = 1.8;
   model.scale.setScalar(target / maxDim);
 
-  // Materiais visÃ­veis
+  // Materiais visíveis
   model.traverse((o) => {
     if (o.isMesh) {
       o.castShadow = o.receiveShadow = false;
@@ -4147,7 +4141,7 @@ function normalizeAndAddModel(model) {
 
 function bindGelMaterials(model) {
   if (!model) { gelA = gelB = gelC = null; return; }
-  // Tenta capturar atÃ© 3 materiais principais
+  // Tenta capturar até 3 materiais principais
   const mats = [];
   model.traverse((o) => { if (o.isMesh && o.material) mats.push(o.material); });
   gelA = mats[0] || null;
@@ -4305,7 +4299,7 @@ document.querySelectorAll('[data-action="sopy-buy"]').forEach((btn) => {
   btn.addEventListener("click", () => {
     const card = btn.closest(".sopy-product-card");
     const sku = card?.dataset?.sku || "sopy";
-    // aqui vocÃª integra com carrinho/Nuvemshop ou redireciona:
+    // aqui você integra com carrinho/Nuvemshop ou redireciona:
     console.log("Comprar SKU:", sku);
     gsap.fromTo(btn, { scale: 1 }, { scale: 0.96, yoyo: true, repeat: 1, duration: 0.12 });
   });
@@ -4319,7 +4313,7 @@ document.querySelectorAll('[data-action="sopy-buy"]').forEach((btn) => {
 document.body.classList.add("theme-citrus");
 
 /* =========================
-   Header: aparece no inÃ­cio e ao rolar pra cima; some ao rolar pra baixo
+   Header: aparece no início e ao rolar pra cima; some ao rolar pra baixo
 ========================= */
 (function autoHideHeader() {
   const header = document.querySelector('.sopy-site-header');
@@ -4328,14 +4322,14 @@ document.body.classList.add("theme-citrus");
   const showNav = () => document.body.classList.remove('nav-hidden');
   const hideNav = () => document.body.classList.add('nav-hidden');
 
-  // VisÃ­vel no inÃ­cio (hero aberto)
+  // Visível no início (hero aberto)
   showNav();
 
   let lastY = 0;
-  // Usamos o Lenis para obter a posiÃ§Ã£o de scroll suavizada
+  // Usamos o Lenis para obter a posição de scroll suavizada
   lenis.on('scroll', (e) => {
     const y = e.scroll;
-    // Sempre mostrar no topo da pÃ¡gina
+    // Sempre mostrar no topo da página
     if (y <= 10) { showNav(); lastY = y; return; }
 
     const goingDown = y > lastY;
@@ -4344,14 +4338,14 @@ document.body.classList.add("theme-citrus");
   });
 })();
 
-// Substitui o animate padrÃ£o por animateWithScroll assim que o modelo 3D estiver carregado
+// Substitui o animate padrão por animateWithScroll assim que o modelo 3D estiver carregado
 function start3DScrollAnimation() {
   running = true;
   if (rafId) cancelAnimationFrame(rafId);
   rafId = requestAnimationFrame(animateWithScroll);
 }
-// Chame start3DScrollAnimation() apÃ³s o modelo ser carregado ou fallback criado
-// Exemplo: apÃ³s swapModel ou createFallbackModel, chame start3DScrollAnimation();
+// Chame start3DScrollAnimation() após o modelo ser carregado ou fallback criado
+// Exemplo: após swapModel ou createFallbackModel, chame start3DScrollAnimation();
 window.start3DScrollAnimation = start3DScrollAnimation; // para debug
 
 
