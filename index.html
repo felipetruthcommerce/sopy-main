@@ -164,7 +164,7 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
 .muted { color: var(--muted); font-size: 1.03rem; line-height: 1.6; }
 
 /* ========== GRID & SEÃ‡Ã•ES ========== */
-.section { 
+.sopy-section { 
   padding: clamp(56px, 8vw, 96px) clamp(16px, 5vw, 64px); 
   position: relative; 
   min-height: 100vh; /* volta para 100vh */
@@ -173,7 +173,7 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
   justify-content: center; /* centraliza verticalmente o conteÃºdo */
   z-index: 3; /* garante que seÃ§Ãµes apÃ³s o hero cubram o vÃ­deo sticky */
 }
-.section--full { 
+.sopy-section--full { 
   height: 100vh; /* volta para 100vh */
   position: relative; 
   overflow: visible; /* nÃ£o clipe para permitir sticky e sobreposiÃ§Ã£o */
@@ -189,14 +189,14 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
 }
 
 /* Make the section title for Benefícios very large, left-aligned and bold */
-#beneficios .section-header {
+#beneficios .sopy-section-header {
   /* move the header off-center visually */
   text-align: left;
   max-width: none; /* allow wide heading */
   margin-left: clamp(16px, 6vw, 96px);
   margin-bottom: 1.25rem;
 }
-#beneficios .section-header h2 {
+#beneficios .sopy-section-header h2 {
   color: #ffffff;
   /* slightly reduced size to match card scale */
   font-size: clamp(3.2rem, 8.5vw, 6.8rem);
@@ -205,7 +205,7 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
   line-height: 0.95;
   letter-spacing: 0;
 }
-#beneficios .section-header p {
+#beneficios .sopy-section-header p {
   color: var(--muted);
   text-align: left;
   margin-left: 0;
@@ -213,9 +213,9 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
 
 @media (max-width: 900px) {
   /* on small screens keep it centered and smaller to avoid overflow */
-  #beneficios .section-header { text-align: center; margin-left: 0; }
-  #beneficios .section-header h2 { font-size: clamp(2rem, 10vw, 3.4rem); line-height: 1.04; }
-  #beneficios .section-header p { text-align: center; }
+  #beneficios .sopy-section-header { text-align: center; margin-left: 0; }
+  #beneficios .sopy-section-header h2 { font-size: clamp(2rem, 10vw, 3.4rem); line-height: 1.04; }
+  #beneficios .sopy-section-header p { text-align: center; }
 }
 .benefit-grid.big-cards {
   display: grid;
@@ -265,10 +265,10 @@ h3 .split-line {
 
 /* Força o mascaramento para elementos que foram splitados */
 h1[class*="split"], h2[class*="split"], h3[class*="split"], 
-p[class*="split"], .section-header[class*="split"] {
+p[class*="split"], .sopy-section-header[class*="split"] {
   overflow: visible !important; /* permite que as linhas internas sejam mascaradas individualmente */
 }
-.card-large {
+.sopy-card-large {
   position: relative;
   background: #fff; /* white surface like the sketch */
   border-radius: 28px;
@@ -285,8 +285,8 @@ p[class*="split"], .section-header[class*="split"] {
   height: 150px;
   opacity: 1;
 }
-.card-large .card-svg img { width: 100%; height: 100%; object-fit: contain; }
-.card-large .benefit-title {
+.sopy-card-large .sopy-card-svg img { width: 100%; height: 100%; object-fit: contain; }
+.sopy-card-large .benefit-title {
   position: absolute;
   right: 28px;
   bottom: 28px;
@@ -298,7 +298,7 @@ p[class*="split"], .section-header[class*="split"] {
 }
 
 /* add subtle outline like the sketch (dark border) for stronger visual matching */
-.benefit-grid.big-cards .card-large {
+.benefit-grid.big-cards .sopy-card-large {
   border: 6px solid rgba(0,0,0,0.95); /* thicker outline to mimic sketch */
 }
 
@@ -338,7 +338,7 @@ p[class*="split"], .section-header[class*="split"] {
 
 #beneficios .sopy-benefits-card-content { position: relative; z-index: 2; display:flex; flex-direction: column; justify-content: space-between; height:100%; }
 
-#beneficios .card-number { font-size: 5rem; font-weight: 500; color: var(--muted); }
+#beneficios .sopy-card-number { font-size: 5rem; font-weight: 500; color: var(--muted); }
 
 #beneficios .sopy-benefits-card-label { font-size: 1rem; font-weight: 500; color: #d1d1d1; align-self: flex-end; text-transform: uppercase; }
 
@@ -405,10 +405,10 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   /* Ensure the hero remains highest visually so video looks correct */
   #hero { z-index: 2; }
   /* other sections slightly lower so overlap order is predictable */
-  .section { z-index: 1; }
+  .sopy-section { z-index: 1; }
 
-.section-header { max-width: 900px; margin: 0 auto 2.25rem; text-align: center; }
-.section-header p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
+.sopy-section-header { max-width: 900px; margin: 0 auto 2.25rem; text-align: center; }
+.sopy-section-header p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
 
 .howto-header {
   text-align: center;
@@ -427,7 +427,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   letter-spacing: 0;
 }
 /* transiÃ§Ã£o suave para o header aparecer/sumir */
-.site-header { 
+.sopy-site-header { 
   transition: opacity .25s ease, transform .25s ease, background .25s ease;
   position: fixed;
   left: 0; right: 0; top: 0;
@@ -438,13 +438,13 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 }
 
 /* Hide the header when JS toggles body.nav-hidden (scrolling down) */
-body.nav-hidden .site-header {
+body.nav-hidden .sopy-site-header {
   transform: translateY(-16px);
   opacity: 0;
   pointer-events: none;
 }
 
-.nav {
+.sopy-nav {
   width: min(1400px, 94%);
   margin: 0 auto; /* center the nav container inside the fixed header */
   padding: 0 24px; /* lateral padding inside the container */
@@ -454,15 +454,15 @@ body.nav-hidden .site-header {
   gap: 16px;
   height: 56px; /* consistent header height for layout */
 }
-.nav-logo img { height: 38px; width: auto; display: block; }
-.nav-logo { align-self: center; }
+.sopy-nav-logo img { height: 38px; width: auto; display: block; }
+.sopy-nav-logo { align-self: center; }
 
-.nav-cta { display: flex; align-items: center; justify-self: end; }
+.sopy-nav-cta { display: flex; align-items: center; justify-self: end; }
 
 /* If navigation links are added later, keep them centered (fallback) */
-.nav-links { display: flex; gap: 20px; justify-content: center; align-items: center; }
-.nav-links a { color: var(--text); font-weight: 500; font-size: .95rem; opacity: .85; transition: opacity .2s ease; }
-.nav-links a:hover { opacity: 1; }
+.sopy-nav-links { display: flex; gap: 20px; justify-content: center; align-items: center; }
+.sopy-nav-links a { color: var(--text); font-weight: 500; font-size: .95rem; opacity: .85; transition: opacity .2s ease; }
+.sopy-nav-links a:hover { opacity: 1; }
 
 /* ========== BOTÃ•ES SOPY ========== */
 .sopy-btn {
@@ -517,7 +517,7 @@ body.nav-hidden .site-header {
 }
 
 /* ========== HERO (VÃDEO) ========== */
-.hero, #hero {
+.sopy-hero, #hero {
   display: flex;
   flex-direction: column;
   /* Use small viewport units and include safe-area to avoid notch overlap */
@@ -526,11 +526,11 @@ body.nav-hidden .site-header {
   justify-content: flex-start; /* alinha o conteúdo para o topo */
 }
 
-.hero-media {
+.sopy-hero-media {
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
   background: var(--gradient);
 }
-.hero-video {
+.sopy-hero-video {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   filter: saturate(105%) contrast(102%);
   mix-blend-mode: normal;
@@ -559,17 +559,17 @@ body.nav-hidden .site-header {
       rgba(0,0,0,0) 100%
     );
 }
-.hero-poster {
+.sopy-hero-poster {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
   opacity: 1; transition: opacity .35s ease;
 }
-.hero-poster.is-hidden { opacity: 0; }
-.hero-content {
+.sopy-hero-poster.is-hidden { opacity: 0; }
+.sopy-hero-content {
   position: relative; z-index: 1; width: min(1100px, 92%);
   margin: 0 auto; padding: 0 0 0;
   display: grid; gap: clamp(12px, 1.8vw, 18px); justify-items: center; text-align: center;
 }
-.hero-content h1 {
+.sopy-hero-content h1 {
   color: var(--brand-dark);
   text-shadow: 0 2px 12px rgba(0,0,0,.28);
   /* Large on desktop, scales down fluidly on smaller screens */
@@ -578,10 +578,10 @@ body.nav-hidden .site-header {
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
-.hero-content p { max-width: 780px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
-.hero section, .hero { color: #fff; }
-.hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
-.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.sopy-hero-content p { max-width: 780px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
+.sopy-hero section, .sopy-hero { color: #fff; }
+.sopy-hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
+.sopy-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
 /* Espuma/seam sutil entre hero e seÃ§Ã£o seguinte */
 #hero::after {
@@ -642,7 +642,7 @@ body.nav-hidden .site-header {
 /* custom cursor removed to use default system cursor */
 
 /* ========== 3D (CAPSULE PIN) ========== */
-.capsule3d { background: var(--surface); }
+.sopy-capsule3d { background: var(--surface); }
 #capsula-3d { height: 200vh; --capsule-ui-offset: 120px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0; position: relative; z-index: 2; isolation: isolate; }
 #capsula-3d::before {
   /* zona de mistura suave no topo e gradiente profundo */
@@ -693,7 +693,7 @@ body.nav-hidden .site-header {
   display: flex; align-items: center; justify-content: center;
   z-index: 3;
 }
-.capsule3d::before {
+.sopy-capsule3d::before {
   /* bolhinhas discretas na seÃ§Ã£o deep (sob o canvas) */
   content: "";
   position: absolute; inset: 0; z-index: 0; pointer-events: none;
@@ -702,7 +702,7 @@ body.nav-hidden .site-header {
   opacity: .18;
   animation: bubbles 28s linear infinite;
 }
-.capsule3d-ui {
+.sopy-capsule3d-ui {
   /* Make the UI static so titles and copy don't pin or move with scroll */
   position: relative; /* normal document flow */
   width: min(1200px, 94%); margin: 0 auto; padding: 16px 0;
@@ -712,7 +712,7 @@ body.nav-hidden .site-header {
   z-index: 2;
   order: -1; /* keeps UI before the canvas in column direction */
 }
-.capsule3d-title-over {
+.sopy-capsule3d-title-over {
   position: absolute;              /* fixed inside the #capsula-3d container */
   top: 65vh;                       /* higher position without sticking */
   left: 50%;
@@ -724,7 +724,7 @@ body.nav-hidden .site-header {
   z-index: 2;                      /* below CTA (z:4) and canvas (z:3) if desired */
   pointer-events: none;
 }
-.capsule3d-title-over h2 {
+.sopy-capsule3d-title-over h2 {
   color: #ffffff;
   text-align: center;
   font-weight: 900;
@@ -853,20 +853,20 @@ body.theme-aqua .capsule-3d-cta {
 @media (max-width: 900px) {
   .capsule-3d-cta.at-end { right: 8vw; bottom: 4.5rem; max-width: 360px; }
 }
-.capsule3d-copy p { color: var(--muted); max-width: 680px; margin: 0 auto; font-size: 1.05rem; line-height: 1.6; }
+.sopy-capsule3d-copy p { color: var(--muted); max-width: 680px; margin: 0 auto; font-size: 1.05rem; line-height: 1.6; }
 
 /* ==== Decorative bubbles inside the 3D section ====
    Bubbles rise from the 3D area upward toward the hero. JS will inject
    bubble elements into `.capsule-bubbles` and animate them with GSAP.
 */
-.capsule-bubbles {
+.sopy-capsule-bubbles {
   position: absolute;
   inset: 0;
   pointer-events: auto; /* habilita cliques para explodir bolhas 3D */
   overflow: visible;
   z-index: 3; /* under CTA (60) and header (50), above background */
 }
-.capsule-bubbles .bubble {
+.sopy-capsule-bubbles .sopy-bubble {
   position: absolute;
   width: 48px;
   height: 48px;
@@ -877,11 +877,11 @@ body.theme-aqua .capsule-3d-cta {
   mix-blend-mode: screen;
   transform: translate3d(0,0,0) scale(0.9);
 }
-.capsule-bubbles .bubble.small { width: 28px; height: 28px; opacity: 0.8; }
-.capsule-bubbles .bubble.large { width: 78px; height: 78px; opacity: 0.6; }
+.sopy-capsule-bubbles .sopy-bubble.small { width: 28px; height: 28px; opacity: 0.8; }
+.sopy-capsule-bubbles .sopy-bubble.large { width: 78px; height: 78px; opacity: 0.6; }
 
 @media (max-width: 900px) {
-  .capsule-bubbles .bubble { width: 34px; height: 34px; }
+  .sopy-capsule-bubbles .sopy-bubble { width: 34px; height: 34px; }
 }
 
 /* --- Toggle Animado de Produtos --- */
@@ -1149,11 +1149,11 @@ body.theme-aqua .sopy-how-card {
 /* dots sem ícones (apenas pílula no ativo) */
 
 /* ========== VÃDEO SECUNDÃRIO ========== */
-.section--video .video-wrap {
+.sopy-section--video .video-wrap {
   width: min(1100px, 94%); margin: 0 auto; border-radius: 16px; overflow: clip;
   border: 1px solid var(--line); box-shadow: var(--shadow); background: #000;
 }
-.section--video video { width: 100%; height: auto; }
+.sopy-section--video video { width: 100%; height: auto; }
 
 /* ========== FRAGRÃ‚NCIAS ========== */
 .fragrance-grid {
@@ -1418,7 +1418,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 
 #faq h2 { color: #fff; }
 
-#faq .faq-accordion {
+#faq .sopy-faq-accordion {
   --d: 0deg;
   --circle-x: 1.8rem;
   --circle-y: 50%;
@@ -1454,9 +1454,9 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 
 /* Force-remove any stray borders/lines on the FAQ cards or their pseudos
    (some browsers/overlapping backgrounds could cause faint corner lines) */
-#faq .faq-accordion,
-#faq .faq-accordion::before,
-#faq .faq-accordion::after {
+#faq .sopy-faq-accordion,
+#faq .sopy-faq-accordion::before,
+#faq .sopy-faq-accordion::after {
   box-shadow: none !important;
   border: none !important;
   outline: none !important;
@@ -1464,34 +1464,34 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 }
 
 /* Estado aberto - texto fica branco */
-#faq .faq-accordion.open {
+#faq .sopy-faq-accordion.open {
   --d: 90deg;
   grid-template-rows: auto 1fr; 
   color: #FFFFFF; /* Texto fica branco */
 }
 
-#faq .faq-accordion .content {
+#faq .sopy-faq-accordion .sopy-content {
   overflow: hidden;
   font-size: var(--size-accordion-content);
   line-height: 140%;
   z-index: 2; /* fica na frente da animação de fundo */
 }
 
-#faq .faq-accordion .wrapper {
+#faq .sopy-faq-accordion .sopy-wrapper {
   padding-block: 0 1.05rem;
   padding-inline: 1.25rem;
 }
 
-#faq .faq-accordion .content p { 
+#faq .sopy-faq-accordion .sopy-content p { 
   margin: 0; 
   color: currentColor; /* herda cor do accordion */
 }
 
-#faq .faq-accordion .title {
+#faq .sopy-faq-accordion .sopy-title {
   z-index: 2; /* fica na frente da animação de fundo */
 }
 
-#faq .faq-accordion .title a {
+#faq .sopy-faq-accordion .sopy-title a {
   padding: 1rem 1.25rem;
   font-size: var(--size-accordion-title);
   font-weight: 800;
@@ -1501,7 +1501,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   align-items: center;
 }
 
-#faq .faq-accordion .title a::before {
+#faq .sopy-faq-accordion .sopy-title a::before {
   --chevron-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='currentColor' d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'/%3E%3C/svg%3E");
   content: "";
   width: 0.65rem;
@@ -1516,7 +1516,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 }
 
 /* Animação de fundo com círculo expandindo */
-#faq .faq-accordion::before {
+#faq .sopy-faq-accordion::before {
   content: "";
   position: absolute;
   width: 100%;
@@ -1530,11 +1530,11 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 }
 
 /* Expande o círculo preto quando o card está aberto */
-#faq .faq-accordion.open::before {
+#faq .sopy-faq-accordion.open::before {
   clip-path: circle(var(--circle-r) at var(--circle-x) var(--circle-y));
 }
 
-#faq .faq-accordion .title a:focus-visible { 
+#faq .sopy-faq-accordion .sopy-title a:focus-visible { 
   outline: 2px solid var(--brand); 
   outline-offset: 3px; 
   border-radius: 10px; 
@@ -1542,15 +1542,15 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 }
 
 /* Temas: mantém cartões claros sobre fundos fortes */
-body.theme-aqua #faq .faq-accordion,
-body.theme-citrus #faq .faq-accordion { 
+body.theme-aqua #faq .sopy-faq-accordion,
+body.theme-citrus #faq .sopy-faq-accordion { 
   background: #fff; 
   border: none; 
   box-shadow: none;
 }
 
 /* ========== FOOTER ========== */
-.site-footer {
+.sopy-site-footer {
   /* tamanho alto conforme solicitado */
   height: 70vh;
   min-height: 420px;
@@ -1570,7 +1570,7 @@ body.theme-citrus #faq .faq-accordion {
   /* sombra sutil para separar do conteúdo acima */
   box-shadow: 0 -8px 24px rgba(0,0,0,0.04);
 }
-.footer-inner {
+.sopy-footer-inner {
   width: min(1200px, 94%);
   margin: 0 auto;
   padding: 0;
@@ -1580,14 +1580,14 @@ body.theme-citrus #faq .faq-accordion {
   color: var(--muted);
   gap: 16px;
 }
-.footer-links { display: flex; gap: 16px; }
+.sopy-footer-links { display: flex; gap: 16px; }
 
 /* ========== STATES PARA REVEALS (GSAP SplitText) ========== */
 /* (remoção) estilos de reveal por linhas/palavras */
 
 /* Nav e botÃµes no hero (entrada suave) â€“ serÃ£o animados no JS */
 .hero .btn,
-.nav { will-change: transform, opacity; }
+.sopy-nav { will-change: transform, opacity; }
 
 /* ========== RESPONSIVO ========== */
 @media (max-width: 1280px) {
@@ -1597,36 +1597,36 @@ body.theme-citrus #faq .faq-accordion {
 }
 
 @media (max-width: 900px) {
-  .nav-links { display: none; }
-  .capsule3d-ui { grid-template-columns: 1fr; gap: 12px; }
+  .sopy-nav-links { display: none; }
+  .sopy-capsule3d-ui { grid-template-columns: 1fr; gap: 12px; }
   .howto-steps { grid-template-columns: 1fr; }
   .fragrance-grid { grid-template-columns: 1fr; }
   .shop .product-grid { grid-template-columns: 1fr 1fr; }
   .testimonial-grid { grid-template-columns: 1fr; }
   /* Hero adjustments – tighter mask and more room for title */
   :root { --mask-start: 58%; --seam-height: 18vh; }
-  .hero-content { width: min(100%, 92%); padding-inline: 16px; }
-  .hero-content h1 { font-size: clamp(2.2rem, 9.5vw, 3.6rem); line-height: .98; }
-  .hero-ctas { justify-content: center; gap: 10px; }
+  .sopy-hero-content { width: min(100%, 92%); padding-inline: 16px; }
+  .sopy-hero-content h1 { font-size: clamp(2.2rem, 9.5vw, 3.6rem); line-height: .98; }
+  .sopy-hero-ctas { justify-content: center; gap: 10px; }
 }
 
 @media (max-width: 600px) {
-  .footer-inner { flex-direction: column; gap: 8px; }
-  .hero-ctas { width: 100%; justify-content: center; }
+  .sopy-footer-inner { flex-direction: column; gap: 8px; }
+  .sopy-hero-ctas { width: 100%; justify-content: center; }
   .fragrance-toggle { right: 12px; bottom: 12px; padding: 6px; }
   .sopy-btn { width: 100%; }
   /* Make hero title very bold and multi-line; reduce video seam */
   :root { --mask-start: 62%; --seam-height: 16vh; }
   /* Force the hero to start content near the top on small screens */
-  .hero, #hero { 
+  .sopy-hero, #hero { 
     min-height: 100svh; 
     height: 100svh; /* força altura completa para preencher */
     padding-top: calc(110px + env(safe-area-inset-top)); /* mais espaço acima para o header */
     justify-content: flex-start; /* puxa o conteúdo para o topo */
     align-items: stretch;
   }
-  .hero-content { gap: 10px; }
-  .hero-content h1 {
+  .sopy-hero-content { gap: 10px; }
+  .sopy-hero-content h1 {
     font-size: clamp(2.4rem, 12vw, 3.2rem);
     line-height: .96;
     letter-spacing: -0.01em;
@@ -1639,9 +1639,9 @@ body.theme-citrus #faq .faq-accordion {
 }
 
 /* ========== UTILITÃRIOS ========== */
-.hide { display: none !important; }
-.center { text-align: center; }
-.max-w { width: min(1100px, 94%); margin-inline: auto; }
+.sopy-hide { display: none !important; }
+.sopy-center { text-align: center; }
+.sopy-max-w { width: min(1100px, 94%); margin-inline: auto; }
 
 /* -------------------------------------------------------
    Fim
@@ -1649,13 +1649,13 @@ body.theme-citrus #faq .faq-accordion {
 
 /* Removed scroll progress bar */
 
-.scroll-to-top {
+.sopy-scroll-to-top {
   position: fixed; right: 18px; bottom: 18px; z-index: 60;
   display: grid; place-items: center; width: 56px; height: 56px;
   border-radius: 999rem; border: none; background: transparent;
   box-shadow: none; cursor: default; pointer-events: none; /* nÃ£o intercepta scroll/click */
 }
-.scroll-to-top .arrow-up { position: absolute; font-size: 16px; color: var(--brand-dark); opacity: 0; transition: opacity .2s ease; }
+.sopy-scroll-to-top .sopy-arrow-up { position: absolute; font-size: 16px; color: var(--brand-dark); opacity: 0; transition: opacity .2s ease; }
 .progress-circle { transform: rotate(-90deg); }
 .progress-circle-bg { stroke: rgba(0,0,0,.08); }
 .progress-circle-bar { stroke: var(--brand); stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset .08s linear; }
@@ -1920,24 +1920,97 @@ body.theme-aqua {
     display: none; /* esconder o texto de fundo no mobile; usamos o how-title */
   }
 
-  /* Slider like testimonials */
-  .sopy-how-stack{ display:block; position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; margin: 4px 12px 0; height: 36vh; min-height: 240px }
-  .sopy-how-stack.sopy-how-grabbing{ cursor:grabbing }
-  .sopy-how-mobile-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:22px; padding: 14px; box-shadow: 0 12px 34px rgba(6,10,12,0.28); min-height: 160px; color:#fff }
-  .sopy-how-stack .sopy-how-mobile-card{ position:absolute !important; inset: 14px 20px 18px 20px !important }
-  .sopy-how-mobile-card .sopy-how-card{ background: transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important }
-  .sopy-how-mobile-card .sopy-how-step-number{ width: 30px; height:30px; font-size:.82rem; margin-bottom: 6px; }
-  .sopy-how-mobile-card p{ font-size: .9rem; line-height: 1.5 }
+  /* Mobile Touch Slider */
+  .sopy-how-stack { 
+    display: block; 
+    position: relative; 
+    overflow: hidden; 
+    width: calc(100% - 24px);
+    margin: 4px 12px 0; 
+    height: 36vh; 
+    min-height: 240px;
+    touch-action: pan-y; 
+    cursor: grab;
+    flex: 1;
+  }
+  .sopy-how-stack.sopy-how-grabbing { cursor: grabbing; }
+  
+  .sopy-how-mobile-card { 
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    right: 16px;
+    bottom: 12px;
+    background: rgba(255,255,255,0.06); 
+    -webkit-backdrop-filter: blur(8px); 
+    backdrop-filter: blur(8px); 
+    border: 1px solid rgba(255,255,255,0.12); 
+    border-radius: 22px; 
+    padding: 20px; 
+    box-shadow: 0 12px 34px rgba(6,10,12,0.28); 
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    will-change: transform;
+    transition: opacity 0.3s ease;
+  }
+  
+  .sopy-how-mobile-card .sopy-how-card { 
+    background: transparent !important; 
+    border: 0 !important; 
+    box-shadow: none !important; 
+    padding: 0 !important;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .sopy-how-mobile-card .sopy-how-step-number { 
+    width: 40px; 
+    height: 40px; 
+    font-size: 1rem; 
+    margin: 0 auto 16px;
+    background: var(--brand);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+  
+  .sopy-how-mobile-card p { 
+    font-size: 1rem; 
+    line-height: 1.5;
+    margin: 0;
+    max-width: 280px;
+    margin: 0 auto;
+  }
 
 
 @media (max-width: 600px) {
-  .sopy-how-stack{ height: 34vh; min-height: 200px }
-  .sopy-how-mobile-card{ padding: 12px; border-radius: 18px; min-height: 150px }
-  .sopy-how-stack .sopy-how-mobile-card{ inset: 10px 14px 14px 14px !important }
-  .sopy-how-mobile-card p{ font-size: .88rem }
+  .sopy-how-stack { height: 34vh; min-height: 200px; }
+  
+  .sopy-how-mobile-card { 
+    padding: 16px; 
+    border-radius: 18px;
+    top: 6px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+  }
+  
+  .sopy-how-mobile-card .sopy-how-step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+  }
+  
+  .sopy-how-mobile-card p { font-size: 0.9rem; }
 
   /* Larger heading on very small screens */
-  .sopy-how-title{ font-size: clamp(4.2rem, 15.5vw, 5.8rem); max-width: 10ch; }
+  .sopy-how-title { font-size: clamp(4.2rem, 15.5vw, 5.8rem); max-width: 10ch; }
 }
   .sopy-how-panel {
     width: 85vw;
@@ -1996,6 +2069,17 @@ body.theme-aqua {
     bottom: 18px;
     left: 50%;
     transform: translateX(-50%);
+    opacity: 1 !important; /* Always visible on mobile */
+    display: flex !important;
+  }
+  
+  .sopy-how-progress-dot {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .sopy-how-progress-dot:hover {
+    transform: translateY(-1px);
   }
 }
 
@@ -2076,19 +2160,19 @@ body.theme-aqua {
 
     <!-- ===================== HERO (VÍDEO) ===================== -->
     <main>
-      <section id="hero" class="hero section--full">
+      <section id="hero" class="sopy-hero sopy-section--full">
         <!-- Vídeo que será revelado pelo circle-reveal -->
-        <div class="hero-media">
-          <video id="heroVideo" class="hero-video" muted playsinline preload="auto">
+        <div class="sopy-hero-media">
+          <video id="heroVideo" class="sopy-hero-video" muted playsinline preload="auto">
             <!-- Quando tiver uma versão WebM otimizada, adicione como primeira source -->
             <!-- <source src="assets/videos/hero.webm" type="video/webm" ../> -->
             <source src="assets/videos/hero.mp4" type="video/mp4" />
           </video>
           <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader -->
-          <img class="hero-poster" src="assets/images/video-capa.jpg" alt="" aria-hidden="true" />
+          <img class="sopy-hero-poster" src="assets/images/video-capa.jpg" alt="" aria-hidden="true" />
         </div>
 
-        <div class="hero-content">
+        <div class="sopy-hero-content">
           <h1>
             LIMPEZA PODEROSA. <br>ZERO ESFORÇO.
           </h1>
@@ -2098,12 +2182,12 @@ body.theme-aqua {
       </section>
 
       <!-- ===================== SEÇÃO 3D (PIN) ===================== -->
-      <section id="capsula-3d" class="capsule3d section--full" aria-label="Cápsula 3D interativa">
+      <section id="capsula-3d" class="sopy-capsule3d sopy-section--full" aria-label="Cápsula 3D interativa">
         <!-- Canvas Three.js será injetado aqui -->
         <div id="three-container"></div>
 
         <!-- Título posicionado sobre o objeto 3D -->
-        <div class="capsule3d-title-over">
+        <div class="sopy-capsule3d-title-over">
           <h2>Tecnologia que dissolve 100%</h2>
         </div>
 
@@ -2117,7 +2201,7 @@ body.theme-aqua {
           </div>
         </div>
         <!-- decorative bubbles container: created by JS -->
-        <div class="capsule-bubbles" aria-hidden="true"></div>
+        <div class="sopy-capsule-bubbles" aria-hidden="true"></div>
       </section>
 
       <!-- ===================== SUSTENTABILIDADE (Parallax - estrutura do template) ===================== -->
@@ -2192,6 +2276,29 @@ body.theme-aqua {
       <!-- ===================== COMO USAR ===================== -->
         <section class="sopy-how-section">
         <h2 class="sopy-how-title" aria-hidden="false">TRES PASSOS. SÓ POR NA MAQUINA</h2>
+        
+        <!-- Mobile Stack Slider -->
+        <div class="sopy-how-stack">
+          <div class="sopy-how-mobile-card">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">01</div>
+              <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
+            </div>
+          </div>
+          <div class="sopy-how-mobile-card">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">02</div>
+              <p>Coloque direto no tambor, antes das roupas.</p>
+            </div>
+          </div>
+          <div class="sopy-how-mobile-card">
+            <div class="sopy-how-card">
+              <div class="sopy-how-step-number">03</div>
+              <p>Inicie o ciclo — a cápsula dissolve 100%</p>
+            </div>
+          </div>
+        </div>
+        
         <div class="sopy-how-track">
           <div class="sopy-how-background-text">TRES PASSOS. SÓ POR NA MAQUINA</div>
 
@@ -2223,8 +2330,8 @@ body.theme-aqua {
 
 
   <!-- ===================== BENEFÍCIOS ===================== -->
-    <section id="beneficios" class="sopy-benefits-section section">
-    <header class="section-header">
+    <section id="beneficios" class="sopy-benefits-section sopy-section">
+    <header class="sopy-section-header">
         <h2>Resultados que você vê e sente</h2>
         <p>A tecnologia Sopy em cada cápsula.</p>
     </header>
@@ -2319,33 +2426,33 @@ body.theme-aqua {
       </section>
 
       <!-- ===================== FAQ ===================== -->
-      <section id="faq" class="faq section"  aria-label="Perguntas frequentes">
-        <header class="section-header">
+      <section id="faq" class="sopy-faq sopy-section"  aria-label="Perguntas frequentes">
+        <header class="sopy-section-header">
           <h2>Perguntas frequentes</h2>
         </header>
 
-        <section class="faq-accordion" id="faq-q1">
-          <h3 class="title"><a href="#faq-q1">Funciona em água fria?</a></h3>
-          <div class="content">
-            <div class="wrapper">
+        <section class="sopy-faq-accordion" id="faq-q1">
+          <h3 class="sopy-title"><a href="#faq-q1">Funciona em água fria?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
               <p>Sim. A fórmula foi pensada para atuar em todas as temperaturas.</p>
             </div>
           </div>
         </section>
 
-        <section class="faq-accordion" id="faq-q2">
-          <h3 class="title"><a href="#faq-q2">Posso usar com roupas de bebê?</a></h3>
-          <div class="content">
-            <div class="wrapper">
+        <section class="sopy-faq-accordion" id="faq-q2">
+          <h3 class="sopy-title"><a href="#faq-q2">Posso usar com roupas de bebê?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
               <p>Sim. Siga o ciclo indicado pelo fabricante da máquina e da roupa.</p>
             </div>
           </div>
         </section>
 
-        <section class="faq-accordion" id="faq-q3">
-          <h3 class="title"><a href="#faq-q3">Dissolve no ciclo rápido?</a></h3>
-          <div class="content">
-            <div class="wrapper">
+        <section class="sopy-faq-accordion" id="faq-q3">
+          <h3 class="sopy-title"><a href="#faq-q3">Dissolve no ciclo rápido?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
               <p>Sim, a película é hidrossolúvel e dissolve completamente.</p>
             </div>
           </div>
@@ -2517,10 +2624,10 @@ body.theme-aqua {
 
 // FAQ accordion toggle functionality
 document.addEventListener('DOMContentLoaded', () => {
-  const allAccordions = document.querySelectorAll('#faq .faq-accordion');
+  const allAccordions = document.querySelectorAll('#faq .sopy-faq-accordion');
 
   allAccordions.forEach(accordion => {
-    const titleLink = accordion.querySelector('.title a');
+    const titleLink = accordion.querySelector('.sopy-title a');
     
     if (titleLink) {
       titleLink.addEventListener('click', (event) => {
@@ -2672,7 +2779,7 @@ window.addEventListener('load', function() {
     
   // Obter TODOS os elementos de texto exceto os do hero
   const titles = document.querySelectorAll('h1:not(#hero *), h2:not(#hero *), h3:not(#hero *), h4:not(#hero *), .tc-title, .tc-sub');
-  const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .subtitle, .sopy-benefits-card-label, .footer-desc');
+  const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
   // Buttons only (exclude FAQ links entirely to keep them clickable)
   const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
 
@@ -2777,7 +2884,7 @@ window.addEventListener('load', function() {
     buttons.forEach(element => animateElement(element, 'words'));
 
     // Add a simple fade/slide-in to FAQ cards (no text splitting)
-    document.querySelectorAll('#faq .faq-accordion').forEach(acc => {
+    document.querySelectorAll('#faq .sopy-faq-accordion').forEach(acc => {
       gsap.from(acc, {
         opacity: 0,
         y: 24,
@@ -2857,7 +2964,7 @@ const dividerEl = document.querySelector(".loader-divider"); // no longer used (
 const circleEl = document.querySelector(".loader-circle");
 const blocks = []; // overlay blocks removed
 const heroVideo = document.getElementById("heroVideo");
-const heroPoster = document.querySelector(".hero-poster");
+const heroPoster = document.querySelector(".sopy-hero-poster");
 
 // Garantimos que o vÃ­deo NÃƒO inicie antes do loader terminar
 if (heroVideo) {
@@ -2988,7 +3095,7 @@ tlLoader.add(() => {
 });
 // entrada suave: só anima se existir alvo
 (() => {
-  const sels = ['.nav', '.hero .sopy-btn'];
+  const sels = ['.sopy-nav', '.sopy-hero .sopy-btn'];
   const existing = sels.filter(s => document.querySelector(s));
   if (existing.length) {
     tlLoader.from(existing.join(', '), {
@@ -3095,6 +3202,150 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     setTrackWidth();
     try { ScrollTrigger.refresh(); } catch {}
+  });
+});
+
+/* =========================
+   MOBILE SLIDER - Como Usar (Touch/Swipe)
+========================= */
+document.addEventListener('DOMContentLoaded', () => {
+  const stack = document.querySelector('.sopy-how-stack');
+  const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
+  const dots = document.querySelectorAll('.sopy-how-progress .sopy-how-progress-dot');
+  
+  if (!stack || cards.length === 0) return;
+
+  let currentIndex = 0;
+  let isAnimating = false;
+  
+  // Position cards
+  const positionCards = () => {
+    const gap = 24;
+    const containerWidth = stack.clientWidth;
+    
+    cards.forEach((card, index) => {
+      const offset = (index - currentIndex) * (containerWidth + gap);
+      if (typeof gsap !== 'undefined') {
+        gsap.set(card, { x: offset, opacity: index === currentIndex ? 1 : 0.7 });
+      } else {
+        card.style.transform = `translateX(${offset}px)`;
+        card.style.opacity = index === currentIndex ? 1 : 0.7;
+      }
+    });
+    
+    // Update dots
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentIndex);
+    });
+  };
+
+  // Animate to specific index
+  const slideTo = (index) => {
+    if (isAnimating || index === currentIndex) return;
+    
+    const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
+    isAnimating = true;
+    currentIndex = targetIndex;
+    
+    positionCards();
+    
+    setTimeout(() => {
+      isAnimating = false;
+    }, 400);
+  };
+
+  // Touch/mouse interaction
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let deltaX = 0;
+
+  const handleStart = (e) => {
+    if (isAnimating) return;
+    
+    isDragging = true;
+    startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    deltaX = 0;
+    
+    stack.classList.add('sopy-how-grabbing');
+    
+    if (e.type === 'mousedown') {
+      e.preventDefault();
+    }
+  };
+
+  const handleMove = (e) => {
+    if (!isDragging) return;
+    
+    const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+    
+    deltaX = currentX - startX;
+    const deltaY = Math.abs(currentY - startY);
+    
+    // Only handle horizontal movement
+    if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
+      e.preventDefault();
+      
+      // Live drag feedback
+      const gap = 24;
+      const containerWidth = stack.clientWidth;
+      
+      cards.forEach((card, index) => {
+        const baseOffset = (index - currentIndex) * (containerWidth + gap);
+        const offset = baseOffset + deltaX;
+        
+        if (typeof gsap !== 'undefined') {
+          gsap.set(card, { x: offset });
+        } else {
+          card.style.transform = `translateX(${offset}px)`;
+        }
+      });
+    }
+  };
+
+  const handleEnd = () => {
+    if (!isDragging) return;
+    
+    isDragging = false;
+    stack.classList.remove('sopy-how-grabbing');
+    
+    const threshold = stack.clientWidth * 0.2; // 20% threshold
+    
+    if (Math.abs(deltaX) > threshold) {
+      const direction = deltaX > 0 ? -1 : 1;
+      slideTo(currentIndex + direction);
+    } else {
+      // Snap back
+      positionCards();
+    }
+  };
+
+  // Event listeners
+  stack.addEventListener('touchstart', handleStart, { passive: false });
+  stack.addEventListener('touchmove', handleMove, { passive: false });
+  stack.addEventListener('touchend', handleEnd);
+  
+  stack.addEventListener('mousedown', handleStart);
+  document.addEventListener('mousemove', handleMove);
+  document.addEventListener('mouseup', handleEnd);
+  
+  // Dot click handlers
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => slideTo(index));
+  });
+
+  // Initial setup
+  positionCards();
+  
+  // Handle resize
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      positionCards();
+    }, 100);
   });
 });
 
@@ -3327,7 +3578,7 @@ function onResizeThree() {
    Uses Three.js with HDRI lighting for photorealistic materials.
 ========================= */
 function initCapsuleBubbles() {
-  const container = document.querySelector('.capsule-bubbles');
+  const container = document.querySelector('.sopy-capsule-bubbles');
   if (!container || typeof THREE === 'undefined') return;
 
   // Evita inicialização múltipla
@@ -3738,10 +3989,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let preparedDir=0, isAnimating=false, pendingDir=1, pendingSteps=0, auto=null;
   function prepareNext(direction){ preparedDir=direction; const w=wPlus(); const nextIndex=(index+direction+data.length)%data.length; fillCard(nextC, data[nextIndex]); Gset(nextC,{ x: direction*w, opacity:1 }); }
-  function commit(direction){ if(!preparedDir) prepareNext(direction); isAnimating=true; const w=wPlus(); const targetIndex=(index+direction+data.length)%data.length; const onComplete=()=>{ const tmp=curr; curr=nextC; nextC=tmp; index=targetIndex; updateDots(); if(pendingSteps>0){ prepareNext(pendingDir); pendingSteps--; commit(pendingDir);} else { prepareNext(1); isAnimating=false; } }; if(hasGSAP()){ gsap.timeline({defaults:{duration:.5,ease:'power3.out'}, onComplete}).to(curr,{ x:-direction*w, opacity:0 },0).to(nextC,{ x:0, opacity:1 },0); } else { Gset(curr,{ x:-direction*w, opacity:0 }); Gset(nextC,{ x:0, opacity:1 }); onComplete(); } }
+  function commit(direction){ if(!preparedDir) prepareNext(direction); if(isAnimating) return; isAnimating=true; const w=wPlus(); const targetIndex=(index+direction+data.length)%data.length; const onComplete=()=>{ const tmp=curr; curr=nextC; nextC=tmp; index=targetIndex; updateDots(); if(pendingSteps>0 && pendingSteps<3){ const nextDir=pendingDir; pendingSteps--; setTimeout(()=>{ prepareNext(nextDir); commit(nextDir); }, 100); } else { pendingSteps=0; prepareNext(1); isAnimating=false; } }; if(hasGSAP()){ gsap.timeline({defaults:{duration:.6,ease:'power2.out'}, onComplete}).to(curr,{ x:-direction*w, opacity:0 },0).to(nextC,{ x:0, opacity:1 },0); } else { Gset(curr,{ x:-direction*w, opacity:0 }); Gset(nextC,{ x:0, opacity:1 }); setTimeout(onComplete, 300); } }
   function cancelSwipe(){ const w=wPlus(); if(hasGSAP()){ gsap.to(curr,{ x:0, opacity:1, duration:.35, ease:'power3.out' }); gsap.to(nextC,{ x:preparedDir*w, duration:.35, ease:'power3.out' }); } else { Gset(curr,{ x:0, opacity:1 }); Gset(nextC,{ x:preparedDir*w }); } }
-  function slideTo(target){ const len=data.length; if(target===index) return; const fwd=(target-index+len)%len; const back=(index-target+len)%len; const dir=fwd<=back?1:-1; const steps=Math.min(fwd,back)||1; if(isAnimating){ pendingDir=dir; pendingSteps+=steps; return; } prepareNext(dir); pendingDir=dir; pendingSteps=steps-1; commit(dir); }
-  function startAuto(){ stopAuto(); auto=setInterval(()=> slideTo((index+1)%data.length), 7000); }
+  function slideTo(target){ const len=data.length; if(target===index || isAnimating) return; const fwd=(target-index+len)%len; const back=(index-target+len)%len; const dir=fwd<=back?1:-1; const steps=Math.min(fwd,back)||1; pendingDir=dir; pendingSteps=Math.max(0, steps-1); prepareNext(dir); commit(dir); }
+  function startAuto(){ stopAuto(); auto=setInterval(()=> { if(!isAnimating) slideTo((index+1)%data.length); }, 9000); }
   function stopAuto(){ if(auto) clearInterval(auto); auto=null; }
 
   fillCard(curr, data[index]);
@@ -3751,9 +4002,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // drag
   let dragging=false, startX=0, startY=0, dx=0, dy=0;
-  stack.addEventListener('pointerdown', (e)=>{ if(isAnimating) return; dragging=true; startX=e.clientX; startY=e.clientY; dx=dy=0; preparedDir=0; stopAuto(); stack.classList.add('tc-grabbing'); stack.setPointerCapture?.(e.pointerId); }, {passive:true});
+  stack.addEventListener('pointerdown', (e)=>{ if(isAnimating) return; dragging=true; startX=e.clientX; startY=e.clientY; dx=dy=0; preparedDir=0; pendingSteps=0; stopAuto(); stack.classList.add('tc-grabbing'); stack.setPointerCapture?.(e.pointerId); }, {passive:true});
   stack.addEventListener('pointermove', (e)=>{ if(!dragging) return; dx=e.clientX-startX; dy=e.clientY-startY; if(!preparedDir && Math.abs(dx)>5 && Math.abs(dx)>Math.abs(dy)) prepareNext(dx<0?1:-1); if(!preparedDir) return; const w=wPlus(); const prog=Math.max(-1, Math.min(1, dx/w)); Gset(curr,{ x:dx, opacity: 1 - Math.min(Math.abs(prog), .2) }); Gset(nextC,{ x:preparedDir*w + dx }); });
-  function endPointer(){ if(!dragging) return; dragging=false; stack.classList.remove('tc-grabbing'); const w=wPlus(); const go = Math.abs(dx) > w*0.18 && Math.abs(dx) > Math.abs(dy); if(go && preparedDir) commit(preparedDir); else cancelSwipe(); startAuto(); }
+  function endPointer(){ if(!dragging) return; dragging=false; stack.classList.remove('tc-grabbing'); const w=wPlus(); const go = Math.abs(dx) > w*0.18 && Math.abs(dx) > Math.abs(dy); if(go && preparedDir) commit(preparedDir); else cancelSwipe(); setTimeout(startAuto, 1000); }
   stack.addEventListener('pointerup', endPointer);
   stack.addEventListener('pointercancel', endPointer);
 });
@@ -4071,7 +4322,7 @@ document.body.classList.add("theme-citrus");
    Header: aparece no inÃ­cio e ao rolar pra cima; some ao rolar pra baixo
 ========================= */
 (function autoHideHeader() {
-  const header = document.querySelector('.site-header');
+  const header = document.querySelector('.sopy-site-header');
   if (!header) return;
 
   const showNav = () => document.body.classList.remove('nav-hidden');
@@ -4112,7 +4363,7 @@ window.start3DScrollAnimation = start3DScrollAnimation; // para debug
 ========================= */
 (function footerParallax() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-  const footer = document.querySelector('.site-footer');
+  const footer = document.querySelector('.sopy-site-footer');
   if (!footer) return;
 
   // Inicialmente empurra o footer para baixo (para criar o movimento de subida)
