@@ -330,7 +330,7 @@ function bootAnimations() {
     }
 
    // ===================================
-    //  BLOCO DOS DEPOIMENTOS (IGUAL AO COMO USAR)
+    //  BLOCO DOS DEPOIMENTOS 
     // ===================================
     const testimonialsSection = document.getElementById('testemunhos');
     if (testimonialsSection) {
@@ -506,7 +506,81 @@ function bootAnimations() {
         console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
 
+   /* =========================
+   5) Fragrance Toggle (tema + materiais)
+========================= */
+const toggleBtns = gsap.utils.toArray(".fragrance-toggle .toggle-option");
+function setTheme(theme) {
+  document.body.classList.toggle("theme-citrus", theme === "citrus");
+  document.body.classList.toggle("theme-aqua", theme === "aqua");
 
+  const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+
+  if (gelA && gelB && gelC) {
+    const toCol = (mat, hex) => {
+      const c = new THREE.Color(hex);
+      gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+    };
+    toCol(gelA, pal.a);
+    toCol(gelB, pal.b);
+    toCol(gelC, pal.c);
+
+    gsap.fromTo(
+      capsuleGroup.scale,
+      { x: 1, y: 1, z: 1 },
+      { x: 1.04, y: 1.04, z: 1.04, yoyo: true, repeat: 1, duration: 0.18, ease: "power2.inOut" }
+    );
+  }
+
+  // Update product card text based on theme
+  const productTitle = document.querySelector('.product-title');
+  const productCopy = document.querySelector('.product-copy');
+  const productPrice = document.querySelector('.product-price');
+  const productCta = document.querySelector('.sopy-product-cta');
+  
+  if (productTitle) {
+    productTitle.textContent = theme === 'citrus' ? productTitle.getAttribute('data-citrus') : productTitle.getAttribute('data-aqua');
+  }
+  if (productCopy) {
+    productCopy.textContent = theme === 'citrus' ? productCopy.getAttribute('data-citrus') : productCopy.getAttribute('data-aqua');
+  }
+  if (productPrice) {
+    productPrice.textContent = theme === 'citrus' ? productPrice.getAttribute('data-citrus') : productPrice.getAttribute('data-aqua');
+  }
+  if (productCta) {
+    productCta.textContent = theme === 'citrus' ? productCta.getAttribute('data-citrus') : productCta.getAttribute('data-aqua');
+  }
+
+  // Troca o modelo 3D para o tema
+  swapModel(theme);
+}
+toggleBtns.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (btn.classList.contains("is-active")) return;
+    toggleBtns.forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    const theme = btn.dataset.theme === "citrus" ? "citrus" : "aqua";
+    setTheme(theme);
+  });
+});
+
+// Toggle animado de produtos: troca tema do site
+const productToggle = document.getElementById('product-toggle');
+if (productToggle) {
+  productToggle.addEventListener('change', function() {
+    if (productToggle.checked) {
+      document.body.classList.add('theme-aqua');
+      document.body.classList.remove('theme-citrus');
+    } else {
+      document.body.classList.add('theme-citrus');
+      document.body.classList.remove('theme-aqua');
+    }
+    // Se existir função setTheme/theme 3D, chame aqui
+    if (typeof setTheme === 'function') {
+      setTheme(productToggle.checked ? 'aqua' : 'citrus');
+    }
+  });
+}
 
     
     
