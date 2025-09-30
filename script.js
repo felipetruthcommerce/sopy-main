@@ -506,81 +506,127 @@ function bootAnimations() {
         console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
 
-   /* =========================
-   5) Fragrance Toggle (tema + materiais)
-========================= */
-const toggleBtns = gsap.utils.toArray(".fragrance-toggle .toggle-option");
-function setTheme(theme) {
-  document.body.classList.toggle("theme-citrus", theme === "citrus");
-  document.body.classList.toggle("theme-aqua", theme === "aqua");
+   // ===================================
+    //  INICIALIZAÇÃO DO LENIS (SCROLL SUAVE)
+    // ===================================
+    // (Seu código do Lenis aqui)
+    const lenis = new Lenis();
+    window.lenis = lenis;
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+    console.log('[LENIS] Scroll suave inicializado.');
 
-  const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+    // ==========================================================
+    //  BLOCO FINAL: 3D E TOGGLE DE TEMA (ELES DEPENDEM UM DO OUTRO)
+    // ==========================================================
 
-  if (gelA && gelB && gelC) {
-    const toCol = (mat, hex) => {
-      const c = new THREE.Color(hex);
-      gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
-    };
-    toCol(gelA, pal.a);
-    toCol(gelB, pal.b);
-    toCol(gelC, pal.c);
+    // Variáveis da cena 3D que precisam ser acessíveis por outras funções
+    let gelA, gelB, gelC, capsuleGroup, COLORS; 
 
-    gsap.fromTo(
-      capsuleGroup.scale,
-      { x: 1, y: 1, z: 1 },
-      { x: 1.04, y: 1.04, z: 1.04, yoyo: true, repeat: 1, duration: 0.18, ease: "power2.inOut" }
-    );
-  }
+    // --- Função para configurar o Toggle ---
+    function initThemeToggle() {
+        console.log('[TOGGLE] Inicializando toggle de fragrância...');
 
-  // Update product card text based on theme
-  const productTitle = document.querySelector('.product-title');
-  const productCopy = document.querySelector('.product-copy');
-  const productPrice = document.querySelector('.product-price');
-  const productCta = document.querySelector('.sopy-product-cta');
-  
-  if (productTitle) {
-    productTitle.textContent = theme === 'citrus' ? productTitle.getAttribute('data-citrus') : productTitle.getAttribute('data-aqua');
-  }
-  if (productCopy) {
-    productCopy.textContent = theme === 'citrus' ? productCopy.getAttribute('data-citrus') : productCopy.getAttribute('data-aqua');
-  }
-  if (productPrice) {
-    productPrice.textContent = theme === 'citrus' ? productPrice.getAttribute('data-citrus') : productPrice.getAttribute('data-aqua');
-  }
-  if (productCta) {
-    productCta.textContent = theme === 'citrus' ? productCta.getAttribute('data-citrus') : productCta.getAttribute('data-aqua');
-  }
+        // Objeto de cores (coloque seus valores hexadecimais aqui)
+        COLORS = {
+            citrus: { a: '#ffdd00', b: '#ffaa00', c: '#ffffff' },
+            aqua:   { a: '#00aaff', b: '#0077cc', c: '#ffffff' }
+        };
 
-  // Troca o modelo 3D para o tema
-  swapModel(theme);
-}
-toggleBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    if (btn.classList.contains("is-active")) return;
-    toggleBtns.forEach((b) => b.classList.remove("is-active"));
-    btn.classList.add("is-active");
-    const theme = btn.dataset.theme === "citrus" ? "citrus" : "aqua";
-    setTheme(theme);
-  });
-});
+        function setTheme(theme) {
+            document.body.classList.toggle("theme-citrus", theme === "citrus");
+            document.body.classList.toggle("theme-aqua", theme === "aqua");
 
-// Toggle animado de produtos: troca tema do site
-const productToggle = document.getElementById('product-toggle');
-if (productToggle) {
-  productToggle.addEventListener('change', function() {
-    if (productToggle.checked) {
-      document.body.classList.add('theme-aqua');
-      document.body.classList.remove('theme-citrus');
-    } else {
-      document.body.classList.add('theme-citrus');
-      document.body.classList.remove('theme-aqua');
+            const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+
+            if (gelA && gelB && gelC) {
+                const toCol = (mat, hex) => {
+                    const c = new THREE.Color(hex);
+                    gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+                };
+                toCol(gelA, pal.a);
+                toCol(gelB, pal.b);
+                toCol(gelC, pal.c);
+            }
+
+            // Atualiza o texto do card de produto
+            const productCard = document.querySelector('.capsule-3d-cta');
+            if(productCard) {
+                const fields = [['.product-title', 'textContent'], ['.product-copy', 'textContent'], ['.product-price', 'textContent'], ['.sopy-product-cta', 'textContent']];
+                fields.forEach(([selector, prop]) => {
+                    const el = productCard.querySelector(selector);
+                    if(el) el[prop] = el.getAttribute(`data-${theme}`);
+                });
+            }
+            
+            // Troca o modelo 3D (a função swapModel deve estar dentro do seu código 3D)
+            if (typeof swapModel === 'function') {
+                swapModel(theme);
+            }
+        }
+
+        // Listeners para os botões
+        const productToggle = document.getElementById('product-toggle');
+        if (productToggle) {
+            productToggle.addEventListener('change', function() {
+                const theme = productToggle.checked ? 'aqua' : 'citrus';
+                setTheme(theme);
+            });
+        }
+        
+        // Dispara o tema inicial (ex: citrus)
+        setTheme('citrus'); 
     }
-    // Se existir função setTheme/theme 3D, chame aqui
-    if (typeof setTheme === 'function') {
-      setTheme(productToggle.checked ? 'aqua' : 'citrus');
+
+    // --- Função para iniciar o 3D ---
+    function initThree() {
+        console.log('[3D] Inicializando cena Three.js...');
+        
+        //
+        // AQUI VAI TODO O SEU CÓDIGO DE CONFIGURAÇÃO DA CENA 3D
+        // (câmera, renderer, luzes, etc.)
+        //
+        
+        const loader = new THREE.GLTFLoader();
+        
+        // Dentro do seu código 3D, você terá a função que carrega/troca o modelo
+        window.swapModel = function(theme) {
+            const modelPath = theme === 'citrus' 
+                ? 'URL_DO_SEU_MODELO_CITRUS.glb' 
+                : 'URL_DO_SEU_MODELO_AQUA.glb';
+
+            loader.load(
+                modelPath,
+                function (gltf) {
+                    // SEU CÓDIGO que processa o modelo carregado...
+                    // Exemplo:
+                    // scene.add(gltf.scene);
+                    // capsuleGroup = gltf.scene;
+                    // gelA = gltf.scene.getObjectByName('Gel_A').material;
+                    // ...etc
+                    console.log(`[3D] Modelo ${theme} carregado com sucesso.`);
+
+                    // ✅ CHAMADA CRÍTICA: Só inicia o Toggle DEPOIS que o primeiro modelo carregou
+                    // Usamos uma flag para garantir que só rode uma vez
+                    if (!window.themeToggleInitialized) {
+                        initThemeToggle();
+                        window.themeToggleInitialized = true;
+                    }
+                },
+                undefined, // onProgress (não precisamos no momento)
+                function (error) {
+                    console.error('[3D] Falha ao carregar modelo:', error);
+                }
+            );
+        };
+        
+        // Inicia o carregamento do primeiro modelo
+        swapModel('citrus');
     }
-  });
-}
+
+    // Inicia o processo do 3D (que por sua vez iniciará o Toggle)
+    initThree();
 
     
     
