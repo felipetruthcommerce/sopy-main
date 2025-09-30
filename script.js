@@ -923,65 +923,65 @@ const COLORS = {
   citrus: { a: 0x5FD97E, b: 0x91D9A3, c: 0xD7D9D2 },
 };
 
-function initThree() {
-  if (!THREE_READY) return;
-  if (!threeWrap) return;
+// function initThree() {
+//   if (!THREE_READY) return;
+//   if (!threeWrap) return;
 
-  scene = new THREE.Scene();
-  scene.background = null;
+//   scene = new THREE.Scene();
+//   scene.background = null;
 
-  const w = threeWrap.clientWidth;
-  const h = threeWrap.clientHeight;
+//   const w = threeWrap.clientWidth;
+//   const h = threeWrap.clientHeight;
 
-  // Force minimum dimensions if container is too small
-  const finalW = Math.max(w, 400);
-  const finalH = Math.max(h, 300);
+//   // Force minimum dimensions if container is too small
+//   const finalW = Math.max(w, 400);
+//   const finalH = Math.max(h, 300);
 
-  camera = new THREE.PerspectiveCamera(45, finalW / finalH, 0.1, 100);
-  camera.position.set(0, 0, 4.2);
+//   camera = new THREE.PerspectiveCamera(45, finalW / finalH, 0.1, 100);
+//   camera.position.set(0, 0, 4.2);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(clamp(window.devicePixelRatio, 1, 1.75));
-  renderer.setSize(finalW, finalH);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.0;
-  threeWrap.appendChild(renderer.domElement);
+//   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+//   renderer.setPixelRatio(clamp(window.devicePixelRatio, 1, 1.75));
+//   renderer.setSize(finalW, finalH);
+//   renderer.toneMapping = THREE.ACESFilmicToneMapping;
+//   renderer.toneMappingExposure = 1.0;
+//   threeWrap.appendChild(renderer.domElement);
 
-  // luzes
-  const amb = new THREE.AmbientLight(0xffffff, 1.2);
-  scene.add(amb);
+//   // luzes
+//   const amb = new THREE.AmbientLight(0xffffff, 1.2);
+//   scene.add(amb);
 
-  const key = new THREE.DirectionalLight(0xffffff, 1.0);
-  key.position.set(3, 4, 2);
-  scene.add(key);
+//   const key = new THREE.DirectionalLight(0xffffff, 1.0);
+//   key.position.set(3, 4, 2);
+//   scene.add(key);
 
-  const fill = new THREE.DirectionalLight(0xffffff, 0.8);
-  fill.position.set(-3, -1, 3);
-  scene.add(fill);
+//   const fill = new THREE.DirectionalLight(0xffffff, 0.8);
+//   fill.position.set(-3, -1, 3);
+//   scene.add(fill);
 
-  // grupo base
-  capsuleGroup = new THREE.Group();
-  scene.add(capsuleGroup);
+//   // grupo base
+//   capsuleGroup = new THREE.Group();
+//   scene.add(capsuleGroup);
 
-  // Define orientação inicial vertical
-  capsuleGroup.rotation.set(0, 0, 0);
+//   // Define orientação inicial vertical
+//   capsuleGroup.rotation.set(0, 0, 0);
 
-  // Se após um tempo razoável ainda não há objeto, cria fallback e inicia animação
-  setTimeout(() => {
-    if (capsuleGroup.children.length === 0) {
-      console.warn("Nenhum objeto 3D carregado até agora. Inserindo fallback...");
-      createFallbackModel(currentTheme3D);
-      ensureEnter3D();
-    }
-  }, 1200);
+//   // Se após um tempo razoável ainda não há objeto, cria fallback e inicia animação
+//   setTimeout(() => {
+//     if (capsuleGroup.children.length === 0) {
+//       console.warn("Nenhum objeto 3D carregado até agora. Inserindo fallback...");
+//       createFallbackModel(currentTheme3D);
+//       ensureEnter3D();
+//     }
+//   }, 1200);
 
-  // carrega o modelo do tema atual (ou pendente)
-  const themeToLoad = pendingThemeForModel || currentTheme3D;
-  swapModel(themeToLoad);
-  // Inicia animação de scroll assim que o modelo for carregado
-  start3DScrollAnimation();
-  window.addEventListener("resize", onResizeThree);
-}
+//   // carrega o modelo do tema atual (ou pendente)
+//   const themeToLoad = pendingThemeForModel || currentTheme3D;
+//   swapModel(themeToLoad);
+//   // Inicia animação de scroll assim que o modelo for carregado
+//   start3DScrollAnimation();
+//   window.addEventListener("resize", onResizeThree);
+// }
 
 function enter3D() {
   // animação de entrada
