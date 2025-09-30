@@ -340,11 +340,28 @@ function bootAnimations() {
         const cards = track ? Array.from(track.querySelectorAll('.tc-testimonial-card')) : [];
         const dots = testimonialsSection.querySelectorAll('.tc-testimonials-dots .tc-dot');
 
+        // Cria/insere progress pill (sem alterar HTML original)
+        let tcProgressWrap = testimonialsSection.querySelector('.tc-progress-wrap');
+        if (!tcProgressWrap) {
+            tcProgressWrap = document.createElement('div');
+            tcProgressWrap.className = 'tc-progress-wrap';
+            tcProgressWrap.innerHTML = '<div class="tc-progress-pill" aria-hidden="true"></div>';
+            const right = testimonialsSection.querySelector('.tc-right');
+            if (right) right.appendChild(tcProgressWrap);
+        }
+        const tcPill = tcProgressWrap.querySelector('.tc-progress-pill');
+
         if (track && cards.length > 0) {
             let currentIndex = 0;
             let isAnimating = false;
             let autoInterval;
-            
+
+            const updatePill = (index) => {
+                if (!tcPill) return;
+                const p = cards.length > 1 ? (index / (cards.length - 1)) : 0;
+                tcPill.style.transform = `scaleX(${p})`;
+            };
+
             const slideTo = (index) => {
                 if (isAnimating) return;
                 const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
@@ -356,47 +373,49 @@ function bootAnimations() {
                 const currentCard = cards[currentIndex];
                 const targetCard = cards[targetIndex];
                 const direction = targetIndex > currentIndex ? 1 : -1;
-                
-                // Remove active class do card atual
+
+                // Remove active class do card atual (a classe active controla visibilidade via CSS)
                 currentCard.classList.remove('active');
-                
-                // Animação com GSAP - cards sobrepostos
+
+                // Animação com GSAP - cards sobrepostos, mais rápida
                 gsap.timeline({
-                    defaults: { duration: 0.6, ease: 'power2.out' },
+                    defaults: { duration: 0.35, ease: 'power2.out' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
                         startAutoPlay();
                         // Update dots
                         dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                        // Update pill
+                        updatePill(currentIndex);
                     }
                 })
-                .to(currentCard, { 
-                    x: direction * -100 + '%', 
+                .to(currentCard, {
+                    x: (direction * -30) + '%',
                     opacity: 0,
-                    duration: 0.4
+                    duration: 0.25
                 }, 0)
                 .fromTo(targetCard, {
-                    x: direction * 100 + '%',
+                    x: (direction * 30) + '%',
                     opacity: 0
                 }, {
                     x: '0%',
                     opacity: 1,
-                    duration: 0.6,
+                    duration: 0.35,
                     onStart: () => targetCard.classList.add('active')
-                }, 0.2);
+                }, 0);
             };
-            
-            // Lógica do Autoplay
+
+            // Lógica do Autoplay (inicia/repõe)
             const startAutoPlay = () => {
                 clearInterval(autoInterval);
                 autoInterval = setInterval(() => {
                     const nextIndex = (currentIndex + 1) % cards.length;
                     slideTo(nextIndex);
-                }, 7000); // 7 segundos
+                }, 7000);
             };
 
-            // Lógica de Arrastar (Drag)
+            // Lógica de Arrastar (Drag) - mais responsiva
             let isDragging = false;
             let startX = 0;
             let deltaX = 0;
@@ -414,8 +433,7 @@ function bootAnimations() {
                 if (!isDragging) return;
                 const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = currentX - startX;
-                
-                // Live drag preview
+                // Live drag preview para o card atual
                 const currentCard = cards[currentIndex];
                 gsap.set(currentCard, { x: deltaX + 'px' });
             };
@@ -424,26 +442,18 @@ function bootAnimations() {
                 if (!isDragging) return;
                 isDragging = false;
                 track.classList.remove('tc-grabbing');
-                
-                const threshold = track.offsetWidth * 0.25; // 25% threshold
-                
+                const threshold = track.offsetWidth * 0.18; // 18% threshold
+
                 if (Math.abs(deltaX) > threshold) {
-                    if (deltaX < 0 && currentIndex < cards.length - 1) {
-                        slideTo(currentIndex + 1);
-                    } else if (deltaX > 0 && currentIndex > 0) {
-                        slideTo(currentIndex - 1);
-                    } else {
-                        // Snap back
-                        gsap.to(cards[currentIndex], { x: 0, duration: 0.3, ease: 'power2.out' });
-                        startAutoPlay();
-                    }
+                    const direction = deltaX < 0 ? 1 : -1;
+                    slideTo(currentIndex + direction);
                 } else {
                     // Snap back
-                    gsap.to(cards[currentIndex], { x: 0, duration: 0.3, ease: 'power2.out' });
+                    gsap.to(cards[currentIndex], { x: 0, duration: 0.25, ease: 'power2.out' });
                     startAutoPlay();
                 }
             };
-            
+
             // Event Listeners
             dots.forEach((dot, index) => dot.addEventListener('click', () => slideTo(index)));
             track.addEventListener('mousedown', handleStart);
@@ -452,7 +462,7 @@ function bootAnimations() {
             track.addEventListener('touchstart', handleStart, { passive: false });
             track.addEventListener('touchmove', handleMove, { passive: false });
             track.addEventListener('touchend', handleEnd);
-            
+
             // Configuração Inicial - apenas o primeiro card visível
             cards.forEach((card, index) => {
                 if (index === 0) {
@@ -463,12 +473,15 @@ function bootAnimations() {
                     gsap.set(card, { x: '100%', opacity: 0 });
                 }
             });
-            
+
             // Ativar primeiro dot
             if (dots.length > 0) {
                 dots[0].classList.add('active');
             }
-            
+
+            // Init pill state
+            updatePill(0);
+
             startAutoPlay();
 
         } else {
