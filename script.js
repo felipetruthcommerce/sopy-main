@@ -736,12 +736,24 @@ function bootAnimations() {
     // Damos um pequeno delay para garantir que o DOM foi totalmente atualizado
     // ===================================
 
-    setTimeout(() => {
+    function finalizeLayoutAndRefresh() {
         if (window.ScrollTrigger) {
-            console.log('Forçando refresh final do ScrollTrigger.');
+            console.log('✅ FINALIZANDO: Todas as animações criadas. Recalculando posições do ScrollTrigger...');
+            
+            // ScrollTrigger.sort() organiza os triggers por ordem de aparição na página,
+            // o que é crucial para layouts complexos com pinning.
+            ScrollTrigger.sort();
+            
+            // Agora sim, o refresh é chamado no mapa final e correto.
             ScrollTrigger.refresh();
+            
+            console.log('✅ Mapa recalculado! As animações devem disparar no momento certo.');
         }
-    }, 100); // 100ms de delay é geralmente suficiente
+    }
+    
+    // Usamos um setTimeout para dar ao navegador uma fração de segundo 
+    // para "digerir" todas as animações que acabamos de criar antes de recalcular.
+    setTimeout(finalizeLayoutAndRefresh, 300); // 300ms de segurança
    
 
     

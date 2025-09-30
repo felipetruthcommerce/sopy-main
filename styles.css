@@ -2160,37 +2160,3 @@ body.theme-aqua {
 
 
 
-/* =======================================================
-   AJUSTE SEGURO E ENCAPSULADO PARA ANIMAÇÃO DE TEXTO
-   (Afeta apenas o conteúdo dentro da seção .sopy-main)
-   ======================================================= */
-
-/* Garante o contexto de posicionamento APENAS para os textos
-   dentro da nossa seção, sem afetar o resto do tema da loja. */
-.sopy-main h1,
-.sopy-main h2,
-.sopy-main h3,
-.sopy-main h4,
-.sopy-main h5,
-.sopy-main h6,
-.sopy-main p,
-.sopy-main a,
-.sopy-main button,
-.sopy-main span {
-    position: relative; 
-    /* A propriedade 'display: block' foi removida para ser menos invasiva.
-       'position: relative' é a mais importante aqui. */
-}
-
-/* Garante que os spans criados pelo SplitType sejam visíveis */
-.sopy-main .split-line > span, 
-.sopy-main .split-word > span {
-    display: inline-block;
-}
-
-/* Força o contexto de posicionamento apenas no card de benefícios
-   dentro da nossa seção. */
-.sopy-main .sopy-benefits-card-content {
-    position: relative;
-    z-index: 2;
-}
