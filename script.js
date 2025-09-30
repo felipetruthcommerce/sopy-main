@@ -50,10 +50,12 @@ function setupButtonRipples() {
     });
 }
 
+// SUBSTITUA SUA FUNÇÃO initTextAnimations PELA VERSÃO ABAIXO
+
 function initTextAnimations() {
     console.log('[SETUP] Inicializando animações de texto (estilo Osmo)...');
-
-    // Adicionar CSS para o mascaramento do texto
+    
+    // ... (O código do 'style' e dos seletores continua o mesmo)
     const style = document.createElement('style');
     style.textContent = `
       .split-line, .split-word { overflow: hidden !important; display: inline-block; vertical-align: top; }
@@ -65,46 +67,73 @@ function initTextAnimations() {
     const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
     const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
 
-    console.log(`[TEXT] Encontrados: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
+    console.log(`[TEXT] Encontrados para animar: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
     
+    // ✅ VERSÃO "SUPER-DEBUG" DA FUNÇÃO
     function animateElement(element, type = 'lines') {
-        if (!element || !element.textContent.trim()) return;
+        if (!element || !element.textContent.trim()) {
+            // console.log(`[DEBUG] Elemento pulado (vazio ou não existe):`, element);
+            return;
+        }
         
-        const split = new SplitType(element, { types: type, lineClass: 'split-line', wordClass: 'split-word' });
-        const targets = type === 'lines' ? split.lines : split.words;
+        // ✅ NOVO LOG: Nos diz qual elemento está sendo processado
+        console.log(`[DEBUG] Processando elemento: <${element.tagName.toLowerCase()}> com texto "${element.textContent.substring(0, 20)}..."`);
 
-        if (targets) {
-            targets.forEach(target => {
-                const content = target.innerHTML;
-                target.innerHTML = `<span>${content}</span>`;
-            });
-            
-            const spans = targets.map(target => target.children[0]);
-            
-            gsap.set(spans, { y: "110%" });
+        try {
+            const split = new SplitType(element, { types: type, lineClass: 'split-line', wordClass: 'split-word' });
+            const targets = type === 'lines' ? split.lines : split.words;
 
-            gsap.to(spans, {
-                y: "0%",
-                duration: type === 'lines' ? 0.8 : 0.6,
-                stagger: type === 'lines' ? 0.08 : 0.05,
-                ease: "osmo-ease",
-                scrollTrigger: {
-                    trigger: element,
-                    start: "top 85%",
-                    once: true,
-                    onEnter: () => console.log(`⚡ Triggered: Animação de texto em ${element.tagName}`)
+            if (targets && targets.length > 0) {
+                targets.forEach(target => {
+                    const content = target.innerHTML;
+                    target.innerHTML = `<span>${content}</span>`;
+                });
+                
+                const spans = targets.map(target => target.children[0]).filter(Boolean);
+                
+                if (spans.length > 0) {
+                    gsap.set(spans, { y: "110%" });
+                    gsap.to(spans, {
+                        y: "0%",
+                        duration: type === 'lines' ? 0.8 : 0.6,
+                        stagger: type === 'lines' ? 0.08 : 0.05,
+                        ease: "osmo-ease",
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 85%",
+                            once: true,
+                            // ✅ NOVO LOG: Confirma que o ScrollTrigger foi criado
+                            onEnter: () => console.log(`✅ [TRIGGER ATIVADO] Animação de texto em: <${element.tagName.toLowerCase()}>`)
+                        }
+                    });
+                } else {
+                     console.warn(`[DEBUG] WARN: SplitType criou targets, mas não encontrou spans para animar em:`, element);
                 }
-            });
+            } else {
+                console.warn(`[DEBUG] WARN: SplitType não criou 'lines' ou 'words' para o elemento:`, element);
+            }
+        } catch (e) {
+            console.error(`[DEBUG] ERRO ao tentar animar o elemento:`, element, e);
         }
     }
     
-    titles.forEach(el => { if (!el.closest('#faq')) animateElement(el, 'lines'); });
+    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE TÍTULOS ---');
+    titles.forEach(el => {
+        if (!el.closest('#faq')) {
+            animateElement(el, 'lines');
+        } else {
+            console.log(`[DEBUG] Pulando título do FAQ (intencional): "${el.textContent.substring(0, 20)}..."`);
+        }
+    });
+
+    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE PARÁGRAFOS ---');
     paragraphs.forEach(el => animateElement(el, 'words'));
+
+    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE BOTÕES ---');
     buttons.forEach(el => animateElement(el, 'words'));
 
     console.log("✅ Animações de texto configuradas!");
 }
-
 
 
 
