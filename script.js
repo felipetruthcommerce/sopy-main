@@ -2,7 +2,7 @@ function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
     // ===================================
-    //  BLOCO DO FAQ (JÁ FUNCIONANDO)
+    //  BLOCO DO FAQ
     // ===================================
     const allAccordions = document.querySelectorAll('#faq .sopy-faq-accordion');
     console.log(`[FAQ] Encontrados ${allAccordions.length} itens de accordion.`);
@@ -24,7 +24,7 @@ function bootAnimations() {
 
 
     // ===================================
-    //  BLOCO DOS BENEFÍCIOS (CORRIGIDO)
+    //  BLOCO DOS BENEFÍCIOS 
     // ===================================
     const benefitsSection = document.getElementById('beneficios');
     if (benefitsSection) {
@@ -329,150 +329,119 @@ function bootAnimations() {
         updatePageProgress();
     }
 
-    // ===================================
+   // ===================================
     //  BLOCO DOS DEPOIMENTOS (CORRIGIDO)
     // ===================================
-    const testimonialsSection = document.getElementById('depoimentos');
+    const testimonialsSection = document.getElementById('testemunhos'); // Corrigi o ID para 'testemunhos' que estava no seu HTML original
     if (testimonialsSection) {
         console.log('[DEPOIMENTOS] Seção encontrada. Inicializando slider...');
-        
+
         const track = testimonialsSection.querySelector('.tc-testimonials-track');
         const cards = track ? Array.from(track.querySelectorAll('.tc-testimonial-card')) : [];
         const dots = testimonialsSection.querySelectorAll('.tc-testimonials-dots .tc-dot');
-        
+
         if (track && cards.length > 0) {
             let currentIndex = 0;
             let isAnimating = false;
             let autoInterval;
-            let pendingSteps = 0;
-            const MAX_PENDING = 3;
             
             const slideTo = (index) => {
-                if (isAnimating || pendingSteps >= MAX_PENDING) return;
-                if (index === currentIndex) return;
-                
-                const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
-                pendingSteps++;
+                if (isAnimating) return;
+                // Faz o slider "dar a volta" (loop)
+                const targetIndex = (index + cards.length) % cards.length;
+                if (targetIndex === currentIndex) return;
+
                 isAnimating = true;
-                
+                clearInterval(autoInterval); // Pausa o autoplay durante a transição
+
                 const currentCard = cards[currentIndex];
                 const targetCard = cards[targetIndex];
                 const direction = targetIndex > currentIndex ? 1 : -1;
-                const cardWidth = currentCard.offsetWidth;
                 
-                // Clear auto interval
-                if (autoInterval) {
-                    clearInterval(autoInterval);
-                    autoInterval = null;
-                }
-                
-                // Animation
-                gsap.timeline({
-                    defaults: { duration: 0.6, ease: 'power2.out' },
+                // Animação com GSAP
+                const tl = gsap.timeline({
+                    defaults: { duration: 0.6, ease: 'power2.inOut' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
-                        pendingSteps = Math.max(0, pendingSteps - 1);
-                        
-                        // Update dots
+                        startAutoPlay(); // Reinicia o autoplay
                         dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
-                        
-                        // Restart auto-play after 1s delay
-                        setTimeout(() => {
-                            if (!autoInterval) {
-                                autoInterval = setInterval(() => {
-                                    if (!isAnimating) {
-                                        slideTo((currentIndex + 1) % cards.length);
-                                    }
-                                }, 9000);
-                            }
-                        }, 1000);
                     }
-                })
-                .to(currentCard, { x: -direction * cardWidth, opacity: 0 }, 0)
-                .fromTo(targetCard, 
-                    { x: direction * cardWidth, opacity: 0 },
-                    { x: 0, opacity: 1 }, 0
-                );
+                });
+
+                // Posiciona o próximo card fora da tela
+                gsap.set(targetCard, { xPercent: direction * 100, opacity: 1, display: 'block' });
+                // Anima o card atual para fora e o próximo para dentro
+                tl.to(currentCard, { xPercent: -direction * 100 })
+                  .to(targetCard, { xPercent: 0 }, "<");
             };
             
-            // Dot clicks
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => slideTo(index));
-            });
-            
-            // Touch/Drag support
-            let isDragging = false;
+            // Lógica do Autoplay
+            const startAutoPlay = () => {
+                clearInterval(autoInterval);
+                autoInterval = setInterval(() => slideTo(currentIndex + 1), 5000);
+            };
+
+            // Lógica de Arrastar (Drag)
+            let isDragging = false; // A correção foi aqui
             let startX = 0;
             let deltaX = 0;
-            
+
             const handleStart = (e) => {
                 if (isAnimating) return;
                 isDragging = true;
                 startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = 0;
                 track.style.cursor = 'grabbing';
+                clearInterval(autoInterval);
             };
-            
+
             const handleMove = (e) => {
                 if (!isDragging) return;
                 const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = currentX - startX;
-                
-                // Live preview drag
-                const currentCard = cards[currentIndex];
-                if (currentCard) {
-                    gsap.set(currentCard, { x: deltaX });
-                }
+                gsap.set(cards[currentIndex], { xPercent: (deltaX / track.offsetWidth) * 100 });
             };
-            
+
             const handleEnd = () => {
                 if (!isDragging) return;
                 isDragging = false;
                 track.style.cursor = 'grab';
-                
-                const threshold = track.clientWidth * 0.18; // 18% threshold
-                
-                if (Math.abs(deltaX) > threshold) {
-                    const direction = deltaX > 0 ? -1 : 1;
-                    slideTo(currentIndex + direction);
+                startAutoPlay(); // Reinicia o autoplay
+
+                if (Math.abs(deltaX) > track.offsetWidth * 0.2) { // Threshold de 20%
+                    slideTo(deltaX < 0 ? currentIndex + 1 : currentIndex - 1);
                 } else {
-                    // Snap back
-                    const currentCard = cards[currentIndex];
-                    if (currentCard) {
-                        gsap.to(currentCard, { x: 0, duration: 0.3, ease: 'power2.out' });
-                    }
+                    gsap.to(cards[currentIndex], { xPercent: 0, duration: 0.4, ease: 'power2.out' });
                 }
             };
             
-            // Event listeners
+            // Adiciona os Event Listeners
+            dots.forEach((dot, index) => dot.addEventListener('click', () => slideTo(index)));
             track.addEventListener('mousedown', handleStart);
-            document.addEventListener('mousemove', handleMove);
-            document.addEventListener('mouseup', handleEnd);
+            track.addEventListener('mousemove', handleMove);
+            track.addEventListener('mouseup', handleEnd);
+            track.addEventListener('mouseleave', handleEnd); // Importante para quando o mouse sai da área
             track.addEventListener('touchstart', handleStart, { passive: true });
-            track.addEventListener('touchmove', handleMove, { passive: false });
+            track.addEventListener('touchmove', handleMove);
             track.addEventListener('touchend', handleEnd);
             
-            // Initial setup
+            // Configuração Inicial
             cards.forEach((card, index) => {
-                if (index !== currentIndex) {
-                    gsap.set(card, { x: card.offsetWidth, opacity: 0 });
-                } else {
-                    gsap.set(card, { x: 0, opacity: 1 });
-                }
+                gsap.set(card, { xPercent: index === 0 ? 0 : 100, display: index === 0 ? 'block' : 'none' });
             });
-            
-            dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
-            
-            // Start auto-play
-            autoInterval = setInterval(() => {
-                if (!isAnimating) {
-                    slideTo((currentIndex + 1) % cards.length);
-                }
-            }, 9000);
+            dots[0].classList.add('active');
+            startAutoPlay();
+
+        } else {
+            console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
         }
     } else {
-        console.log('[DEPOIMENTOS] Seção #depoimentos não encontrada.');
+        console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
+
+
+
+    
     
 } // Fim da função bootAnimations
