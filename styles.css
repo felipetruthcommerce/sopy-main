@@ -1753,9 +1753,12 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-score{ color:#f2f3f7; font-weight:700 }
 /* Progress dos depoimentos igual ao Como Usar */
 .tc-progress-wrap {
-  position: fixed;
+  /* place the dots inside the testimonials section so they're fixed to the cards area
+     Use absolute so the wrap sits relative to the section (section must be positioned)
+     — this keeps them visually under the cards, not at the viewport bottom */
+  position: absolute;
   left: 50%;
-  bottom: 32px;
+  bottom: 36px;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -2151,3 +2154,6 @@ body.theme-aqua {
     line-height: 1.1;
   }
 }
+
+/* Ensure testimonials section is a positioned container for absolute dots */
+#testemunhos { position: relative; }
