@@ -1,3 +1,122 @@
+// --- PARTE 1: DEFINIÇÃO DAS FUNÇÕES DE APOIO ---
+
+function setupLenis() {
+    console.log('[SETUP] Inicializando Lenis (Scroll Suave)...');
+    const lenis = new Lenis();
+    window.lenis = lenis; // Deixa o Lenis acessível globalmente
+    
+    lenis.on('scroll', ScrollTrigger.update);
+    
+    gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // Sempre iniciar no topo ao recarregar
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    } catch {}
+    window.scrollTo(0, 0);
+}
+
+function setupGsapPlugins() {
+    console.log('[SETUP] Registrando plugins e eases do GSAP...');
+    if (typeof gsap === "undefined" || window.__gsapPluginsRegistered) return;
+
+    const plugs = [];
+    if (typeof ScrollTrigger !== "undefined") plugs.push(ScrollTrigger);
+    if (typeof CustomEase !== "undefined") plugs.push(CustomEase);
+    if (typeof SplitText !== "undefined") plugs.push(SplitText); // Adicione se você usa SplitText
+    
+    if (plugs.length) gsap.registerPlugin(...plugs);
+
+    if (typeof CustomEase !== "undefined") {
+        CustomEase.create("osmo-ease", "0.625, 0.05, 0, 1");
+    }
+    
+    window.__gsapPluginsRegistered = true;
+}
+
+function setupButtonRipples() {
+    console.log('[SETUP] Configurando efeito ripple nos botões...');
+    document.querySelectorAll('.sopy-btn').forEach(btn => {
+        btn.addEventListener('mousemove', (event) => {
+            const rect = btn.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            btn.style.setProperty("--xPos", x + "px");
+            btn.style.setProperty("--yPos", y + "px");
+        });
+    });
+}
+
+function initTextAnimations() {
+    console.log('[SETUP] Inicializando animações de texto (estilo Osmo)...');
+
+    // Adicionar CSS para o mascaramento do texto
+    const style = document.createElement('style');
+    style.textContent = `
+      .split-line, .split-word { overflow: hidden !important; display: inline-block; vertical-align: top; }
+      .split-line > span, .split-word > span { display: inline-block; will-change: transform; }
+    `;
+    document.head.appendChild(style);
+
+    const titles = document.querySelectorAll('h1:not(#hero *), h2:not(#hero *), h3:not(#hero *), h4:not(#hero *), .tc-title, .tc-sub');
+    const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
+    const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
+
+    console.log(`[TEXT] Encontrados: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
+    
+    function animateElement(element, type = 'lines') {
+        if (!element || !element.textContent.trim()) return;
+        
+        const split = new SplitType(element, { types: type, lineClass: 'split-line', wordClass: 'split-word' });
+        const targets = type === 'lines' ? split.lines : split.words;
+
+        if (targets) {
+            targets.forEach(target => {
+                const content = target.innerHTML;
+                target.innerHTML = `<span>${content}</span>`;
+            });
+            
+            const spans = targets.map(target => target.children[0]);
+            
+            gsap.set(spans, { y: "110%" });
+
+            gsap.to(spans, {
+                y: "0%",
+                duration: type === 'lines' ? 0.8 : 0.6,
+                stagger: type === 'lines' ? 0.08 : 0.05,
+                ease: "osmo-ease",
+                scrollTrigger: {
+                    trigger: element,
+                    start: "top 85%",
+                    once: true,
+                    onEnter: () => console.log(`⚡ Triggered: Animação de texto em ${element.tagName}`)
+                }
+            });
+        }
+    }
+    
+    titles.forEach(el => { if (!el.closest('#faq')) animateElement(el, 'lines'); });
+    paragraphs.forEach(el => animateElement(el, 'words'));
+    buttons.forEach(el => animateElement(el, 'words'));
+
+    console.log("✅ Animações de texto configuradas!");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
@@ -101,60 +220,6 @@ function bootAnimations() {
             });
         }
     });
-
-
-    // FAQ accordion toggle functionality
-document.addEventListener('DOMContentLoaded', () => {
-  const allAccordions = document.querySelectorAll('#faq .sopy-faq-accordion');
-
-  allAccordions.forEach(accordion => {
-    const titleLink = accordion.querySelector('.sopy-title a');
-    
-    if (titleLink) {
-      titleLink.addEventListener('click', (event) => {
-        event.preventDefault(); // Impede o comportamento padr3o do link
-
-        // click coords relative to the clicked accordion
-        const rect = accordion.getBoundingClientRect();
-        const clickX = event.clientX - rect.left; // px from left of card
-        const clickY = event.clientY - rect.top;  // px from top of card
-
-        // Close other open accordions toward the click point (compute coords relative to each)
-        allAccordions.forEach(acc => {
-          if (acc === accordion) return;
-          if (acc.classList.contains('open')) {
-            const r = acc.getBoundingClientRect();
-            const x = event.clientX - r.left;
-            const y = event.clientY - r.top;
-            acc.style.setProperty('--circle-x', `${x}px`);
-            acc.style.setProperty('--circle-y', `${y}px`);
-            // force reflow so the CSS var is applied before starting the close animation
-            // eslint-disable-next-line no-unused-expressions
-            acc.offsetWidth;
-            acc.classList.remove('open');
-          }
-        });
-
-        const isOpen = accordion.classList.contains('open');
-
-        // Set the click origin for the clicked accordion
-        accordion.style.setProperty('--circle-x', `${clickX}px`);
-        accordion.style.setProperty('--circle-y', `${clickY}px`);
-        // force reflow so the CSS var is applied before toggling class
-        // eslint-disable-next-line no-unused-expressions
-        accordion.offsetWidth;
-
-        if (isOpen) {
-          // close this accordion toward the click point
-          accordion.classList.remove('open');
-        } else {
-          // open this accordion from the click point
-          accordion.classList.add('open');
-        }
-      });
-    }
-  });
-});
 
 
     // ===================================
@@ -641,7 +706,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+   // ===================================
+   // Refresh final de segurança do ScrollTrigger
+    // Damos um pequeno delay para garantir que o DOM foi totalmente atualizado
+    // ===================================
 
+    setTimeout(() => {
+        if (window.ScrollTrigger) {
+            console.log('Forçando refresh final do ScrollTrigger.');
+            ScrollTrigger.refresh();
+        }
+    }, 100); // 100ms de delay é geralmente suficiente
    
 
     

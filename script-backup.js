@@ -1,30 +1,4 @@
-
-
-
-
-
-function bootAnimations() {
-  console.log("[SOPY] Comando recebido. Iniciando animações e interatividade...");
-
-  // 1. Adiciona a classe do tema ao body
-  document.body.classList.add('theme-citrus');
-
-  // 2. Usa a ferramenta que definimos para corrigir os caminhos das imagens/vídeos
-  // Esta função PRECISA rodar aqui, pois o HTML já vai estar na página
-  if (window.SOPY && typeof window.SOPY.rewriteDomAssets === 'function') {
-    window.SOPY.rewriteDomAssets();
-    console.log("[SOPY] Caminhos de assets reescritos.");
-  }
-
-  // 3. A PARTIR DAQUI, COLOQUE TODO O RESTO DO SEU CÓDIGO
-  // Todo o código que inicia animações, sliders, accordions, etc.
-  // Exemplo:
-  // initHeroAnimation();
-  // initFaqAccordion();
-  // initTestimonialsSlider();
-  // document.querySelector('#meu-botao').addEventListener('click', () => { ... }); 
-
-  /* =========================
+/* =========================
   1) GSAP Setup + Lenis (limpo)
   Safe plugin registration: register only after window.onload so CDNs have a chance to load.
 ========================= */
@@ -1526,6 +1500,6 @@ document.body.classList.add("theme-citrus");
 
 
   console.log("[SOPY] Animações e eventos configurados.");
-}
+
 
 
