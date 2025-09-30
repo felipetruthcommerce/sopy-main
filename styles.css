@@ -1754,10 +1754,45 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-stars{ display:flex; gap:4px }
 .tc-stars svg{ width:18px; height:18px }
 .tc-score{ color:#f2f3f7; font-weight:700 }
-.tc-testimonials-dots{ margin-top:20px; display:flex; gap:12px; align-items:center; justify-content:center }
-.tc-dot{ width:14px !important; height:14px !important; aspect-ratio:1/1 !important; border-radius:50% !important; padding:0 !important; background:rgba(255,255,255,0.25) !important; border:2px solid rgba(255,255,255,0.1) !important; cursor:pointer; transform:scale(1) !important; transition: all 0.3s ease !important }
-.tc-dot:hover{ background:rgba(255,255,255,0.4) !important; transform:scale(1.1) !important }
-.tc-dot.active{ background: #ffd84d !important; border-color: #ffd84d !important; transform:scale(1.25) !important; box-shadow: 0 0 0 4px rgba(255,216,77,0.25) !important }
+/* Progress dos depoimentos igual ao Como Usar */
+.tc-progress-wrap {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 50;
+  width: auto;
+  opacity: 0;
+  pointer-events: auto;
+  transition: opacity 0.34s cubic-bezier(.22,1,.36,1);
+}
+
+.tc-progress-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              background-color .25s ease, transform .2s ease;
+}
+
+.tc-progress-dot.active {
+  width: 56px;
+  height: 12px;
+  border-radius: 999px;
+  background-color: #F8C537;
+  transform: translateY(-1px);
+}
+
+/* Remove dots antigos */
+.tc-testimonials-dots { display: none; }
 
 /* removed duplicate .capsule3d-title-over rule to keep the one above as source of truth */
 

@@ -330,7 +330,7 @@ function bootAnimations() {
     }
 
    // ===================================
-    //  BLOCO DOS DEPOIMENTOS (CORRIGIDO)
+    //  BLOCO DOS DEPOIMENTOS (IGUAL AO COMO USAR)
     // ===================================
     const testimonialsSection = document.getElementById('testemunhos');
     if (testimonialsSection) {
@@ -338,84 +338,78 @@ function bootAnimations() {
 
         const track = testimonialsSection.querySelector('.tc-testimonials-track');
         const cards = track ? Array.from(track.querySelectorAll('.tc-testimonial-card')) : [];
-        const dots = testimonialsSection.querySelectorAll('.tc-testimonials-dots .tc-dot');
 
-        // Cria/insere progress pill (sem alterar HTML original)
-        let tcProgressWrap = testimonialsSection.querySelector('.tc-progress-wrap');
+        // Criar progress wrap igual ao Como Usar (fixo na tela)
+        let tcProgressWrap = document.querySelector('.tc-progress-wrap');
         if (!tcProgressWrap) {
             tcProgressWrap = document.createElement('div');
             tcProgressWrap.className = 'tc-progress-wrap';
-            tcProgressWrap.innerHTML = '<div class="tc-progress-pill" aria-hidden="true"></div>';
-            const right = testimonialsSection.querySelector('.tc-right');
-            if (right) right.appendChild(tcProgressWrap);
+            document.body.appendChild(tcProgressWrap);
         }
-        const tcPill = tcProgressWrap.querySelector('.tc-progress-pill');
+        
+        // Criar dots dinâmicos
+        tcProgressWrap.innerHTML = '';
+        cards.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'tc-progress-dot';
+            dot.setAttribute('data-index', i);
+            tcProgressWrap.appendChild(dot);
+        });
+        
+        const dots = tcProgressWrap.querySelectorAll('.tc-progress-dot');
 
         if (track && cards.length > 0) {
             let currentIndex = 0;
             let isAnimating = false;
             let autoInterval;
 
-            const updatePill = (index) => {
-                if (!tcPill) return;
-                const p = cards.length > 1 ? (index / (cards.length - 1)) : 0;
-                tcPill.style.transform = `scaleX(${p})`;
-            };
-
-            const slideTo = (index) => {
+            const slideTo = (targetIndex) => {
                 if (isAnimating) return;
-                const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
+                
+                // Carrossel infinito
+                if (targetIndex >= cards.length) targetIndex = 0;
+                if (targetIndex < 0) targetIndex = cards.length - 1;
+                
                 if (targetIndex === currentIndex) return;
 
                 isAnimating = true;
                 clearInterval(autoInterval);
 
                 const currentCard = cards[currentIndex];
-                const targetCard = cards[targetIndex];
-                const direction = targetIndex > currentIndex ? 1 : -1;
+                const nextCard = cards[targetIndex];
+                const direction = targetIndex > currentIndex || (currentIndex === cards.length - 1 && targetIndex === 0) ? 1 : -1;
 
-                // Remove active class do card atual (a classe active controla visibilidade via CSS)
-                currentCard.classList.remove('active');
-
-                // Animação com GSAP - cards sobrepostos, mais rápida
+                // Animação horizontal igual ao Como Usar
                 gsap.timeline({
-                    defaults: { duration: 0.35, ease: 'power2.out' },
+                    defaults: { duration: 0.6, ease: 'power2.out' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
                         startAutoPlay();
-                        // Update dots
-                        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
-                        // Update pill
-                        updatePill(currentIndex);
+                        updateDots();
                     }
                 })
-                .to(currentCard, {
-                    x: (direction * -30) + '%',
-                    opacity: 0,
-                    duration: 0.25
-                }, 0)
-                .fromTo(targetCard, {
-                    x: (direction * 30) + '%',
-                    opacity: 0
-                }, {
-                    x: '0%',
-                    opacity: 1,
-                    duration: 0.35,
-                    onStart: () => targetCard.classList.add('active')
-                }, 0);
+                .to(currentCard, { x: direction * -100 + '%', opacity: 0 }, 0)
+                .fromTo(nextCard, 
+                    { x: direction * 100 + '%', opacity: 0 },
+                    { x: '0%', opacity: 1 }, 0.1
+                );
             };
 
-            // Lógica do Autoplay (inicia/repõe)
+            const updateDots = () => {
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+            };
+
             const startAutoPlay = () => {
                 clearInterval(autoInterval);
                 autoInterval = setInterval(() => {
-                    const nextIndex = (currentIndex + 1) % cards.length;
-                    slideTo(nextIndex);
-                }, 7000);
+                    slideTo(currentIndex + 1); // Infinito
+                }, 6000);
             };
 
-            // Lógica de Arrastar (Drag) - mais responsiva
+            // Drag/Touch igual ao Como Usar
             let isDragging = false;
             let startX = 0;
             let deltaX = 0;
@@ -433,29 +427,29 @@ function bootAnimations() {
                 if (!isDragging) return;
                 const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = currentX - startX;
-                // Live drag preview para o card atual
-                const currentCard = cards[currentIndex];
-                gsap.set(currentCard, { x: deltaX + 'px' });
+                gsap.set(cards[currentIndex], { x: deltaX });
             };
 
             const handleEnd = () => {
                 if (!isDragging) return;
                 isDragging = false;
                 track.classList.remove('tc-grabbing');
-                const threshold = track.offsetWidth * 0.18; // 18% threshold
-
+                
+                const threshold = track.offsetWidth * 0.2;
                 if (Math.abs(deltaX) > threshold) {
-                    const direction = deltaX < 0 ? 1 : -1;
+                    const direction = deltaX > 0 ? -1 : 1;
                     slideTo(currentIndex + direction);
                 } else {
-                    // Snap back
-                    gsap.to(cards[currentIndex], { x: 0, duration: 0.25, ease: 'power2.out' });
+                    gsap.to(cards[currentIndex], { x: 0, duration: 0.3 });
                     startAutoPlay();
                 }
             };
 
-            // Event Listeners
-            dots.forEach((dot, index) => dot.addEventListener('click', () => slideTo(index)));
+            // Event listeners
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => slideTo(index));
+            });
+            
             track.addEventListener('mousedown', handleStart);
             document.addEventListener('mousemove', handleMove);
             document.addEventListener('mouseup', handleEnd);
@@ -463,26 +457,30 @@ function bootAnimations() {
             track.addEventListener('touchmove', handleMove, { passive: false });
             track.addEventListener('touchend', handleEnd);
 
-            // Configuração Inicial - apenas o primeiro card visível
+            // Setup inicial
             cards.forEach((card, index) => {
                 if (index === 0) {
-                    card.classList.add('active');
                     gsap.set(card, { x: 0, opacity: 1 });
                 } else {
-                    card.classList.remove('active');
                     gsap.set(card, { x: '100%', opacity: 0 });
                 }
             });
-
-            // Ativar primeiro dot
-            if (dots.length > 0) {
-                dots[0].classList.add('active');
-            }
-
-            // Init pill state
-            updatePill(0);
-
+            
+            updateDots();
             startAutoPlay();
+            
+            // Mostrar progress quando entrar na seção
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        tcProgressWrap.style.opacity = '1';
+                    } else {
+                        tcProgressWrap.style.opacity = '0';
+                    }
+                });
+            }, { threshold: 0.3 });
+            
+            observer.observe(testimonialsSection);
 
         } else {
             console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
