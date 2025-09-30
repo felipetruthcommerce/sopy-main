@@ -909,8 +909,8 @@ const THREE_CONFIG = {
 
 // Modelos por tema (se um arquivo não existir, cai em fallback ou no modelo default)
 const MODELS = {
-  aqua: "assets/models/compressed_1758509853615_aqua.glb",
-  citrus: "assets/models/compressed_1758509855927_citrus.glb",
+  aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
+  citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
 };
 let currentTheme3D = "citrus";
 let currentModelKey = null; // 'theme:url'
