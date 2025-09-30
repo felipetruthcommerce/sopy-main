@@ -120,20 +120,16 @@ function initTextAnimations() {
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
-       // ===================================
-    //  INICIALIZAÇÃO DO LENIS (SCROLL SUAVE)
-    // ===================================
-    // (Seu código do Lenis aqui)
-    const lenis = new Lenis();
-    window.lenis = lenis;
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
-    gsap.ticker.lagSmoothing(0);
-    console.log('[LENIS] Scroll suave inicializado.');
 
+    // 1. Configurar Lenis (SEMPRE PRIMEIRO)
+    setupLenis(); // ✅ CHAMANDO A FUNÇÃO
 
+    // 2. Registrar plugins e eases do GSAP
+    setupGsapPlugins(); // ✅ CHAMANDO A FUNÇÃO
 
-
+    // 3. Ativar as animações e interatividades individuais
+    setupButtonRipples(); // ✅ CHAMANDO A FUNÇÃO
+    initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
 
     // ===================================
     //  BLOCO 2: EFEITO PARALLAX (SUSTENTABILIDADE)

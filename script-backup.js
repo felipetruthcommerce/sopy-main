@@ -1,7 +1,32 @@
-/* =========================
-  1) GSAP Setup + Lenis (limpo)
-  Safe plugin registration: register only after window.onload so CDNs have a chance to load.
-========================= */
+/* ===================================================
+   SOPY LANDING PAGE - SCRIPT ORGANIZADO POR FUNCIONALIDADES
+   
+   RESUMO DE FUNCIONALIDADES PARA DIVISÃO MODULAR:
+   
+   MÓDULOS INDEPENDENTES (podem ser separados):
+   - FUNCIONALIDADE 4: Botões Ripple
+   - FUNCIONALIDADE 5: Animações de Texto
+   - FUNCIONALIDADE 7: Bolhas 3D
+   - FUNCIONALIDADE 9: Ações de Compra
+   
+   MÓDULOS CORE (necessários juntos):
+   - FUNCIONALIDADE 1: GSAP Setup (base para tudo)
+   - FUNCIONALIDADE 3: Lenis (base para scroll)
+   
+   MÓDULOS RELACIONADOS:
+   - FUNCIONALIDADE 6 + 8: Cápsula 3D + Toggle Temas (compartilham materiais)
+   
+   UTILITÁRIOS:
+   - FUNCIONALIDADE 2: Utils globais
+   - FUNCIONALIDADE 10: Inicialização
+   ==================================================== */
+
+/* ===================================================
+   FUNCIONALIDADE 1: GSAP SETUP & INICIALIZAÇÃO
+   Responsável por: Configuração segura do GSAP, plugins e custom eases
+   Dependências: GSAP, ScrollTrigger, CustomEase, SplitText (via CDN)
+   Módulo independente: NÃO - base para outras funcionalidades
+   ==================================================== */
 function registerGSAPOnce() {
   if (!window.gsap || window.__gsapPluginsRegistered) return;
   const plugs = [];
@@ -27,19 +52,20 @@ window.addEventListener('load', registerGSAPOnce);
 */
 
 /* =========================
-   0) Utils
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 2: UTILITIES GLOBAIS
+   Responsável por: Funções utilitárias compartilhadas
+   Dependências: Nenhuma
+   Módulo independente: SIM - pode ser separado
+   ==================================================== */
 const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
 
-/* =========================
-  1) GSAP Setup + Lenis
-  (legacy guarded registration removed — handled by registerGSAPOnce())
-========================= */
-// (plugins are registered on window.load via registerGSAPOnce)
-
-/* =========================
-   Button Ripple Effect
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 4: BOTÕES COM EFEITO RIPPLE
+   Responsável por: Efeito visual de ondulação nos botões
+   Dependências: DOM
+   Módulo independente: SIM - pode ser separado completamente
+   ==================================================== */
 function setupButtonRipples() {
   const buttons = document.querySelectorAll('.sopy-btn');
 
@@ -58,9 +84,13 @@ function setupButtonRipples() {
 // Inicializar ripples após DOM estar pronto
 document.addEventListener('DOMContentLoaded', setupButtonRipples);
 
-/* =========================
-   SplitText: Osmo Style Animations (exclude #hero)
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 5: ANIMAÇÕES DE TEXTO (ESTILO OSMO)
+   Responsável por: Split text e animações de entrada para títulos/parágrafos
+   Dependências: GSAP, ScrollTrigger, SplitText/SplitType
+   Módulo independente: SIM - pode ser separado completamente
+   Exclui: Elementos dentro de #hero e #faq (para preservar interatividade)
+   ==================================================== */
 // Esperar que tudo carregue completamente
 window.addEventListener('load', function() {
   // Dar um tempo extra para garantir que tudo está pronto
@@ -246,7 +276,16 @@ window.addEventListener('load', function() {
     instances = [];
   }
 
-/* Lenis (scroll suave) - configuração igual ao exemplo */
+/* ===================================================
+   FUNCIONALIDADE 3: LENIS SCROLL SUAVE - INICIALIZAÇÃO
+   Responsável por: Configurar scroll suave e integração com GSAP ticker
+   Dependências: Lenis.js, GSAP
+   Módulo independente: PARCIAL - core para outras animações de scroll
+   ==================================================== */
+
+/* ===================================================
+   FUNCIONALIDADE 3: LENIS SCROLL SUAVE - INICIALIZAÇÃO
+   ==================================================== */
 const lenis = new Lenis()
 // Atualiza o ScrollTrigger via Lenis se o plugin estiver disponível
 if (typeof ScrollTrigger !== 'undefined' && ScrollTrigger && typeof ScrollTrigger.update === 'function') {
@@ -277,400 +316,6 @@ window.scrollTo(0, 0);
 try { lenis.stop(); } catch { }
 document.body.classList.add('is-loading');
 
-/* =========================
-  2) Loader 0→100 + Circle Reveal
-========================= */
-const loaderEl = document.getElementById("loader");
-const countEl = document.getElementById("loader-count");
-const countPrefixEl = document.querySelector(".count-prefix");
-const dividerEl = document.querySelector(".loader-divider"); // no longer used (kept for DOM query safety)
-const circleEl = document.querySelector(".loader-circle");
-const blocks = []; // overlay blocks removed
-const heroVideo = document.getElementById("heroVideo");
-const heroPoster = document.querySelector(".sopy-hero-poster");
-
-// Garantimos que o vídeo NÃƒO inicie antes do loader terminar
-if (heroVideo) {
-  try {
-    heroVideo.muted = true;
-    heroVideo.playsInline = true;
-    heroVideo.setAttribute("preload", "auto");
-    heroVideo.pause();
-    // opcional: resetar para o início
-    heroVideo.currentTime = 0;
-  } catch { }
-}
-
-// Estado do contador visual + timeline do loader (mais lenta)
-const loaderObj = { n: 0 };
-const tlLoader = gsap.timeline({ defaults: { ease: "hop" } });
-
-// Helpers para pré-tocar e esconder poster
-let listenersAttached = false;
-function hidePoster() {
-  if (heroPoster) heroPoster.classList.add("is-hidden");
-}
-function attachPosterHide() {
-  if (!heroVideo || listenersAttached) return;
-  listenersAttached = true;
-  const onPlay = () => { hidePoster(); cleanup(); };
-  const onTime = () => { if (heroVideo.currentTime > 0) { hidePoster(); cleanup(); } };
-  const cleanup = () => {
-    heroVideo.removeEventListener("playing", onPlay);
-    heroVideo.removeEventListener("timeupdate", onTime);
-  };
-  heroVideo.addEventListener("playing", onPlay, { once: true });
-  heroVideo.addEventListener("timeupdate", onTime);
-  // Se já estiver tocando, resolve imediatamente
-  if (!heroVideo.paused && heroVideo.currentTime > 0) hidePoster();
-}
-function tryPlay() {
-  heroVideo?.play?.().catch(() => { });
-}
-let preplayTriggered = false;
-
-// preparar máscara da gota (centro da tela)
-if (loaderEl) {
-  loaderEl.style.setProperty("--cx", "50%");
-  loaderEl.style.setProperty("--cy", "50%");
-  loaderEl.style.setProperty("--r", "0px");
-}
-// Timeline do loader: mais lenta e só então começamos o vídeo
-// contagem 0 → 100 (mais demorada)
-tlLoader.to(loaderObj, {
-  n: 100,
-  duration: 3.4,
-  onUpdate: () => {
-    const v = Math.round(loaderObj.n);
-    if (countEl) countEl.textContent = v;
-    if (countPrefixEl) countPrefixEl.style.display = "none";
-    if (!preplayTriggered && loaderObj.n >= 90) {
-      preplayTriggered = true;
-      attachPosterHide();
-      tryPlay();
-    }
-  },
-});
-// esconder o contador antes da gota (somente se existir)
-if (document.querySelector('.loader-counter')) {
-  tlLoader.to('.loader-counter', { autoAlpha: 0, y: -10, duration: 0.32, ease: 'power2.in' });
-}
-// gota transparente (máscara radial)
-tlLoader.fromTo(
-  { r: 0 },
-  { r: 0 },
-  {
-    r: Math.hypot(window.innerWidth, window.innerHeight),
-    duration: 1.1,
-    ease: 'power3.inOut',
-    onUpdate: function () {
-      if (loaderEl) loaderEl.style.setProperty('--r', this.targets()[0].r + 'px');
-    },
-  }
-);
-// esconder loader e então iniciar o vídeo (somente se existir loader)
-if (loaderEl) {
-  tlLoader.to(loaderEl, {
-    autoAlpha: 0,
-    duration: 0.35,
-    onComplete: () => {
-      if (heroVideo) {
-        attachPosterHide();
-        tryPlay();
-      }
-      document.body.classList.remove('is-loading');
-      try { lenis.start(); } catch { }
-      window.scrollTo(0, 0);
-    },
-  });
-} else {
-  // sem loader no DOM: finalize estado básico
-  tlLoader.add(() => {
-    document.body.classList.remove('is-loading');
-    try { lenis.start(); } catch {}
-  });
-}
-// configura reveals só após o loader
-tlLoader.add(() => {
-    // Inicia apenas o Osmo Masked Reveal global (exceto hero)
-  // animações de texto removidas globalmente por solicitação
-  if (typeof ScrollTrigger !== "undefined") try { ScrollTrigger.refresh(true); } catch {}
-    // Mostrar CTA alinhado ao fim da seção 3D
-    try {
-      const cta = document.querySelector('.capsule-3d-cta');
-      const triggerEl = document.getElementById('capsula-3d');
-      if (cta && triggerEl && typeof ScrollTrigger !== 'undefined') {
-        // Show the CTA only near the end of the 3D section and keep it visible.
-        ScrollTrigger.create({
-          trigger: triggerEl,
-          // show CTA much earlier: when the section top reaches 80% of viewport
-          start: 'top 80%',
-          once: true,
-          onEnter: () => {
-            cta.classList.add('is-visible');
-            cta.classList.add('at-end');
-            try { ScrollTrigger.refresh(); } catch (_) {}
-          },
-          markers: false,
-        });
-      }
-    } catch (e) { console.warn('CTA ScrollTrigger init failed', e); }
-});
-// entrada suave: só anima se existir alvo
-(() => {
-  const sels = ['.sopy-nav', '.sopy-hero .sopy-btn'];
-  const existing = sels.filter(s => document.querySelector(s));
-  if (existing.length) {
-    tlLoader.from(existing.join(', '), {
-      y: -16,
-      autoAlpha: 0,
-      duration: 0.6,
-      ease: 'power2.out',
-      stagger: 0.08,
-    });
-  }
-})();
-// Footer overlap animation - slide up to cover previous section
-tlLoader.add(() => {
-    const footer = document.querySelector('.page-footer');
-    if (footer && typeof ScrollTrigger !== 'undefined') {
-      ScrollTrigger.create({
-        trigger: footer,
-        start: 'top bottom-=100px', // trigger when footer approaches viewport
-        end: 'bottom bottom',
-        scrub: 1.2,
-        animation: gsap.fromTo(footer, 
-          { y: 100 }, // start position (down)
-          { y: 0, ease: "none" } // end position (normal)
-        ),
-        invalidateOnRefresh: true
-      });
-    }
-});
-
-
-/* =========================
-   Scroll Progress (barra + círculo) + Voltar ao topo
-========================= */
-(function scrollProgress() {
-  // Escopo apenas para o indicador global (se existir). Não tocar na barra da seção "como usar".
-  const bar = document.querySelector('.page-progress-bar');
-  const circ = document.querySelector('.progress-circle-bar');
-  if (!bar && !circ) return;
-
-  const CIRCUMFERENCE = 2 * Math.PI * 45; // r=45 no SVG
-
-  const update = () => {
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const y = lenis?.scroll || window.pageYOffset || document.documentElement.scrollTop || 0;
-    const p = docHeight > 0 ? y / docHeight : 0;
-
-  if (bar) bar.style.width = Math.min(100, Math.max(0, p * 100)) + '%';
-    if (circ) circ.style.strokeDashoffset = CIRCUMFERENCE * (1 - p);
-  };
-
-  // Lenis emite evento de scroll; usamos também resize
-  lenis.on('scroll', update);
-  window.addEventListener('resize', update);
-
-  // init
-  update();
-})();
-// reveals e UI do hero agora são iniciados pelo tlLoader acima
-
-/* =========================
-   COMO USAR — Horizontal Scroll (GSAP)
-========================= */
-document.addEventListener('DOMContentLoaded', () => {
-  const section = document.querySelector('.sopy-how-section');
-  const track = section?.querySelector('.sopy-how-track');
-  const panels = track ? Array.from(track.children).filter(el => el.classList.contains('sopy-how-panel')) : [];
-  const dots = document.querySelectorAll('.sopy-how-progress .sopy-how-progress-dot');
-  if (!section || !track || panels.length === 0 || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-
-  // Define a largura do track conforme nº de painéis em pixels para medição precisa
-  const setTrackWidth = () => {
-    track.style.width = `${panels.length * window.innerWidth}px`;
-  };
-  setTrackWidth();
-
-  // Distância necessária para arrastar o track totalmente (px)
-  const getDistance = () => Math.max(0, track.scrollWidth - window.innerWidth);
-
-  const tween = gsap.to(track, {
-    x: () => -getDistance(),
-    ease: 'none',
-    scrollTrigger: {
-      trigger: section,
-      start: 'top top',
-      end: () => `+=${getDistance()}`,
-      pin: true,
-      scrub: 0.6,
-      invalidateOnRefresh: true,
-      onRefresh: setTrackWidth,
-      onEnter: () => document.querySelector('.sopy-how-progress')?.classList.add('visible'),
-      onEnterBack: () => document.querySelector('.sopy-how-progress')?.classList.add('visible'),
-      onLeave: () => document.querySelector('.sopy-how-progress')?.classList.remove('visible'),
-      onLeaveBack: () => document.querySelector('.sopy-how-progress')?.classList.remove('visible'),
-      onUpdate: self => {
-        if (!dots || dots.length === 0) return;
-        const steps = dots.length;
-        const idx = Math.min(steps - 1, Math.max(0, Math.round(self.progress * (steps - 1))));
-        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-      }
-    }
-  });
-
-  // Atualiza em resize
-  window.addEventListener('resize', () => {
-    setTrackWidth();
-    try { ScrollTrigger.refresh(); } catch {}
-  });
-});
-
-/* =========================
-   MOBILE SLIDER - Como Usar (Touch/Swipe)
-========================= */
-document.addEventListener('DOMContentLoaded', () => {
-  const stack = document.querySelector('.sopy-how-stack');
-  const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
-  const dots = document.querySelectorAll('.sopy-how-progress .sopy-how-progress-dot');
-  
-  if (!stack || cards.length === 0) return;
-
-  let currentIndex = 0;
-  let isAnimating = false;
-  
-  // Position cards
-  const positionCards = () => {
-    const gap = 24;
-    const containerWidth = stack.clientWidth;
-    
-    cards.forEach((card, index) => {
-      const offset = (index - currentIndex) * (containerWidth + gap);
-      if (typeof gsap !== 'undefined') {
-        gsap.set(card, { x: offset, opacity: index === currentIndex ? 1 : 0.7 });
-      } else {
-        card.style.transform = `translateX(${offset}px)`;
-        card.style.opacity = index === currentIndex ? 1 : 0.7;
-      }
-    });
-    
-    // Update dots
-    dots.forEach((dot, index) => {
-      dot.classList.toggle('active', index === currentIndex);
-    });
-  };
-
-  // Animate to specific index
-  const slideTo = (index) => {
-    if (isAnimating || index === currentIndex) return;
-    
-    const targetIndex = Math.max(0, Math.min(cards.length - 1, index));
-    isAnimating = true;
-    currentIndex = targetIndex;
-    
-    positionCards();
-    
-    setTimeout(() => {
-      isAnimating = false;
-    }, 400);
-  };
-
-  // Touch/mouse interaction
-  let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let deltaX = 0;
-
-  const handleStart = (e) => {
-    if (isAnimating) return;
-    
-    isDragging = true;
-    startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-    deltaX = 0;
-    
-    stack.classList.add('sopy-how-grabbing');
-    
-    if (e.type === 'mousedown') {
-      e.preventDefault();
-    }
-  };
-
-  const handleMove = (e) => {
-    if (!isDragging) return;
-    
-    const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-    const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
-    
-    deltaX = currentX - startX;
-    const deltaY = Math.abs(currentY - startY);
-    
-    // Only handle horizontal movement
-    if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
-      e.preventDefault();
-      
-      // Live drag feedback
-      const gap = 24;
-      const containerWidth = stack.clientWidth;
-      
-      cards.forEach((card, index) => {
-        const baseOffset = (index - currentIndex) * (containerWidth + gap);
-        const offset = baseOffset + deltaX;
-        
-        if (typeof gsap !== 'undefined') {
-          gsap.set(card, { x: offset });
-        } else {
-          card.style.transform = `translateX(${offset}px)`;
-        }
-      });
-    }
-  };
-
-  const handleEnd = () => {
-    if (!isDragging) return;
-    
-    isDragging = false;
-    stack.classList.remove('sopy-how-grabbing');
-    
-    const threshold = stack.clientWidth * 0.2; // 20% threshold
-    
-    if (Math.abs(deltaX) > threshold) {
-      const direction = deltaX > 0 ? -1 : 1;
-      slideTo(currentIndex + direction);
-    } else {
-      // Snap back
-      positionCards();
-    }
-  };
-
-  // Event listeners
-  stack.addEventListener('touchstart', handleStart, { passive: false });
-  stack.addEventListener('touchmove', handleMove, { passive: false });
-  stack.addEventListener('touchend', handleEnd);
-  
-  stack.addEventListener('mousedown', handleStart);
-  document.addEventListener('mousemove', handleMove);
-  document.addEventListener('mouseup', handleEnd);
-  
-  // Dot click handlers
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => slideTo(index));
-  });
-
-  // Initial setup
-  positionCards();
-  
-  // Handle resize
-  let resizeTimeout;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-      positionCards();
-    }, 100);
-  });
-});
 
 /* =========================
    4) Seção 3D â€“ cápsula
@@ -895,11 +540,13 @@ function onResizeThree() {
   camera.updateProjectionMatrix();
 }
 
-/* =========================
-   3D Interactive Bubbles with Explosion Effects
-   Creates realistic floating bubbles with click interactions and particle explosions.
-   Uses Three.js with HDRI lighting for photorealistic materials.
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 7: BOLHAS INTERATIVAS 3D
+   Responsável por: Bolhas flutuantes com física, explosões de partículas, HDRI lighting
+   Dependências: Three.js, RGBELoader (opcional para HDRI)
+   Módulo independente: SIM - pode ser separado completamente
+   Inclui: Raycasting, particle systems, realistic materials
+   ==================================================== */
 function initCapsuleBubbles() {
   const container = document.querySelector('.sopy-capsule-bubbles');
   if (!container || typeof THREE === 'undefined') return;
@@ -1399,9 +1046,13 @@ function clearNonFallbackChildren() {
   toRemove.forEach((obj) => capsuleGroup.remove(obj));
 }
 
-/* =========================
-   5) Fragrance Toggle (tema + materiais)
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 8: TOGGLE DE TEMAS/FRAGRÂNCIAS
+   Responsável por: Troca entre temas Aqua/Citrus, atualização de materiais 3D e conteúdo
+   Dependências: GSAP, Three.js materials, DOM elements
+   Relacionada com: FUNCIONALIDADE 6 (para troca de modelos 3D)
+   Módulo independente: PARCIAL - depende dos materiais 3D
+   ==================================================== */
 const toggleBtns = gsap.utils.toArray(".fragrance-toggle .toggle-option");
 function setTheme(theme) {
   document.body.classList.toggle("theme-citrus", theme === "citrus");
@@ -1476,9 +1127,13 @@ if (productToggle) {
 }
 
 
-/* =========================
-   7) Comprar (placeholder)
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 9: AÇÕES DE COMPRA
+   Responsável por: Handlers para botões de compra, integração com e-commerce
+   Dependências: GSAP (para feedback visual), DOM
+   Módulo independente: SIM - pode ser separado completamente
+   Nota: Atualmente placeholder, pronto para integração Nuvemshop
+   ==================================================== */
 document.querySelectorAll('[data-action="sopy-buy"]').forEach((btn) => {
   btn.addEventListener("click", () => {
     const card = btn.closest(".sopy-product-card");
@@ -1491,15 +1146,37 @@ document.querySelectorAll('[data-action="sopy-buy"]').forEach((btn) => {
 
 // Custom cursor removed: using default system cursor everywhere.
 
-/* =========================
-   9) Safety: inicia tema default
-========================= */
+/* ===================================================
+   FUNCIONALIDADE 10: INICIALIZAÇÃO FINAL
+   Responsável por: Configurações padrão e log final
+   Dependências: DOM
+   ==================================================== */
+// Tema padrão
 document.body.classList.add("theme-citrus");
 
+// Log de conclusão
+console.log("[SOPY] Animações e eventos configurados.");
 
-
-
-  console.log("[SOPY] Animações e eventos configurados.");
+/* ===================================================
+   RESUMO FINAL DE FUNCIONALIDADES PARA DIVISÃO MODULAR:
+   
+   MÓDULOS INDEPENDENTES (podem ser separados):
+   - FUNCIONALIDADE 4: Botões Ripple
+   - FUNCIONALIDADE 5: Animações de Texto
+   - FUNCIONALIDADE 7: Bolhas 3D
+   - FUNCIONALIDADE 9: Ações de Compra
+   
+   MÓDULOS CORE (necessários juntos):
+   - FUNCIONALIDADE 1: GSAP Setup (base para tudo)
+   - FUNCIONALIDADE 3: Lenis (base para scroll)
+   
+   MÓDULOS RELACIONADOS:
+   - FUNCIONALIDADE 6 + 8: Cápsula 3D + Toggle Temas (compartilham materiais)
+   
+   UTILITÁRIOS:
+   - FUNCIONALIDADE 2: Utils globais
+   - FUNCIONALIDADE 10: Inicialização
+   ==================================================== */
 
 
 
