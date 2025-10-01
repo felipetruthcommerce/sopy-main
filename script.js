@@ -221,33 +221,85 @@ function initThree() {
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
 
-    console.log("[3D] Inicializando cena Three.js...");
+    console.log('[3D] Inicializando cena 3D com animação de scroll...');
 
+    // --- Configuração da Cena, Câmera e Renderer ---
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
+    scene.background = null;
+
+    const rect = threeWrap.getBoundingClientRect();
+    camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
     camera.position.set(0, 0, 4.2);
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(rect.width, rect.height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
     renderer.outputEncoding = THREE.sRGBEncoding;
     threeWrap.appendChild(renderer.domElement);
-    
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    scene.add(new THREE.DirectionalLight(0xffffff, 1.0));
-    // ... (adicione suas outras luzes se precisar) ...
 
+    // --- Iluminação de Três Pontos ---
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    keyLight.position.set(3, 4, 2);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    fillLight.position.set(-3, -1, 3);
+    scene.add(fillLight);
+
+    // --- Grupo da Cápsula ---
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
+    
+    // =======================================================
+    //  ✅ O "CÉREBRO" DA ANIMAÇÃO, AGORA INTEGRADO E CORRIGIDO
+    // =======================================================
+    function animateWithScroll() {
+        // Pega uma área maior que inclui a div intermediária antes da seção 3D
+        const section = document.getElementById('capsula-3d');
+        if (!section) { requestAnimationFrame(animateWithScroll); return; }
 
-    function animate() {
-        requestAnimationFrame(animate);
+        const sectionRect = section.getBoundingClientRect();
+        // ✅ PEGA O SCROLL DO LENIS, NÃO DO NAVEGADOR
+        const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
+        const sectionTop = scrollY + sectionRect.top;
+        const sectionHeight = section.offsetHeight;
+        const winH = window.innerHeight;
+        
+        // Expande a área de trigger para começar mais cedo
+        const expandedStart = sectionTop - winH;
+        const expandedHeight = sectionHeight + winH;
+        
+        // Progresso baseado na área expandida
+        let progress = (scrollY - expandedStart) / expandedHeight;
+        progress = Math.max(0, Math.min(1, progress)); // clamp(0, 1)
+        progress = Math.min(progress, 0.6); // Limita o progresso máximo
+        
+        // Posição Y controlada por scroll com easing e "dança"
+        const yStart = 15.0;
+        const yEnd = -9.5;
+        const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
+        let yBase = yStart + (yEnd - yStart) * e;
+        const midFactor = 1 - Math.abs(progress - 0.5) * 2;
+        const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
+        capsuleGroup.position.y = yBase + yWiggle;
+
+        // Rotação controlada por scroll
+        const rx = 0.08 * Math.sin(progress * Math.PI * 5);
+        const ry = 0.06 * Math.sin(progress * Math.PI * 3 + 0.6);
+        const rz = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
+        const normalizedSpin = Math.max(0, Math.min(1, progress / 0.6));
+        const spin = normalizedSpin * Math.PI * 2;
+        capsuleGroup.rotation.set(rx, spin + ry, rz);
+
         renderer.render(scene, camera);
+        requestAnimationFrame(animateWithScroll);
     }
-    animate();
+    // Inicia o loop de animação
+    animateWithScroll();
 
+    // --- Configuração do Toggle ---
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
         productToggle.addEventListener('change', () => {
@@ -255,7 +307,9 @@ function initThree() {
         });
     }
     
-    setTheme(document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
+    // Carrega o modelo e define o tema inicial
+    setTheme('citrus');
+    window.addEventListener("resize", onResizeThree); // Sua função de resize
 }
 
 
