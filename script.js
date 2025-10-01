@@ -149,6 +149,9 @@ function initTextAnimations() {
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
+        console.log('[TEMA] Aplicando tema inicial: theme-citrus');
+    document.body.classList.add("theme-citrus");
+
 
     // 1. Configurar Lenis (SEMPRE PRIMEIRO)
     setupLenis(); // ✅ CHAMANDO A FUNÇÃO
