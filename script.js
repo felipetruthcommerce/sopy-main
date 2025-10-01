@@ -164,9 +164,9 @@ function swapModel(theme = "citrus") {
     const loader = new THREE.GLTFLoader();
 
     // (Opcional, mas recomendado) Adicione o DracoLoader se seus modelos forem comprimidos
-    // const dracoLoader = new THREE.DRACOLoader();
-    // dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-    // loader.setDRACOLoader(dracoLoader);
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    loader.setDRACOLoader(dracoLoader);
 
     loader.load(url, (gltf) => {
         // Limpa o modelo antigo
