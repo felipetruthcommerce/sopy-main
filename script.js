@@ -221,16 +221,15 @@ function initThree() {
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
 
-    console.log('[3D] Inicializando cena 3D com animação de scroll...');
+    console.log('[3D] Inicializando cena com GSAP ScrollTrigger...');
 
-    // --- Configuração da Cena, Câmera e Renderer ---
+    // --- Configuração da Cena, Câmera, Renderer e Luzes ---
+    // (Esta parte continua a mesma)
     scene = new THREE.Scene();
     scene.background = null;
-
     const rect = threeWrap.getBoundingClientRect();
     camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
     camera.position.set(0, 0, 4.2);
-
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(rect.width, rect.height);
@@ -238,8 +237,6 @@ function initThree() {
     renderer.toneMappingExposure = 1.0;
     renderer.outputEncoding = THREE.sRGBEncoding;
     threeWrap.appendChild(renderer.domElement);
-
-    // --- Iluminação de Três Pontos ---
     scene.add(new THREE.AmbientLight(0xffffff, 1.2));
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
     keyLight.position.set(3, 4, 2);
@@ -248,61 +245,51 @@ function initThree() {
     fillLight.position.set(-3, -1, 3);
     scene.add(fillLight);
 
-    // --- Grupo da Cápsula ---
+    // --- Grupo da Cápsula (com posição inicial alta) ---
     capsuleGroup = new THREE.Group();
+    capsuleGroup.position.y = 15.0; // Posição inicial bem alta
     scene.add(capsuleGroup);
     
     // =======================================================
-    //  ✅ O "CÉREBRO" DA ANIMAÇÃO, AGORA INTEGRADO E CORRIGIDO
+    //  ✅ A NOVA ANIMAÇÃO CONTROLADA 100% PELO GSAP
     // =======================================================
-    function animateWithScroll() {
-            const section = document.getElementById('capsula-3d');
-            if (!section) { requestAnimationFrame(animateWithScroll); return; }
-
-            const sectionRect = section.getBoundingClientRect();
-            const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
-            const sectionTop = scrollY + sectionRect.top;
-            const sectionHeight = section.offsetHeight;
-            const winH = window.innerHeight;
-            
-            const expandedStart = sectionTop - winH;
-            const expandedHeight = sectionHeight + winH;
-            
-            let progress = (scrollY - expandedStart) / expandedHeight;
-            progress = Math.max(0, Math.min(1, progress));
-            
-            // Posição Y (Descida) - Esta parte está correta
-            const yStart = 15.0;
-            const yEnd = -9.5;
-            const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
-            let yBase = yStart + (yEnd - yStart) * e;
-            const midFactor = 1 - Math.abs(progress - 0.5) * 2;
-            const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
-            capsuleGroup.position.y = yBase + yWiggle;
-
-            // ===============================================
-            // ✅ CORREÇÃO NA LÓGICA DE ROTAÇÃO
-            // ===============================================
-            
-            // 1. Rotação principal de 360° no eixo Y
-            // Mapeia o progresso total (0 a 1) para uma volta completa (0 a 2*PI)
-            const mainSpinY = progress * Math.PI * 2;
-
-            // 2. Pequenas oscilações ("wobble") nos outros eixos
-            const wobbleX = 0.08 * Math.sin(progress * Math.PI * 5);
-            const wobbleZ = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
-
-            // 3. Aplica a rotação
-            // O eixo Y agora recebe a rotação principal, garantindo o 360.
-            capsuleGroup.rotation.set(wobbleX, mainSpinY, wobbleZ);
-            
-            renderer.render(scene, camera);
-            requestAnimationFrame(animateWithScroll);
+    
+    // 1. Criamos uma "linha do tempo" (timeline) para a nossa animação
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: "#capsula-3d",      // O gatilho da animação
+            pin: true,                  // ✅ "PRENDE" A SEÇÃO NA TELA
+            scrub: 1,                   // ✅ Suaviza a animação com o scroll
+            start: "top top",           // Inicia quando o topo da seção encontra o topo da tela
+            end: "+=2500",              // ✅ A "DURAÇÃO" DA ANIMAÇÃO. Aumente este número para deixar mais LENTO.
+            invalidateOnRefresh: true,  // Garante que os cálculos sejam refeitos se a janela mudar
         }
-    // Inicia o loop de animação
-    animateWithScroll();
+    });
 
-    // --- Configuração do Toggle ---
+    // 2. Adicionamos os movimentos à "linha do tempo"
+    tl
+      // Movimento de descida
+      .to(capsuleGroup.position, {
+        y: -9.5, // Posição final
+        ease: "power1.inOut" // Efeito de aceleração e desaceleração suave
+      }, "<") // O "<" faz com que a descida e a rotação aconteçam ao mesmo tempo
+
+      // Rotação 360 graus
+      .to(capsuleGroup.rotation, {
+        y: Math.PI * 2, // Uma volta completa
+        ease: "none" // Rotação linear e constante
+      }, "<");
+
+
+    // --- Loop de Renderização Simplificado ---
+    // A única responsabilidade dele agora é desenhar a cena. O GSAP cuida de atualizar as posições.
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // --- Configuração do Toggle (como antes) ---
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
         productToggle.addEventListener('change', () => {
@@ -312,7 +299,7 @@ function initThree() {
     
     // Carrega o modelo e define o tema inicial
     setTheme('citrus');
-    window.addEventListener("resize", onResizeThree); // Sua função de resize
+    window.addEventListener("resize", onResizeThree);
 }
 
 
