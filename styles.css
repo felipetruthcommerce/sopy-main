@@ -1561,33 +1561,22 @@ body.theme-citrus #capsula-3d {
 
 }
 
-/* Ensure panels use solid backgrounds with the same colors as their sections a */
-body.theme-aqua #sustentabilidade .fullscreen-panel {
-  background-color: #0D1B2A !important; /* same as aqua sustentabilidade section */
-}
+/* Force solid backgrounds in sustainability section (no transparency) */
+body.theme-citrus #sustentabilidade .fullscreen-panel,
+body.theme-citrus .sustainability-parallax .fullscreen-panel { background: #1B4332 !important; }
 
-body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #1B4332 !important; /* same as citrus sustentabilidade section */
-}
+body.theme-aqua #sustentabilidade .fullscreen-panel,
+body.theme-aqua .sustainability-parallax .fullscreen-panel { background: #0D1B2A !important; }
 
-/* Ensure panels inside the sustainability section use a solid background matching the section theme */
-body.theme-aqua #sustentabilidade .fullscreen-panel {
-  background-color: #0D1B2A !important; /* solid blue for aqua theme */
-}
+body.theme-citrus #sustentabilidade .panel-content,
+body.theme-citrus .sustainability-parallax .panel-content { background: #1B4332 !important; }
 
-body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #1B4332 !important; /* solid green for citrus theme */
-}
+body.theme-aqua #sustentabilidade .panel-content,
+body.theme-aqua .sustainability-parallax .panel-content { background: #0D1B2A !important; }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
 .tc-wrap{ max-width: 1200px; margin: 0 auto; display: grid; gap: clamp(20px, 4vw, 40px); grid-template-columns: 1fr }
 @media (min-width: 960px){ .tc-wrap{ grid-template-columns: 1fr 1.4fr } }
-
-/* Ensure ALL panel contents in sustainability have solid backgrounds (no transparency) */
-body.theme-citrus #sustentabilidade .sustainability-parallax .panel-content { background-color: #1B4332 !important; background: #1B4332 !important; }
-body.theme-aqua   #sustentabilidade .sustainability-parallax .panel-content { background-color: #0D1B2A !important; background: #0D1B2A !important; }
-body.theme-citrus .sustainability-parallax .panel-content { background-color: #1B4332 !important; background: #1B4332 !important; }
-body.theme-aqua   .sustainability-parallax .panel-content { background-color: #0D1B2A !important; background: #0D1B2A !important; }
 
 /* cores por tema (section background) */
 body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007BFF !important; color:#e9e9ee }
