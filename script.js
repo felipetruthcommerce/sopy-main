@@ -142,58 +142,43 @@ function initTextAnimations() {
 let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
-
-// ===== SCROLL → ROTAÇÃO 3D (SEM PIN) =====
-let _tl3d; // guard pra matar/atualizar quando precisar
+let _tl3d; // timeline global pra atualizar/kill quando precisar
 function setup3DScroll() {
   const section = document.getElementById('capsula-3d');
   if (!section || !window.gsap || !window.ScrollTrigger || !capsuleGroup) return;
 
-  // mata instância anterior
+  // evita duplicar timelines
   if (_tl3d) {
     if (_tl3d.scrollTrigger) _tl3d.scrollTrigger.kill();
     _tl3d.kill();
     _tl3d = null;
   }
 
-  // rotação atual como base (evita “pulos” quando trocar modelo/refresh)
-  const baseY = capsuleGroup.rotation.y || 0;
+  // define o “comprimento” do pin/scroll (ajuste à vontade)
+  const END_DISTANCE = '+=200%';
 
-  // mapeia a rotação à passagem natural da seção pela viewport
-  // ajuste start/end se quiser “começar antes” ou “acabar depois”
-  _tl3d = gsap.to(capsuleGroup.rotation, {
-    y: baseY + Math.PI * 2,           // 360°
-    ease: 'none',
+  _tl3d = gsap.timeline({
+    defaults: { ease: 'none' },
     scrollTrigger: {
       trigger: section,
-      start: 'top 85%',               // começa a girar quando a parte de cima chega ~no fim da tela
-      end:   'bottom 15%',            // termina quando a parte de baixo quase sai
-      scrub: 0.6,                     // segue o scroll suavemente
-      invalidateOnRefresh: true,      // recalcula em resize
-      // sem PIN: a seção flui normalmente, descendo junto com o scroll
-      onUpdate: () => {               // garante render mesmo se um dia você pausar o RAF
-        if (renderer && scene && camera) renderer.render(scene, camera);
-      },
-      onLeave: self => {              // fixa exatamente no final ao sair por baixo
-        if (capsuleGroup) capsuleGroup.rotation.y = baseY + Math.PI * 2;
-      },
-      onLeaveBack: self => {          // e no começo quando voltar por cima
-        if (capsuleGroup) capsuleGroup.rotation.y = baseY;
-      }
+      start: 'top top',
+      end: END_DISTANCE,
+      pin: true,
+      scrub: 0.6,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: () => { if (renderer && scene && camera) renderer.render(scene, camera); }
     }
   });
 
-  // (opcional) leve tilt conforme progresso — sem timeline, só via onUpdate:
-  // gsap.to({}, {
-  //   scrollTrigger: {
-  //     trigger: section,
-  //     start: 'top 85%',
-  //     end: 'bottom 15%',
-  //     scrub: true,
-  //     onUpdate: self => { if (capsuleGroup) capsuleGroup.rotation.x = 0.05 + self.progress * 0.12; }
-  //   }
-  // });
+  // rotação 360º no eixo Y durante o scroll
+  _tl3d.to(capsuleGroup.rotation, { y: '+=' + (Math.PI * 2) }, 0);
 
+  // um leve “tilt” e aproximação pra dar vida (opcional)
+  _tl3d.to(capsuleGroup.rotation, { x: '+=' + (Math.PI * 0.12) }, 0);
+  _tl3d.fromTo(camera.position, { z: 4.2 }, { z: 3.4 }, 0);
+
+  // garante ajuste se layout mudar
   setTimeout(() => { try { ScrollTrigger.refresh(); } catch(e){} }, 50);
 }
 
