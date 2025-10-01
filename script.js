@@ -51,93 +51,12 @@ function setupButtonRipples() {
 }
 
 
-function initTextAnimations() {
-    console.log('[SETUP] Inicializando animações de texto (estilo Osmo)...');
-    
-    // ... (O código do 'style' e dos seletores continua o mesmo)
-    const style = document.createElement('style');
-    style.textContent = `
-      .split-line, .split-word { overflow: hidden !important; display: inline-block; vertical-align: top; }
-      .split-line > span, .split-word > span { display: inline-block; will-change: transform; }
-    `;
-    document.head.appendChild(style);
-
-    const titles = document.querySelectorAll('h1:not(#hero *), h2:not(#hero *), h3:not(#hero *), h4:not(#hero *), .tc-title, .tc-sub');
-    const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
-    const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
-
-    console.log(`[TEXT] Encontrados para animar: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
-    
-    // ✅ VERSÃO "SUPER-DEBUG" DA FUNÇÃO
-    function animateElement(element, type = 'lines') {
-        if (!element || !element.textContent.trim()) {
-            // console.log(`[DEBUG] Elemento pulado (vazio ou não existe):`, element);
-            return;
-        }
-        
-        // ✅ NOVO LOG: Nos diz qual elemento está sendo processado
-        console.log(`[DEBUG] Processando elemento: <${element.tagName.toLowerCase()}> com texto "${element.textContent.substring(0, 20)}..."`);
-
-        try {
-            const split = new SplitType(element, { types: type, lineClass: 'split-line', wordClass: 'split-word' });
-            const targets = type === 'lines' ? split.lines : split.words;
-
-            if (targets && targets.length > 0) {
-                targets.forEach(target => {
-                    const content = target.innerHTML;
-                    target.innerHTML = `<span>${content}</span>`;
-                });
-                
-                const spans = targets.map(target => target.children[0]).filter(Boolean);
-                
-                if (spans.length > 0) {
-                    gsap.set(spans, { y: "110%" });
-                    gsap.to(spans, {
-                        y: "0%",
-                        duration: type === 'lines' ? 0.8 : 0.6,
-                        stagger: type === 'lines' ? 0.08 : 0.05,
-                        ease: "osmo-ease",
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 85%",
-                            once: true,
-                            // ✅ NOVO LOG: Confirma que o ScrollTrigger foi criado
-                            onEnter: () => console.log(`✅ [TRIGGER ATIVADO] Animação de texto em: <${element.tagName.toLowerCase()}>`)
-                        }
-                    });
-                } else {
-                     console.warn(`[DEBUG] WARN: SplitType criou targets, mas não encontrou spans para animar em:`, element);
-                }
-            } else {
-                console.warn(`[DEBUG] WARN: SplitType não criou 'lines' ou 'words' para o elemento:`, element);
-            }
-        } catch (e) {
-            console.error(`[DEBUG] ERRO ao tentar animar o elemento:`, element, e);
-        }
-    }
-    
-    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE TÍTULOS ---');
-    titles.forEach(el => {
-        if (!el.closest('#faq')) {
-            animateElement(el, 'lines');
-        } else {
-            console.log(`[DEBUG] Pulando título do FAQ (intencional): "${el.textContent.substring(0, 20)}..."`);
-        }
-    });
-
-    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE PARÁGRAFOS ---');
-    paragraphs.forEach(el => animateElement(el, 'words'));
-
-    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE BOTÕES ---');
-    buttons.forEach(el => animateElement(el, 'words'));
-
-    console.log("✅ Animações de texto configuradas!");
-}
-
+// ===================================
+//  PARTE 2: DEFINIÇÃO DAS FUNÇÕES DO 3D E DO TOGGLE
+// ===================================
 
 let THREE_READY = typeof THREE !== "undefined";
-let renderer, scene, camera, capsuleGroup, rafId, running = true;
-let gelA, gelB, gelC;
+let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
 const MODELS = {
     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
@@ -149,21 +68,11 @@ const COLORS = {
     citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
 };
 
-function swapModel(theme = "citrus") {
-    console.log(`[DEBUG 3D] Passo 3: Função swapModel chamada com o tema: ${theme}`);
-    if (!THREE_READY || !capsuleGroup) {
-        console.error("[DEBUG 3D] ERRO: swapModel chamada mas Three.js ou capsuleGroup não estão prontos.");
-        return;
-    }
+function swapModel(theme) {
+    console.log(`[3D] Trocando para o modelo: ${theme}`);
+    if (!THREE_READY || !capsuleGroup) return;
 
     const url = MODELS[theme];
-    console.log(`[DEBUG 3D] Passo 4: Tentando carregar o modelo da URL: ${url}`);
-    
-    if (!url) {
-        console.error(`[DEBUG 3D] ERRO: URL para o tema '${theme}' não encontrada no objeto MODELS.`);
-        return;
-    }
-
     const loader = new THREE.GLTFLoader();
     const dracoLoader = new THREE.DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
@@ -171,25 +80,54 @@ function swapModel(theme = "citrus") {
 
     loader.load(url, 
         (gltf) => {
-            console.log(`✅ [DEBUG 3D] SUCESSO: Modelo '${theme}' carregado!`);
+            console.log(`✅ [3D] Modelo '${theme}' carregado com sucesso!`);
             while (capsuleGroup.children.length) {
                 capsuleGroup.remove(capsuleGroup.children[0]);
             }
-            capsuleGroup.add(gltf.scene);
+            const model = gltf.scene;
+            capsuleGroup.add(model);
+            
+            // Re-captura os materiais após carregar o novo modelo
+            gelA = model.getObjectByName('Gel_A')?.material;
+            gelB = model.getObjectByName('Gel_B')?.material;
+            gelC = model.getObjectByName('Gel_C')?.material;
+            
+            // Aplica a cor do tema atual aos novos materiais
+            const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+            if (gelA && gelB && gelC) {
+                 const toCol = (mat, hex) => {
+                    const c = new THREE.Color(hex);
+                    gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+                };
+                toCol(gelA, pal.a);
+                toCol(gelB, pal.b);
+                toCol(gelC, pal.c);
+            }
         }, 
         undefined, 
         (error) => {
-            console.error(`❌ [DEBUG 3D] FALHA CRÍTICA ao carregar modelo '${theme}':`, error);
+            console.error(`❌ [3D] FALHA CRÍTICA ao carregar modelo '${theme}':`, error);
         }
     );
 }
 
 function setTheme(theme) {
-    console.log(`[DEBUG 3D] Passo 2: Função setTheme chamada com o tema: ${theme}`);
+    console.log(`[TEMA] Trocando para o tema: ${theme}`);
     document.body.classList.toggle("theme-citrus", theme === "citrus");
     document.body.classList.toggle("theme-aqua", theme === "aqua");
 
-    // ... (resto da sua função setTheme, para mudar cores e textos)
+    const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+    if (gelA && gelB && gelC) {
+        const toCol = (mat, hex) => {
+            const c = new THREE.Color(hex);
+            gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+        };
+        toCol(gelA, pal.a);
+        toCol(gelB, pal.b);
+        toCol(gelC, pal.c);
+    }
+    
+    // ... (seu código para atualizar textos do card de produto) ...
 
     swapModel(theme);
 }
@@ -199,37 +137,30 @@ function initThree() {
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
 
-    console.log("[DEBUG 3D] Passo 1: Função initThree foi chamada.");
+    console.log("[3D] Inicializando cena Three.js...");
 
     scene = new THREE.Scene();
-    scene.background = null;
-
-    const rect = threeWrap.getBoundingClientRect();
-    camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
+    camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
     camera.position.set(0, 0, 4.2);
 
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.setSize(rect.width, rect.height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
     renderer.outputEncoding = THREE.sRGBEncoding;
     threeWrap.appendChild(renderer.domElement);
     
     scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const key = new THREE.DirectionalLight(0xffffff, 1.0);
-    key.position.set(3, 4, 2);
-    scene.add(key);
-    const fill = new THREE.DirectionalLight(0xffffff, 0.8);
-    fill.position.set(-3, -1, 3);
-    scene.add(fill);
+    scene.add(new THREE.DirectionalLight(0xffffff, 1.0));
+    // ... (adicione suas outras luzes se precisar) ...
 
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
 
     function animate() {
-        renderer.render(scene, camera);
         requestAnimationFrame(animate);
+        renderer.render(scene, camera);
     }
     animate();
 
@@ -240,9 +171,8 @@ function initThree() {
         });
     }
     
-    setTheme('citrus');
+    setTheme(document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
 }
-
 
 
 
@@ -841,44 +771,24 @@ function bootAnimations() {
         console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
 
-    // 3. Inicializador do 3D (lazy-load)
-    // Bloco do 3D (lazy-load)
+      // 3. Inicializador do 3D (Lazy Load)
     const threeSection = document.getElementById("capsula-3d");
     if (threeSection) {
-        const io = new IntersectionObserver((entries, observer) => {
+        new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
                 initThree();
                 observer.unobserve(threeSection);
             }
-        }, { threshold: 0.1 });
-        io.observe(threeSection);
+        }, { threshold: 0.1 }).observe(threeSection);
     }
 
-
-   // ===================================
-   // Refresh final de segurança do ScrollTrigger
-    // Damos um pequeno delay para garantir que o DOM foi totalmente atualizado
-    // ===================================
-
-    function finalizeLayoutAndRefresh() {
+    // 4. Refresh final de segurança
+    setTimeout(() => {
         if (window.ScrollTrigger) {
-            console.log('✅ FINALIZANDO: Todas as animações criadas. Recalculando posições do ScrollTrigger...');
-            
-            // ScrollTrigger.sort() organiza os triggers por ordem de aparição na página,
-            // o que é crucial para layouts complexos com pinning.
-            ScrollTrigger.sort();
-            
-            // Agora sim, o refresh é chamado no mapa final e correto.
+            console.log('✅ Forçando refresh final do ScrollTrigger.');
             ScrollTrigger.refresh();
-            
-            console.log('✅ Mapa recalculado! As animações devem disparar no momento certo.');
         }
-    }
-    
-    // Usamos um setTimeout para dar ao navegador uma fração de segundo 
-    // para "digerir" todas as animações que acabamos de criar antes de recalcular.
-    setTimeout(finalizeLayoutAndRefresh, 300); // 300ms de segurança
-   
+    }, 500);
 
     
     
