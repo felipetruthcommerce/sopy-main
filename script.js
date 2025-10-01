@@ -135,13 +135,9 @@ function initTextAnimations() {
 }
 
 
-// --- PARTE 2: CÓDIGO 3D E TOGGLE (VERSÃO FINAL E CORRETA) ---
-
 let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, rafId, running = true;
 let gelA, gelB, gelC;
-let hover = { x: 0, y: 0 };
-let threeEntered = false;
 
 const MODELS = {
     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
@@ -153,27 +149,57 @@ const COLORS = {
     citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
 };
 
-function onResizeThree() {
-    const threeWrap = document.getElementById("three-container");
-    if (!renderer || !camera || !threeWrap) return;
-    const w = threeWrap.clientWidth;
-    const h = threeWrap.clientHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
+function swapModel(theme = "citrus") {
+    console.log(`[DEBUG 3D] Passo 3: Função swapModel chamada com o tema: ${theme}`);
+    if (!THREE_READY || !capsuleGroup) {
+        console.error("[DEBUG 3D] ERRO: swapModel chamada mas Three.js ou capsuleGroup não estão prontos.");
+        return;
+    }
+
+    const url = MODELS[theme];
+    console.log(`[DEBUG 3D] Passo 4: Tentando carregar o modelo da URL: ${url}`);
+    
+    if (!url) {
+        console.error(`[DEBUG 3D] ERRO: URL para o tema '${theme}' não encontrada no objeto MODELS.`);
+        return;
+    }
+
+    const loader = new THREE.GLTFLoader();
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    loader.setDRACOLoader(dracoLoader);
+
+    loader.load(url, 
+        (gltf) => {
+            console.log(`✅ [DEBUG 3D] SUCESSO: Modelo '${theme}' carregado!`);
+            while (capsuleGroup.children.length) {
+                capsuleGroup.remove(capsuleGroup.children[0]);
+            }
+            capsuleGroup.add(gltf.scene);
+        }, 
+        undefined, 
+        (error) => {
+            console.error(`❌ [DEBUG 3D] FALHA CRÍTICA ao carregar modelo '${theme}':`, error);
+        }
+    );
 }
 
-// A função swapModel do seu código original (com draco loader ativado)
-function swapModel(theme = "citrus") {
-    // ... cole aqui sua função swapModel completa ...
-    // Garanta que ela usa o DracoLoader como fizemos da última vez
+function setTheme(theme) {
+    console.log(`[DEBUG 3D] Passo 2: Função setTheme chamada com o tema: ${theme}`);
+    document.body.classList.toggle("theme-citrus", theme === "citrus");
+    document.body.classList.toggle("theme-aqua", theme === "aqua");
+
+    // ... (resto da sua função setTheme, para mudar cores e textos)
+
+    swapModel(theme);
 }
 
 function initThree() {
     const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
-    console.log('[3D] Inicializando cena 3D (versão completa)...');
+
+    console.log("[DEBUG 3D] Passo 1: Função initThree foi chamada.");
 
     scene = new THREE.Scene();
     scene.background = null;
@@ -185,19 +211,12 @@ function initThree() {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(rect.width, rect.height);
-    
-    // CONFIGURAÇÕES DE RENDERIZAÇÃO DO SEU CÓDIGO ORIGINAL
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.0;
-
-    // ✅ A LINHA MÁGICA QUE FALTAVA PARA CORRIGIR AS CORES E O BRILHO
     renderer.outputEncoding = THREE.sRGBEncoding;
-
     threeWrap.appendChild(renderer.domElement);
-
-    // ✅ SUA ILUMINAÇÃO DE TRÊS PONTOS ORIGINAL RESTAURADA
-    const amb = new THREE.AmbientLight(0xffffff, 1.2);
-    scene.add(amb);
+    
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
     const key = new THREE.DirectionalLight(0xffffff, 1.0);
     key.position.set(3, 4, 2);
     scene.add(key);
@@ -207,31 +226,21 @@ function initThree() {
 
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
-    
-    // Sua lógica de animação de scroll
-    function animateWithScroll() {
-        if (!running || !capsuleGroup) { rafId = null; return; }
-        // ... cole aqui sua função animateWithScroll completa
-        renderer.render(scene, camera);
-        rafId = requestAnimationFrame(animateWithScroll);
-    }
-    animateWithScroll();
 
-    // Sua lógica do toggle
-    function setTheme(theme) {
-        // ... cole aqui sua função setTheme completa
+    function animate() {
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
     }
-    
+    animate();
+
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
         productToggle.addEventListener('change', () => {
             setTheme(productToggle.checked ? 'aqua' : 'citrus');
         });
     }
-
-    // Carrega modelo e tema inicial
+    
     setTheme('citrus');
-    window.addEventListener("resize", onResizeThree);
 }
 
 
