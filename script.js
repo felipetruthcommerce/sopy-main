@@ -50,7 +50,6 @@ function setupButtonRipples() {
     });
 }
 
-// SUBSTITUA SUA FUNÇÃO initTextAnimations PELA VERSÃO ABAIXO
 
 function initTextAnimations() {
     console.log('[SETUP] Inicializando animações de texto (estilo Osmo)...');
@@ -162,6 +161,188 @@ function bootAnimations() {
     // 3. Ativar as animações e interatividades individuais
     setupButtonRipples(); // ✅ CHAMANDO A FUNÇÃO
     initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
+
+
+    // ===================================
+//  PARTE 2: DEFINIÇÃO DAS FUNÇÕES DO 3D E DO TOGGLE
+// ===================================
+
+// Variáveis globais para a cena 3D e Toggle
+let THREE_READY = typeof THREE !== "undefined";
+let renderer, scene, camera, capsuleGroup, rafId, running = true;
+let gelA, gelB, gelC; // Materiais para trocar cores
+
+// Objeto de cores (usado pela função setTheme)
+const COLORS = {
+    aqua: { a: '#076DF2', b: '#0C87F2', c: '#1DDDF2' },
+    citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
+};
+
+// Objeto com as URLs dos modelos 3D
+const MODELS = {
+    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
+    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
+};
+
+// Função para trocar o modelo 3D
+function swapModel(theme = "citrus") {
+    if (!THREE_READY || !capsuleGroup) return;
+
+    const url = MODELS[theme] || MODELS.citrus;
+    const loader = new THREE.GLTFLoader();
+
+    // (Opcional, mas recomendado) Adicione o DracoLoader se seus modelos forem comprimidos
+    // const dracoLoader = new THREE.DRACOLoader();
+    // dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    // loader.setDRACOLoader(dracoLoader);
+
+    loader.load(url, (gltf) => {
+        // Limpa o modelo antigo
+        while (capsuleGroup.children.length) {
+            capsuleGroup.remove(capsuleGroup.children[0]);
+        }
+        // Adiciona o modelo novo
+        const model = gltf.scene;
+        capsuleGroup.add(model);
+
+        // Captura os materiais para a troca de cor (adapte os nomes se necessário)
+        model.traverse(child => {
+            if (child.isMesh) {
+                if (child.name.includes("Gel_A")) gelA = child.material;
+                if (child.name.includes("Gel_B")) gelB = child.material;
+                if (child.name.includes("Gel_C")) gelC = child.material;
+            }
+        });
+
+        console.log(`[3D] Modelo '${theme}' carregado com sucesso.`);
+    }, undefined, (error) => {
+        console.error(`[3D] Falha ao carregar modelo '${theme}':`, error);
+    });
+}
+
+// Função para trocar o tema (cores, textos e modelo 3D)
+function setTheme(theme) {
+    document.body.classList.toggle("theme-citrus", theme === "citrus");
+    document.body.classList.toggle("theme-aqua", theme === "aqua");
+
+    const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+
+    // Muda as cores dos materiais 3D
+    if (gelA && gelB && gelC) {
+        const toCol = (mat, hex) => {
+            const c = new THREE.Color(hex);
+            gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+        };
+        toCol(gelA, pal.a);
+        toCol(gelB, pal.b);
+        toCol(gelC, pal.c);
+    }
+
+    // Atualiza os textos do card de produto
+    const productCard = document.querySelector('.capsule-3d-cta');
+    if(productCard) {
+        ['.product-title', '.product-copy', '.product-price', '.sopy-product-cta'].forEach(selector => {
+            const el = productCard.querySelector(selector);
+            if(el) el.textContent = el.getAttribute(`data-${theme}`);
+        });
+    }
+
+    // Troca o modelo 3D
+    swapModel(theme);
+}
+
+// Função principal que inicializa a cena 3D
+function initThree() {
+    const threeWrap = document.getElementById("three-container");
+    if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
+    threeWrap.__initialized = true;
+
+    console.log('[3D] Inicializando cena Three.js...');
+
+    scene = new THREE.Scene();
+    scene.background = null;
+
+    const rect = threeWrap.getBoundingClientRect();
+    camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
+    camera.position.set(0, 0, 4.2);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(rect.width, rect.height);
+    threeWrap.appendChild(renderer.domElement);
+    
+    // Luzes
+    scene.add(new THREE.AmbientLight(0xffffff, 2.5));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    keyLight.position.set(3, 4, 2);
+    scene.add(keyLight);
+
+    // Grupo da cápsula
+    capsuleGroup = new THREE.Group();
+    scene.add(capsuleGroup);
+
+    // Animação de Scroll e Render Loop
+    function animate() {
+        // (Adapte ou cole aqui sua lógica de animação de scroll - animateWithScroll)
+        // Por enquanto, um render simples:
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Configura os botões do Toggle
+    const productToggle = document.getElementById('product-toggle');
+    if (productToggle) {
+        productToggle.addEventListener('change', () => {
+            setTheme(productToggle.checked ? 'aqua' : 'citrus');
+        });
+    }
+    
+    // Carrega o modelo e define o tema inicial
+    setTheme('citrus');
+}
+
+
+// --- PARTE 3: A FUNÇÃO "MAESTRO" QUE ORQUESTRA TUDO ---
+
+function bootAnimations() {
+    console.log('Orquestrando inicialização de todas as funções...');
+
+    // 1. Configurações Iniciais
+    setupLenis();
+    setupGsapPlugins();
+    document.body.classList.add("theme-citrus"); // Define o tema inicial
+
+    // 2. Módulos de UI e Animações Gerais
+    setupButtonRipples();
+    initTextAnimations();
+    // (Cole aqui as chamadas das suas outras funções: parallax, faq, etc.)
+    
+    // 3. Inicializador do 3D (lazy-load)
+    const threeSection = document.getElementById("capsula-3d");
+    if (threeSection) {
+        // Usa IntersectionObserver para só carregar o 3D quando a seção estiver visível
+        const io = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    initThree(); // Inicia a cena 3D
+                    observer.unobserve(threeSection); // Para de observar depois de carregar
+                }
+            });
+        }, { threshold: 0.1 }); // Carrega quando 10% da seção estiver visível
+        io.observe(threeSection);
+    }
+
+    // 4. Refresh final de segurança do ScrollTrigger
+    setTimeout(() => {
+        if (window.ScrollTrigger) {
+            console.log('✅ Forçando refresh final do ScrollTrigger.');
+            ScrollTrigger.refresh();
+        }
+    }, 500); // Aumentei um pouco o delay por causa da complexidade do 3D
+}
+
+
 
     // ===================================
     //  BLOCO 2: EFEITO PARALLAX (SUSTENTABILIDADE)

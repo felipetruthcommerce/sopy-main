@@ -1146,16 +1146,6 @@ document.querySelectorAll('[data-action="sopy-buy"]').forEach((btn) => {
 
 // Custom cursor removed: using default system cursor everywhere.
 
-/* ===================================================
-   FUNCIONALIDADE 10: INICIALIZAÇÃO FINAL
-   Responsável por: Configurações padrão e log final
-   Dependências: DOM
-   ==================================================== */
-// Tema padrão
-document.body.classList.add("theme-citrus");
-
-// Log de conclusão
-console.log("[SOPY] Animações e eventos configurados.");
 
 /* ===================================================
    RESUMO FINAL DE FUNCIONALIDADES PARA DIVISÃO MODULAR:
