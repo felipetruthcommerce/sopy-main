@@ -1570,13 +1570,13 @@ body.theme-citrus #sustentabilidade .fullscreen-panel {
   background-color: #1B4332 !important; /* same as citrus sustentabilidade section */
 }
 
-/* Ensure ALL panel contents in sustainability are also solid (no transparency) */
-body.theme-aqua #sustentabilidade .panel-content {
-  background-color: #0D1B2A !important; /* match aqua section color */
+/* Ensure panels inside the sustainability section use a solid background matching the section theme */
+body.theme-aqua #sustentabilidade .fullscreen-panel {
+  background-color: #0D1B2A !important; /* solid blue for aqua theme */
 }
 
-body.theme-citrus #sustentabilidade .panel-content {
-  background-color: #1B4332 !important; /* match citrus section color */
+body.theme-citrus #sustentabilidade .fullscreen-panel {
+  background-color: #1B4332 !important; /* solid green for citrus theme */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
