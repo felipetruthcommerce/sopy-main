@@ -224,7 +224,6 @@ function initThree() {
     console.log('[3D] Inicializando cena com GSAP ScrollTrigger...');
 
     // --- Configuração da Cena, Câmera, Renderer e Luzes ---
-    // (Esta parte continua a mesma)
     scene = new THREE.Scene();
     scene.background = null;
     const rect = threeWrap.getBoundingClientRect();
@@ -245,51 +244,52 @@ function initThree() {
     fillLight.position.set(-3, -1, 3);
     scene.add(fillLight);
 
-    // --- Grupo da Cápsula (com posição inicial alta) ---
+    // --- Grupo da Cápsula ---
     capsuleGroup = new THREE.Group();
-    capsuleGroup.position.y = 15.0; // Posição inicial bem alta
+    capsuleGroup.position.y = 15.0; 
     scene.add(capsuleGroup);
     
-    // =======================================================
-    //  ✅ A NOVA ANIMAÇÃO CONTROLADA 100% PELO GSAP
-    // =======================================================
-    
-    // 1. Criamos uma "linha do tempo" (timeline) para a nossa animação
+    // --- Animação com GSAP ScrollTrigger ---
     const tl = gsap.timeline({
         scrollTrigger: {
-            trigger: "#capsula-3d",      // O gatilho da animação
-            pin: true,                  // ✅ "PRENDE" A SEÇÃO NA TELA
-            scrub: 1,                   // ✅ Suaviza a animação com o scroll
-            start: "top top",           // Inicia quando o topo da seção encontra o topo da tela
-            end: "+=2500",              // ✅ A "DURAÇÃO" DA ANIMAÇÃO. Aumente este número para deixar mais LENTO.
-            invalidateOnRefresh: true,  // Garante que os cálculos sejam refeitos se a janela mudar
+            trigger: "#capsula-3d",      
+            pin: true,                  
+            scrub: 1,                   
+            start: "top top",           
+            end: "+=2500",              
+            invalidateOnRefresh: true,  
         }
     });
 
-    // 2. Adicionamos os movimentos à "linha do tempo"
-    tl
-      // Movimento de descida
-      .to(capsuleGroup.position, {
-        y: -9.5, // Posição final
-        ease: "power1.inOut" // Efeito de aceleração e desaceleração suave
-      }, "<") // O "<" faz com que a descida e a rotação aconteçam ao mesmo tempo
-
-      // Rotação 360 graus
+    tl.to(capsuleGroup.position, {
+        y: -9.5, 
+        ease: "power1.inOut"
+      }, "<")
       .to(capsuleGroup.rotation, {
-        y: Math.PI * 2, // Uma volta completa
-        ease: "none" // Rotação linear e constante
+        y: Math.PI * 2, 
+        ease: "none"
       }, "<");
 
 
-    // --- Loop de Renderização Simplificado ---
-    // A única responsabilidade dele agora é desenhar a cena. O GSAP cuida de atualizar as posições.
+    // --- Loop de Renderização ---
     function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
     }
     animate();
 
-    // --- Configuração do Toggle (como antes) ---
+    // ===============================================
+    // ✅ A FUNÇÃO QUE FALTAVA, AGORA ADICIONADA
+    // ===============================================
+    function onResizeThree() {
+        if (!renderer || !camera || !threeWrap) return;
+        const rect = threeWrap.getBoundingClientRect();
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+    }
+
+    // --- Configuração do Toggle ---
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
         productToggle.addEventListener('change', () => {
@@ -297,9 +297,9 @@ function initThree() {
         });
     }
     
-    // Carrega o modelo e define o tema inicial
+    // Carrega o modelo, define o tema e adiciona o listener de resize
     setTheme('citrus');
-    window.addEventListener("resize", onResizeThree);
+    window.addEventListener("resize", onResizeThree); // Esta linha agora funciona
 }
 
 
