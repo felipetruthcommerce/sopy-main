@@ -50,6 +50,7 @@ function setupButtonRipples() {
     });
 }
 
+
 function initTextAnimations() {
     console.log('[SETUP] Inicializando animações de texto (estilo Osmo)...');
     
@@ -134,10 +135,12 @@ function initTextAnimations() {
 }
 
 
-// --- Variáveis Globais para o Módulo 3D ---
+// ===================================
+//  PARTE 2: DEFINIÇÃO DAS FUNÇÕES DO 3D E DO TOGGLE
+// ===================================
+
 let THREE_READY = typeof THREE !== "undefined";
-let renderer, scene, camera, capsuleGroup, rafId, running = true;
-let gelA, gelB, gelC;
+let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
 const MODELS = {
     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
@@ -149,92 +152,85 @@ const COLORS = {
     citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
 };
 
-// --- Funções Auxiliares do 3D ---
-const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+function swapModel(theme) {
+    console.log(`[3D] Trocando para o modelo: ${theme}`);
+    if (!THREE_READY || !capsuleGroup) return;
 
-function onResizeThree() {
-    const threeWrap = document.getElementById("three-container");
-    if (!renderer || !camera || !threeWrap) return;
-    const rect = threeWrap.getBoundingClientRect();
-    renderer.setSize(rect.width, rect.height, false);
-    camera.aspect = rect.width / rect.height;
-    camera.updateProjectionMatrix();
-}
-
-// --- Função Principal de Animação ---
-function animateWithScroll() {
-    if (!running || !capsuleGroup) { rafId = null; return; }
-    const section = document.getElementById('capsula-3d');
-    if (!section) { rafId = requestAnimationFrame(animateWithScroll); return; }
-    
-    // Usa o scroll do Lenis para sincronia perfeita
-    const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
-
-    const sectionRect = section.getBoundingClientRect();
-    const sectionTop = scrollY + sectionRect.top;
-    const sectionHeight = section.offsetHeight;
-    const winH = window.innerHeight;
-    
-    const expandedStart = sectionTop - winH;
-    const expandedHeight = sectionHeight + winH;
-    let progress = clamp((scrollY - expandedStart) / expandedHeight, 0, 1);
-    progress = Math.min(progress, 0.6);
-    
-    // Sua lógica de posição Y (sem alterações)
-    const yStart = 15.0;
-    const yEnd = -9.5;
-    const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
-    capsuleGroup.position.y = yStart + (yEnd - yStart) * e;
-
-    // Sua lógica de rotação (sem alterações)
-    const rx = 0.08 * Math.sin(progress * Math.PI * 5);
-    const ry = 0.06 * Math.sin(progress * Math.PI * 3 + 0.6);
-    const rz = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
-    const normalizedSpin = clamp(progress / 0.6, 0, 1);
-    const spin = normalizedSpin * Math.PI * 2;
-    capsuleGroup.rotation.set(rx, spin + ry, rz);
-    
-    renderer.render(scene, camera);
-    rafId = requestAnimationFrame(animateWithScroll);
-}
-
-// --- Funções de Troca de Tema e Modelo ---
-function swapModel(theme, onModelLoaded) {
-    console.log(`[3D] Carregando modelo: ${theme}`);
     const url = MODELS[theme];
     const loader = new THREE.GLTFLoader();
     const dracoLoader = new THREE.DRACOLoader();
     dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
     loader.setDRACOLoader(dracoLoader);
 
-    loader.load(url, (gltf) => {
-        console.log(`✅ [3D] Modelo '${theme}' carregado!`);
-        while (capsuleGroup.children.length > 0) {
-            capsuleGroup.remove(capsuleGroup.children[0]);
+    loader.load(url, 
+        (gltf) => {
+            console.log(`✅ [3D] Modelo '${theme}' carregado com sucesso!`);
+            while (capsuleGroup.children.length) {
+                capsuleGroup.remove(capsuleGroup.children[0]);
+            }
+            const model = gltf.scene;
+            capsuleGroup.add(model);
+            
+            // Re-captura os materiais após carregar o novo modelo
+            gelA = model.getObjectByName('Gel_A')?.material;
+            gelB = model.getObjectByName('Gel_B')?.material;
+            gelC = model.getObjectByName('Gel_C')?.material;
+            
+            // Aplica a cor do tema atual aos novos materiais
+            const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+            if (gelA && gelB && gelC) {
+                 const toCol = (mat, hex) => {
+                    const c = new THREE.Color(hex);
+                    gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+                };
+                toCol(gelA, pal.a);
+                toCol(gelB, pal.b);
+                toCol(gelC, pal.c);
+            }
+        }, 
+        undefined, 
+        (error) => {
+            console.error(`❌ [3D] FALHA CRÍTICA ao carregar modelo '${theme}':`, error);
         }
-        capsuleGroup.add(gltf.scene);
-        
-        // Chama a função de callback DEPOIS que o modelo carregou
-        if (onModelLoaded) onModelLoaded();
-    }, undefined, (error) => {
-        console.error(`❌ [3D] FALHA ao carregar modelo '${theme}':`, error);
-    });
+    );
 }
 
-function setTheme(theme) { /* ... cole aqui sua função setTheme completa, ela não precisa mudar ... */ }
+function setTheme(theme) {
+    console.log(`[TEMA] Trocando para o tema: ${theme}`);
+    document.body.classList.toggle("theme-citrus", theme === "citrus");
+    document.body.classList.toggle("theme-aqua", theme === "aqua");
 
-// --- A Função de Inicialização Principal do 3D ---
+    const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
+    if (gelA && gelB && gelC) {
+        const toCol = (mat, hex) => {
+            const c = new THREE.Color(hex);
+            gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
+        };
+        toCol(gelA, pal.a);
+        toCol(gelB, pal.b);
+        toCol(gelC, pal.c);
+    }
+    
+    // ... (seu código para atualizar textos do card de produto) ...
+
+    swapModel(theme);
+}
+
 function initThree() {
     const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
-    console.log('[3D] Inicializando cena...');
 
+    console.log('[3D] Inicializando cena 3D com animação de scroll...');
+
+    // --- Configuração da Cena, Câmera e Renderer ---
     scene = new THREE.Scene();
     scene.background = null;
+
     const rect = threeWrap.getBoundingClientRect();
     camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
     camera.position.set(0, 0, 4.2);
+
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(rect.width, rect.height);
@@ -242,43 +238,82 @@ function initThree() {
     renderer.toneMappingExposure = 1.0;
     renderer.outputEncoding = THREE.sRGBEncoding;
     threeWrap.appendChild(renderer.domElement);
-    
-    // Suas luzes originais
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const key = new THREE.DirectionalLight(0xffffff, 1.0);
-    key.position.set(3, 4, 2);
-    scene.add(key);
-    const fill = new THREE.DirectionalLight(0xffffff, 0.8);
-    fill.position.set(-3, -1, 3);
-    scene.add(fill);
 
+    // --- Iluminação de Três Pontos ---
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
+    keyLight.position.set(3, 4, 2);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    fillLight.position.set(-3, -1, 3);
+    scene.add(fillLight);
+
+    // --- Grupo da Cápsula ---
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
     
-    // Configura o ScrollTrigger SEM o pin
-    if (typeof ScrollTrigger !== "undefined") {
-        ScrollTrigger.create({
-            trigger: "#capsula-3d",
-            start: "top bottom", // Inicia a animação quando a seção começa a aparecer
-            end: "bottom top",   // Termina quando a seção sai completamente da tela
-            scrub: false,        // Não precisa de scrub com seu loop manual
-            pin: false,          // ✅ PIN REMOVIDO
+    // =======================================================
+    //  ✅ O "CÉREBRO" DA ANIMAÇÃO, AGORA INTEGRADO E CORRIGIDO
+    // =======================================================
+    function animateWithScroll() {
+        // Pega uma área maior que inclui a div intermediária antes da seção 3D
+        const section = document.getElementById('capsula-3d');
+        if (!section) { requestAnimationFrame(animateWithScroll); return; }
+
+        const sectionRect = section.getBoundingClientRect();
+        // ✅ PEGA O SCROLL DO LENIS, NÃO DO NAVEGADOR
+        const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
+        const sectionTop = scrollY + sectionRect.top;
+        const sectionHeight = section.offsetHeight;
+        const winH = window.innerHeight;
+        
+        // Expande a área de trigger para começar mais cedo
+        const expandedStart = sectionTop - winH;
+        const expandedHeight = sectionHeight + winH;
+        
+        // Progresso baseado na área expandida
+        let progress = (scrollY - expandedStart) / expandedHeight;
+        progress = Math.max(0, Math.min(1, progress)); // clamp(0, 1)
+        progress = Math.min(progress, 0.6); // Limita o progresso máximo
+        
+        // Posição Y controlada por scroll com easing e "dança"
+        const yStart = 15.0;
+        const yEnd = -9.5;
+        const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
+        let yBase = yStart + (yEnd - yStart) * e;
+        const midFactor = 1 - Math.abs(progress - 0.5) * 2;
+        const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
+        capsuleGroup.position.y = yBase + yWiggle;
+
+        // Rotação controlada por scroll
+        const rx = 0.08 * Math.sin(progress * Math.PI * 5);
+        const ry = 0.06 * Math.sin(progress * Math.PI * 3 + 0.6);
+        const rz = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
+        const normalizedSpin = Math.max(0, Math.min(1, progress / 0.6));
+        const spin = normalizedSpin * Math.PI * 2;
+        capsuleGroup.rotation.set(rx, spin + ry, rz);
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animateWithScroll);
+    }
+    // Inicia o loop de animação
+    animateWithScroll();
+
+    // --- Configuração do Toggle ---
+    const productToggle = document.getElementById('product-toggle');
+    if (productToggle) {
+        productToggle.addEventListener('change', () => {
+            setTheme(productToggle.checked ? 'aqua' : 'citrus');
         });
     }
-
-    // Configura os listeners do toggle
-    const productToggle = document.getElementById('product-toggle');
-    if (productToggle) { /* ... cole aqui seu listener do toggle ... */ }
     
-    // ✅ CORREÇÃO DA ORDEM DE EXECUÇÃO
-    // Carrega o modelo inicial, e SÓ DEPOIS, inicia a animação
-    swapModel('citrus', () => {
-        console.log('[3D] Modelo inicial carregado. Iniciando loop de animação de scroll.');
-        animateWithScroll();
-    });
-
-    window.addEventListener("resize", onResizeThree);
+    // Carrega o modelo e define o tema inicial
+    setTheme('citrus');
+    window.addEventListener("resize", onResizeThree); // Sua função de resize
 }
+
+
+
 
 
 
@@ -874,10 +909,7 @@ function bootAnimations() {
         console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
 
-    // --- O Bloco que vai dentro da sua função `bootAnimations` ---
-// (Não cole isso solto, apenas a chamada `initThreeScene()` dentro do bootAnimations)
-function initThreeScene() {
-    console.log('[INIT] Configurando 3D...');
+      // 3. Inicializador do 3D (Lazy Load)
     const threeSection = document.getElementById("capsula-3d");
     if (threeSection) {
         new IntersectionObserver((entries, observer) => {
@@ -887,12 +919,11 @@ function initThreeScene() {
             }
         }, { threshold: 0.1 }).observe(threeSection);
     }
-}
-    
-    // Refresh final
+
+    // 4. Refresh final de segurança
     setTimeout(() => {
         if (window.ScrollTrigger) {
-            ScrollTrigger.sort();
+            console.log('✅ Forçando refresh final do ScrollTrigger.');
             ScrollTrigger.refresh();
         }
     }, 500);
