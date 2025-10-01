@@ -1111,29 +1111,6 @@ body.theme-aqua .sopy-how-card {
   transform: translateY(-1px);
 }
 
-/* Ícones dos passos (ajuste os SVGs conforme quiser) */
-/* dots sem ícones (apenas pílula no ativo) */
-
-/* ========== VÃDEO SECUNDÁRIO ========== */
-.sopy-section--video .video-wrap {
-  width: min(1100px, 94%); margin: 0 auto; border-radius: 16px; overflow: clip;
-  border: 1px solid var(--line); box-shadow: var(--shadow); background: #000;
-}
-.sopy-section--video video { width: 100%; height: auto; }
-
-/* ========== FRAGRÂNCIAS ========== */
-.fragrance-grid {
-  width: min(1200px, 94%); margin: 0 auto;
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 3vw, 24px);
-}
-.fragrance-card {
-  background: #fff; border: 1px solid var(--line); border-radius: 18px;
-  padding: clamp(16px, 3vw, 24px); display: grid; justify-items: center; gap: 10px;
-  text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,.06);
-}
-.fragrance-card img { width: min(380px, 88%); height: auto; }
-
-
 
 /* Painel em tela cheia com posição sticky */
 .sustainability-parallax .fullscreen-panel {
@@ -1162,7 +1139,6 @@ body.theme-aqua .sopy-how-card {
   gap: clamp(1.5rem, 5vw, 4rem);
   /* RESET do estilo de .panel-content usado na seção horizontal */
   max-width: none !important;
-  background: transparent !important;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -1683,7 +1659,7 @@ body.theme-aqua #sustentabilidade .fullscreen-panel {
 }
 
 body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #5FD97E !important; /* same as citrus sustentabilidade section */
+  background-color: #1B4332 !important; /* same as citrus sustentabilidade section */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
