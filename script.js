@@ -241,6 +241,19 @@ function initThree() {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(rect.width, rect.height);
+// --- AS 3 LINHAS QUE FALTAM ---
+// ✅ 1. Gerenciador de Contraste: Evita que as luzes "estourem" para o branco puro.
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+
+// ✅ 2. Controle de Brilho Geral: Ajusta a exposição da cena.
+renderer.toneMappingExposure = 1.0; 
+
+// ✅ 3. O "Tradutor de Cores": Garante que as cores apareçam corretamente na tela.
+renderer.outputEncoding = THREE.sRGBEncoding; 
+// --- FIM DAS LINHAS QUE FALTAM ---
+
+
+
     threeWrap.appendChild(renderer.domElement);
     
     // Luzes
