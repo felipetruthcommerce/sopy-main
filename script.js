@@ -256,46 +256,49 @@ function initThree() {
     //  ✅ O "CÉREBRO" DA ANIMAÇÃO, AGORA INTEGRADO E CORRIGIDO
     // =======================================================
     function animateWithScroll() {
-        // Pega uma área maior que inclui a div intermediária antes da seção 3D
-        const section = document.getElementById('capsula-3d');
-        if (!section) { requestAnimationFrame(animateWithScroll); return; }
+            const section = document.getElementById('capsula-3d');
+            if (!section) { requestAnimationFrame(animateWithScroll); return; }
 
-        const sectionRect = section.getBoundingClientRect();
-        // ✅ PEGA O SCROLL DO LENIS, NÃO DO NAVEGADOR
-        const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
-        const sectionTop = scrollY + sectionRect.top;
-        const sectionHeight = section.offsetHeight;
-        const winH = window.innerHeight;
-        
-        // Expande a área de trigger para começar mais cedo
-        const expandedStart = sectionTop - winH;
-        const expandedHeight = sectionHeight + winH;
-        
-        // Progresso baseado na área expandida
-        let progress = (scrollY - expandedStart) / expandedHeight;
-        progress = Math.max(0, Math.min(1, progress)); // clamp(0, 1)
-        progress = Math.min(progress, 0.6); // Limita o progresso máximo
-        
-        // Posição Y controlada por scroll com easing e "dança"
-        const yStart = 15.0;
-        const yEnd = -9.5;
-        const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
-        let yBase = yStart + (yEnd - yStart) * e;
-        const midFactor = 1 - Math.abs(progress - 0.5) * 2;
-        const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
-        capsuleGroup.position.y = yBase + yWiggle;
+            const sectionRect = section.getBoundingClientRect();
+            const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
+            const sectionTop = scrollY + sectionRect.top;
+            const sectionHeight = section.offsetHeight;
+            const winH = window.innerHeight;
+            
+            const expandedStart = sectionTop - winH;
+            const expandedHeight = sectionHeight + winH;
+            
+            let progress = (scrollY - expandedStart) / expandedHeight;
+            progress = Math.max(0, Math.min(1, progress));
+            
+            // Posição Y (Descida) - Esta parte está correta
+            const yStart = 15.0;
+            const yEnd = -9.5;
+            const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
+            let yBase = yStart + (yEnd - yStart) * e;
+            const midFactor = 1 - Math.abs(progress - 0.5) * 2;
+            const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
+            capsuleGroup.position.y = yBase + yWiggle;
 
-        // Rotação controlada por scroll
-        const rx = 0.08 * Math.sin(progress * Math.PI * 5);
-        const ry = 0.06 * Math.sin(progress * Math.PI * 3 + 0.6);
-        const rz = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
-        const normalizedSpin = Math.max(0, Math.min(1, progress / 0.6));
-        const spin = normalizedSpin * Math.PI * 2;
-        capsuleGroup.rotation.set(rx, spin + ry, rz);
+            // ===============================================
+            // ✅ CORREÇÃO NA LÓGICA DE ROTAÇÃO
+            // ===============================================
+            
+            // 1. Rotação principal de 360° no eixo Y
+            // Mapeia o progresso total (0 a 1) para uma volta completa (0 a 2*PI)
+            const mainSpinY = progress * Math.PI * 2;
 
-        renderer.render(scene, camera);
-        requestAnimationFrame(animateWithScroll);
-    }
+            // 2. Pequenas oscilações ("wobble") nos outros eixos
+            const wobbleX = 0.08 * Math.sin(progress * Math.PI * 5);
+            const wobbleZ = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
+
+            // 3. Aplica a rotação
+            // O eixo Y agora recebe a rotação principal, garantindo o 360.
+            capsuleGroup.rotation.set(wobbleX, mainSpinY, wobbleZ);
+            
+            renderer.render(scene, camera);
+            requestAnimationFrame(animateWithScroll);
+        }
     // Inicia o loop de animação
     animateWithScroll();
 
