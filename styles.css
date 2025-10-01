@@ -89,13 +89,13 @@ img, video { display: block; max-width: 100%; }
   --line: #e5e7eb;
   --shadow: 0 10px 25px rgba(0,0,0,.12);
 
-  /* Aqua Blu (default) â€” palette: #083DA6, #076DF2, #0C87F2, #1DDDF2 */
-  --brand: #076DF2;       /* primary */
-  --brand-2: #0C87F2;     /* secondary */
-  --accent: #1DDDF2;      /* accent */
-  --brand-dark: #083DA6;  /* dark */
-  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(7,109,242,.18), transparent),
-              radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
+  /* Citrus Lush (default) â€” palette: #083DA6, #076DF2, #0C87F2, #1DDDF2 */
+  --brand: #5FD97E;       /* primary */
+  --brand-2: #91D9A3;     /* secondary */
+  --accent: #D7D9D2;      /* accent */
+  --brand-dark: #167312;  /* dark */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
+              radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
   /* Water seam controls */
   --mask-start: 52%;   /* onde começa a desvanecer o vídeo (45â€“60%) */
   --seam-height: 22vh; /* altura da zona de mistura (15â€“30vh) */
@@ -1659,7 +1659,7 @@ body.theme-aqua #sustentabilidade .fullscreen-panel {
 }
 
 body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #5FD97E !important; /* mesma cor da seção citrus */
+  background-color: #1B4332 !important; /* mesma cor da seção citrus */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
