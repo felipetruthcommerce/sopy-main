@@ -378,59 +378,9 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 .sopy-section-header { max-width: 900px; margin: 0 auto 2.25rem; text-align: center; }
 .sopy-section-header p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
 
-.howto-header {
-  text-align: center;
-  margin: 0 0 2.5rem 0;
-  padding: 0;
-  background: transparent; /* remove fundo separado */
-}
-.howto-header h2 {
-  color: #fff;
-  font-family: 'Avant Garde Demi BT', 'Syne', sans-serif;
-  /* Font um pouco menor que benefícios */
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 900;
-  margin: 0;
-  line-height: 0.95;
-  letter-spacing: 0;
-}
-/* transição suave para o header aparecer/sumir */
-.sopy-site-header { 
-  transition: opacity .25s ease, transform .25s ease, background .25s ease;
-  position: fixed;
-  left: 0; right: 0; top: 0;
-  z-index: 1200; /* stay above most content */
-  background: transparent; /* transparent by default so hero shows through */
-  padding: 12px 0; /* vertical spacing for the header */
-  will-change: transform, opacity, background;
-}
 
-/* Hide the header when JS toggles body.nav-hidden (scrolling down) */
-body.nav-hidden .sopy-site-header {
-  transform: translateY(-16px);
-  opacity: 0;
-  pointer-events: none;
-}
 
-.sopy-nav {
-  width: min(1400px, 94%);
-  margin: 0 auto; /* center the nav container inside the fixed header */
-  padding: 0 24px; /* lateral padding inside the container */
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* logo left, CTA right */
-  gap: 16px;
-  height: 56px; /* consistent header height for layout */
-}
-.sopy-nav-logo img { height: 38px; width: auto; display: block; }
-.sopy-nav-logo { align-self: center; }
 
-.sopy-nav-cta { display: flex; align-items: center; justify-self: end; }
-
-/* If navigation links are added later, keep them centered (fallback) */
-.sopy-nav-links { display: flex; gap: 20px; justify-content: center; align-items: center; }
-.sopy-nav-links a { color: var(--text); font-weight: 500; font-size: .95rem; opacity: .85; transition: opacity .2s ease; }
-.sopy-nav-links a:hover { opacity: 1; }
 
 /* ========== BOTÕES SOPY ========== */
 .sopy-btn {
@@ -1485,38 +1435,7 @@ body.theme-citrus #faq .sopy-faq-accordion {
   box-shadow: none;
 }
 
-/* ========== FOOTER ========== */
-.sopy-site-footer {
-  /* tamanho alto conforme solicitado */
-  height: 70vh;
-  min-height: 420px;
-  background: #fff;
-  border-top: 1px solid var(--line);
-  /* radius apenas no topo para um visual suave */
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
-  overflow: hidden;
-  position: relative;
-  z-index: 20; /* appear above the previous section for the parallax overlap */
-  will-change: transform;
-  display: flex;
-  align-items: center; /* centra verticalmente o conteúdo */
-  justify-content: center;
-  padding: 24px 0;
-  /* sombra sutil para separar do conteúdo acima */
-  box-shadow: 0 -8px 24px rgba(0,0,0,0.04);
-}
-.sopy-footer-inner {
-  width: min(1200px, 94%);
-  margin: 0 auto;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: var(--muted);
-  gap: 16px;
-}
-.sopy-footer-links { display: flex; gap: 16px; }
+
 
 /* ========== STATES PARA REVEALS (GSAP SplitText) ========== */
 /* (remoção) estilos de reveal por linhas/palavras */
@@ -1583,18 +1502,7 @@ body.theme-citrus #faq .sopy-faq-accordion {
    Fim
 ------------------------------------------------------- */
 
-/* Removed scroll progress bar */
 
-.sopy-scroll-to-top {
-  position: fixed; right: 18px; bottom: 18px; z-index: 60;
-  display: grid; place-items: center; width: 56px; height: 56px;
-  border-radius: 999rem; border: none; background: transparent;
-  box-shadow: none; cursor: default; pointer-events: none; /* não intercepta scroll/click */
-}
-.sopy-scroll-to-top .sopy-arrow-up { position: absolute; font-size: 16px; color: var(--brand-dark); opacity: 0; transition: opacity .2s ease; }
-.progress-circle { transform: rotate(-90deg); }
-.progress-circle-bg { stroke: rgba(0,0,0,.08); }
-.progress-circle-bar { stroke: var(--brand); stroke-dasharray: 283; stroke-dashoffset: 283; transition: stroke-dashoffset .08s linear; }
 
 /* ========== SEÇÕES COM FUNDO TEMÁTICO (CORES FORTES) ========== */
 /* AQUA â€” blocos fortes e contrastantes */
@@ -1660,6 +1568,15 @@ body.theme-aqua #sustentabilidade .fullscreen-panel {
 
 body.theme-citrus #sustentabilidade .fullscreen-panel {
   background-color: #1B4332 !important; /* same as citrus sustentabilidade section */
+}
+
+/* Ensure ALL panel contents in sustainability are also solid (no transparency) */
+body.theme-aqua #sustentabilidade .panel-content {
+  background-color: #0D1B2A !important; /* match aqua section color */
+}
+
+body.theme-citrus #sustentabilidade .panel-content {
+  background-color: #1B4332 !important; /* match citrus section color */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
@@ -1776,85 +1693,6 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-testimonials-dots { display: none; }
 
 /* removed duplicate .capsule3d-title-over rule to keep the one above as source of truth */
-
-/* =========================
-   Page Footer (overlap style) — uses theme variables
-   ========================= */
-.page-footer {
-  position: relative;
-  z-index: 10;
-  /* Use brand color instead of brand-dark for better visual contrast */
-  background: var(--brand); /* primary theme color */
-  color: #ffffff; /* white text for good contrast */
-  border-top-left-radius: 26px;
-  border-top-right-radius: 26px;
-  will-change: transform;
-  transform: translateZ(0) translateY(100px); /* start offset down for animation */
-  /* make footer taller */
-  min-height: 560px;
-  box-shadow: 0 -12px 30px rgba(0,0,0,.18);
-}
-.page-footer .footer-inner {
-  padding: 10vh 6vw 32vh; /* increase top and bottom padding to make it taller */
-  max-width: 1200px;
-  margin-inline: auto;
-}
-.page-footer .footer-inner h3 {
-  margin: 0 0 12px 0;
-  color: var(--muted);
-  font-size: 1.4rem;
-}
-.page-footer .footer-inner {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 32px;
-}
-
-.page-footer .footer-left {
-  flex: 1 1 48%;
-  display:flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.page-footer .footer-cols {
-  display: flex;
-  gap: 48px;
-  align-items: flex-start;
-}
-
-.page-footer .col-sitemap, .page-footer .col-legal { min-width: 180px; }
-
-.page-footer .cols { margin: 0; }
-.page-footer a { display:block; color: rgba(255,255,255,0.95); text-decoration:none; margin: 6px 0; }
-.page-footer strong { display:block; margin-bottom:8px; color: rgba(255,255,255,0.95); }
-.page-footer .legal { opacity:.8; margin-top: 24px; color: rgba(255,255,255,0.85); }
-
-/* Social icons (only the SVGs provided) */
-.footer-social { display:flex; gap:14px; align-items:center; }
-.footer-social .social-link { display:inline-flex; width:38px; height:38px; align-items:center; justify-content:center; background: rgba(255,255,255,0.06); border-radius: 8px; }
-.footer-social .social-link svg { width:20px; height:20px; display:block; fill: currentColor; color: #ffffff; }
-
-/* Make social icons follow theme color if needed (inverse appearance on light backgrounds) */
-body.theme-citrus .footer-social .social-link { background: rgba(255,255,255,0.06); }
-body.theme-aqua .footer-social .social-link { background: rgba(255,255,255,0.06); }
-
-/* Responsive: stack on small screens */
-@media (max-width: 900px) {
-  .page-footer .footer-inner { flex-direction: column; padding: 8vh 6vw 12vh; }
-  .page-footer .footer-left, .page-footer .footer-cols { width: 100%; }
-  .page-footer .footer-cols { flex-direction: row; gap: 20px; margin-top: 12px; }
-  .page-footer .legal { text-align: center; margin-top: 18px; }
-}
-
-/* Theme-specific: citrus uses brand color with white text */
-.theme-citrus .page-footer {
-  background: var(--brand); /* citrus green brand color */
-  color: #ffffff;
-}
-.theme-citrus .page-footer a { color: rgba(255,255,255,0.9); }
-.theme-citrus .page-footer strong { color: rgba(255,255,255,0.95); }
 
 /* Ensure theme body backgrounds match the FAQ section colors so the area behind the footer aligns */
 body.theme-citrus {
