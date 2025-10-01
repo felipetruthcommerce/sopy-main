@@ -136,11 +136,14 @@ function initTextAnimations() {
 
 
 // ===================================
-//  PARTE 2: DEFINIÇÃO DAS FUNÇÕES DO 3D E DO TOGGLE
+//  PARTE 2: CÓDIGO 3D E TOGGLE (VERSÃO ORIGINAL CORRIGIDA)
 // ===================================
 
 let THREE_READY = typeof THREE !== "undefined";
-let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
+let renderer, scene, camera, capsuleGroup, rafId, running = true;
+let gelA, gelB, gelC;
+let threeEntered = false;
+const threeWrap = document.getElementById("three-container");
 
 const MODELS = {
     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
@@ -152,83 +155,88 @@ const COLORS = {
     citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
 };
 
-function swapModel(theme) {
-    console.log(`[3D] Trocando para o modelo: ${theme}`);
-    if (!THREE_READY || !capsuleGroup) return;
-
-    const url = MODELS[theme];
-    const loader = new THREE.GLTFLoader();
-    const dracoLoader = new THREE.DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-    loader.setDRACOLoader(dracoLoader);
-
-    loader.load(url, 
-        (gltf) => {
-            console.log(`✅ [3D] Modelo '${theme}' carregado com sucesso!`);
-            while (capsuleGroup.children.length) {
-                capsuleGroup.remove(capsuleGroup.children[0]);
-            }
-            const model = gltf.scene;
-            capsuleGroup.add(model);
-            
-            // Re-captura os materiais após carregar o novo modelo
-            gelA = model.getObjectByName('Gel_A')?.material;
-            gelB = model.getObjectByName('Gel_B')?.material;
-            gelC = model.getObjectByName('Gel_C')?.material;
-            
-            // Aplica a cor do tema atual aos novos materiais
-            const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
-            if (gelA && gelB && gelC) {
-                 const toCol = (mat, hex) => {
-                    const c = new THREE.Color(hex);
-                    gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
-                };
-                toCol(gelA, pal.a);
-                toCol(gelB, pal.b);
-                toCol(gelC, pal.c);
-            }
-        }, 
-        undefined, 
-        (error) => {
-            console.error(`❌ [3D] FALHA CRÍTICA ao carregar modelo '${theme}':`, error);
-        }
-    );
+function onResizeThree() {
+    if (!renderer || !camera || !threeWrap) return;
+    const rect = threeWrap.getBoundingClientRect();
+    renderer.setSize(rect.width, rect.height, false);
+    camera.aspect = rect.width / rect.height;
+    camera.updateProjectionMatrix();
 }
 
-function setTheme(theme) {
-    console.log(`[TEMA] Trocando para o tema: ${theme}`);
-    document.body.classList.toggle("theme-citrus", theme === "citrus");
-    document.body.classList.toggle("theme-aqua", theme === "aqua");
+function swapModel(theme) { /* ... cole aqui sua função swapModel ... */ }
+function setTheme(theme) { /* ... cole aqui sua função setTheme ... */ }
 
-    const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
-    if (gelA && gelB && gelC) {
-        const toCol = (mat, hex) => {
-            const c = new THREE.Color(hex);
-            gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
-        };
-        toCol(gelA, pal.a);
-        toCol(gelB, pal.b);
-        toCol(gelC, pal.c);
+function enter3D() {
+    if (threeEntered) return;
+    threeEntered = true;
+
+    // Animação de entrada
+    capsuleGroup.scale.set(0, 0, 0);
+    gsap.to(capsuleGroup.scale, { x: 1, y: 1, z: 1, duration: 1, ease: "power2.out", delay: 0.1 });
+
+    // ✅ AJUSTE 1: REATIVANDO O PIN DA SEÇÃO
+    if (typeof ScrollTrigger !== "undefined") {
+        ScrollTrigger.create({
+            trigger: "#capsula-3d",
+            start: "top top",
+            end: "+=2500", // A "duração" do pin em pixels. Aumente para ficar mais lento.
+            pin: true, 
+            scrub: false, 
+        });
     }
-    
-    // ... (seu código para atualizar textos do card de produto) ...
+}
 
-    swapModel(theme);
+function animateWithScroll() {
+    if (!running || !capsuleGroup) { rafId = null; return; }
+    
+    const section = document.getElementById('capsula-3d');
+    if (!section) { rafId = requestAnimationFrame(animateWithScroll); return; }
+    
+    const sectionRect = section.getBoundingClientRect();
+    // ✅ AJUSTE 2: USANDO O SCROLL DO LENIS
+    const scrollY = window.lenis ? window.lenis.scroll : window.scrollY;
+    const sectionTop = scrollY + sectionRect.top;
+    const sectionHeight = section.offsetHeight;
+    const winH = window.innerHeight;
+    
+    const expandedStart = sectionTop - winH;
+    const expandedHeight = sectionHeight + winH;
+    
+    let progress = (scrollY - expandedStart) / expandedHeight;
+    progress = Math.max(0, Math.min(1, progress));
+    progress = Math.min(progress, 0.6);
+    
+    const yStart = 15.0;
+    const yEnd = -9.5;
+    const e = 0.5 - 0.5 * Math.cos(Math.PI * progress);
+    let yBase = yStart + (yEnd - yStart) * e;
+    const midFactor = 1 - Math.abs(progress - 0.5) * 2;
+    const yWiggle = 0.6 * Math.sin(progress * Math.PI * 4) * midFactor;
+    capsuleGroup.position.y = yBase + yWiggle;
+
+    const rx = 0.08 * Math.sin(progress * Math.PI * 5);
+    const ry = 0.06 * Math.sin(progress * Math.PI * 3 + 0.6);
+    const rz = 0.04 * Math.sin(progress * Math.PI * 7 + 1.2);
+    const normalizedSpin = Math.max(0, Math.min(1, progress / 0.6));
+    const spin = normalizedSpin * Math.PI * 2;
+    capsuleGroup.rotation.set(rx, spin + ry, rz);
+    
+    renderer.render(scene, camera);
+    rafId = requestAnimationFrame(animateWithScroll);
 }
 
 function initThree() {
-    const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
+    console.log('[3D] Inicializando cena 3D (versão original corrigida)...');
 
-    console.log('[3D] Inicializando cena com GSAP ScrollTrigger...');
-
-    // --- Configuração da Cena, Câmera, Renderer e Luzes ---
     scene = new THREE.Scene();
     scene.background = null;
+
     const rect = threeWrap.getBoundingClientRect();
     camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
     camera.position.set(0, 0, 4.2);
+
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(rect.width, rect.height);
@@ -236,60 +244,26 @@ function initThree() {
     renderer.toneMappingExposure = 1.0;
     renderer.outputEncoding = THREE.sRGBEncoding;
     threeWrap.appendChild(renderer.domElement);
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const keyLight = new THREE.DirectionalLight(0xffffff, 1.0);
-    keyLight.position.set(3, 4, 2);
-    scene.add(keyLight);
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    fillLight.position.set(-3, -1, 3);
-    scene.add(fillLight);
 
-    // --- Grupo da Cápsula ---
+    const amb = new THREE.AmbientLight(0xffffff, 1.2);
+    scene.add(amb);
+    const key = new THREE.DirectionalLight(0xffffff, 1.0);
+    key.position.set(3, 4, 2);
+    scene.add(key);
+    const fill = new THREE.DirectionalLight(0xffffff, 0.8);
+    fill.position.set(-3, -1, 3);
+    scene.add(fill);
+
     capsuleGroup = new THREE.Group();
-    capsuleGroup.position.y = 15.0; 
     scene.add(capsuleGroup);
     
-    // --- Animação com GSAP ScrollTrigger ---
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: "#capsula-3d",      
-            pin: true,                  
-            scrub: 1,                   
-            start: "top top",           
-            end: "+=2500",              
-            invalidateOnRefresh: true,  
-        }
-    });
+    // Inicia o loop de animação/renderização
+    animateWithScroll(); 
 
-    tl.to(capsuleGroup.position, {
-        y: -9.5, 
-        ease: "power1.inOut"
-      }, "<")
-      .to(capsuleGroup.rotation, {
-        y: Math.PI * 2, 
-        ease: "none"
-      }, "<");
+    // Chama o enter3D para configurar o pin e a animação de entrada
+    enter3D(); 
 
-
-    // --- Loop de Renderização ---
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
-
-    // ===============================================
-    // ✅ A FUNÇÃO QUE FALTAVA, AGORA ADICIONADA
-    // ===============================================
-    function onResizeThree() {
-        if (!renderer || !camera || !threeWrap) return;
-        const rect = threeWrap.getBoundingClientRect();
-        renderer.setSize(rect.width, rect.height, false);
-        camera.aspect = rect.width / rect.height;
-        camera.updateProjectionMatrix();
-    }
-
-    // --- Configuração do Toggle ---
+    // Configura os listeners do toggle
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
         productToggle.addEventListener('change', () => {
@@ -297,12 +271,10 @@ function initThree() {
         });
     }
     
-    // Carrega o modelo, define o tema e adiciona o listener de resize
+    // Carrega o modelo e define o tema inicial
     setTheme('citrus');
-    window.addEventListener("resize", onResizeThree); // Esta linha agora funciona
+    window.addEventListener("resize", onResizeThree);
 }
-
-
 
 
 
