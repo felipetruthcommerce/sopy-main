@@ -135,35 +135,7 @@ function initTextAnimations() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-function bootAnimations() {
-    console.log('Iniciando reconstrução das animações...');
-
-        console.log('[TEMA] Aplicando tema inicial: theme-citrus');
-    document.body.classList.add("theme-citrus");
-
-
-    // 1. Configurar Lenis (SEMPRE PRIMEIRO)
-    setupLenis(); // ✅ CHAMANDO A FUNÇÃO
-
-    // 2. Registrar plugins e eases do GSAP
-    setupGsapPlugins(); // ✅ CHAMANDO A FUNÇÃO
-
-    // 3. Ativar as animações e interatividades individuais
-    setupButtonRipples(); // ✅ CHAMANDO A FUNÇÃO
-    initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
-
-
-    // ===================================
+// ===================================
 //  PARTE 2: DEFINIÇÃO DAS FUNÇÕES DO 3D E DO TOGGLE
 // ===================================
 
@@ -303,44 +275,30 @@ function initThree() {
 }
 
 
-// --- PARTE 3: A FUNÇÃO "MAESTRO" QUE ORQUESTRA TUDO ---
+
+
+
+
+
+
 
 function bootAnimations() {
-    console.log('Orquestrando inicialização de todas as funções...');
+    console.log('Iniciando reconstrução das animações...');
 
-    // 1. Configurações Iniciais
-    setupLenis();
-    setupGsapPlugins();
-    document.body.classList.add("theme-citrus"); // Define o tema inicial
+        console.log('[TEMA] Aplicando tema inicial: theme-citrus');
+    document.body.classList.add("theme-citrus");
 
-    // 2. Módulos de UI e Animações Gerais
-    setupButtonRipples();
-    initTextAnimations();
-    // (Cole aqui as chamadas das suas outras funções: parallax, faq, etc.)
+
+    // 1. Configurar Lenis (SEMPRE PRIMEIRO)
+    setupLenis(); // ✅ CHAMANDO A FUNÇÃO
+
+    // 2. Registrar plugins e eases do GSAP
+    setupGsapPlugins(); // ✅ CHAMANDO A FUNÇÃO
+
+    // 3. Ativar as animações e interatividades individuais
+    setupButtonRipples(); // ✅ CHAMANDO A FUNÇÃO
+    initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
     
-    // 3. Inicializador do 3D (lazy-load)
-    const threeSection = document.getElementById("capsula-3d");
-    if (threeSection) {
-        // Usa IntersectionObserver para só carregar o 3D quando a seção estiver visível
-        const io = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    initThree(); // Inicia a cena 3D
-                    observer.unobserve(threeSection); // Para de observar depois de carregar
-                }
-            });
-        }, { threshold: 0.1 }); // Carrega quando 10% da seção estiver visível
-        io.observe(threeSection);
-    }
-
-    // 4. Refresh final de segurança do ScrollTrigger
-    setTimeout(() => {
-        if (window.ScrollTrigger) {
-            console.log('✅ Forçando refresh final do ScrollTrigger.');
-            ScrollTrigger.refresh();
-        }
-    }, 500); // Aumentei um pouco o delay por causa da complexidade do 3D
-}
 
 
 
@@ -912,6 +870,21 @@ function bootAnimations() {
         }
     } else {
         console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
+    }
+
+    // 3. Inicializador do 3D (lazy-load)
+    const threeSection = document.getElementById("capsula-3d");
+    if (threeSection) {
+        // Usa IntersectionObserver para só carregar o 3D quando a seção estiver visível
+        const io = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    initThree(); // Inicia a cena 3D
+                    observer.unobserve(threeSection); // Para de observar depois de carregar
+                }
+            });
+        }, { threshold: 0.1 }); // Carrega quando 10% da seção estiver visível
+        io.observe(threeSection);
     }
 
 
