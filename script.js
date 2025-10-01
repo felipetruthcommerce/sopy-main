@@ -142,6 +142,47 @@ function initTextAnimations() {
 let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
+let _tl3d; // timeline global pra atualizar/kill quando precisar
+function setup3DScroll() {
+  const section = document.getElementById('capsula-3d');
+  if (!section || !window.gsap || !window.ScrollTrigger || !capsuleGroup) return;
+
+  // evita duplicar timelines
+  if (_tl3d) {
+    if (_tl3d.scrollTrigger) _tl3d.scrollTrigger.kill();
+    _tl3d.kill();
+    _tl3d = null;
+  }
+
+  // define o “comprimento” do pin/scroll (ajuste à vontade)
+  const END_DISTANCE = '+=200%';
+
+  _tl3d = gsap.timeline({
+    defaults: { ease: 'none' },
+    scrollTrigger: {
+      trigger: section,
+      start: 'top top',
+      end: END_DISTANCE,
+      pin: true,
+      scrub: 0.6,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+      onUpdate: () => { if (renderer && scene && camera) renderer.render(scene, camera); }
+    }
+  });
+
+  // rotação 360º no eixo Y durante o scroll
+  _tl3d.to(capsuleGroup.rotation, { y: '+=' + (Math.PI * 2) }, 0);
+
+  // um leve “tilt” e aproximação pra dar vida (opcional)
+  _tl3d.to(capsuleGroup.rotation, { x: '+=' + (Math.PI * 0.12) }, 0);
+  _tl3d.fromTo(camera.position, { z: 4.2 }, { z: 3.4 }, 0);
+
+  // garante ajuste se layout mudar
+  setTimeout(() => { try { ScrollTrigger.refresh(); } catch(e){} }, 50);
+}
+
+
 const MODELS = {
     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
     citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
@@ -187,6 +228,9 @@ function swapModel(theme) {
                 toCol(gelB, pal.b);
                 toCol(gelC, pal.c);
             }
+
+                if (typeof setup3DScroll === 'function') setup3DScroll();
+
         }, 
         undefined, 
         (error) => {
@@ -256,6 +300,14 @@ function initThree() {
     }
     
     setTheme(document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
+
+    // ... no FINAL da initThree()
+setup3DScroll();
+
+window.addEventListener('resize', () => {
+  try { ScrollTrigger.refresh(); } catch(e){}
+});
+
 }
 
 
