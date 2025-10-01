@@ -1603,7 +1603,7 @@ body.theme-aqua #beneficios {
 }
 
 body.theme-aqua #como-usar {
-  background: #1B263B; /* dark */
+  background: #083DA6; /* como usar: #083DA6 */
 }
 
 
@@ -1612,7 +1612,7 @@ body.theme-aqua #sustentabilidade {
 }
 
 body.theme-aqua #testemunhos {
-  background: #007BFF ; /* brand */
+  background: #007BFF; /* depoimentos: #007BFF */
 }
 
 body.theme-aqua #faq {
@@ -1637,11 +1637,11 @@ body.theme-citrus #fragrancias {
 }
 
 body.theme-citrus #sustentabilidade {
-  background: #5FD97E; /* updated to requested green for both themes  1B4332*/
+  background: #1B4332; /* sustentabilidade: #1B4332 */
 }
 
 body.theme-citrus #testemunhos {
-  background: #2D6A4F; /* brand */
+  background: #2D6A4F; /* depoimentos: #2D6A4F */
 }
 
 body.theme-citrus #faq {
@@ -1659,7 +1659,7 @@ body.theme-aqua #sustentabilidade .fullscreen-panel {
 }
 
 body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #1B4332 !important; /* mesma cor da seção citrus */
+  background-color: #1B4332 !important; /* sustentabilidade: #1B4332 */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
