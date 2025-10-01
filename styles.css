@@ -57,7 +57,7 @@ body {
   /* Use Avant Garde Book (lighter) for body text */
   font-family: 'Avant Garde Book BT';
   color: var(--text);
-  background: #0D1B2A; /* match FAQ section background to avoid white behind footer */
+  background: #1B4332; /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -89,13 +89,13 @@ img, video { display: block; max-width: 100%; }
   --line: #e5e7eb;
   --shadow: 0 10px 25px rgba(0,0,0,.12);
 
-  /* Aqua Blu (default) â€” palette: #083DA6, #076DF2, #0C87F2, #1DDDF2 */
-  --brand: #076DF2;       /* primary */
-  --brand-2: #0C87F2;     /* secondary */
-  --accent: #1DDDF2;      /* accent */
-  --brand-dark: #083DA6;  /* dark */
-  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(7,109,242,.18), transparent),
-              radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
+    /* Citrus Lush (default) — palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
+    --brand: #5FD97E;       /* primary */
+    --brand-2: #91D9A3;     /* secondary */
+    --accent: #D7D9D2;      /* accent/neutral */
+    --brand-dark: #167312;  /* dark */
+    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
+                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
   /* Water seam controls */
   --mask-start: 52%;   /* onde começa a desvanecer o vídeo (45â€“60%) */
   --seam-height: 22vh; /* altura da zona de mistura (15â€“30vh) */
@@ -103,12 +103,12 @@ img, video { display: block; max-width: 100%; }
 
 body.theme-citrus {
   /* Citrus Lush â€” palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
-  --brand: #5FD97E;       /* primary */
-  --brand-2: #91D9A3;     /* secondary */
-  --accent: #D7D9D2;      /* accent/neutral */
-  --brand-dark: #167312;  /* dark */
-  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
-              radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
+    --brand: #5FD97E;       /* primary */
+    --brand-2: #91D9A3;     /* secondary */
+    --accent: #D7D9D2;      /* accent/neutral */
+    --brand-dark: #167312;  /* dark */
+    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
+                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
 }
 
 /* Tipos */
@@ -1599,24 +1599,24 @@ body.theme-citrus #faq .sopy-faq-accordion {
 /* ========== SEÇÕES COM FUNDO TEMÁTICO (CORES FORTES) ========== */
 /* AQUA â€” blocos fortes e contrastantes */
 body.theme-aqua #beneficios {
-  background: #0D1B2A; /* brand */
+  background: #0D1B2A !important; /* brand */
 }
 
 body.theme-aqua #como-usar {
-  background: #083DA6; /* como usar: #083DA6 */
+  background: #083DA6 !important; /* como usar: #083DA6 */
 }
 
 
 body.theme-aqua #sustentabilidade {
-  background: #0D1B2A; /* aqua theme: set to requested blue */
+  background: #0D1B2A !important; /* aqua theme: set to requested blue */
 }
 
 body.theme-aqua #testemunhos {
-  background: #007BFF ; /* brand */
+  background: #007BFF !important; /* brand */
 }
 
 body.theme-aqua #faq {
-  background: #0D1B2A ; /* dark */
+  background: #0D1B2A !important; /* dark */
 }
 
 body.theme-aqua #capsula-3d {
@@ -1625,27 +1625,27 @@ body.theme-aqua #capsula-3d {
 
 /* CITRUS â€” verdes fortes com neutros escuros para variação */
 body.theme-citrus #beneficios {
-  background: #1B4332; /* brand */
+  background: #1B4332 !important; /* brand */
 }
 
 body.theme-citrus #como-usar {
-  background: #167312; /* dark */
+  background: #167312 !important; /* dark */
 }
 
 body.theme-citrus #fragrancias {
-  background: #436147; /* secondary */
+  background: #436147 !important; /* secondary */
 }
 
 body.theme-citrus #sustentabilidade {
-  background: #1B4332; /* sustentabilidade: #1B4332 */
+  background: #1B4332 !important; /* sustentabilidade: #1B4332 */
 }
 
 body.theme-citrus #testemunhos {
-  background: #2D6A4F; /* brand */
+  background: #2D6A4F !important; /* brand */
 }
 
 body.theme-citrus #faq {
-  background: #1B4332; /* dark */
+  background: #1B4332 !important; /* dark */
 }
 
 body.theme-citrus #capsula-3d {
@@ -1653,7 +1653,7 @@ body.theme-citrus #capsula-3d {
 
 }
 
-/* Ensure panels use solid backgrounds with the same colors as their sections */
+/* Ensure panels use solid backgrounds with the same colors as their sections a */
 body.theme-aqua #sustentabilidade .fullscreen-panel {
   background-color: #0D1B2A !important; /* same as aqua sustentabilidade section */
 }
@@ -1667,8 +1667,8 @@ body.theme-citrus #sustentabilidade .fullscreen-panel {
 @media (min-width: 960px){ .tc-wrap{ grid-template-columns: 1fr 1.4fr } }
 
 /* cores por tema (section background) */
-body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007BFF; color:#e9e9ee }
-body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(95,217,126,.06), transparent 55%), #2D6A4F; color:#e9e9ee }
+body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007BFF !important; color:#e9e9ee }
+body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(95,217,126,.06), transparent 55%), #2D6A4F !important; color:#e9e9ee }
 
 .tc-left .tc-title{ font-size: clamp(28px, 4vw, 44px); line-height:1.12; letter-spacing:.2px; margin:0 0 16px; font-weight:800 }
 .tc-sub{ color:#cfd6d8; max-width:44ch; margin:0 0 24px }
