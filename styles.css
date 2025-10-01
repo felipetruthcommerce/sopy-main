@@ -1123,7 +1123,7 @@ body.theme-aqua .sopy-how-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Remove transparent background to allow solid theme colors */
+  background-color: #5FD97E; /* cor padrão citrus, será sobrescrita pelos temas */
 }
 
 /* Container flexível para o conteúdo do painel */
@@ -1653,13 +1653,13 @@ body.theme-citrus #capsula-3d {
 
 }
 
-/* Ensure panels use solid backgrounds with the same colors as their sections */
+/* Painéis com fundo sólido usando as mesmas cores das seções */
 body.theme-aqua #sustentabilidade .fullscreen-panel {
-  background-color: #0D1B2A !important; /* same as aqua sustentabilidade section */
+  background-color: #0D1B2A !important; /* mesma cor da seção aqua */
 }
 
 body.theme-citrus #sustentabilidade .fullscreen-panel {
-  background-color: #1B4332 !important; /* same as citrus sustentabilidade section */
+  background-color: #5FD97E !important; /* mesma cor da seção citrus */
 }
 
 .tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
