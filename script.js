@@ -242,6 +242,47 @@ function initThree() {
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
 
+    // === SPIN ON SCROLL (giro por scroll – sem pin) ===
+(function setupCapsuleSpinOnScroll(){
+  const spinSection = document.getElementById('capsula-3d');
+  if (!spinSection || !capsuleGroup) return;
+
+  const TWO_PI = Math.PI * 2;
+  let spinRaf = null;
+
+  // Progresso 0..1 enquanto a seção atravessa a viewport
+  function computeProgress(){
+    const rect = spinSection.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    // Faixa estendida: começa quando a seção encosta no fundo e termina quando sai pelo topo
+    const total = rect.height + vh;
+    const seen  = vh - rect.top;             // quanto da faixa já passou
+    return Math.max(0, Math.min(1, seen / total));
+  }
+
+  function onScrollSpin(){
+    if (spinRaf) return;
+    spinRaf = requestAnimationFrame(()=>{
+      spinRaf = null;
+      const p = computeProgress();
+      // 1 volta completa (360º) mapeada no progresso
+      capsuleGroup.rotation.y = p * TWO_PI;
+    });
+  }
+
+  // Usa Lenis se existir; senão, scroll nativo
+  if (window.lenis && typeof window.lenis.on === 'function'){
+    window.lenis.on('scroll', onScrollSpin);
+  } else {
+    window.addEventListener('scroll', onScrollSpin, { passive: true });
+  }
+  window.addEventListener('resize', onScrollSpin);
+
+  // Estado inicial
+  onScrollSpin();
+})();
+
+
     function animate() {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
