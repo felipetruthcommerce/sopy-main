@@ -119,6 +119,17 @@ body.theme-citrus {
                 radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
 }
 
+/* Aqua theme token overrides: ensure all var(--brand*) switch on theme */
+body.theme-aqua {
+  /* Aqua Blues — align with 3D palette and section colors */
+  --brand: #076DF2;       /* primary */
+  --brand-2: #0C87F2;     /* secondary */
+  --accent: #1DDDF2;      /* accent/neutral */
+  --brand-dark: #083DA6;  /* dark (used by hero title and Como Usar bg) */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(12,135,242,.18), transparent),
+              radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
+}
+
 /* Tipos */
 /* Headings use Inter Tight for a tighter display; fallback to Avant Garde Demi */
 h1, h2, h3, h4, h5, h6 { font-family: 'Inter Tight', 'Avant Garde Demi BT', sans-serif; font-weight: 600; letter-spacing: 0; }
