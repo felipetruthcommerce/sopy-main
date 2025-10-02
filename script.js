@@ -170,6 +170,20 @@ function swapModel(theme) {
             }
             const model = gltf.scene;
             capsuleGroup.add(model);
+
+            // aumenta/refina o brilho do material PBR com o environment
+// Depois de: capsuleGroup.add(model);
+model.traverse((obj) => {
+  if (obj.isMesh && obj.material) {
+    // deixa mais “gel” com highlights bonitos
+    if ('roughness' in obj.material) obj.material.roughness = 0.3;  // menos áspero
+    if ('metalness' in obj.material) obj.material.metalness = 0.1;  // um toque metálico
+    if ('envMapIntensity' in obj.material) obj.material.envMapIntensity = 0.35; // reflexo discreto
+    obj.material.needsUpdate = true;
+  }
+});
+
+
             
             // Re-captura os materiais após carregar o novo modelo
             gelA = model.getObjectByName('Gel_A')?.material;
@@ -227,47 +241,45 @@ function initThree() {
     camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
     camera.position.set(0, 0, 4.2);
 
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-    renderer.physicallyCorrectLights = true;
+// RENDERER
+renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.25; // 1.15–1.35 ajuste fino
-renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMappingExposure = 1.1; // um tiquinho mais claro que 1.0
+renderer.outputEncoding = THREE.SRGBColorSpace; // use sRGBEncoding se sua versão for antiga
 threeWrap.appendChild(renderer.domElement);
-    
-// --- Luzes (chave/fill/ambiente + rim opcional)
-const amb = new THREE.HemisphereLight(0xffffff, 0x6ba08a, 0.45); // céu / chão
+
+// LUZES (look “foto”: key forte, fill leve, rim suave)
+const amb  = new THREE.AmbientLight(0xffffff, 0.9);
 scene.add(amb);
 
-const key = new THREE.DirectionalLight(0xffffff, 1.7); // luz principal mais forte
-key.position.set(2.2, 3.8, 2.5);                       // cima-direita-frente
-key.castShadow = false;
+const key  = new THREE.DirectionalLight(0xffffff, 1.6); // brilho principal
+key.position.set(2.8, 3.5, 2.2);
 scene.add(key);
 
-const fill = new THREE.DirectionalLight(0xffffff, 0.55); // preenchimento suave
-fill.position.set(-2.5, 0.5, 2.2);                       // esquerda-baixa
+const fill = new THREE.DirectionalLight(0xffffff, 0.5); // suaviza sombras
+fill.position.set(-2.2, 0.6, 2.0);
 scene.add(fill);
 
-// (opcional) leve rim para dar recorte no topo
-const rim = new THREE.DirectionalLight(0xffffff, 0.25);
-rim.position.set(0, 2.8, -2.5); // vindo de trás
+const rim  = new THREE.DirectionalLight(0xffffff, 0.35); // recorte por trás
+rim.position.set(0, 1.8, -2.4);
 scene.add(rim);
+
+// ENV MAP (reflexo discreto tipo estúdio)
+const pmrem = new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
 
 
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
 
-    // --- Environment HDRI (suave/estúdio). Você pode trocar a URL por outra HDRI sua.
-const pmremGen = new THREE.PMREMGenerator(renderer);
-pmremGen.compileEquirectangularShader();
 
 new THREE.RGBELoader()
   .setDataType(THREE.UnsignedByteType)
   .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr', (hdr) => {
-    const envMap = pmremGen.fromEquirectangular(hdr).texture;
-    scene.environment = envMap;   // PBR reflections
+    const tex = pmremGen.fromEquirectangular(hdr).texture;
+    scene.environment = tex;   // PBR reflections
     scene.background  = null;     // mantemos teu gradiente da página
     hdr.dispose();
     pmremGen.dispose();
