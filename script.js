@@ -307,8 +307,8 @@ new THREE.RGBELoader()
     const SPIN_END   = toNum(ds.spinEnd, 0.65);   // termina o giro (360°) e fica reto
 
     // alturas em coordenadas do mundo 3D
-    const Y_START = toNum(ds.yStart, 1.0);        // começa alto (visível)
-    const Y_END   = toNum(ds.yEnd, -0.15);        // posição final no MEIO da seção
+    const Y_START = toNum(ds.yStart, 5.0);        // começa alto (visível)
+    const Y_END   = toNum(ds.yEnd, -2.15);        // posição final no MEIO da seção
 
   const TWO_PI = Math.PI * 2;
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
