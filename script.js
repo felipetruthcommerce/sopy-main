@@ -249,15 +249,23 @@ function initThree() {
 
   const TWO_PI = Math.PI * 2;
   let spinRaf = null;
+  let lastP = -1; // para debouncing
 
-  // Progresso 0..1 enquanto a seção atravessa a viewport
+  // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
+  // e termina quando o fundo da seção encosta no topo da viewport
   function computeProgress(){
     const rect = spinSection.getBoundingClientRect();
     const vh   = window.innerHeight;
-    // Faixa estendida: começa quando a seção encosta no fundo e termina quando sai pelo topo
-    const total = rect.height + vh;
-    const seen  = vh - rect.top;             // quanto da faixa já passou
+    const total = rect.height + vh;     // faixa “vista” total
+    const seen  = vh - rect.top;        // quanto da faixa já passou
     return Math.max(0, Math.min(1, seen / total));
+  }
+
+  function applySpin(p){
+    // snap exato nas pontas pra não “passar” nem continuar girando
+    if (p <= 0) { capsuleGroup.rotation.y = 0; return; }
+    if (p >= 1) { capsuleGroup.rotation.y = TWO_PI; return; }
+    capsuleGroup.rotation.y = p * TWO_PI;
   }
 
   function onScrollSpin(){
@@ -265,12 +273,13 @@ function initThree() {
     spinRaf = requestAnimationFrame(()=>{
       spinRaf = null;
       const p = computeProgress();
-      // 1 volta completa (360º) mapeada no progresso
-      capsuleGroup.rotation.y = p * TWO_PI;
+      if (p === lastP) return;
+      lastP = p;
+      applySpin(p);
     });
   }
 
-  // Usa Lenis se existir; senão, scroll nativo
+  // usa Lenis se existir; senão, scroll nativo
   if (window.lenis && typeof window.lenis.on === 'function'){
     window.lenis.on('scroll', onScrollSpin);
   } else {
@@ -278,7 +287,7 @@ function initThree() {
   }
   window.addEventListener('resize', onScrollSpin);
 
-  // Estado inicial
+  // estado inicial
   onScrollSpin();
 })();
 
