@@ -262,10 +262,23 @@ function initThree() {
   }
 
   function applySpin(p){
-    // snap exato nas pontas pra não “passar” nem continuar girando
-    if (p <= 0) { capsuleGroup.rotation.y = 0; return; }
-    if (p >= 1) { capsuleGroup.rotation.y = TWO_PI; return; }
-    capsuleGroup.rotation.y = p * TWO_PI;
+     // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
+  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
+  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
+
+  // memoriza o yaw inicial do modelo na primeira atualização
+  if (window.__capsuleBaseYaw == null) {
+    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
+  }
+
+  // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
+  let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
+  t = Math.max(0, Math.min(1, t)); // clamp 0..1
+
+  // faz exatamente 360° nesse intervalo e PARA
+  const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
+  capsuleGroup.rotation.y = yaw;
+
   }
 
   function onScrollSpin(){
