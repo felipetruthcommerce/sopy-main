@@ -284,80 +284,87 @@ new THREE.RGBELoader()
   }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
-(function setupCapsuleSpinOnScroll() {
-  const spinSection = document.getElementById('capsula-3d');
-  if (!spinSection || !capsuleGroup) return;
+// === DESCER + GIRAR (leve, sem pin, para no meio da seção) ===
+(function setupCapsuleSpinOnScroll () {
+  const section = document.getElementById('capsula-3d');
+  if (!section || !capsuleGroup) return;
 
-  // Ajustes principais
-  const DROP_START = 0.00; // começa a descer já no início da seção
-  const DROP_END   = 0.50; // PARA de descer no meio da seção (0.50 == meio)
-  const SPIN_START = 0.05; // começa a girar bem cedo
-  const SPIN_END   = 0.65; // termina o giro aqui
+  // Config: onde desce/para e onde gira
+  const DROP_START = 0.00;  // começa a descer assim que a seção entra
+  const DROP_END   = 0.50;  // para de descer no MEIO da seção
+  const SPIN_START = 0.05;  // começa a girar bem cedo
+  const SPIN_END   = 0.65;  // termina o giro aqui (fica reto depois)
 
-  // Posição inicial visível (não muito alta!)
-  const Y_START = 2.2;     // ~já aparece no topo da seção
-  const Y_END   = -0.8;    // ~meio da seção (ajuste fino conforme seu layout)
-  const baseYaw = 0;       // frente
+  // Ajuste fino de posição no seu mundo 3D (já entra visível!)
+  const Y_START = 1.2;      // posição inicial (no topo da seção, já visível)
+  const Y_END   = -0.2;     // onde ela “assenta” (meio da seção)
+  const baseYaw = 0;        // frente “reta”
 
-  // Garante estado inicial visível e reto
-  capsuleGroup.rotation.set(0, baseYaw, 0);
+  // Estado inicial (já aparece reta e no topo da seção)
   capsuleGroup.position.y = Y_START;
+  capsuleGroup.rotation.set(0, baseYaw, 0);
 
-  let spinRaf = null;
-  let lastP = -1;
+  // Cache de métricas (evita layout thrash)
+  let sectionTop = 0, sectionHeight = 0, viewportH = window.innerHeight;
+  function recalc() {
+    const rect = section.getBoundingClientRect();
+    sectionTop = window.scrollY + rect.top;
+    sectionHeight = rect.height;
+    viewportH = window.innerHeight;
+  }
+  recalc();
 
-  const clamp01 = v => Math.max(0, Math.min(1, v));
-  const easeInOutSine = t => 0.5 - 0.5 * Math.cos(Math.PI * t);
-
-  // progresso 0..1 ao atravessar a viewport
-  function computeProgress() {
-    const rect = spinSection.getBoundingClientRect();
-    const vh   = window.innerHeight;
-    const total = rect.height + vh;
-    const seen  = vh - rect.top;
-    return clamp01(seen / total);
+  // Progresso 0..1 usando scrollY (rápido)
+  function progress() {
+    const y = window.scrollY;
+    const total = sectionHeight + viewportH;
+    const seen  = (viewportH + y) - sectionTop;
+    return Math.max(0, Math.min(1, seen / total));
   }
 
-  function applySpinAndDrop(p) {
-    // DESCIDA — ativa desde o início; trava no meio
-    let td = clamp01((p - DROP_START) / (DROP_END - DROP_START)); // 0..1
-    const y = Y_START + (Y_END - Y_START) * easeInOutSine(td);
-    capsuleGroup.position.y = (p <= DROP_START) ? Y_START :
-                              (p >= DROP_END)   ? Y_END   : y;
+  const clamp01 = v => v < 0 ? 0 : (v > 1 ? 1 : v);
+  const ease    = t => 0.5 - 0.5 * Math.cos(Math.PI * t);
 
-    // GIRO — só entre SPIN_START..SPIN_END; reto antes e depois
+  let ticking = false;
+  function update() {
+    const p = progress();
+
+    // DESCIDA (0..1) e trava no meio
+    let td = clamp01((p - DROP_START) / (DROP_END - DROP_START));
+    const yy = Y_START + (Y_END - Y_START) * ease(td);
+    capsuleGroup.position.y = (p <= DROP_START) ? Y_START
+                              : (p >= DROP_END) ? Y_END
+                              : yy;
+
+    // GIRO 360º somente entre SPIN_START..SPIN_END
     if (p <= SPIN_START) {
       capsuleGroup.rotation.y = baseYaw;
     } else if (p >= SPIN_END) {
-      capsuleGroup.rotation.y = baseYaw + Math.PI * 2; // 360°
+      capsuleGroup.rotation.y = baseYaw + Math.PI * 2; // trava reto após 360
     } else {
       const ts = (p - SPIN_START) / (SPIN_END - SPIN_START); // 0..1
       capsuleGroup.rotation.y = baseYaw + ts * (Math.PI * 2);
     }
+
+    ticking = false;
   }
 
-  function onScrollSpin() {
-    if (spinRaf) return;
-    spinRaf = requestAnimationFrame(() => {
-      spinRaf = null;
-      const p = computeProgress();
-      if (p === lastP) return;
-      lastP = p;
-      applySpinAndDrop(p);
-    });
+  function onScroll() {
+    if (!ticking) { ticking = true; requestAnimationFrame(update); }
   }
 
-  // Lenis ou scroll nativo
+  // Lenis (se existir) ou scroll nativo
   if (window.lenis && typeof window.lenis.on === 'function') {
-    window.lenis.on('scroll', onScrollSpin);
+    window.lenis.on('scroll', onScroll);
   } else {
-    window.addEventListener('scroll', onScrollSpin, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
   }
-  window.addEventListener('resize', onScrollSpin);
+  window.addEventListener('resize', () => { recalc(); onScroll(); });
 
-  // Estado inicial (já visível e reto)
-  applySpinAndDrop(0);
+  // Estado inicial já pronto (sem “aparecer do nada”)
+  update();
 })();
+
 
 
     function animate() {
