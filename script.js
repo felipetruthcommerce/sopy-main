@@ -294,13 +294,21 @@ new THREE.RGBELoader()
   if (!spinSection || typeof capsuleGroup === 'undefined' || !capsuleGroup || !renderer) return;
 
   // -------- parâmetros de controle (ajuste livre) --------
-  const DROP_END   = 0.50;  // até onde o objeto DESCE (0..1 do progresso da seção) — pára no meio
-  const SPIN_START = 0.05;  // começa a girar
-  const SPIN_END   = 0.65;  // termina o giro (360°) e fica reto
+    // Você pode sobrescrever estes valores via data-attributes no elemento #capsula-3d
+    // Ex.: <section id="capsula-3d" data-drop-end="0.55" data-y-end="-0.25" ...>
+    const ds = spinSection.dataset || {};
+    const toNum = (v, fb) => {
+        const s = v == null ? '' : String(v).trim();
+        const n = parseFloat(s);
+        return Number.isFinite(n) ? n : fb;
+    };
+    const DROP_END   = toNum(ds.dropEnd, 0.50);  // até onde o objeto DESCE (0..1 do progresso da seção) — pára no meio
+    const SPIN_START = toNum(ds.spinStart, 0.05); // começa a girar
+    const SPIN_END   = toNum(ds.spinEnd, 0.65);   // termina o giro (360°) e fica reto
 
-  // alturas em coordenadas do mundo 3D
-  const Y_START = 1.0;      // começa alto (visível)
-  const Y_END   = -0.15;    // posição final no MEIO da seção
+    // alturas em coordenadas do mundo 3D
+    const Y_START = toNum(ds.yStart, 1.0);        // começa alto (visível)
+    const Y_END   = toNum(ds.yEnd, -0.15);        // posição final no MEIO da seção
 
   const TWO_PI = Math.PI * 2;
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
@@ -348,12 +356,24 @@ new THREE.RGBELoader()
     }
   }
 
-  // força nossa sincronização ANTES de cada render (ganha de outras animações)
-  const origRender = renderer.render.bind(renderer);
-  renderer.render = function(sceneArg, cameraArg){
-    syncFromScroll();
-    return origRender(sceneArg, cameraArg);
-  };
+    // força nossa sincronização ANTES de cada render (ganha de outras animações)
+    // aplica apenas uma vez
+    if (!renderer.__capsuleSyncPatched) {
+        const origRender = renderer.render.bind(renderer);
+        renderer.render = function(sceneArg, cameraArg){
+            syncFromScroll();
+            return origRender(sceneArg, cameraArg);
+        };
+        renderer.__capsuleSyncPatched = true;
+    }
+
+    // Além disso, garante no nível do objeto: executa antes de renderizar o grupo
+    if (!capsuleGroup.__syncBeforeRenderAttached) {
+        capsuleGroup.onBeforeRender = () => {
+            try { syncFromScroll(); } catch (e) { /* no-op */ }
+        };
+        capsuleGroup.__syncBeforeRenderAttached = true;
+    }
 
   // mantém as métricas atualizadas e aplica estado inicial
   window.addEventListener('resize', () => { recalc(); });
@@ -394,6 +414,8 @@ new THREE.RGBELoader()
 
 
 function bootAnimations() {
+    if (window.__bootedAnimations) return; // evita rodar 2x
+    window.__bootedAnimations = true;
     console.log('Iniciando reconstrução das animações...');
 
         console.log('[TEMA] Aplicando tema inicial: theme-citrus');
@@ -1058,3 +1080,12 @@ if (heroVideo && heroPoster) {
     
     
 } // Fim da função bootAnimations
+
+// Auto-start quando o DOM estiver pronto
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        try { bootAnimations(); } catch (e) { console.error('[BOOT] Falha ao iniciar animações:', e); }
+    });
+} else {
+    try { bootAnimations(); } catch (e) { console.error('[BOOT] Falha ao iniciar animações:', e); }
+}
