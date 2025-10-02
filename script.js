@@ -284,57 +284,61 @@ new THREE.RGBELoader()
   }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
-(function setupCapsuleSpinOnScroll(){
+(function setupCapsuleSpinOnScroll() {
   const spinSection = document.getElementById('capsula-3d');
   if (!spinSection || !capsuleGroup) return;
 
-  const TWO_PI = Math.PI * 2;
-  let spinRaf = null;
-  let lastP = -1; // para debouncing
+  // CONFIGS — ajuste se quiser
+  const SPIN_START = 0.05;   // quando começa a girar
+  const SPIN_END   = 0.65;   // quando termina o giro (e a descida)
+  const DROP_START = 0.00;   // quando começa a descer
+  const DROP_END   = 0.65;   // quando termina a descida (para no meio)
+  const Y_START    = 12;     // posição Y inicial (acima)
+  const Y_END      = 0;      // posição Y final (meio da seção)
 
-  // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
-  // e termina quando o fundo da seção encosta no topo da viewport
-  function computeProgress(){
+  // memoriza referências iniciais uma única vez
+  if (window.__capsuleBaseYaw == null) window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
+  if (window.__capsuleBaseY  == null) window.__capsuleBaseY  = capsuleGroup.position.y || Y_START;
+
+  let spinRaf = null;
+  let lastP = -1;
+
+  function clamp01(v){ return Math.max(0, Math.min(1, v)); }
+  function easeInOutSine(t){ return 0.5 - 0.5 * Math.cos(Math.PI * t); }
+
+  // progresso 0..1 enquanto a seção cruza a viewport
+  function computeProgress() {
     const rect = spinSection.getBoundingClientRect();
     const vh   = window.innerHeight;
-    const total = rect.height + vh;     // faixa “vista” total
-    const seen  = vh - rect.top;        // quanto da faixa já passou
-    return Math.max(0, Math.min(1, seen / total));
+    const total = rect.height + vh;
+    const seen  = vh - rect.top;
+    return clamp01(seen / total);
   }
 
-  function applySpin(p){
-     // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
-  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
-  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
+  function applySpinAndDrop(p) {
+    // --- GIRO 0→360° entre SPIN_START..SPIN_END
+    let ts = clamp01((p - SPIN_START) / (SPIN_END - SPIN_START));
+    capsuleGroup.rotation.y = window.__capsuleBaseYaw + ts * (Math.PI * 2);
 
-  // memoriza o yaw inicial do modelo na primeira atualização
-  if (window.__capsuleBaseYaw == null) {
-    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
+    // --- DESCIDA Y entre DROP_START..DROP_END (e PARA)
+    let td = clamp01((p - DROP_START) / (DROP_END - DROP_START));
+    const y = window.__capsuleBaseY + (Y_END - window.__capsuleBaseY) * easeInOutSine(td);
+    capsuleGroup.position.y = (p >= DROP_END) ? Y_END : y;
   }
 
-  // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
-  let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
-  t = Math.max(0, Math.min(1, t)); // clamp 0..1
-
-  // faz exatamente 360° nesse intervalo e PARA
-  const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
-  capsuleGroup.rotation.y = yaw;
-
-  }
-
-  function onScrollSpin(){
+  function onScrollSpin() {
     if (spinRaf) return;
-    spinRaf = requestAnimationFrame(()=>{
+    spinRaf = requestAnimationFrame(() => {
       spinRaf = null;
       const p = computeProgress();
       if (p === lastP) return;
       lastP = p;
-      applySpin(p);
+      applySpinAndDrop(p);
     });
   }
 
   // usa Lenis se existir; senão, scroll nativo
-  if (window.lenis && typeof window.lenis.on === 'function'){
+  if (window.lenis && typeof window.lenis.on === 'function') {
     window.lenis.on('scroll', onScrollSpin);
   } else {
     window.addEventListener('scroll', onScrollSpin, { passive: true });
@@ -792,24 +796,24 @@ if (heroVideo && heroPoster) {
         }
     }
 
-    // --- Parte 2: Lógica para a Barra de Progresso Global ---
-    // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
-    const pageBar = document.querySelector('.page-progress-bar');
-    const pageCirc = document.querySelector('.progress-circle-bar');
-    if (pageBar || pageCirc) {
-        const CIRCUMFERENCE = 2 * Math.PI * 45; // raio 45 do SVG
-        const updatePageProgress = () => {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const y = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop || 0);
-            const p = docHeight > 0 ? Math.max(0, Math.min(1, y / docHeight)) : 0;
-            if (pageBar) pageBar.style.transform = `scaleX(${p})`;
-            if (pageCirc) pageCirc.style.strokeDashoffset = `${CIRCUMFERENCE * (1 - p)}`;
-        };
-        try { if (window.lenis) window.lenis.on('scroll', updatePageProgress); } catch(e){}
-        window.addEventListener('resize', updatePageProgress);
-        // init
-        updatePageProgress();
-    }
+    // // --- Parte 2: Lógica para a Barra de Progresso Global ---
+    // // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
+    // const pageBar = document.querySelector('.page-progress-bar');
+    // const pageCirc = document.querySelector('.progress-circle-bar');
+    // if (pageBar || pageCirc) {
+    //     const CIRCUMFERENCE = 2 * Math.PI * 45; // raio 45 do SVG
+    //     const updatePageProgress = () => {
+    //         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    //         const y = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop || 0);
+    //         const p = docHeight > 0 ? Math.max(0, Math.min(1, y / docHeight)) : 0;
+    //         if (pageBar) pageBar.style.transform = `scaleX(${p})`;
+    //         if (pageCirc) pageCirc.style.strokeDashoffset = `${CIRCUMFERENCE * (1 - p)}`;
+    //     };
+    //     try { if (window.lenis) window.lenis.on('scroll', updatePageProgress); } catch(e){}
+    //     window.addEventListener('resize', updatePageProgress);
+    //     // init
+    //     updatePageProgress();
+    // }
 
    // ===================================
     //  BLOCO DOS DEPOIMENTOS 
