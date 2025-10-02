@@ -387,19 +387,36 @@ function bootAnimations() {
     initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
     
 
-// ===================================
-    //  ✅ NOVO BLOCO PARA REVELAR O VÍDEO DA HERO
-    // ===================================
-    const heroVideo = document.getElementById('heroVideo');
-    const heroPoster = document.querySelector('.sopy-hero-poster');
+// =======================================================
+//  ✅ BLOCO SUPER ROBUSTO PARA REVELAR O VÍDEO DA HERO
+// =======================================================
+const heroVideo = document.getElementById('heroVideo');
+const heroPoster = document.querySelector('.sopy-hero-poster');
 
-    if (heroVideo && heroPoster) {
-        // 'canplay' é um evento que dispara quando o vídeo já carregou o suficiente para tocar
-        heroVideo.addEventListener('canplay', () => {
-            console.log('[HERO] Vídeo pronto. Removendo poster.');
+if (heroVideo && heroPoster) {
+    const revealVideo = () => {
+        // Checa se a classe já foi adicionada para não repetir a lógica
+        if (!heroPoster.classList.contains('is-hidden')) {
+            console.log('[HERO] Garantindo a remoção do poster.');
             heroPoster.classList.add('is-hidden');
-        }, { once: true }); // { once: true } garante que isso só aconteça uma vez
+        }
+    };
+
+    // --- TENTATIVA 1: O vídeo já está pronto? (Resolve se o script rodar depois)
+    if (heroVideo.readyState >= 3) {
+        revealVideo();
+    } else {
+    // --- TENTATIVA 2: Esperar pelo sinal do vídeo (O ideal)
+        heroVideo.addEventListener('canplay', revealVideo, { once: true });
     }
+
+    // --- TENTATIVA 3 (PLANO C - À PROVA DE FALHAS): Esperar a página inteira carregar
+    // Se o evento 'canplay' falhar por algum motivo, isso garante que o poster suma.
+    window.addEventListener('load', () => {
+        // Adiciona um pequeno delay para garantir que a renderização da página terminou
+        setTimeout(revealVideo, 250); 
+    });
+}
 
     // ===================================
     //  BLOCO 2: EFEITO PARALLAX (SUSTENTABILIDADE)
