@@ -1655,7 +1655,7 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
      — this keeps them visually under the cards, not at the viewport bottom */
   position: absolute;
   left: 50%;
-  bottom: 36px;
+  bottom: -56px; /* sits below the cards container when placed inside .tc-right */
   transform: translateX(-50%);
   display: flex;
   align-items: center;

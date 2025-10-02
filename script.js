@@ -801,8 +801,14 @@ function bootAnimations() {
         if (!tcProgressWrap) {
             tcProgressWrap = document.createElement('div');
             tcProgressWrap.className = 'tc-progress-wrap';
-            // inserir no final da seção para manter o escopo visual
-            testimonialsSection.appendChild(tcProgressWrap);
+            // Prefer append inside the right column so the dots center under the cards
+            const rightCol = testimonialsSection.querySelector('.tc-right');
+            if (rightCol) {
+                rightCol.appendChild(tcProgressWrap);
+            } else {
+                // fallback: append to section
+                testimonialsSection.appendChild(tcProgressWrap);
+            }
         }
 
         // Limpa e cria dots dinâmicos dentro do wrap da seção
@@ -815,6 +821,24 @@ function bootAnimations() {
         });
 
         const dots = tcProgressWrap.querySelectorAll('.tc-progress-dot');
+
+        // Populate avatar images (if placeholders exist) with public images
+        try {
+            const avatarUrls = [
+                'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&auto=format&q=60',
+                'https://images.unsplash.com/photo-1545996124-1b3b0a1b6f3d?w=200&h=200&fit=crop&auto=format&q=60',
+                'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=200&h=200&fit=crop&auto=format&q=60',
+                'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=200&h=200&fit=crop&auto=format&q=60',
+                'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=200&h=200&fit=crop&auto=format&q=60'
+            ];
+            const avatars = testimonialsSection.querySelectorAll('img.tc-avatar');
+            avatars.forEach((img, i) => {
+                const url = avatarUrls[i % avatarUrls.length];
+                if (img && !img.getAttribute('src')) img.setAttribute('src', url);
+            });
+        } catch (e) {
+            console.warn('[DEPOIMENTOS] Falha ao popular avatares:', e);
+        }
 
         if (track && cards.length > 0) {
             let currentIndex = 0;
