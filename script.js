@@ -270,21 +270,18 @@ scene.add(rim);
 const pmrem = new THREE.PMREMGenerator(renderer);
 pmrem.compileEquirectangularShader();
 
-
-    capsuleGroup = new THREE.Group();
-    scene.add(capsuleGroup);
-
+capsuleGroup = new THREE.Group();
+scene.add(capsuleGroup);
 
 new THREE.RGBELoader()
   .setDataType(THREE.UnsignedByteType)
   .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr', (hdr) => {
-    const pmrem = pmrem.fromEquirectangular(hdr).texture;
-    scene.environment = pmrem;   // PBR reflections
-    scene.background  = null;     // mantemos teu gradiente da página
+    const tex = pmrem.fromEquirectangular(hdr).texture;
+    scene.environment = tex;   // PBR reflections
+    scene.background  = null;  // mantemos teu gradiente da página
     hdr.dispose();
     pmrem.dispose();
   }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
-
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
 (function setupCapsuleSpinOnScroll(){
