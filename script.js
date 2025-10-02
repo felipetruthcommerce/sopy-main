@@ -387,7 +387,19 @@ function bootAnimations() {
     initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
     
 
+// ===================================
+    //  ✅ NOVO BLOCO PARA REVELAR O VÍDEO DA HERO
+    // ===================================
+    const heroVideo = document.getElementById('heroVideo');
+    const heroPoster = document.querySelector('.sopy-hero-poster');
 
+    if (heroVideo && heroPoster) {
+        // 'canplay' é um evento que dispara quando o vídeo já carregou o suficiente para tocar
+        heroVideo.addEventListener('canplay', () => {
+            console.log('[HERO] Vídeo pronto. Removendo poster.');
+            heroPoster.classList.add('is-hidden');
+        }, { once: true }); // { once: true } garante que isso só aconteça uma vez
+    }
 
     // ===================================
     //  BLOCO 2: EFEITO PARALLAX (SUSTENTABILIDADE)
