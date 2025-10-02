@@ -284,124 +284,66 @@ new THREE.RGBELoader()
   }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
-// === DESCER + GIRAR (leve, sem pin, para no meio da seção) ===
-(function CapsuleStickySpinOnlyJS () {
-  const SECTION_ID = 'capsula-3d';
-  const CANVAS_ID  = 'three-container';
+(function setupCapsuleSpinOnScroll(){
+  const spinSection = document.getElementById('capsula-3d');
+  if (!spinSection || !capsuleGroup) return;
 
-  // 1) Injeta o estilo necessário (sticky) SEM tocar no seu CSS
-  (function injectStyles(){
-    const css = `
-      #${CANVAS_ID}{
-        position: sticky;
-        top: 50vh;
-        transform: translateY(-50%);
-        height: 60vh;
-      }
-      #${SECTION_ID}{
-        min-height: 220vh;
-      }
-    `;
-    const s = document.createElement('style');
-    s.setAttribute('data-capsule-sticky-spin', 'true');
-    s.textContent = css;
-    document.head.appendChild(s);
-  })();
+  const TWO_PI = Math.PI * 2;
+  let spinRaf = null;
+  let lastP = -1; // para debouncing
 
-  // 2) Espera a seção e o grupo 3D existirem (robusto p/ init assíncrono)
-  function ready() {
-    const section = document.getElementById(SECTION_ID);
-    // `capsuleGroup` deve estar em escopo global do seu initThree()
-    const group = (typeof window.capsuleGroup !== 'undefined') ? window.capsuleGroup : (typeof capsuleGroup !== 'undefined' ? capsuleGroup : null);
-    return section && group ? { section, group } : null;
+  // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
+  // e termina quando o fundo da seção encosta no topo da viewport
+  function computeProgress(){
+    const rect = spinSection.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    const total = rect.height + vh;     // faixa “vista” total
+    const seen  = vh - rect.top;        // quanto da faixa já passou
+    return Math.max(0, Math.min(1, seen / total));
   }
 
-  function waitForReady(cb, tries=0){
-    const r = ready();
-    if (r) return cb(r.section, r.group);
-    if (tries > 200) return; // ~4s de espera máx
-    setTimeout(() => waitForReady(cb, tries+1), 20);
+  function applySpin(p){
+     // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
+  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
+  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
+
+  // memoriza o yaw inicial do modelo na primeira atualização
+  if (window.__capsuleBaseYaw == null) {
+    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
   }
 
-  waitForReady((section, group) => {
-    // ===== Configuráveis (fáceis de ajustar) =====
-    const DROP_END   = 0.50;   // para de descer no MEIO da seção
-    const SPIN_START = 0.05;   // começa giro cedo
-    const SPIN_END   = 0.65;   // termina giro antes do fim
-    const BASE_YAW   = 0;      // frente “reta”
+  // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
+  let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
+  t = Math.max(0, Math.min(1, t)); // clamp 0..1
 
-    // Posições no mundo 3D
-    const Y_START = 1.0;       // já entra visível
-    const Y_END   = -0.15;     // altura quando “assenta” no meio
+  // faz exatamente 360° nesse intervalo e PARA
+  const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
+  capsuleGroup.rotation.y = yaw;
 
-    // Estado inicial visível (sem “corte”/pop-in)
-    try {
-      group.position.y = Y_START;
-      group.rotation.set(0, BASE_YAW, 0);
-    } catch(e){}
+  }
 
-    // Cache de métricas p/ não recalcular pesado
-    let sectionTop = 0, sectionH = 0, vh = window.innerHeight;
-    function recalc() {
-      const r = section.getBoundingClientRect();
-      sectionTop = window.scrollY + r.top;
-      sectionH   = r.height;
-      vh         = window.innerHeight;
-    }
-    recalc();
+  function onScrollSpin(){
+    if (spinRaf) return;
+    spinRaf = requestAnimationFrame(()=>{
+      spinRaf = null;
+      const p = computeProgress();
+      if (p === lastP) return;
+      lastP = p;
+      applySpin(p);
+    });
+  }
 
-    const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-    const ease    = t => 0.5 - 0.5 * Math.cos(Math.PI * (t < 0 ? 0 : t > 1 ? 1 : t));
+  // usa Lenis se existir; senão, scroll nativo
+  if (window.lenis && typeof window.lenis.on === 'function'){
+    window.lenis.on('scroll', onScrollSpin);
+  } else {
+    window.addEventListener('scroll', onScrollSpin, { passive: true });
+  }
+  window.addEventListener('resize', onScrollSpin);
 
-    // Progresso 0..1 da seção atravessando a viewport
-    function getProgress() {
-      const y = window.scrollY || window.pageYOffset || 0;
-      const total = sectionH + vh;
-      const seen  = (vh + y) - sectionTop;
-      return clamp01(seen / total);
-    }
-
-    let ticking = false;
-    function update() {
-      const p = getProgress();
-
-      // DESCIDA: 0..DROP_END -> depois trava em Y_END
-      const tDrop = (p <= 0) ? 0 : (p >= DROP_END ? 1 : (p / DROP_END));
-      group.position.y = Y_START + (Y_END - Y_START) * ease(tDrop);
-
-      // GIRO: 360° somente entre SPIN_START..SPIN_END -> trava reto
-      if (p <= SPIN_START) {
-        group.rotation.y = BASE_YAW;
-      } else if (p >= SPIN_END) {
-        group.rotation.y = BASE_YAW + Math.PI * 2;
-      } else {
-        const tSpin = (p - SPIN_START) / (SPIN_END - SPIN_START); // 0..1
-        group.rotation.y = BASE_YAW + tSpin * (Math.PI * 2);
-      }
-
-      ticking = false;
-    }
-
-    function onScroll(){
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    }
-
-    // Lenis (se houver) ou scroll nativo
-    if (window.lenis && typeof window.lenis.on === 'function'){
-      window.lenis.on('scroll', onScroll);
-    } else {
-      window.addEventListener('scroll', onScroll, { passive: true });
-    }
-    window.addEventListener('resize', () => { recalc(); onScroll(); });
-
-    // Estado inicial consistente
-    update();
-  });
+  // estado inicial
+  onScrollSpin();
 })();
-
 
 
     function animate() {
@@ -850,24 +792,24 @@ if (heroVideo && heroPoster) {
         }
     }
 
-    // // --- Parte 2: Lógica para a Barra de Progresso Global ---
-    // // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
-    // const pageBar = document.querySelector('.page-progress-bar');
-    // const pageCirc = document.querySelector('.progress-circle-bar');
-    // if (pageBar || pageCirc) {
-    //     const CIRCUMFERENCE = 2 * Math.PI * 45; // raio 45 do SVG
-    //     const updatePageProgress = () => {
-    //         const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    //         const y = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop || 0);
-    //         const p = docHeight > 0 ? Math.max(0, Math.min(1, y / docHeight)) : 0;
-    //         if (pageBar) pageBar.style.transform = `scaleX(${p})`;
-    //         if (pageCirc) pageCirc.style.strokeDashoffset = `${CIRCUMFERENCE * (1 - p)}`;
-    //     };
-    //     try { if (window.lenis) window.lenis.on('scroll', updatePageProgress); } catch(e){}
-    //     window.addEventListener('resize', updatePageProgress);
-    //     // init
-    //     updatePageProgress();
-    // }
+    // --- Parte 2: Lógica para a Barra de Progresso Global ---
+    // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
+    const pageBar = document.querySelector('.page-progress-bar');
+    const pageCirc = document.querySelector('.progress-circle-bar');
+    if (pageBar || pageCirc) {
+        const CIRCUMFERENCE = 2 * Math.PI * 45; // raio 45 do SVG
+        const updatePageProgress = () => {
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const y = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop || 0);
+            const p = docHeight > 0 ? Math.max(0, Math.min(1, y / docHeight)) : 0;
+            if (pageBar) pageBar.style.transform = `scaleX(${p})`;
+            if (pageCirc) pageCirc.style.strokeDashoffset = `${CIRCUMFERENCE * (1 - p)}`;
+        };
+        try { if (window.lenis) window.lenis.on('scroll', updatePageProgress); } catch(e){}
+        window.addEventListener('resize', updatePageProgress);
+        // init
+        updatePageProgress();
+    }
 
    // ===================================
     //  BLOCO DOS DEPOIMENTOS 
