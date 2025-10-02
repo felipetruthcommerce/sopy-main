@@ -288,25 +288,27 @@ new THREE.RGBELoader()
   const spinSection = document.getElementById('capsula-3d');
   if (!spinSection || !capsuleGroup) return;
 
-  // CONFIGS — ajuste se quiser
-  const SPIN_START = 0.05;   // quando começa a girar
-  const SPIN_END   = 0.65;   // quando termina o giro (e a descida)
-  const DROP_START = 0.00;   // quando começa a descer
-  const DROP_END   = 0.65;   // quando termina a descida (para no meio)
-  const Y_START    = 12;     // posição Y inicial (acima)
-  const Y_END      = 0;      // posição Y final (meio da seção)
+  // ── CONFIGS (ajuste à vontade)
+  const SPIN_START = 0.02;  // inicia o giro bem cedo, mas não 0
+  const SPIN_END   = 0.65;  // termina o giro aqui
+  const DROP_START = 0.00;  // desce desde o início da seção
+  const DROP_END   = 0.65;  // para de descer no meio
+  const Y_START    = 10;    // y inicial (alto)
+  const Y_END      = 0;     // y final (meio da seção)
 
-  // memoriza referências iniciais uma única vez
-  if (window.__capsuleBaseYaw == null) window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
-  if (window.__capsuleBaseY  == null) window.__capsuleBaseY  = capsuleGroup.position.y || Y_START;
+  // garanta orientação inicial frontal e posição inicial alta
+  capsuleGroup.rotation.set(0, 0, 0);
+  capsuleGroup.position.y = Y_START;
+
+  const baseYaw = 0;        // frente
+  const baseY   = Y_START;  // alto
 
   let spinRaf = null;
   let lastP = -1;
 
-  function clamp01(v){ return Math.max(0, Math.min(1, v)); }
-  function easeInOutSine(t){ return 0.5 - 0.5 * Math.cos(Math.PI * t); }
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const easeInOutSine = t => 0.5 - 0.5 * Math.cos(Math.PI * t);
 
-  // progresso 0..1 enquanto a seção cruza a viewport
   function computeProgress() {
     const rect = spinSection.getBoundingClientRect();
     const vh   = window.innerHeight;
@@ -316,14 +318,20 @@ new THREE.RGBELoader()
   }
 
   function applySpinAndDrop(p) {
-    // --- GIRO 0→360° entre SPIN_START..SPIN_END
-    let ts = clamp01((p - SPIN_START) / (SPIN_END - SPIN_START));
-    capsuleGroup.rotation.y = window.__capsuleBaseYaw + ts * (Math.PI * 2);
-
-    // --- DESCIDA Y entre DROP_START..DROP_END (e PARA)
+    // DESCIDA (sempre suave desde o início)
     let td = clamp01((p - DROP_START) / (DROP_END - DROP_START));
-    const y = window.__capsuleBaseY + (Y_END - window.__capsuleBaseY) * easeInOutSine(td);
-    capsuleGroup.position.y = (p >= DROP_END) ? Y_END : y;
+    const y = baseY + (Y_END - baseY) * easeInOutSine(td);
+    capsuleGroup.position.y = (p >= DROP_END) ? Y_END : (p <= DROP_START ? Y_START : y);
+
+    // ROTAÇÃO: travada frontal antes do SPIN_START, 360° no intervalo, travada no fim
+    if (p <= SPIN_START) {
+      capsuleGroup.rotation.y = baseYaw;
+    } else if (p >= SPIN_END) {
+      capsuleGroup.rotation.y = baseYaw + Math.PI * 2;
+    } else {
+      let ts = (p - SPIN_START) / (SPIN_END - SPIN_START); // 0..1
+      capsuleGroup.rotation.y = baseYaw + ts * (Math.PI * 2);
+    }
   }
 
   function onScrollSpin() {
@@ -337,7 +345,7 @@ new THREE.RGBELoader()
     });
   }
 
-  // usa Lenis se existir; senão, scroll nativo
+  // usa Lenis se houver
   if (window.lenis && typeof window.lenis.on === 'function') {
     window.lenis.on('scroll', onScrollSpin);
   } else {
