@@ -286,30 +286,32 @@ new THREE.RGBELoader()
    /* ====== Spin + Descida até o MEIO da seção (usando teu setup antigo) ====== */
 /* Substitua SÓ o teu IIFE `setupCapsuleSpinOnScroll` por este aqui.          */
 
+/* ====== Spin + Descida até o MEIO da seção (forçando antes do render) ====== */
+/* Cole no lugar do seu setupCapsuleSpinOnScroll antigo.                        */
+
 (function setupCapsuleSpinOnScroll(){
   const spinSection = document.getElementById('capsula-3d');
-  // `capsuleGroup` já vem do teu initThree()
-  if (!spinSection || typeof capsuleGroup === 'undefined' || !capsuleGroup) return;
+  if (!spinSection || typeof capsuleGroup === 'undefined' || !capsuleGroup || !renderer) return;
 
-  // ===== parâmetros fáceis de ajustar =====
-  const DROP_END   = 0.50;  // até onde o objeto DESCE (0..1 do progresso da seção)
-  const SPIN_START = 0.05;  // onde começa a girar
-  const SPIN_END   = 0.65;  // onde termina o giro (360°) e PARA
+  // -------- parâmetros de controle (ajuste livre) --------
+  const DROP_END   = 0.50;  // até onde o objeto DESCE (0..1 do progresso da seção) — pára no meio
+  const SPIN_START = 0.05;  // começa a girar
+  const SPIN_END   = 0.65;  // termina o giro (360°) e fica reto
 
-  // altura inicial/final no mundo 3D (ajuste fino se quiser)
-  const Y_START = 1.0;      // começa mais alto, já visível
-  const Y_END   = -0.15;    // “assenta” no meio da seção
+  // alturas em coordenadas do mundo 3D
+  const Y_START = 1.0;      // começa alto (visível)
+  const Y_END   = -0.15;    // posição final no MEIO da seção
 
   const TWO_PI = Math.PI * 2;
-  const clamp01 = (v)=> v < 0 ? 0 : v > 1 ? 1 : v;
-  const ease    = (t)=> 0.5 - 0.5 * Math.cos(Math.PI * clamp01(t));
+  const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
+  const ease    = t => 0.5 - 0.5 * Math.cos(Math.PI * clamp01(t)); // easeInOutSine
 
-  // estado inicial: já aparece na tela e “reto”
+  // estado inicial: visível e reto
   const BASE_YAW = capsuleGroup.rotation?.y || 0;
   capsuleGroup.position.y = Y_START;
   if (capsuleGroup.rotation) capsuleGroup.rotation.set(0, BASE_YAW, 0);
 
-  // cache de métricas da seção
+  // cache de métricas
   let sectionTop = 0, sectionH = 0, vh = window.innerHeight;
   function recalc(){
     const r = spinSection.getBoundingClientRect();
@@ -320,49 +322,51 @@ new THREE.RGBELoader()
   recalc();
 
   // progresso 0..1 da seção atravessando a viewport (sem pin)
-  function computeProgress(){
+  function progress(){
     const y = window.scrollY || window.pageYOffset || 0;
     const total = sectionH + vh;
     const seen  = (vh + y) - sectionTop;
     return clamp01(seen / total);
   }
 
-  let raf = 0;
-  function update(){
-    raf = 0;
-    const p = computeProgress();
+  // aplica posição + rotação com base no scroll
+  function syncFromScroll(){
+    const p = progress();
 
-    // DESCIDA até o meio (para no Y_END quando p >= DROP_END)
+    // DESCIDA: para de descer em DROP_END (meio da seção)
     const tDrop = p <= 0 ? 0 : (p >= DROP_END ? 1 : (p / DROP_END));
     capsuleGroup.position.y = Y_START + (Y_END - Y_START) * ease(tDrop);
 
-    // GIRO 360° entre SPIN_START..SPIN_END (fora desse intervalo, trava reto)
+    // SPIN: 360° apenas entre SPIN_START..SPIN_END; fora disso, travado reto
     if (p <= SPIN_START) {
       capsuleGroup.rotation.y = BASE_YAW;
     } else if (p >= SPIN_END) {
       capsuleGroup.rotation.y = BASE_YAW + TWO_PI;
     } else {
-      const tSpin = (p - SPIN_START) / (SPIN_END - SPIN_START); // 0..1
+      const tSpin = (p - SPIN_START) / (SPIN_END - SPIN_START);
       capsuleGroup.rotation.y = BASE_YAW + tSpin * TWO_PI;
     }
   }
 
-  function onScroll(){
-    if (raf) return;
-    raf = requestAnimationFrame(update);
-  }
+  // força nossa sincronização ANTES de cada render (ganha de outras animações)
+  const origRender = renderer.render.bind(renderer);
+  renderer.render = function(sceneArg, cameraArg){
+    syncFromScroll();
+    return origRender(sceneArg, cameraArg);
+  };
 
-  // Lenis (se houver) ou scroll nativo
+  // mantém as métricas atualizadas e aplica estado inicial
+  window.addEventListener('resize', () => { recalc(); });
   if (window.lenis && typeof window.lenis.on === 'function'){
-    window.lenis.on('scroll', onScroll);
+    window.lenis.on('scroll', () => { /* render loop já chama sync; nada a fazer */ });
   } else {
-    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('scroll', () => { /* idem */ }, { passive: true });
   }
-  window.addEventListener('resize', ()=>{ recalc(); onScroll(); });
 
-  // estado inicial consistente
-  update();
+  // aplica já no primeiro frame (evita “aparecer do nada”)
+  syncFromScroll();
 })();
+
 
 
 
