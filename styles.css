@@ -62,6 +62,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Hide native scrollbars but keep scrolling functional */
+/* Firefox */
+html { scrollbar-width: none; }
+/* WebKit browsers */
+html::-webkit-scrollbar { width: 0; height: 0; }
+/* For IE/Edge older implementations, ensure no visual scrollbar track */
+html { -ms-overflow-style: none; }
+
 /* Bloqueia scroll durante o loading */
 body.is-loading {
   overflow: hidden;
