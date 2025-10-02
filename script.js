@@ -230,17 +230,49 @@ function initThree() {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.0;
-    renderer.outputEncoding = THREE.sRGBEncoding;
-    threeWrap.appendChild(renderer.domElement);
+
+    renderer.physicallyCorrectLights = true;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.25; // 1.15–1.35 ajuste fino
+renderer.outputEncoding = THREE.sRGBEncoding;
+threeWrap.appendChild(renderer.domElement);
     
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    scene.add(new THREE.DirectionalLight(0xffffff, 1.0));
-    // ... (adicione suas outras luzes se precisar) ...
+// --- Luzes (chave/fill/ambiente + rim opcional)
+const amb = new THREE.HemisphereLight(0xffffff, 0x6ba08a, 0.45); // céu / chão
+scene.add(amb);
+
+const key = new THREE.DirectionalLight(0xffffff, 1.7); // luz principal mais forte
+key.position.set(2.2, 3.8, 2.5);                       // cima-direita-frente
+key.castShadow = false;
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xffffff, 0.55); // preenchimento suave
+fill.position.set(-2.5, 0.5, 2.2);                       // esquerda-baixa
+scene.add(fill);
+
+// (opcional) leve rim para dar recorte no topo
+const rim = new THREE.DirectionalLight(0xffffff, 0.25);
+rim.position.set(0, 2.8, -2.5); // vindo de trás
+scene.add(rim);
+
 
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
+
+    // --- Environment HDRI (suave/estúdio). Você pode trocar a URL por outra HDRI sua.
+const pmremGen = new THREE.PMREMGenerator(renderer);
+pmremGen.compileEquirectangularShader();
+
+new THREE.RGBELoader()
+  .setDataType(THREE.UnsignedByteType)
+  .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr', (hdr) => {
+    const envMap = pmremGen.fromEquirectangular(hdr).texture;
+    scene.environment = envMap;   // PBR reflections
+    scene.background  = null;     // mantemos teu gradiente da página
+    hdr.dispose();
+    pmremGen.dispose();
+  }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
+
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
 (function setupCapsuleSpinOnScroll(){
