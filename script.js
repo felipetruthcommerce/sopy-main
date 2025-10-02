@@ -1487,6 +1487,21 @@ function clearNonFallbackChildren() {
         }, { threshold: 0.1 }).observe(threeSection);
     }
 
+
+    // --- BOLHAS: inicializa agora (sem depender de DOMContentLoaded antigo)
+try { initCapsuleBubbles(); } catch (e) { console.warn('[SOPY] Bubbles init falhou', e); }
+
+// --- 3D: lazy-init com IO AGORA (quando a seção já existe)
+if (threeSection) {
+  const io = new IntersectionObserver((ents, obs) => {
+    if (ents[0].isIntersecting) { 
+      try { initThree(); } catch(e){ console.error('[SOPY] initThree erro', e); }
+      obs.disconnect();
+    }
+  }, { threshold: 0.1 });
+  io.observe(threeSection);
+}
+
     // 4. Refresh final de segurança
     setTimeout(() => {
         if (window.ScrollTrigger) {
