@@ -305,10 +305,11 @@ new THREE.RGBELoader()
     const DROP_END   = toNum(ds.dropEnd, 0.50);  // até onde o objeto DESCE (0..1 do progresso da seção) — pára no meio
     const SPIN_START = toNum(ds.spinStart, 0.05); // começa a girar
     const SPIN_END   = toNum(ds.spinEnd, 0.65);   // termina o giro (360°) e fica reto
+    const PIN_AMOUNT = toNum(ds.pinAmount, 200);  // duração do pin da seção em % do viewport (ex.: 200 => 200%)
 
     // alturas em coordenadas do mundo 3D
-    const Y_START = toNum(ds.yStart, 20.0);        // começa alto (visível)
-    const Y_END   = toNum(ds.yEnd, -30.15);        // posição final no MEIO da seção
+    const Y_START = toNum(ds.yStart, 1.0);        // começa alto (visível)
+    const Y_END   = toNum(ds.yEnd, -0.15);        // posição final no MEIO da seção
 
   const TWO_PI = Math.PI * 2;
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
@@ -319,8 +320,8 @@ new THREE.RGBELoader()
   capsuleGroup.position.y = Y_START;
   if (capsuleGroup.rotation) capsuleGroup.rotation.set(0, BASE_YAW, 0);
 
-  // cache de métricas
-  let sectionTop = 0, sectionH = 0, vh = window.innerHeight;
+    // cache de métricas
+    let sectionTop = 0, sectionH = 0, vh = window.innerHeight;
     const getScrollY = () => (window.lenis && typeof window.lenis.scroll === 'number')
         ? window.lenis.scroll
         : (window.scrollY || window.pageYOffset || 0);
@@ -332,13 +333,31 @@ new THREE.RGBELoader()
   }
   recalc();
 
-  // progresso 0..1 da seção atravessando a viewport (sem pin)
-  function progress(){
+    // cria ScrollTrigger com pin para desacelerar e estabilizar a animação
+    let st = null;
+    let stProgress = null;
+    try {
+        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            st = ScrollTrigger.create({
+                trigger: spinSection,
+                start: 'top top',
+                end: `+=${PIN_AMOUNT}%`,
+                pin: true,
+                scrub: 0.6,
+                onUpdate: self => { stProgress = self.progress; }
+            });
+        }
+    } catch (e) { /* sem ST, segue sem pin */ }
+
+    // progresso 0..1
+    function progress(){
+        if (st && typeof stProgress === 'number') return clamp01(stProgress);
+        // fallback sem pin
         const y = getScrollY();
-    const total = sectionH + vh;
-    const seen  = (vh + y) - sectionTop;
-    return clamp01(seen / total);
-  }
+        const total = sectionH + vh;
+        const seen  = (vh + y) - sectionTop;
+        return clamp01(seen / total);
+    }
 
   // aplica posição + rotação com base no scroll
   function syncFromScroll(){
