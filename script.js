@@ -309,7 +309,7 @@ new THREE.RGBELoader()
 
     // alturas em coordenadas do mundo 3D
     const Y_START = toNum(ds.yStart, 1.0);        // começa alto (visível)
-    const Y_END   = toNum(ds.yEnd, -10.15);        // posição final no MEIO da seção
+    const Y_END   = toNum(ds.yEnd, 10.15);        // posição final no MEIO da seção
 
   const TWO_PI = Math.PI * 2;
   const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
