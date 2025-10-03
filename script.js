@@ -481,6 +481,45 @@ if (heroVideo && heroPoster) {
         console.warn('[PARALLAX] Seção #sustentabilidade ou Lenis não encontrados.');
     }
 
+        // ===================== HERO STICKY CTA (opcional) =====================
+        try {
+            const hero = document.getElementById('hero');
+            if (hero) {
+                let sticky = document.getElementById('sticky-hero-cta');
+                if (!sticky) {
+                    sticky = document.createElement('div');
+                    sticky.id = 'sticky-hero-cta';
+                    sticky.style.position = 'fixed';
+                    sticky.style.right = '20px';
+                    sticky.style.bottom = '20px';
+                    sticky.style.zIndex = '80';
+                    sticky.style.opacity = '0';
+                    sticky.style.transform = 'translateY(20px)';
+                    sticky.style.visibility = 'hidden';
+                    sticky.style.transition = 'opacity .4s ease-out, transform .4s ease-out, visibility .4s';
+                    const btn = document.createElement('a');
+                    btn.href = '/comprar.html';
+                    btn.className = 'sopy-btn sopy-hero-cta';
+                    btn.textContent = 'COMPRE AGORA';
+                    sticky.appendChild(btn);
+                    document.body.appendChild(sticky);
+                }
+                const io = new IntersectionObserver((entries) => {
+                    const e = entries[0];
+                    if (!e.isIntersecting) {
+                        sticky.style.opacity = '1';
+                        sticky.style.transform = 'translateY(0)';
+                        sticky.style.visibility = 'visible';
+                    } else {
+                        sticky.style.opacity = '0';
+                        sticky.style.transform = 'translateY(20px)';
+                        sticky.style.visibility = 'hidden';
+                    }
+                }, { root: null, threshold: 0, rootMargin: '-120px 0px 0px 0px' });
+                io.observe(hero);
+            }
+        } catch {}
+
 
 
     // ===================================
