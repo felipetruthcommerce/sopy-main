@@ -1033,4 +1033,4 @@ if (heroVideo && heroPoster) {
 
     
     
-} // Fim da função bootAnimations
+} // Fim da função bootAnimations a
