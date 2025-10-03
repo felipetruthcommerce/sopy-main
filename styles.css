@@ -1012,7 +1012,8 @@ body.theme-citrus .benefit-title h2 {
   }
   
   .pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
-    --tx: 42px;
+    /* precise end position for 90x45 label, 36px handle, 3px border, 4px left gap */
+    transform: translate(40px, -50%) !important;
   }
   
   .toggle-hint {
