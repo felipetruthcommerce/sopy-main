@@ -378,9 +378,6 @@ new THREE.RGBELoader()
 
 // === MOSTRAR O CARD DO PRODUTO NA SEÇÃO 3D (DESKTOP APENAS) ===
 (function setupCapsuleCtaTrigger(){
-    // roda apenas em desktop
-    if (!window.matchMedia || !window.matchMedia('(min-width: 1024px)').matches) return;
-
     // aguarda até que o DOM e o ScrollTrigger estejam prontos
     const trySetup = () => {
         const section = document.getElementById('capsula-3d');
@@ -389,48 +386,62 @@ new THREE.RGBELoader()
         if (typeof ScrollTrigger === 'undefined') return;
 
         // garante que o CTA comece escondido
-        cta.classList.remove('is-visible', 'at-end');
+        cta.classList.remove('is-visible', 'at-end', 'overlay');
+
+        // create hint if missing (mobile helper)
+        const inner = cta.querySelector('.capsule-3d-cta-inner');
+        if (inner && !inner.querySelector('.cta-hint')) {
+            const hint = document.createElement('div');
+            hint.className = 'cta-hint';
+            hint.innerHTML = `<span>Toque para comprar</span><svg class="cta-hint-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            inner.insertBefore(hint, inner.firstChild);
+            // clicking the hint hides it
+            hint.addEventListener('click', () => hint.remove());
+            // also hide when the product button is clicked
+            const btn = inner.querySelector('.sopy-product-cta');
+            if (btn) btn.addEventListener('click', () => { hint.remove(); });
+        }
 
         // cria o ScrollTrigger que mostra e depois marca como at-end
         ScrollTrigger.create({
             trigger: section,
-            start: 'top 65%',   // ajusta quando começa a aparecer
-            end: 'bottom 35%',  // até quando considerar a seção ativa
+            start: 'top 65%',   // quando começa a aparecer
+            end: 'bottom 35%',  // quando termina a faixa ativa
             onEnter: self => {
                 cta.classList.add('is-visible');
+                // ensure overlay removed until end
+                cta.classList.remove('at-end', 'overlay');
             },
             onEnterBack: self => {
                 cta.classList.add('is-visible');
+                cta.classList.remove('at-end', 'overlay');
             },
             onLeave: self => {
-                // quando sair para baixo, adiciona at-end para posicionamento final
+                // quando sair para baixo, posiciona o CTA sobre o 3D
                 cta.classList.add('at-end');
+                cta.classList.add('overlay');
             },
             onLeaveBack: self => {
                 // quando voltar acima da seção, esconder
-                cta.classList.remove('is-visible', 'at-end');
+                cta.classList.remove('is-visible', 'at-end', 'overlay');
             }
         });
-    };
 
-    // tentar após bootAnimations (caso ScrollTrigger seja registrado lá)
-    const whenReady = () => {
-        trySetup();
-        // também reagir a resize para reavaliar media queries
+        // cleanup on resize: if switch to mobile, keep only the button visible as per CSS
         window.addEventListener('resize', () => {
-            // se trocar para mobile, garantir esconder
-            if (!window.matchMedia('(min-width: 1024px)').matches) {
-                const c = document.querySelector('.capsule-3d-cta');
-                if (c) c.classList.remove('is-visible', 'at-end');
+            const isMobile = window.matchMedia('(max-width: 600px)').matches;
+            if (isMobile) {
+                cta.classList.remove('overlay');
+                // hint will show by default (CSS) — nothing else to do
             }
         });
     };
 
     // se já existe bootAnimations (iniciado) rodamos logo; senão esperamos DOMContentLoaded
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(whenReady, 120);
+        setTimeout(trySetup, 120);
     } else {
-        document.addEventListener('DOMContentLoaded', whenReady);
+        document.addEventListener('DOMContentLoaded', trySetup);
     }
 })();
 

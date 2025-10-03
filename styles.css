@@ -704,6 +704,91 @@ body.theme-aqua .capsule-3d-cta {
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
 }
+
+/* Mobile: collapse to only button and position overlay when .overlay is present */
+@media (max-width: 600px){
+  .capsule-3d-cta{
+    right: 16px;
+    left: 16px;
+    top: auto;
+    bottom: 18px;
+    position: fixed;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* inner button will allow clicks */
+  }
+
+  .capsule-3d-cta .capsule-3d-cta-inner{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 999px;
+  }
+
+  /* only the buy button is visible on mobile (rest hidden) */
+  .capsule-3d-cta .product-title,
+  .capsule-3d-cta .product-price,
+  .capsule-3d-cta .product-copy{
+    display: none !important;
+  }
+
+  .capsule-3d-cta .sopy-product-cta{
+    pointer-events: auto;
+    width: calc(100% - 32px);
+    margin: 0 auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 18px;
+    border-radius: 999px;
+    font-size: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+  }
+
+  /* smaller toggle on mobile */
+  .capsule-3d-cta .toggle, .capsule-3d-cta .switch{
+    transform: scale(.78);
+  }
+
+  /* overlay: when the section is at-end, center the button above the 3D canvas */
+  .capsule-3d-cta.overlay{
+    position: absolute;
+    bottom: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(50% - 40px); /* approximate center above canvas */
+    pointer-events: none;
+  }
+
+  .capsule-3d-cta.overlay .capsule-3d-cta-inner{
+    pointer-events: auto;
+    background: transparent;
+  }
+
+  /* hint styling */
+  .cta-hint{
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--text-muted, #fff);
+    background: rgba(0,0,0,0.45);
+    padding: 6px 10px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+
+  .cta-hint .cta-hint-arrow{
+    opacity: .9;
+  }
+}
 .capsule-3d-cta .product-title { 
   font-size: 1.2rem; 
   margin: 0 0 4px 0; 
