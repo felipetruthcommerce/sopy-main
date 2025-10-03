@@ -258,11 +258,12 @@ function setTheme(theme) {
         console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
     }
 
-    // Update benefit phrases colors based on theme (CSS handles this via body class)
+    // Update benefit titles colors based on theme (CSS handles this via body class)
     // Force a repaint to ensure theme colors are applied immediately
-    const benefitPhrases = document.querySelectorAll('.benefit-phrase');
-    benefitPhrases.forEach(phrase => {
-        phrase.style.transform = phrase.style.transform; // force repaint
+    const benefitTitles = document.querySelectorAll('.benefit-title');
+    benefitTitles.forEach(title => {
+        const h2 = title.querySelector('h2');
+        if (h2) h2.style.color = h2.style.color; // force repaint
     });
 
     swapModel(theme);
@@ -358,27 +359,54 @@ new THREE.RGBELoader()
   const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
   capsuleGroup.rotation.y = yaw;
 
-  // Revelar frases de benefícios baseado no progresso do scroll
-  revealBenefitPhrases(p);
+  // Revelar títulos de benefícios baseado no progresso do scroll
+  revealBenefitTitles(p);
   }
 
-  function revealBenefitPhrases(progress) {
-    const phrases = document.querySelectorAll('.benefit-phrase');
+  function revealBenefitTitles(progress) {
+    const titles = document.querySelectorAll('.benefit-title');
     
-    phrases.forEach(phrase => {
-      const revealPoint = parseFloat(phrase.dataset.reveal || 0);
+    titles.forEach(title => {
+      const revealPoint = parseFloat(title.dataset.reveal || 0);
       const shouldReveal = progress >= revealPoint;
-      const isRevealed = phrase.classList.contains('revealed');
+      const isRevealed = title.classList.contains('revealed');
       
       if (shouldReveal && !isRevealed) {
-        // Adicionar pequeno delay escalonado para efeito mais suave
-        const delay = (revealPoint - 0.2) * 200; // delay baseado na posição
-        setTimeout(() => {
-          phrase.classList.add('revealed');
-        }, Math.max(0, delay));
+        title.classList.add('revealed');
+        
+        // Aplicar animação GSAP similar ao título principal
+        const h2 = title.querySelector('h2');
+        if (h2 && typeof gsap !== 'undefined') {
+          // Set initial state
+          gsap.set(h2, {
+            opacity: 0,
+            y: 50,
+            scale: 0.8
+          });
+          
+          // Animate in with similar timing to main title
+          gsap.to(h2, {
+            opacity: 1,
+            y: 0,
+            scale: 1,
+            duration: 1.2,
+            ease: "power3.out",
+            delay: (revealPoint - 0.2) * 0.3 // stagger based on reveal point
+          });
+        }
       } else if (!shouldReveal && isRevealed) {
         // Remove a revelação se o usuário scrollar para trás
-        phrase.classList.remove('revealed');
+        title.classList.remove('revealed');
+        const h2 = title.querySelector('h2');
+        if (h2 && typeof gsap !== 'undefined') {
+          gsap.to(h2, {
+            opacity: 0,
+            y: 30,
+            scale: 0.9,
+            duration: 0.6,
+            ease: "power2.in"
+          });
+        }
       }
     });
   }
@@ -424,8 +452,7 @@ new THREE.RGBELoader()
             hint.innerHTML = `<span>CLIQUE AQUI</span><svg class="hint-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
             toggleContainer.insertBefore(hint, toggleContainer.firstChild);
             
-            // esconder o hint quando clicar nele ou no toggle
-            hint.addEventListener('click', () => hint.remove());
+            // esconder o hint APENAS quando o toggle é usado (não quando clica no texto)
             const toggleInput = toggleContainer.querySelector('#product-toggle');
             if (toggleInput) {
                 toggleInput.addEventListener('change', () => hint.remove());
