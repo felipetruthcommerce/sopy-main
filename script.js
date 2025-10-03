@@ -283,91 +283,67 @@ new THREE.RGBELoader()
     pmrem.dispose();
   }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
 
-   /* ====== Spin + Descida até o MEIO da seção (usando teu setup antigo) ====== */
-/* Substitua SÓ o teu IIFE `setupCapsuleSpinOnScroll` por este aqui.          */
-
-/* ====== Spin + Descida até o MEIO da seção (forçando antes do render) ====== */
-/* Cole no lugar do seu setupCapsuleSpinOnScroll antigo.                        */
-
+    // === SPIN ON SCROLL (giro por scroll – sem pin) ===
 (function setupCapsuleSpinOnScroll(){
   const spinSection = document.getElementById('capsula-3d');
-  if (!spinSection || typeof capsuleGroup === 'undefined' || !capsuleGroup || !renderer) return;
-
-  // -------- parâmetros de controle (ajuste livre) --------
-  const DROP_END   = 0.50;  // até onde o objeto DESCE (0..1 do progresso da seção) — pára no meio
-  const SPIN_START = 0.05;  // começa a girar
-  const SPIN_END   = 0.65;  // termina o giro (360°) e fica reto
-
-  // alturas em coordenadas do mundo 3D
-  const Y_START = 20.0;      // começa alto (visível)
-  const Y_END   = -30.15;    // posição final no MEIO da seção
+  if (!spinSection || !capsuleGroup) return;
 
   const TWO_PI = Math.PI * 2;
-  const clamp01 = v => v < 0 ? 0 : v > 1 ? 1 : v;
-  const ease    = t => 0.5 - 0.5 * Math.cos(Math.PI * clamp01(t)); // easeInOutSine
+  let spinRaf = null;
+  let lastP = -1; // para debouncing
 
-  // estado inicial: visível e reto
-  const BASE_YAW = capsuleGroup.rotation?.y || 0;
-  capsuleGroup.position.y = Y_START;
-  if (capsuleGroup.rotation) capsuleGroup.rotation.set(0, BASE_YAW, 0);
-
-  // cache de métricas
-  let sectionTop = 0, sectionH = 0, vh = window.innerHeight;
-  function recalc(){
-    const r = spinSection.getBoundingClientRect();
-    sectionTop = (window.scrollY || window.pageYOffset || 0) + r.top;
-    sectionH   = r.height;
-    vh         = window.innerHeight;
-  }
-  recalc();
-
-  // progresso 0..1 da seção atravessando a viewport (sem pin)
-  function progress(){
-    const y = window.scrollY || window.pageYOffset || 0;
-    const total = sectionH + vh;
-    const seen  = (vh + y) - sectionTop;
-    return clamp01(seen / total);
+  // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
+  // e termina quando o fundo da seção encosta no topo da viewport
+  function computeProgress(){
+    const rect = spinSection.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    const total = rect.height + vh;     // faixa “vista” total
+    const seen  = vh - rect.top;        // quanto da faixa já passou
+    return Math.max(0, Math.min(1, seen / total));
   }
 
-  // aplica posição + rotação com base no scroll
-  function syncFromScroll(){
-    const p = progress();
+  function applySpin(p){
+     // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
+  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
+  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
 
-    // DESCIDA: para de descer em DROP_END (meio da seção)
-    const tDrop = p <= 0 ? 0 : (p >= DROP_END ? 1 : (p / DROP_END));
-    capsuleGroup.position.y = Y_START + (Y_END - Y_START) * ease(tDrop);
-
-    // SPIN: 360° apenas entre SPIN_START..SPIN_END; fora disso, travado reto
-    if (p <= SPIN_START) {
-      capsuleGroup.rotation.y = BASE_YAW;
-    } else if (p >= SPIN_END) {
-      capsuleGroup.rotation.y = BASE_YAW + TWO_PI;
-    } else {
-      const tSpin = (p - SPIN_START) / (SPIN_END - SPIN_START);
-      capsuleGroup.rotation.y = BASE_YAW + tSpin * TWO_PI;
-    }
+  // memoriza o yaw inicial do modelo na primeira atualização
+  if (window.__capsuleBaseYaw == null) {
+    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
   }
 
-  // força nossa sincronização ANTES de cada render (ganha de outras animações)
-  const origRender = renderer.render.bind(renderer);
-  renderer.render = function(sceneArg, cameraArg){
-    syncFromScroll();
-    return origRender(sceneArg, cameraArg);
-  };
+  // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
+  let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
+  t = Math.max(0, Math.min(1, t)); // clamp 0..1
 
-  // mantém as métricas atualizadas e aplica estado inicial
-  window.addEventListener('resize', () => { recalc(); });
+  // faz exatamente 360° nesse intervalo e PARA
+  const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
+  capsuleGroup.rotation.y = yaw;
+
+  }
+
+  function onScrollSpin(){
+    if (spinRaf) return;
+    spinRaf = requestAnimationFrame(()=>{
+      spinRaf = null;
+      const p = computeProgress();
+      if (p === lastP) return;
+      lastP = p;
+      applySpin(p);
+    });
+  }
+
+  // usa Lenis se existir; senão, scroll nativo
   if (window.lenis && typeof window.lenis.on === 'function'){
-    window.lenis.on('scroll', () => { /* render loop já chama sync; nada a fazer */ });
+    window.lenis.on('scroll', onScrollSpin);
   } else {
-    window.addEventListener('scroll', () => { /* idem */ }, { passive: true });
+    window.addEventListener('scroll', onScrollSpin, { passive: true });
   }
+  window.addEventListener('resize', onScrollSpin);
 
-  // aplica já no primeiro frame (evita “aparecer do nada”)
-  syncFromScroll();
+  // estado inicial
+  onScrollSpin();
 })();
-
-
 
 
     function animate() {
