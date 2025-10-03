@@ -345,6 +345,64 @@ new THREE.RGBELoader()
   onScrollSpin();
 })();
 
+// === MOSTRAR O CARD DO PRODUTO NA SEÇÃO 3D (DESKTOP APENAS) ===
+(function setupCapsuleCtaTrigger(){
+    // roda apenas em desktop
+    if (!window.matchMedia || !window.matchMedia('(min-width: 1024px)').matches) return;
+
+    // aguarda até que o DOM e o ScrollTrigger estejam prontos
+    const trySetup = () => {
+        const section = document.getElementById('capsula-3d');
+        const cta = document.querySelector('.capsule-3d-cta');
+        if (!section || !cta) return;
+        if (typeof ScrollTrigger === 'undefined') return;
+
+        // garante que o CTA comece escondido
+        cta.classList.remove('is-visible', 'at-end');
+
+        // cria o ScrollTrigger que mostra e depois marca como at-end
+        ScrollTrigger.create({
+            trigger: section,
+            start: 'top 65%',   // ajusta quando começa a aparecer
+            end: 'bottom 35%',  // até quando considerar a seção ativa
+            onEnter: self => {
+                cta.classList.add('is-visible');
+            },
+            onEnterBack: self => {
+                cta.classList.add('is-visible');
+            },
+            onLeave: self => {
+                // quando sair para baixo, adiciona at-end para posicionamento final
+                cta.classList.add('at-end');
+            },
+            onLeaveBack: self => {
+                // quando voltar acima da seção, esconder
+                cta.classList.remove('is-visible', 'at-end');
+            }
+        });
+    };
+
+    // tentar após bootAnimations (caso ScrollTrigger seja registrado lá)
+    const whenReady = () => {
+        trySetup();
+        // também reagir a resize para reavaliar media queries
+        window.addEventListener('resize', () => {
+            // se trocar para mobile, garantir esconder
+            if (!window.matchMedia('(min-width: 1024px)').matches) {
+                const c = document.querySelector('.capsule-3d-cta');
+                if (c) c.classList.remove('is-visible', 'at-end');
+            }
+        });
+    };
+
+    // se já existe bootAnimations (iniciado) rodamos logo; senão esperamos DOMContentLoaded
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(whenReady, 120);
+    } else {
+        document.addEventListener('DOMContentLoaded', whenReady);
+    }
+})();
+
 
     function animate() {
         requestAnimationFrame(animate);
