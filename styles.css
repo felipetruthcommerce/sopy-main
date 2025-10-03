@@ -750,16 +750,16 @@ body.theme-aqua .capsule-3d-cta {
 .capsule-3d-cta.is-visible { opacity: 1; visibility: visible; }
 
 @media (max-width: 900px) {
-  .capsule-3d-cta { position: absolute; bottom: 15vh; right: 5vw; max-width: 340px; transform: none; }
+  .capsule-3d-cta { position: absolute; bottom: 15vh; right: 8vw; max-width: 340px; transform: none; }
   
   body.theme-citrus .capsule-3d-cta {
     right: auto;
-    left: 5vw;
+    left: 8vw; /* mais centralizado */
   }
   
   body.theme-aqua .capsule-3d-cta {
     left: auto;
-    right: 5vw;
+    right: 8vw; /* mais centralizado */
   }
   
   .capsule-3d-cta-inner { border-radius: 12px; padding: 20px; }
@@ -797,8 +797,9 @@ body.theme-aqua .capsule-3d-cta {
   justify-content: center;
   gap: 6px;
   position: absolute;
-  top: -20px;
-  right: 0;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
   background: transparent;
   color: #000;
   padding: 8px 12px;
@@ -858,21 +859,21 @@ body.theme-aqua .capsule-3d-cta {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Positioning for each title - positioned higher and more spaced out */
+/* Positioning for each title - with increased spacing */
 .benefit-1 {
-  top: 10%;
+  top: 8%;
   left: 10%;
   right: 10%;
 }
 
 .benefit-2 {
-  top: 30%;
+  top: 35%;
   left: 15%;
   right: 15%;
 }
 
 .benefit-3 {
-  top: 50%;
+  top: 62%;
   left: 10%;
   right: 10%;
 }
@@ -901,19 +902,19 @@ body.theme-citrus .benefit-title h2 {
   }
   
   .benefit-1 {
-    top: 8%;
+    top: 6%;
     left: 5%;
     right: 5%;
   }
   
   .benefit-2 {
-    top: 25%;
+    top: 30%;
     left: 5%;
     right: 5%;
   }
   
   .benefit-3 {
-    top: 42%;
+    top: 54%;
     left: 5%;
     right: 5%;
   }
