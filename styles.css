@@ -858,21 +858,21 @@ body.theme-aqua .capsule-3d-cta {
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Positioning for each title - more spaced out across the extended section */
+/* Positioning for each title - positioned higher and more spaced out */
 .benefit-1 {
-  top: 20%;
+  top: 10%;
   left: 10%;
   right: 10%;
 }
 
 .benefit-2 {
-  top: 45%;
+  top: 30%;
   left: 15%;
   right: 15%;
 }
 
 .benefit-3 {
-  top: 70%;
+  top: 50%;
   left: 10%;
   right: 10%;
 }
@@ -891,7 +891,7 @@ body.theme-aqua .benefit-title h2 {
 
 body.theme-citrus .benefit-title h2 {
   color: #ffffff;
-  text-shadow: 2px 2px 8px rgba(255, 193, 7, 0.6), 0 0 20px rgba(255, 193, 7, 0.3);
+  text-shadow: 2px 2px 8px rgba(34, 139, 34, 0.8), 0 0 20px rgba(34, 139, 34, 0.5);
 }
 
 /* Mobile adjustments */
@@ -901,19 +901,19 @@ body.theme-citrus .benefit-title h2 {
   }
   
   .benefit-1 {
-    top: 15%;
+    top: 8%;
     left: 5%;
     right: 5%;
   }
   
   .benefit-2 {
-    top: 40%;
+    top: 25%;
     left: 5%;
     right: 5%;
   }
   
   .benefit-3 {
-    top: 65%;
+    top: 42%;
     left: 5%;
     right: 5%;
   }
