@@ -797,7 +797,7 @@ body.theme-aqua .capsule-3d-cta {
   justify-content: center;
   gap: 6px;
   position: absolute;
-  top: -28px;                 /* adjust vertical offset if needed */
+  top: -18px;                 /* moved down closer to the toggle */
   left: 50%;
   transform: translateX(-50%);/* center above toggle */
   white-space: nowrap;        /* keep on a single line */
@@ -825,7 +825,7 @@ body.theme-aqua .capsule-3d-cta {
 .product-toggle-container {
   position: fixed;
   right: 18px;
-  bottom: 18px;
+  bottom: 30px; /* moved slightly lower */
   z-index: 80;
   padding: 8px;
 }
