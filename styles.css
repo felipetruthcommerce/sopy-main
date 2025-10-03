@@ -902,7 +902,7 @@ body.theme-citrus .benefit-title h2 {
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .benefit-title h2 {
-    font-size: clamp(1.8rem, 6vw, 3rem);
+    font-size: clamp(2.2rem, 8vw, 4rem); /* increased from 1.8rem-3rem to 2.2rem-4rem */
   }
   
   .benefit-1 {
@@ -983,6 +983,32 @@ body.theme-citrus .benefit-title h2 {
     background-color: #5cb85c;
     border: 4px solid #449d44;
     transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Make toggle even smaller on mobile */
+@media (max-width: 768px) {
+  .pod-toggle-label {
+    width: 90px;
+    height: 45px;
+    border-radius: 25px;
+    border: 3px solid #449d44;
+  }
+  
+  .pod-toggle-handle {
+    width: 36px;
+    height: 36px;
+    left: 4px;
+  }
+  
+  .pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
+    --tx: 42px;
+    transform: translate(42px, -50%);
+  }
+  
+  .toggle-hint {
+    font-size: 12px;
+    top: -16px;
+  }
 }
 .pod-toggle-handle {
   position: absolute;
