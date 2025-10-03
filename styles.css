@@ -795,15 +795,13 @@ body.theme-aqua .capsule-3d-cta {
   justify-content: center;
   gap: 6px;
   position: absolute;
-  top: -45px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
+  top: -20px;
+  right: 0;
+  background: transparent;
+  color: #000;
   padding: 8px 12px;
-  border-radius: 20px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 800;
   cursor: pointer;
   z-index: 100;
   pointer-events: auto;
@@ -811,8 +809,7 @@ body.theme-aqua .capsule-3d-cta {
 }
 
 .toggle-hint:hover {
-  background: rgba(0, 0, 0, 0.9);
-  transform: translateX(-50%) scale(1.05);
+  transform: scale(1.05);
 }
 
 .toggle-hint .hint-arrow {
