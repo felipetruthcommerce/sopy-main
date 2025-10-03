@@ -675,13 +675,12 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   bottom: 30vh; /* align with 3D object height */
   right: clamp(24px, 8vw, 14vw); /* default position on right */
   transform: translateY(0) scale(1);
-  max-width: clamp(300px, 28vw, 420px); /* fluidly shrink with viewport */
-  width: 100%;
+  max-width: 420px;
   z-index: 4; /* above title */
   pointer-events: none;
   opacity: 0; /* shown near the end via class */
   visibility: hidden;
-  transition: opacity .45s cubic-bezier(.22,.9,.25,1), transform .45s cubic-bezier(.22,.9,.25,1), visibility .45s, left .6s ease, right .6s ease, bottom .4s ease;
+  transition: opacity .45s cubic-bezier(.22,.9,.25,1), transform .45s cubic-bezier(.22,.9,.25,1), visibility .45s, left .6s ease, right .6s ease;
 }
 
 /* Theme-based positioning */
@@ -703,100 +702,6 @@ body.theme-aqua .capsule-3d-cta {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
-}
-
-/* Mobile: collapse to only button and position overlay when .overlay is present */
-@media (max-width: 600px){
-  .capsule-3d-cta{
-    right: 16px;
-    left: 16px;
-    top: auto;
-    bottom: 18px;
-    position: fixed;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    pointer-events: none; /* inner button will allow clicks */
-  }
-
-  .capsule-3d-cta .capsule-3d-cta-inner{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    padding: 0;
-    box-shadow: none;
-    border-radius: 999px;
-    flex-direction: column; /* stack vertically so hint can sit above toggle/button */
-  }
-
-  /* only the buy button is visible on mobile (rest hidden) */
-  .capsule-3d-cta .product-title,
-  .capsule-3d-cta .product-price,
-  .capsule-3d-cta .product-copy{
-    display: none !important;
-  }
-
-  .capsule-3d-cta .sopy-product-cta{
-    pointer-events: auto;
-    width: calc(100% - 32px);
-    margin: 0 auto;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    padding: 12px 18px;
-    border-radius: 999px;
-    font-size: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.28);
-  }
-
-  /* ensure the toggle sits below the hint and above the button when present */
-  .capsule-3d-cta .toggle,
-  .capsule-3d-cta .switch{
-    margin-top: 8px;
-    margin-bottom: 8px;
-    transform: scale(.78);
-  }
-
-  /* smaller toggle on mobile */
-  .capsule-3d-cta .toggle, .capsule-3d-cta .switch{
-    transform: scale(.78);
-  }
-
-  /* overlay: when the section is at-end, center the button above the 3D canvas */
-  .capsule-3d-cta.overlay{
-    position: absolute;
-    bottom: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(50% - 40px); /* approximate center above canvas */
-    pointer-events: none;
-  }
-
-  .capsule-3d-cta.overlay .capsule-3d-cta-inner{
-    pointer-events: auto;
-    background: transparent;
-  }
-
-  /* hint styling */
-  .cta-hint{
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    color: var(--text-muted, #fff);
-    background: rgba(0,0,0,0.45);
-    padding: 6px 10px;
-    border-radius: 999px;
-    margin-bottom: 8px;
-    cursor: pointer;
-  }
-
-  .cta-hint .cta-hint-arrow{
-    opacity: .9;
-  }
 }
 .capsule-3d-cta .product-title { 
   font-size: 1.2rem; 
@@ -845,8 +750,7 @@ body.theme-aqua .capsule-3d-cta {
 .capsule-3d-cta.is-visible { opacity: 1; visibility: visible; }
 
 @media (max-width: 900px) {
-  /* Tablet: reduce size and bring CTA a little closer to the canvas */
-  .capsule-3d-cta { position: absolute; bottom: 18vh; right: 5vw; max-width: clamp(280px, 40vw, 360px); transform: none; }
+  .capsule-3d-cta { position: absolute; bottom: 15vh; right: 5vw; max-width: 340px; transform: none; }
   
   body.theme-citrus .capsule-3d-cta {
     right: auto;
@@ -858,7 +762,7 @@ body.theme-aqua .capsule-3d-cta {
     right: 5vw;
   }
   
-  .capsule-3d-cta-inner { border-radius: 12px; padding: 18px; }
+  .capsule-3d-cta-inner { border-radius: 12px; padding: 20px; }
 }
 /* Quando visível, o CTA pode receber eventos do ponteiro */
 .capsule-3d-cta.is-visible { pointer-events: auto; }
@@ -883,47 +787,41 @@ body.theme-aqua .capsule-3d-cta {
 
 @media (max-width: 900px) {
   .capsule-3d-cta.at-end { right: 8vw; bottom: 4.5rem; max-width: 360px; }
+
+/* Toggle hint */
+.toggle-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: absolute;
+  top: -45px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 100;
+  pointer-events: auto;
+  transition: all 0.3s ease;
 }
 
-/* Mobile-specific: show only the buy button and place above the 3D canvas */
-@media (max-width: 600px) {
-  /* Position the CTA centered above the canvas */
-  .capsule-3d-cta {
-    left: 50% !important;
-    right: auto !important;
-    top: 6vh; /* above the object */
-    bottom: auto !important;
-    transform: translateX(-50%) !important;
-    width: calc(100% - 32px);
-    max-width: 520px;
-    pointer-events: auto; /* allow clicking the button */
-    z-index: 60;
-    display: block;
-    opacity: 1 !important; /* keep visible when needed; JS controls .is-visible */
-    visibility: visible !important;
-  }
+.toggle-hint:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: translateX(-50%) scale(1.05);
+}
 
-  /* Collapse inner content but keep the buy button visible */
-  .capsule-3d-cta-inner { display:flex; align-items:center; justify-content:center; padding: 8px 12px; border-radius: 12px; background: var(--brand); border: none; }
-  .capsule-3d-cta-inner .product-title,
-  .capsule-3d-cta-inner .product-price,
-  .capsule-3d-cta-inner .product-copy { display: none !important; }
+.toggle-hint .hint-arrow {
+  opacity: 0.8;
+}
 
-  /* Make the buy button prominent and full-width on mobile */
-  .capsule-3d-cta-inner .sopy-product-cta {
-    display: block !important;
-    width: 100% !important;
-    padding: 14px 18px !important;
-    border-radius: 12px !important;
-    background: #fff !important;
-    color: var(--brand) !important;
-    font-weight: 800;
-    text-align: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-  }
-
-  /* ensure the CTA doesn't cover important UI when small screens with safe-area insets */
-  .capsule-3d-cta { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+.product-toggle-container {
+  position: relative;
+}
 }
 .sopy-capsule3d-copy p { color: var(--muted); max-width: 680px; margin: 0 auto; font-size: 1.05rem; line-height: 1.6; }
 

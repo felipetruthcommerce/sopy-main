@@ -376,82 +376,71 @@ new THREE.RGBELoader()
   onScrollSpin();
 })();
 
-// === MOSTRAR O CARD DO PRODUTO NA SEÇÃO 3D (DESKTOP APENAS) ===
+// === MOSTRAR O CARD DO PRODUTO NA SEÇÃO 3D E HINT NO TOGGLE ===
 (function setupCapsuleCtaTrigger(){
     // aguarda até que o DOM e o ScrollTrigger estejam prontos
     const trySetup = () => {
         const section = document.getElementById('capsula-3d');
         const cta = document.querySelector('.capsule-3d-cta');
-        if (!section || !cta) return;
+        const toggleContainer = document.querySelector('.product-toggle-container');
+        
+        if (!section || !cta || !toggleContainer) return;
         if (typeof ScrollTrigger === 'undefined') return;
 
-        // garante que o CTA comece escondido
-        cta.classList.remove('is-visible', 'at-end', 'overlay');
-
-        // create hint if missing (mobile helper)
-        const inner = cta.querySelector('.capsule-3d-cta-inner');
-            if (inner && !inner.querySelector('.cta-hint')) {
-                const hint = document.createElement('div');
-                hint.className = 'cta-hint';
-                // attach to the toggle if present, otherwise to the product button; text set to required Portuguese label
-                hint.innerHTML = `<span>CLIQUE AQUI</span><svg class="cta-hint-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-                const toggle = inner.querySelector('.toggle, .switch');
-                const btn = inner.querySelector('.sopy-product-cta');
-                if (toggle) {
-                    // place hint right before the toggle so it sits visually above it when stacked
-                    inner.insertBefore(hint, toggle);
-                } else if (btn) {
-                    // fallback: place hint before the buy button
-                    inner.insertBefore(hint, btn);
-                } else {
-                    inner.appendChild(hint);
-                }
-                // clicking the hint hides it
-                hint.addEventListener('click', () => hint.remove());
-                // also hide when the product button is clicked
-                if (btn) btn.addEventListener('click', () => { hint.remove(); });
+        // criar hint "CLIQUE AQUI" acima do toggle se não existir
+        if (!toggleContainer.querySelector('.toggle-hint')) {
+            const hint = document.createElement('div');
+            hint.className = 'toggle-hint';
+            hint.innerHTML = `<span>CLIQUE AQUI</span><svg class="hint-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+            toggleContainer.insertBefore(hint, toggleContainer.firstChild);
+            
+            // esconder o hint quando clicar nele ou no toggle
+            hint.addEventListener('click', () => hint.remove());
+            const toggleInput = toggleContainer.querySelector('#product-toggle');
+            if (toggleInput) {
+                toggleInput.addEventListener('change', () => hint.remove());
             }
+        }
+
+        // garante que o CTA comece escondido
+        cta.classList.remove('is-visible', 'at-end');
 
         // cria o ScrollTrigger que mostra e depois marca como at-end
         ScrollTrigger.create({
             trigger: section,
-            start: 'top 65%',   // quando começa a aparecer
-            end: 'bottom 35%',  // quando termina a faixa ativa
+            start: 'top 65%',   // ajusta quando começa a aparecer
+            end: 'bottom 35%',  // até quando considerar a seção ativa
             onEnter: self => {
                 cta.classList.add('is-visible');
-                // ensure overlay removed until end
-                cta.classList.remove('at-end', 'overlay');
             },
             onEnterBack: self => {
                 cta.classList.add('is-visible');
-                cta.classList.remove('at-end', 'overlay');
             },
             onLeave: self => {
-                // quando sair para baixo, posiciona o CTA sobre o 3D
+                // quando sair para baixo, adiciona at-end para posicionamento final
                 cta.classList.add('at-end');
-                cta.classList.add('overlay');
             },
             onLeaveBack: self => {
                 // quando voltar acima da seção, esconder
-                cta.classList.remove('is-visible', 'at-end', 'overlay');
+                cta.classList.remove('is-visible', 'at-end');
             }
         });
+    };
 
-        // cleanup on resize: if switch to mobile, keep only the button visible as per CSS
+    // tentar após bootAnimations (caso ScrollTrigger seja registrado lá)
+    const whenReady = () => {
+        trySetup();
+        // também reagir a resize
         window.addEventListener('resize', () => {
-            const isMobile = window.matchMedia('(max-width: 600px)').matches;
-            if (isMobile) {
-                cta.classList.remove('overlay');
-                // hint will show by default (CSS) — nothing else to do
-            }
+            // refresh triggers se necessário
         });
     };
 
     // se já existe bootAnimations (iniciado) rodamos logo; senão esperamos DOMContentLoaded
     if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        setTimeout(trySetup, 120);
+        setTimeout(whenReady, 120);
     } else {
-        document.addEventListener('DOMContentLoaded', trySetup);
+        document.addEventListener('DOMContentLoaded', whenReady);
     }
 })();
 
