@@ -321,9 +321,12 @@ new THREE.RGBELoader()
 
   // cache de métricas
   let sectionTop = 0, sectionH = 0, vh = window.innerHeight;
+    const getScrollY = () => (window.lenis && typeof window.lenis.scroll === 'number')
+        ? window.lenis.scroll
+        : (window.scrollY || window.pageYOffset || 0);
   function recalc(){
     const r = spinSection.getBoundingClientRect();
-    sectionTop = (window.scrollY || window.pageYOffset || 0) + r.top;
+        sectionTop = getScrollY() + r.top;
     sectionH   = r.height;
     vh         = window.innerHeight;
   }
@@ -331,7 +334,7 @@ new THREE.RGBELoader()
 
   // progresso 0..1 da seção atravessando a viewport (sem pin)
   function progress(){
-    const y = window.scrollY || window.pageYOffset || 0;
+        const y = getScrollY();
     const total = sectionH + vh;
     const seen  = (vh + y) - sectionTop;
     return clamp01(seen / total);
