@@ -390,17 +390,27 @@ new THREE.RGBELoader()
 
         // create hint if missing (mobile helper)
         const inner = cta.querySelector('.capsule-3d-cta-inner');
-        if (inner && !inner.querySelector('.cta-hint')) {
-            const hint = document.createElement('div');
-            hint.className = 'cta-hint';
-            hint.innerHTML = `<span>Toque para comprar</span><svg class="cta-hint-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-            inner.insertBefore(hint, inner.firstChild);
-            // clicking the hint hides it
-            hint.addEventListener('click', () => hint.remove());
-            // also hide when the product button is clicked
-            const btn = inner.querySelector('.sopy-product-cta');
-            if (btn) btn.addEventListener('click', () => { hint.remove(); });
-        }
+            if (inner && !inner.querySelector('.cta-hint')) {
+                const hint = document.createElement('div');
+                hint.className = 'cta-hint';
+                // attach to the toggle if present, otherwise to the product button; text set to required Portuguese label
+                hint.innerHTML = `<span>CLIQUE AQUI</span><svg class="cta-hint-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+                const toggle = inner.querySelector('.toggle, .switch');
+                const btn = inner.querySelector('.sopy-product-cta');
+                if (toggle) {
+                    // place hint right before the toggle so it sits visually above it when stacked
+                    inner.insertBefore(hint, toggle);
+                } else if (btn) {
+                    // fallback: place hint before the buy button
+                    inner.insertBefore(hint, btn);
+                } else {
+                    inner.appendChild(hint);
+                }
+                // clicking the hint hides it
+                hint.addEventListener('click', () => hint.remove());
+                // also hide when the product button is clicked
+                if (btn) btn.addEventListener('click', () => { hint.remove(); });
+            }
 
         // cria o ScrollTrigger que mostra e depois marca como at-end
         ScrollTrigger.create({

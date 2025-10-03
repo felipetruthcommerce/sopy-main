@@ -728,6 +728,7 @@ body.theme-aqua .capsule-3d-cta {
     padding: 0;
     box-shadow: none;
     border-radius: 999px;
+    flex-direction: column; /* stack vertically so hint can sit above toggle/button */
   }
 
   /* only the buy button is visible on mobile (rest hidden) */
@@ -748,6 +749,14 @@ body.theme-aqua .capsule-3d-cta {
     border-radius: 999px;
     font-size: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+  }
+
+  /* ensure the toggle sits below the hint and above the button when present */
+  .capsule-3d-cta .toggle,
+  .capsule-3d-cta .switch{
+    margin-top: 8px;
+    margin-bottom: 8px;
+    transform: scale(.78);
   }
 
   /* smaller toggle on mobile */
