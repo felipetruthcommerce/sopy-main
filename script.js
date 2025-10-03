@@ -227,6 +227,37 @@ function setTheme(theme) {
     
     // ... (seu código para atualizar textos do card de produto) ...
 
+    // Atualiza também os textos do card de produto (se presentes no DOM).
+    try {
+        const cta = document.querySelector('.capsule-3d-cta');
+        if (cta) {
+            const titleEl = cta.querySelector('.product-title');
+            const priceEl = cta.querySelector('.product-price');
+            const copyEl  = cta.querySelector('.product-copy');
+            const btnEl   = cta.querySelector('.sopy-product-cta');
+
+            const pick = (el, key) => {
+                if (!el) return;
+                const dataKey = `data-${key}`;
+                // prefer data attribute for the theme, fallback to existing text
+                const v = el.getAttribute(dataKey);
+                if (v != null) el.textContent = v;
+            };
+
+            // data attributes are data-citrus / data-aqua on each element
+            pick(titleEl, theme === 'citrus' ? 'citrus' : 'aqua');
+            pick(priceEl, theme === 'citrus' ? 'citrus' : 'aqua');
+            pick(copyEl,  theme === 'citrus' ? 'citrus' : 'aqua');
+            // For the CTA button, some authors used data-aqua/data-citrus on the element itself
+            if (btnEl) {
+                const btnData = btnEl.getAttribute(theme === 'citrus' ? 'data-citrus' : 'data-aqua');
+                if (btnData != null) btnEl.textContent = btnData;
+            }
+        }
+    } catch (e) {
+        console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
+    }
+
     swapModel(theme);
 }
 
