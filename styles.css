@@ -815,10 +815,12 @@ body.theme-aqua .capsule-3d-cta {
 
 .toggle-hint .hint-arrow { opacity: 0.8; }
 
-/* Ensure the toggle's own transitions don't shift the hint */
-.product-toggle-container .pod-toggle-label,
+/* Restore smooth toggle animations but keep hint stable */
+.product-toggle-container .pod-toggle-label {
+  transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
+}
 .product-toggle-container .pod-toggle-handle {
-  transition: none !important;
+  transition: transform 0.6s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease;
 }
 
 /* preserve existing positioning for product-toggle-container */
@@ -985,24 +987,32 @@ body.theme-citrus .benefit-title h2 {
     transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
 }
 
-/* Make toggle even smaller on mobile */
+/* Mobile toggle adjustments - maintain smooth animation */
 @media (max-width: 768px) {
+  .product-toggle-container {
+    bottom: 20px;
+    right: 15px;
+  }
+  
   .pod-toggle-label {
     width: 90px;
     height: 45px;
     border-radius: 25px;
     border: 3px solid #449d44;
+    transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
   }
   
   .pod-toggle-handle {
     width: 36px;
     height: 36px;
     left: 4px;
+    --tx: 0px;
+    transform: translate(var(--tx), -50%);
+    transition: transform 0.6s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease;
   }
   
   .pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
     --tx: 42px;
-    transform: translate(42px, -50%);
   }
   
   .toggle-hint {
