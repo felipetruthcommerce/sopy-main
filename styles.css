@@ -827,7 +827,7 @@ body.theme-aqua .capsule-3d-cta {
 
 /* Seção 3D estendida para acomodar animações */
 .sopy-section--extended {
-  min-height: 200vh; /* Dobrar a altura para mais espaço de scroll */
+  min-height: 300vh; /* Triplicar a altura para ainda mais espaço de scroll */
 }
 
 /* Benefit titles animation */
@@ -852,27 +852,27 @@ body.theme-aqua .capsule-3d-cta {
   font-size: clamp(2.5rem, 8vw, 6rem);
   font-weight: 700;
   line-height: 1.1;
-  color: var(--text-primary, #000);
+  color: #ffffff;
   text-align: center;
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Positioning for each title - spread across the section */
+/* Positioning for each title - more spaced out across the extended section */
 .benefit-1 {
-  top: 25%;
+  top: 20%;
   left: 10%;
   right: 10%;
 }
 
 .benefit-2 {
-  top: 50%;
+  top: 45%;
   left: 15%;
   right: 15%;
 }
 
 .benefit-3 {
-  top: 75%;
+  top: 70%;
   left: 10%;
   right: 10%;
 }
@@ -883,13 +883,15 @@ body.theme-aqua .capsule-3d-cta {
   visibility: visible;
 }
 
-/* Theme variations */
+/* Theme variations - mantém branco mas com sombra temática */
 body.theme-aqua .benefit-title h2 {
-  color: var(--aqua-primary, #4BB3FF);
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(75, 179, 255, 0.6), 0 0 20px rgba(75, 179, 255, 0.3);
 }
 
 body.theme-citrus .benefit-title h2 {
-  color: var(--citrus-primary, #FFC107);
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(255, 193, 7, 0.6), 0 0 20px rgba(255, 193, 7, 0.3);
 }
 
 /* Mobile adjustments */
@@ -899,19 +901,19 @@ body.theme-citrus .benefit-title h2 {
   }
   
   .benefit-1 {
-    top: 20%;
+    top: 15%;
     left: 5%;
     right: 5%;
   }
   
   .benefit-2 {
-    top: 50%;
+    top: 40%;
     left: 5%;
     right: 5%;
   }
   
   .benefit-3 {
-    top: 80%;
+    top: 65%;
     left: 5%;
     right: 5%;
   }
