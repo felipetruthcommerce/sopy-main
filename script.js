@@ -481,8 +481,6 @@ if (heroVideo && heroPoster) {
         console.warn('[PARALLAX] Seção #sustentabilidade ou Lenis não encontrados.');
     }
 
-            // (removido) sticky CTA fora da hero — mantém só o botão na própria hero
-
 
 
     // ===================================
