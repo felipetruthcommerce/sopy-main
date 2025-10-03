@@ -258,6 +258,13 @@ function setTheme(theme) {
         console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
     }
 
+    // Update benefit phrases colors based on theme (CSS handles this via body class)
+    // Force a repaint to ensure theme colors are applied immediately
+    const benefitPhrases = document.querySelectorAll('.benefit-phrase');
+    benefitPhrases.forEach(phrase => {
+        phrase.style.transform = phrase.style.transform; // force repaint
+    });
+
     swapModel(theme);
 }
 
@@ -351,6 +358,29 @@ new THREE.RGBELoader()
   const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
   capsuleGroup.rotation.y = yaw;
 
+  // Revelar frases de benefícios baseado no progresso do scroll
+  revealBenefitPhrases(p);
+  }
+
+  function revealBenefitPhrases(progress) {
+    const phrases = document.querySelectorAll('.benefit-phrase');
+    
+    phrases.forEach(phrase => {
+      const revealPoint = parseFloat(phrase.dataset.reveal || 0);
+      const shouldReveal = progress >= revealPoint;
+      const isRevealed = phrase.classList.contains('revealed');
+      
+      if (shouldReveal && !isRevealed) {
+        // Adicionar pequeno delay escalonado para efeito mais suave
+        const delay = (revealPoint - 0.2) * 200; // delay baseado na posição
+        setTimeout(() => {
+          phrase.classList.add('revealed');
+        }, Math.max(0, delay));
+      } else if (!shouldReveal && isRevealed) {
+        // Remove a revelação se o usuário scrollar para trás
+        phrase.classList.remove('revealed');
+      }
+    });
   }
 
   function onScrollSpin(){
