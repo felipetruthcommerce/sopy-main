@@ -827,7 +827,7 @@ body.theme-aqua .capsule-3d-cta {
 
 /* Seção 3D estendida para acomodar animações */
 .sopy-section--extended {
-  min-height: 300vh; /* Triplicar a altura para ainda mais espaço de scroll */
+  min-height: 400vh; /* Quadruplicar a altura para máximo espaçamento entre títulos */
 }
 
 /* Benefit titles animation */
