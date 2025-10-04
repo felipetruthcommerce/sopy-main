@@ -26,7 +26,8 @@ function setupGsapPlugins() {
     const plugs = [];
     if (typeof ScrollTrigger !== "undefined") plugs.push(ScrollTrigger);
     if (typeof CustomEase !== "undefined") plugs.push(CustomEase);
-    if (typeof SplitText !== "undefined") plugs.push(SplitText); // Adicione se você usa SplitText
+    if (typeof SplitText !== "undefined") plugs.push(SplitText);
+    if (typeof ScrollToPlugin !== "undefined") plugs.push(ScrollToPlugin); // Para navegação suave
     
     if (plugs.length) gsap.registerPlugin(...plugs);
 
@@ -750,7 +751,7 @@ if (heroVideo && heroPoster) {
 
 
     // ===================================
-    //  BLOCO COMO USAR (Scroll-driven Slider) - VERSÃO MELHORADA
+    //  BLOCO COMO USAR (Scroll-driven Slider) - VERSÃO CORRIGIDA
     // ===================================
     
     const howSection = document.querySelector('.sopy-how-section');
@@ -768,115 +769,135 @@ if (heroVideo && heroPoster) {
         const textElement = howSection.querySelector("#sopy-how-text");
         
         // Estado do slider
-        let currentIndex = 0;
-        let isTransitioning = false;
+        let currentSlide = 0;
+        let isManualControl = false;
         let scrollTriggerInstance = null;
+        
+        // Timeline principal para controle das transições
+        const mainTimeline = gsap.timeline({ paused: true });
+        
+        // Função para criar as animações do timeline
+        function createTimeline() {
+            mainTimeline.clear();
+            
+            slides.forEach((slide, index) => {
+                if (index === 0) {
+                    // Primeiro slide começa visível
+                    mainTimeline.set(slide, { x: "0%", zIndex: 2, opacity: 1 }, 0);
+                } else {
+                    // Outros slides começam à direita
+                    mainTimeline.set(slide, { x: "100%", zIndex: 1, opacity: 0 }, 0);
+                }
+            });
+            
+            // Animações para cada transição
+            for (let i = 0; i < slides.length - 1; i++) {
+                const currentSlide = slides[i];
+                const nextSlide = slides[i + 1];
+                
+                // Tempo da transição (cada seção ocupa 33.33% do timeline)
+                const startTime = (i + 1) * 0.3333;
+                
+                mainTimeline
+                    .set(nextSlide, { zIndex: 2 }, startTime)
+                    .set(currentSlide, { zIndex: 1 }, startTime)
+                    .to(nextSlide, {
+                        x: "0%",
+                        opacity: 1,
+                        duration: 0.8,
+                        ease: "power2.inOut"
+                    }, startTime)
+                    .to(currentSlide, {
+                        x: "-100%",
+                        opacity: 0,
+                        duration: 0.8,
+                        ease: "power2.inOut"
+                    }, startTime);
+            }
+        }
         
         // Função para atualizar navegação
         function updateNavigation(activeIndex) {
-            console.log(`[NAV] Atualizando navegação para índice ${activeIndex}`);
-            
             navItems.forEach((item, index) => {
                 const isActive = index === activeIndex;
+                item.classList.toggle("active", isActive);
+                
                 const text = item.querySelector("span");
                 const bar = item.querySelector(".nav-bar");
                 
-                // Remove/adiciona classe active
-                item.classList.toggle("active", isActive);
-                
-                // Atualiza opacidade do texto
                 if (text) {
-                    text.style.opacity = isActive ? "1" : "0.6";
-                    text.style.transform = isActive ? "translateY(-1px)" : "translateY(0)";
-                }
-                
-                // Atualiza barra de progresso
-                if (bar) {
-                    bar.style.opacity = isActive ? "1" : "0.4";
-                }
-                
-                // Adiciona feedback visual extra
-                item.style.transform = isActive ? "translateY(-2px)" : "translateY(0)";
-            });
-        }
-        
-        // Função para animar slides
-        function animateSlides(targetIndex, immediate = false) {
-            if (isTransitioning && !immediate) return;
-            
-            isTransitioning = true;
-            
-            slides.forEach((slide, index) => {
-                let xPosition = 0;
-                let zIndex = 1;
-                
-                if (index < targetIndex) {
-                    xPosition = -100; // Slides passados ficam à esquerda
-                } else if (index > targetIndex) {
-                    xPosition = 100; // Slides futuros ficam à direita
-                } else {
-                    xPosition = 0; // Slide atual no centro
-                    zIndex = 2;
-                }
-                
-                slide.style.zIndex = zIndex;
-                
-                if (immediate) {
-                    slide.style.transform = `translateX(${xPosition}%)`;
-                } else {
-                    gsap.to(slide, {
-                        x: xPosition + "%",
-                        duration: 0.8,
-                        ease: "power2.inOut",
-                        onComplete: () => {
-                            if (index === targetIndex) {
-                                isTransitioning = false;
-                            }
-                        }
+                    gsap.to(text, {
+                        opacity: isActive ? 1 : 0.6,
+                        y: isActive ? -1 : 0,
+                        duration: 0.3
                     });
                 }
+                
+                if (bar) {
+                    gsap.to(bar, { opacity: isActive ? 1 : 0.4, duration: 0.3 });
+                }
+                
+                gsap.to(item, {
+                    y: isActive ? -2 : 0,
+                    duration: 0.3,
+                    ease: "power2.out"
+                });
             });
         }
         
         // Função para atualizar texto
-        function updateText(index, immediate = false) {
+        function updateText(index) {
             if (!textElement) return;
-            
-            if (immediate) {
-                textElement.innerHTML = slideTexts[index];
-                textElement.style.opacity = "1";
-                textElement.style.transform = "translateY(0)";
-                return;
-            }
             
             gsap.to(textElement, {
                 opacity: 0,
-                y: -20,
-                duration: 0.3,
+                y: -15,
+                duration: 0.25,
                 ease: "power2.inOut",
                 onComplete: () => {
                     textElement.innerHTML = slideTexts[index];
                     gsap.fromTo(textElement, 
-                        { y: 20, opacity: 0 },
-                        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
+                        { y: 15, opacity: 0 },
+                        { y: 0, opacity: 1, duration: 0.35, ease: "power2.out" }
                     );
                 }
             });
         }
         
-        // Função principal para mudar slide
-        function goToSlide(index, immediate = false) {
-            if (index === currentIndex && !immediate) return;
+        // Função para ir para um slide específico
+        function goToSlide(targetIndex, immediate = false) {
+            if (targetIndex === currentSlide) return;
             
-            console.log(`[SLIDER] Mudando para slide ${index}`);
+            console.log(`[SLIDER] Indo para slide ${targetIndex}`);
             
-            currentIndex = index;
-            updateNavigation(index);
-            updateText(index, immediate);
-            animateSlides(index, immediate);
+            const progress = targetIndex / (slides.length - 1);
+            
+            if (immediate) {
+                mainTimeline.progress(progress);
+                currentSlide = targetIndex;
+                updateNavigation(targetIndex);
+                if (textElement) {
+                    textElement.innerHTML = slideTexts[targetIndex];
+                }
+            } else {
+                gsap.to(mainTimeline, {
+                    progress: progress,
+                    duration: 0.8,
+                    ease: "power2.inOut",
+                    onUpdate: () => {
+                        const newIndex = Math.round(mainTimeline.progress() * (slides.length - 1));
+                        if (newIndex !== currentSlide) {
+                            currentSlide = newIndex;
+                            updateNavigation(newIndex);
+                            updateText(newIndex);
+                        }
+                    }
+                });
+            }
         }
         
-        // Configuração inicial
+        // Inicializar timeline e posições
+        createTimeline();
         goToSlide(0, true);
         
         // Criar indicador de progresso
@@ -891,123 +912,122 @@ if (heroVideo && heroPoster) {
         scrollTriggerInstance = ScrollTrigger.create({
             trigger: howSection,
             start: "top top",
-            end: "+=300%", // Mais espaço para scroll suave
+            end: "+=300%",
             pin: true,
-            scrub: 1, // Scroll mais suave
+            scrub: 0.5,
             onUpdate: self => {
+                if (isManualControl) return; // Ignora durante controle manual
+                
                 const progress = self.progress;
-                let targetIndex = 0;
                 
-                console.log(`[SCROLL] Progresso: ${(progress * 100).toFixed(1)}%`);
-                
-                // Atualizar debug info
-                if (window.updateDebugInfo) {
-                    window.updateDebugInfo(progress, currentIndex);
-                }
-                
-                // Atualizar barra de progresso
+                // Atualizar barra de progresso visual
                 if (progressBar) {
                     progressBar.style.width = `${progress * 100}%`;
                 }
                 
-                // Determinação mais precisa do slide baseada no progresso
-                if (progress >= 0 && progress < 0.3) {
-                    targetIndex = 0;
-                } else if (progress >= 0.3 && progress < 0.7) {
-                    targetIndex = 1;
-                } else if (progress >= 0.7) {
-                    targetIndex = 2;
+                // Atualizar timeline baseado no progresso do scroll
+                mainTimeline.progress(progress);
+                
+                // Determinar slide atual baseado no progresso
+                let targetSlide = 0;
+                if (progress >= 0.66) {
+                    targetSlide = 2;
+                } else if (progress >= 0.33) {
+                    targetSlide = 1;
+                } else {
+                    targetSlide = 0;
                 }
                 
-                // Só atualizar se mudou o slide
-                if (targetIndex !== currentIndex) {
-                    console.log(`[SCROLL] Mudando slide: ${currentIndex} → ${targetIndex}`);
-                    goToSlide(targetIndex);
+                // Atualizar navegação e texto se mudou de slide
+                if (targetSlide !== currentSlide) {
+                    currentSlide = targetSlide;
+                    updateNavigation(targetSlide);
+                    updateText(targetSlide);
                 }
             },
             snap: {
                 snapTo: [0, 0.33, 0.66, 1],
-                duration: { min: 0.3, max: 0.8 },
-                delay: 0.2,
-                ease: "power2.inOut"
+                duration: { min: 0.3, max: 0.6 },
+                delay: 0.1
             }
         });
         
-        // Event listeners para cliques na navegação
+        // Event listeners para navegação manual
         navItems.forEach((item, index) => {
-            // Adicionar feedback visual no hover
+            // Hover effects
             item.addEventListener("mouseenter", () => {
-                if (index !== currentIndex) {
-                    item.style.transform = "translateY(-1px)";
+                if (index !== currentSlide) {
+                    gsap.to(item, { y: -1, duration: 0.2 });
                     const text = item.querySelector("span");
-                    if (text) text.style.opacity = "0.8";
+                    if (text) gsap.to(text, { opacity: 0.8, duration: 0.2 });
                 }
             });
             
             item.addEventListener("mouseleave", () => {
-                if (index !== currentIndex) {
-                    item.style.transform = "translateY(0)";
+                if (index !== currentSlide) {
+                    gsap.to(item, { y: 0, duration: 0.2 });
                     const text = item.querySelector("span");
-                    if (text) text.style.opacity = "0.6";
+                    if (text) gsap.to(text, { opacity: 0.6, duration: 0.2 });
                 }
             });
             
+            // Click handler
             item.addEventListener("click", (e) => {
                 e.preventDefault();
-                e.stopPropagation();
                 
-                console.log(`[NAV CLICK] Clicou no item ${index}, slide atual: ${currentIndex}`);
+                if (index === currentSlide) return;
                 
-                if (index === currentIndex) {
-                    console.log(`[NAV CLICK] Mesmo slide, ignorando...`);
-                    return;
-                }
+                console.log(`[NAV CLICK] Clicou no slide ${index}`);
                 
-                // Desativar temporariamente o ScrollTrigger para evitar conflitos
-                if (scrollTriggerInstance) {
-                    console.log(`[NAV CLICK] Desabilitando ScrollTrigger temporariamente...`);
-                    scrollTriggerInstance.disable();
-                }
+                // Ativar controle manual
+                isManualControl = true;
                 
-                // Ir para o slide
+                // Ir para o slide clicado
                 goToSlide(index);
                 
-                // Reativar ScrollTrigger após animação
-                setTimeout(() => {
-                    if (scrollTriggerInstance) {
-                        console.log(`[NAV CLICK] Reabilitando ScrollTrigger...`);
-                        scrollTriggerInstance.enable();
-                        ScrollTrigger.refresh();
+                // Sincronizar ScrollTrigger com a nova posição
+                const targetProgress = index / (slides.length - 1);
+                if (scrollTriggerInstance) {
+                    // Calcular posição de scroll target
+                    const targetScroll = scrollTriggerInstance.start + (scrollTriggerInstance.end - scrollTriggerInstance.start) * targetProgress;
+                    
+                    // Usar ScrollToPlugin se disponível, senão usar método alternativo
+                    if (typeof ScrollToPlugin !== "undefined") {
+                        gsap.to(window, {
+                            duration: 0.8,
+                            ease: "power2.inOut",
+                            scrollTo: {
+                                y: targetScroll,
+                                autoKill: false
+                            },
+                            onComplete: () => {
+                                setTimeout(() => {
+                                    isManualControl = false;
+                                }, 300);
+                            }
+                        });
+                    } else {
+                        // Método alternativo usando scroll nativo
+                        const startScroll = window.pageYOffset;
+                        const distance = targetScroll - startScroll;
+                        
+                        gsap.to({ progress: 0 }, {
+                            progress: 1,
+                            duration: 0.8,
+                            ease: "power2.inOut",
+                            onUpdate: function() {
+                                window.scrollTo(0, startScroll + distance * this.progress());
+                            },
+                            onComplete: () => {
+                                setTimeout(() => {
+                                    isManualControl = false;
+                                }, 300);
+                            }
+                        });
                     }
-                }, 1200);
+                }
             });
         });
-        
-        // Sistema de debug visual (remover em produção)
-        const debugInfo = document.createElement('div');
-        debugInfo.className = 'debug-info';
-        debugInfo.style.cssText = `
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 10px;
-            font-size: 12px;
-            border-radius: 5px;
-            z-index: 9999;
-            font-family: monospace;
-        `;
-        document.body.appendChild(debugInfo);
-        
-        // Função para atualizar debug info
-        window.updateDebugInfo = (progress, slideIndex) => {
-            debugInfo.innerHTML = `
-                Progresso: ${(progress * 100).toFixed(1)}%<br>
-                Slide Atual: ${slideIndex}<br>
-                Transitioning: ${isTransitioning}
-            `;
-        };
         
         console.log('[COMO USAR] Slider inicializado com sucesso!');
     }
