@@ -750,7 +750,7 @@ if (heroVideo && heroPoster) {
 
 
     // ===================================
-    //  BLOCO COMO USAR (Scroll-driven Slider)
+    //  BLOCO COMO USAR (Scroll-driven Slider) - VERSÃO MELHORADA
     // ===================================
     
     const howSection = document.querySelector('.sopy-how-section');
@@ -766,115 +766,250 @@ if (heroVideo && heroPoster) {
         const navItems = Array.from(howSection.querySelectorAll(".nav-item"));
         const slides = Array.from(howSection.querySelectorAll(".slide"));
         const textElement = howSection.querySelector("#sopy-how-text");
-        const currentIndexRef = { current: 0 };
         
-        function updateNav(activeIndex) {
+        // Estado do slider
+        let currentIndex = 0;
+        let isTransitioning = false;
+        let scrollTriggerInstance = null;
+        
+        // Função para atualizar navegação
+        function updateNavigation(activeIndex) {
+            console.log(`[NAV] Atualizando navegação para índice ${activeIndex}`);
+            
             navItems.forEach((item, index) => {
+                const isActive = index === activeIndex;
                 const text = item.querySelector("span");
                 const bar = item.querySelector(".nav-bar");
                 
-                if (index === activeIndex) {
-                    item.classList.add("active");
-                    if (text) text.style.opacity = "1";
-                    if (bar) bar.style.opacity = "1";
+                // Remove/adiciona classe active
+                item.classList.toggle("active", isActive);
+                
+                // Atualiza opacidade do texto
+                if (text) {
+                    text.style.opacity = isActive ? "1" : "0.6";
+                    text.style.transform = isActive ? "translateY(-1px)" : "translateY(0)";
+                }
+                
+                // Atualiza barra de progresso
+                if (bar) {
+                    bar.style.opacity = isActive ? "1" : "0.4";
+                }
+                
+                // Adiciona feedback visual extra
+                item.style.transform = isActive ? "translateY(-2px)" : "translateY(0)";
+            });
+        }
+        
+        // Função para animar slides
+        function animateSlides(targetIndex, immediate = false) {
+            if (isTransitioning && !immediate) return;
+            
+            isTransitioning = true;
+            
+            slides.forEach((slide, index) => {
+                let xPosition = 0;
+                let zIndex = 1;
+                
+                if (index < targetIndex) {
+                    xPosition = -100; // Slides passados ficam à esquerda
+                } else if (index > targetIndex) {
+                    xPosition = 100; // Slides futuros ficam à direita
                 } else {
-                    item.classList.remove("active");
-                    if (text) text.style.opacity = "0.5";
-                    if (bar) bar.style.opacity = "0.3";
+                    xPosition = 0; // Slide atual no centro
+                    zIndex = 2;
+                }
+                
+                slide.style.zIndex = zIndex;
+                
+                if (immediate) {
+                    slide.style.transform = `translateX(${xPosition}%)`;
+                } else {
+                    gsap.to(slide, {
+                        x: xPosition + "%",
+                        duration: 0.8,
+                        ease: "power2.inOut",
+                        onComplete: () => {
+                            if (index === targetIndex) {
+                                isTransitioning = false;
+                            }
+                        }
+                    });
                 }
             });
         }
         
-        function gotoSlideDirect(index) {
-            if (currentIndexRef.current === index) return;
+        // Função para atualizar texto
+        function updateText(index, immediate = false) {
+            if (!textElement) return;
             
-            updateNav(index);
-            
-            // Anima texto de forma mais suave
-            if (textElement) {
-                gsap.to(textElement, {
-                    opacity: 0,
-                    y: -15,
-                    duration: 0.4,
-                    ease: "power2.inOut",
-                    onComplete: () => {
-                        textElement.innerHTML = slideTexts[index];
-                        gsap.fromTo(textElement, 
-                            { y: 15, opacity: 0 },
-                            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
-                        );
-                    }
-                });
+            if (immediate) {
+                textElement.innerHTML = slideTexts[index];
+                textElement.style.opacity = "1";
+                textElement.style.transform = "translateY(0)";
+                return;
             }
             
-            currentIndexRef.current = index;
+            gsap.to(textElement, {
+                opacity: 0,
+                y: -20,
+                duration: 0.3,
+                ease: "power2.inOut",
+                onComplete: () => {
+                    textElement.innerHTML = slideTexts[index];
+                    gsap.fromTo(textElement, 
+                        { y: 20, opacity: 0 },
+                        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }
+                    );
+                }
+            });
         }
         
-        // Configuração inicial dos slides
-        slides.forEach((slide, index) => {
-            if (index === 0) {
-                slide.style.zIndex = "2";
-                slide.style.transform = "translateX(0%)";
-            } else {
-                slide.style.zIndex = "1";
-                slide.style.transform = "translateX(100%)";
-            }
-        });
+        // Função principal para mudar slide
+        function goToSlide(index, immediate = false) {
+            if (index === currentIndex && !immediate) return;
+            
+            console.log(`[SLIDER] Mudando para slide ${index}`);
+            
+            currentIndex = index;
+            updateNavigation(index);
+            updateText(index, immediate);
+            animateSlides(index, immediate);
+        }
         
-        // ScrollTrigger para controlar o slider
-        ScrollTrigger.create({
+        // Configuração inicial
+        goToSlide(0, true);
+        
+        // Criar indicador de progresso
+        const progressIndicator = document.createElement('div');
+        progressIndicator.className = 'scroll-progress-indicator';
+        progressIndicator.innerHTML = '<div class="progress-bar"></div>';
+        howSection.appendChild(progressIndicator);
+        
+        const progressBar = progressIndicator.querySelector('.progress-bar');
+        
+        // ScrollTrigger para controle por scroll
+        scrollTriggerInstance = ScrollTrigger.create({
             trigger: howSection,
             start: "top top",
-            end: "+=200%",
+            end: "+=300%", // Mais espaço para scroll suave
             pin: true,
-            scrub: 0.8,
+            scrub: 1, // Scroll mais suave
             onUpdate: self => {
                 const progress = self.progress;
                 let targetIndex = 0;
                 
-                // Definir qual slide deve estar ativo baseado no progresso
-                if (progress < 0.33) {
+                console.log(`[SCROLL] Progresso: ${(progress * 100).toFixed(1)}%`);
+                
+                // Atualizar debug info
+                if (window.updateDebugInfo) {
+                    window.updateDebugInfo(progress, currentIndex);
+                }
+                
+                // Atualizar barra de progresso
+                if (progressBar) {
+                    progressBar.style.width = `${progress * 100}%`;
+                }
+                
+                // Determinação mais precisa do slide baseada no progresso
+                if (progress >= 0 && progress < 0.3) {
                     targetIndex = 0;
-                } else if (progress < 0.66) {
+                } else if (progress >= 0.3 && progress < 0.7) {
                     targetIndex = 1;
-                } else {
+                } else if (progress >= 0.7) {
                     targetIndex = 2;
                 }
                 
-                // Só mudar se for diferente do atual
-                if (targetIndex !== currentIndexRef.current) {
-                    gotoSlideDirect(targetIndex);
+                // Só atualizar se mudou o slide
+                if (targetIndex !== currentIndex) {
+                    console.log(`[SCROLL] Mudando slide: ${currentIndex} → ${targetIndex}`);
+                    goToSlide(targetIndex);
                 }
-                
-                // Atualizar posições dos slides baseado no progresso
-                slides.forEach((slide, index) => {
-                    let xPos = 0;
-                    
-                    if (index < targetIndex) {
-                        xPos = -100; // Slides anteriores saem pela esquerda
-                    } else if (index > targetIndex) {
-                        xPos = 100; // Slides seguintes ficam à direita
-                    } else {
-                        xPos = 0; // Slide atual no centro
-                    }
-                    
-                    gsap.set(slide, { x: xPos + "%" });
-                });
             },
             snap: {
                 snapTo: [0, 0.33, 0.66, 1],
-                duration: { min: 0.2, max: 0.6 },
-                delay: 0.1
+                duration: { min: 0.3, max: 0.8 },
+                delay: 0.2,
+                ease: "power2.inOut"
             }
         });
         
-        // Event listeners para nav items (opcional - permite clique direto)
+        // Event listeners para cliques na navegação
         navItems.forEach((item, index) => {
-            item.addEventListener("click", () => gotoSlideDirect(index));
+            // Adicionar feedback visual no hover
+            item.addEventListener("mouseenter", () => {
+                if (index !== currentIndex) {
+                    item.style.transform = "translateY(-1px)";
+                    const text = item.querySelector("span");
+                    if (text) text.style.opacity = "0.8";
+                }
+            });
+            
+            item.addEventListener("mouseleave", () => {
+                if (index !== currentIndex) {
+                    item.style.transform = "translateY(0)";
+                    const text = item.querySelector("span");
+                    if (text) text.style.opacity = "0.6";
+                }
+            });
+            
+            item.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                console.log(`[NAV CLICK] Clicou no item ${index}, slide atual: ${currentIndex}`);
+                
+                if (index === currentIndex) {
+                    console.log(`[NAV CLICK] Mesmo slide, ignorando...`);
+                    return;
+                }
+                
+                // Desativar temporariamente o ScrollTrigger para evitar conflitos
+                if (scrollTriggerInstance) {
+                    console.log(`[NAV CLICK] Desabilitando ScrollTrigger temporariamente...`);
+                    scrollTriggerInstance.disable();
+                }
+                
+                // Ir para o slide
+                goToSlide(index);
+                
+                // Reativar ScrollTrigger após animação
+                setTimeout(() => {
+                    if (scrollTriggerInstance) {
+                        console.log(`[NAV CLICK] Reabilitando ScrollTrigger...`);
+                        scrollTriggerInstance.enable();
+                        ScrollTrigger.refresh();
+                    }
+                }, 1200);
+            });
         });
         
-        // Setup inicial
-        updateNav(0);
+        // Sistema de debug visual (remover em produção)
+        const debugInfo = document.createElement('div');
+        debugInfo.className = 'debug-info';
+        debugInfo.style.cssText = `
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            font-size: 12px;
+            border-radius: 5px;
+            z-index: 9999;
+            font-family: monospace;
+        `;
+        document.body.appendChild(debugInfo);
+        
+        // Função para atualizar debug info
+        window.updateDebugInfo = (progress, slideIndex) => {
+            debugInfo.innerHTML = `
+                Progresso: ${(progress * 100).toFixed(1)}%<br>
+                Slide Atual: ${slideIndex}<br>
+                Transitioning: ${isTransitioning}
+            `;
+        };
+        
+        console.log('[COMO USAR] Slider inicializado com sucesso!');
     }
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---
