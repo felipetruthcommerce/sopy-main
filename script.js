@@ -821,56 +821,50 @@ if (heroVideo && heroPoster) {
             }
         });
         
-        // ScrollTrigger para controlar o slider com transições mais suaves
-        let tl = gsap.timeline({ paused: true });
-        
-        // Criar timeline com transições mais fluidas
-        slides.forEach((slide, index) => {
-            if (index > 0) {
-                tl.to(slides[index - 1], {
-                    x: "-100%",
-                    duration: 1,
-                    ease: "power2.inOut"
-                }, index)
-                .fromTo(slide, {
-                    x: "100%"
-                }, {
-                    x: "0%",
-                    duration: 1,
-                    ease: "power2.inOut"
-                }, index)
-                .call(() => {
-                    updateNav(index);
-                    if (textElement) {
-                        gsap.to(textElement, {
-                            opacity: 0,
-                            y: -20,
-                            duration: 0.3,
-                            onComplete: () => {
-                                textElement.innerHTML = slideTexts[index];
-                                gsap.fromTo(textElement, 
-                                    { y: 20, opacity: 0 },
-                                    { y: 0, opacity: 1, duration: 0.6 }
-                                );
-                            }
-                        });
-                    }
-                }, [], index + 0.3);
-            }
-        });
-        
+        // ScrollTrigger para controlar o slider
         ScrollTrigger.create({
             trigger: howSection,
             start: "top top",
-            end: "+=300%", // Mais espaço para scroll mais suave
+            end: "+=200%",
             pin: true,
-            scrub: 1.2, // Scrub mais lento para mais controle
-            animation: tl,
+            scrub: 0.8,
+            onUpdate: self => {
+                const progress = self.progress;
+                let targetIndex = 0;
+                
+                // Definir qual slide deve estar ativo baseado no progresso
+                if (progress < 0.33) {
+                    targetIndex = 0;
+                } else if (progress < 0.66) {
+                    targetIndex = 1;
+                } else {
+                    targetIndex = 2;
+                }
+                
+                // Só mudar se for diferente do atual
+                if (targetIndex !== currentIndexRef.current) {
+                    gotoSlideDirect(targetIndex);
+                }
+                
+                // Atualizar posições dos slides baseado no progresso
+                slides.forEach((slide, index) => {
+                    let xPos = 0;
+                    
+                    if (index < targetIndex) {
+                        xPos = -100; // Slides anteriores saem pela esquerda
+                    } else if (index > targetIndex) {
+                        xPos = 100; // Slides seguintes ficam à direita
+                    } else {
+                        xPos = 0; // Slide atual no centro
+                    }
+                    
+                    gsap.set(slide, { x: xPos + "%" });
+                });
+            },
             snap: {
-                snapTo: "labels",
-                duration: { min: 0.3, max: 0.8 },
-                delay: 0.05,
-                ease: "power2.inOut"
+                snapTo: [0, 0.33, 0.66, 1],
+                duration: { min: 0.2, max: 0.6 },
+                delay: 0.1
             }
         });
         
