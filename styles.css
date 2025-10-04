@@ -976,15 +976,14 @@ body.theme-citrus .benefit-title h2 {
 }
 .pod-toggle-label {
     display: inline-block;
-  width: 130px; /* widened to keep handle fully inside */
-  height: 64px; /* taller to add vertical padding */
-  border-radius: 36px;
+    width: 120px; /* smaller */
+    height: 60px; /* smaller */
+    border-radius: 36px;
     position: relative;
     cursor: pointer;
     box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(255, 255, 255, 0.45);
     background-color: #5cb85c;
     border: 4px solid #449d44;
-  overflow: hidden; /* guarantee the handle never shows outside */
     transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
 }
 
@@ -1057,8 +1056,8 @@ body.theme-citrus .benefit-title h2 {
 .pod-image.blue { opacity: 0; }
 .pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
   /* move the handle to the right while preserving vertical centering */
-  --tx: 62px; /* computed for 130x64 track, 4px border, 48px handle, 6px side gap */
-  transform: translate(62px, -50%); /* set explicit transform to ensure smooth animation across browsers */
+  --tx: 56px; /* adjusted for smaller label */
+  transform: translate(56px, -50%); /* set explicit transform to ensure smooth animation across browsers */
 }
 .pod-toggle-checkbox:checked + .pod-toggle-label {
     background-color: #007bff;
@@ -1084,45 +1083,44 @@ body.theme-citrus .benefit-title h2 {
 .benefit-item img { width: 40px; height: 40px; margin: 0 auto .25rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,.06)); }
 .benefit-item h3 { font-size: .98rem; color: var(--text); }
 
-/* ========== COMO USAR (Horizontal Scroll driven by scroll in all viewports) ========== */
+/* ========== COMO USAR (Horizontal Scroll) ========== */
 .sopy-how-section {
-  height: 100vh;
+  height: 100vh;            /* ocupa toda a viewport */
   position: relative;
   overflow: hidden;
   background-color: var(--brand-dark);
-  padding: 0;
+  padding: 0;               /* sem padding para centralizar perfeitamente */
 }
 
 .sopy-how-title { display: none; }
-/* Always hide the old mobile stack; we use the horizontal track on all sizes */
-.sopy-how-stack { display: none !important; }
+/* Hide mobile slider by default (desktop) */
+.sopy-how-stack{ display:none; }
 
 .sopy-how-track {
   display: flex;
-  position: relative;
-  height: 100vh;
-  will-change: transform;
+  position: relative; /* GSAP pinna a seção, não o track */
+  height: 100vh;      /* ocupa toda a viewport conforme solicitado */
+  will-change: transform; /* performance */
 }
 
 .sopy-how-background-text {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+  display: grid; place-items: center;
   font-size: 18vw;
   text-align: center;
   color: rgba(255,255,255,0.35);
   font-weight: 800;
-  z-index: 1;
+  z-index: 1; /* por trás do card */
   pointer-events: none;
 }
 
 .sopy-how-panel {
-  flex: 0 0 100vw;
-  height: 100vh;
+  flex: 0 0 100vw;   /* cada painel ocupa 100% da largura da viewport */
+  height: 100vh;     /* cada painel usa a altura inteira da viewport */
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
   padding: 0 10%;
   box-sizing: border-box;
   position: relative;
@@ -1248,20 +1246,104 @@ body.theme-aqua .sopy-how-card {
 
 .sopy-how-progress-dot.active { background-color: rgba(255,255,255,0.28); border-color: transparent; transform: translateY(-2px); filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
 .sopy-how-progress-dot.active {
-  /* Tablet e mobile: Como usar - keep section sizing but use the same horizontal track */
-  @media (max-width: 900px) {
-    .sopy-how-section {
-      min-height: 100vh;
-      height: 100vh;
-      padding: clamp(20px, 6.5vw, 32px) 0 80px;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
+  width: 56px;           /* pílula longa */
+  height: 12px;
+  border-radius: 999px;
+  background-color: #F8C537; /* amarelo destaque */
+  transform: translateY(-1px);
+}
 
-    .sopy-how-title { display: none; }
-    .sopy-how-track { display: flex !important; }
-    .sopy-how-background-text { display: grid; }
+
+/* Painel em tela cheia com posição sticky */
+.sustainability-parallax .fullscreen-panel {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;        /* como no teste.html */
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remove transparent background to allow solid theme colors */
+}
+
+/* Container flexível para o conteúdo do painel */
+.sustainability-parallax .panel-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row !important; /* garante imagem e texto lado a lado por padrão */
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1.5rem, 5vw, 4rem);
+  gap: clamp(1.5rem, 5vw, 4rem);
+  /* RESET do estilo de .panel-content usado na seção horizontal */
+  max-width: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+
+}
+
+/* Remove o efeito de hover herdado da seção horizontal */
+.sustainability-parallax .panel-content:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Inverte a direção quando a imagem deve estar à direita */
+.sustainability-parallax .fullscreen-panel[data-layout="right-image"] .panel-content {
+  flex-direction: row-reverse !important;
+}
+
+/* left-image sempre imagem à esquerda, texto à direita */
+.sustainability-parallax .fullscreen-panel[data-layout="left-image"] .panel-content {
+  flex-direction: row !important;
+}
+
+/* alinhamento da imagem encostada à borda correta */
+.sustainability-parallax .fullscreen-panel[data-layout="right-image"] .image-column { align-items: flex-end; }
+.sustainability-parallax .fullscreen-panel[data-layout="left-image"]  .image-column { align-items: flex-start; }
+
+/* Colunas de texto e imagem com tamanhos iguais */
+.sustainability-parallax .text-column,
+.sustainability-parallax .image-column {
+  flex: 1;
+  max-width: 50%;
+  height: 100%;
+}
+
+/* center text vertically inside the text column */
+.sustainability-parallax .text-column { 
+  display:flex; 
+  flex-direction:column; 
+  justify-content:flex-start; /* move texto para o topo */
+  align-items:flex-start; 
+  padding: 3rem 2rem; /* mais padding no topo */
+}
+
+/* central por padrão; alinhamento final vem do data-layout */
+.sustainability-parallax .image-column { align-items: center; }
+
+/* Container da imagem com proporção fixa */
+.sustainability-parallax .image-wrapper {
+  width: clamp(320px, 48vw, 520px);
+  margin: 0 auto;
+  aspect-ratio: 3 / 4.1; /* um pouco maior que antes */
+  overflow: hidden;
+  border-radius: 16px;
+  transform-origin: center center;
+}
+
+.sustainability-parallax .image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* Estilos de texto */
 .sustainability-parallax .text-column h2 {
@@ -2077,6 +2159,3 @@ body.theme-aqua {
 
 /* Ensure testimonials section is a positioned container for absolute dots */
 #testemunhos { position: relative; }
-
-
-
