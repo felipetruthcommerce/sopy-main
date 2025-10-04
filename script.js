@@ -788,41 +788,21 @@ if (heroVideo && heroPoster) {
         function gotoSlideDirect(index) {
             if (currentIndexRef.current === index) return;
             
-            const currentSlide = slides[currentIndexRef.current];
-            const nextSlide = slides[index];
-            
-            if (currentSlide) currentSlide.style.zIndex = "1";
-            if (nextSlide) {
-                nextSlide.style.zIndex = "2";
-                nextSlide.style.transform = "translateX(100%)";
-            }
-            
             updateNav(index);
             
-            // Anima texto saindo
+            // Anima texto de forma mais suave
             if (textElement) {
                 gsap.to(textElement, {
                     opacity: 0,
-                    y: -20,
-                    duration: 0.3,
+                    y: -15,
+                    duration: 0.4,
+                    ease: "power2.inOut",
                     onComplete: () => {
                         textElement.innerHTML = slideTexts[index];
                         gsap.fromTo(textElement, 
-                            { y: 20, opacity: 0 },
-                            { y: 0, opacity: 1, duration: 0.8, delay: 0.3 }
+                            { y: 15, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
                         );
-                    }
-                });
-            }
-            
-            // Anima slide entrando
-            if (nextSlide) {
-                gsap.to(nextSlide, {
-                    x: "0%",
-                    duration: 1.2,
-                    ease: "power2.out",
-                    onComplete: () => {
-                        if (currentSlide) currentSlide.style.zIndex = "0";
                     }
                 });
             }
@@ -841,33 +821,56 @@ if (heroVideo && heroPoster) {
             }
         });
         
-        // ScrollTrigger para controlar o slider
+        // ScrollTrigger para controlar o slider com transições mais suaves
+        let tl = gsap.timeline({ paused: true });
+        
+        // Criar timeline com transições mais fluidas
+        slides.forEach((slide, index) => {
+            if (index > 0) {
+                tl.to(slides[index - 1], {
+                    x: "-100%",
+                    duration: 1,
+                    ease: "power2.inOut"
+                }, index)
+                .fromTo(slide, {
+                    x: "100%"
+                }, {
+                    x: "0%",
+                    duration: 1,
+                    ease: "power2.inOut"
+                }, index)
+                .call(() => {
+                    updateNav(index);
+                    if (textElement) {
+                        gsap.to(textElement, {
+                            opacity: 0,
+                            y: -20,
+                            duration: 0.3,
+                            onComplete: () => {
+                                textElement.innerHTML = slideTexts[index];
+                                gsap.fromTo(textElement, 
+                                    { y: 20, opacity: 0 },
+                                    { y: 0, opacity: 1, duration: 0.6 }
+                                );
+                            }
+                        });
+                    }
+                }, [], index + 0.3);
+            }
+        });
+        
         ScrollTrigger.create({
             trigger: howSection,
             start: "top top",
-            end: "bottom top",
+            end: "+=300%", // Mais espaço para scroll mais suave
             pin: true,
-            scrub: 0.5,
+            scrub: 1.2, // Scrub mais lento para mais controle
+            animation: tl,
             snap: {
-                snapTo: [0, 0.5, 1],
-                duration: { min: 0.2, max: 0.6 },
-                delay: 0.1
-            },
-            onUpdate: self => {
-                const progress = self.progress;
-                let targetIndex = 0;
-                
-                if (progress < 0.33) {
-                    targetIndex = 0;
-                } else if (progress < 0.66) {
-                    targetIndex = 1;
-                } else {
-                    targetIndex = 2;
-                }
-                
-                if (targetIndex !== currentIndexRef.current) {
-                    gotoSlideDirect(targetIndex);
-                }
+                snapTo: "labels",
+                duration: { min: 0.3, max: 0.8 },
+                delay: 0.05,
+                ease: "power2.inOut"
             }
         });
         
