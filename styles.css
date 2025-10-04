@@ -1084,8 +1084,7 @@ body.theme-citrus .benefit-title h2 {
 .benefit-item img { width: 40px; height: 40px; margin: 0 auto .25rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,.06)); }
 .benefit-item h3 { font-size: .98rem; color: var(--text); }
 
-/* ========== COMO USAR (Horizontal Scroll) ========== */
-/* New scroll-driven slider layout for COMO USAR */
+/* ========== COMO USAR (Horizontal Scroll driven by scroll in all viewports) ========== */
 .sopy-how-section {
   height: 100vh;
   position: relative;
@@ -1094,29 +1093,50 @@ body.theme-citrus .benefit-title h2 {
   padding: 0;
 }
 
-/* Wrapper keeps overlays positioned */
-.how-wrapper { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
+.sopy-how-title { display: none; }
+/* Always hide the old mobile stack; we use the horizontal track on all sizes */
+.sopy-how-stack { display: none !important; }
 
-/* Slider holds absolute slides stacked; JS animates X based on scroll */
-.how-slider { width: 100%; height: 100%; position: relative; overflow: hidden; }
-.how-slide { position: absolute; inset: 0; display: grid; place-items: center; }
-.how-slide > .sopy-how-card { max-width: 520px; }
+.sopy-how-track {
+  display: flex;
+  position: relative;
+  height: 100vh;
+  will-change: transform;
+}
 
-/* Overlay title/text */
-.how-text { position: absolute; top: 18%; left: clamp(16px, 6vw, 120px); color: #fff; font-size: clamp(2rem, 6vw, 4rem); font-weight: 800; z-index: 10; opacity: 1; }
+.sopy-how-background-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 18vw;
+  text-align: center;
+  color: rgba(255,255,255,0.35);
+  font-weight: 800;
+  z-index: 1;
+  pointer-events: none;
+}
 
-/* Bottom-left nav with animated bars */
-.how-nav { position: absolute; bottom: clamp(32px, 8vh, 80px); left: clamp(16px, 5vw, 100px); display: flex; gap: clamp(10px, 2vw, 30px); z-index: 10; }
-.how-nav-item { display: flex; flex-direction: column; align-items: flex-start; cursor: pointer; }
-.how-nav-item span { color: #fff; opacity: .6; font-size: 0.95rem; transition: opacity .3s ease; }
-.how-nav-item.active span { opacity: 1; }
-.how-bar { width: clamp(120px, 22vw, 360px); height: 5px; background: rgba(255,255,255,.35); position: relative; overflow: hidden; border-radius: 999px; margin-top: 12px; opacity: .6; transition: opacity .3s ease; }
-.how-nav-item.active .how-bar { opacity: 1; }
-.how-bar-fill { position: absolute; inset: 0; width: 0%; background: #fff; transform: translateX(-100%); }
-.how-nav-item.active .how-bar-fill { transform: none; width: 100%; transition: transform .6s ease, width .6s ease; }
+.sopy-how-panel {
+  flex: 0 0 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10%;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
 
-/* Hide old implementations to avoid conflicts */
-.sopy-how-title, .sopy-how-track, .sopy-how-stack { display: none !important; }
+@media (max-width: 768px){
+  .sopy-how-track{ height: 78vh; }
+}
+
+/* todos os painéis centralizados verticalmente, sem offsets */
+.sopy-how-panel:nth-child(2),
+.sopy-how-panel:nth-child(3),
+.sopy-how-panel:nth-child(4) { align-self: center; padding: 0; }
 
 .sopy-how-card {
   /* Glassmorphism: translucent surface with blur */
@@ -1228,48 +1248,56 @@ body.theme-aqua .sopy-how-card {
 
 .sopy-how-progress-dot.active { background-color: rgba(255,255,255,0.28); border-color: transparent; transform: translateY(-2px); filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
 .sopy-how-progress-dot.active {
-  width: 56px;           /* pílula longa */
-  height: 12px;
-  border-radius: 999px;
-  background-color: #F8C537; /* amarelo destaque */
-  transform: translateY(-1px);
+  /* Tablet e mobile: Como usar - keep section sizing but use the same horizontal track */
+  @media (max-width: 900px) {
+    .sopy-how-section {
+      min-height: 100vh;
+      height: 100vh;
+      padding: clamp(20px, 6.5vw, 32px) 0 80px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .sopy-how-title { display: none; }
+    .sopy-how-track { display: flex !important; }
+    .sopy-how-background-text { display: grid; }
+
+/* Estilos de texto */
+.sustainability-parallax .text-column h2 {
+  font-size: clamp(2.8rem, 6.5vw, 5rem);
+  line-height: 1.02;
+  margin-bottom: 1rem;
+  color: #f0f0f0;
 }
 
-
-/* Painel em tela cheia com posição sticky */
-.sustainability-parallax .fullscreen-panel {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;        /* como no teste.html */
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Remove transparent background to allow solid theme colors */
+.sustainability-parallax .text-column p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #ffffff; /* changed from gray to white */
+  max-width: 55ch;
 }
 
-/* Container flexível para o conteúdo do painel */
-.sustainability-parallax .panel-content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: row !important; /* garante imagem e texto lado a lado por padrão */
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: space-between;
-  padding: clamp(1.5rem, 5vw, 4rem);
-  gap: clamp(1.5rem, 5vw, 4rem);
-  /* RESET do estilo de .panel-content usado na seção horizontal */
-  max-width: none !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  -webkit-backdrop-filter: none !important;
-    .how-text { top: 14%; left: 50%; transform: translateX(-50%); text-align: center; font-size: clamp(1.6rem, 8vw, 2.4rem); }
-    .how-nav { left: 12px; right: 12px; bottom: 56px; gap: 8px; }
-    .how-bar { width: 28vw; height: 4px; }
+/* Painel de introdução */
+.sustainability-parallax .intro-panel {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.sustainability-parallax .intro-panel h1 {
+  font-size: 3rem;
+  color: #f0f0f0;
+  margin-bottom: 0.5rem;
+}
+
+.sustainability-parallax .intro-panel p {
+  font-size: 1.2rem;
+  color: #ffffff; /* changed from gray to white */
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
   .sustainability-parallax .panel-content {
     flex-direction: column !important;
     text-align: center;
@@ -1935,7 +1963,29 @@ body.theme-aqua {
 }
 
 @media (max-width: 600px) {
-  .sopy-how-card { padding: 22px 18px 28px; border-radius: 18px; }
+  .sopy-how-section {
+    padding: 22px 0 64px;
+  }
+
+  .sopy-how-track {
+    padding: 0 16px;
+    gap: 14px;
+  }
+
+  .sopy-how-panel {
+    width: 88vw;
+    min-width: 88vw;
+  }
+
+  .sopy-how-card {
+    padding: 22px 18px 28px;
+    border-radius: 18px;
+  }
+
+  .sopy-how-background-text {
+    font-size: clamp(1.6rem, 6.5vw, 2.1rem);
+    margin-bottom: 16px;
+  }
 }
 
 /* Progress dots position for mobile within the section */

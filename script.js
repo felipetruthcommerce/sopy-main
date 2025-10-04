@@ -750,76 +750,201 @@ if (heroVideo && heroPoster) {
 
 
     // ===================================
-    //  BLOCO COMO USAR (SCROLL-DRIVEN SLIDER)
+    //  BLOCO COMO USAR (DESKTOP E MOBILE) + BARRA DE PROGRESSO
     // ===================================
+
+    // --- Parte 1: Lógica para a seção "Como Usar" ---
     const howSection = document.querySelector('.sopy-how-section');
-    if (howSection && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        const slider = howSection.querySelector('#howSlider');
-        const slides = slider ? Array.from(slider.querySelectorAll('.how-slide')) : [];
-        const textEl = howSection.querySelector('#howText');
-        const nav = howSection.querySelector('#howNav');
-        const navItems = nav ? Array.from(nav.querySelectorAll('.how-nav-item')) : [];
+    if (howSection) {
+        console.log('[COMO USAR] Seção encontrada. Verificando versão Desktop/Mobile...');
 
-        if (slides.length) {
-            // Prepare slides positions (stacked right-to-left)
-            slides.forEach((s, i) => gsap.set(s, { xPercent: i === 0 ? 0 : 100, opacity: i === 0 ? 1 : 0 }));
+        const track = howSection.querySelector('.sopy-how-track');
+        const panels = track ? Array.from(track.querySelectorAll('.sopy-how-panel')) : [];
+        const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+        const progressWrap = howSection.querySelector('.sopy-how-progress');
+        const progressPill = progressWrap ? progressWrap.querySelector('.sopy-how-progress-pill') : null;
+        const bgText = howSection.querySelector('.sopy-how-bg-text');
 
-            const labels = [
-                '01 Pegue 1 cápsula (2 para cargas grandes/alta sujeira).',
-                '02 Coloque direto no tambor, antes das roupas.',
-                '03 Inicie o ciclo — a cápsula dissolve 100%'
-            ];
-
-            const tl = gsap.timeline({
-                defaults: { ease: 'power2.out' },
-                scrollTrigger: {
-                    trigger: howSection,
-                    start: 'top top',
-                    end: () => `+=${window.innerHeight * (slides.length - 1)}`,
-                    pin: true,
-                    scrub: 0.8,
-                    snap: { snapTo: (value) => {
-                        // snap to slide boundaries (0..1)
-                        const step = 1 / (slides.length - 1);
-                        return Math.round(value / step) * step;
-                    }, duration: 0.2, ease: 'power1.inOut' },
-                    invalidateOnRefresh: true
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+            // Fallback: position cards for mobile-only experience
+            if (!window.matchMedia('(min-width:1024px)').matches) {
+                const stack = howSection.querySelector('.sopy-how-stack');
+                if (stack) {
+                    // Simple fallback positioning
+                    Array.from(stack.querySelectorAll('.sopy-how-mobile-card')).forEach((c, i) => c.style.transform = `translateX(${i * 100}%)`);
                 }
-            });
+            }
+        } else {
+            // Utility: set track width explicit so getDistance is accurate and background text can span
+            const setTrackWidth = () => {
+                if (!track) return;
+                track.style.width = `${Math.max(1, panels.length) * window.innerWidth}px`;
+                // make background text span the same visual area (in vw) so it "ocupa o scroll"
+                if (bgText) {
+                    bgText.style.width = `${panels.length * 100}vw`;
+                }
+            };
+            setTrackWidth();
 
-            // Build transitions per slide
-            for (let i = 0; i < slides.length - 1; i++) {
-                const current = slides[i];
-                const next = slides[i + 1];
-                // slide transition segment
-                tl.to(current, { xPercent: -100, opacity: 0 }, i)
-                  .fromTo(next, { xPercent: 100, opacity: 0 }, { xPercent: 0, opacity: 1 }, i);
+            const getDistance = () => track ? Math.max(0, track.scrollWidth - window.innerWidth) : 0;
+
+            // DESKTOP: horizontal pin with progress inside the section + bg text horizontal
+            if (window.matchMedia('(min-width:1024px)').matches && track && panels.length > 0) {
+                const tween = gsap.to(track, {
+                    x: () => -getDistance(),
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: howSection,
+                        start: 'top top',
+                        end: () => `+=${getDistance()}`,
+                        pin: true,
+                        scrub: 0.6,
+                        invalidateOnRefresh: true,
+                        onRefresh: () => {
+                            setTrackWidth();
+                        },
+                        onEnter: () => progressWrap?.classList.add('visible'),
+                        onEnterBack: () => progressWrap?.classList.add('visible'),
+                        onLeave: () => progressWrap?.classList.remove('visible'),
+                        onLeaveBack: () => progressWrap?.classList.remove('visible'),
+                        onUpdate: self => {
+                            // dots
+                            if (dots && dots.length) {
+                                const steps = dots.length;
+                                const idx = Math.min(steps - 1, Math.max(0, Math.round(self.progress * (steps - 1))));
+                                dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+                            }
+
+                            // section progress pill (0..1)
+                            if (progressPill) {
+                                const p = Math.max(0, Math.min(1, self.progress));
+                                progressPill.style.transform = `scaleX(${p})`;
+                            }
+
+                            // background text parallax/occupy effect: move proportionally to scroll but slightly slower
+                            if (bgText) {
+                                const bgMax = Math.max(0, bgText.scrollWidth - window.innerWidth);
+                                const x = bgMax * self.progress; // 0 -> bgMax
+                                bgText.style.transform = `translateX(${-x}px)`;
+                            }
+                        }
+                    }
+                });
+
+                // refresh handlers
+                window.addEventListener('resize', () => {
+                    setTrackWidth();
+                    try { ScrollTrigger.refresh(); } catch (e) {}
+                });
             }
 
-            // Update text and nav on progress
-            const updateUi = (index) => {
-                if (textEl) {
-                    textEl.textContent = labels[index] || '';
-                }
-                navItems.forEach((it, i) => it.classList.toggle('active', i === index));
-            };
-            updateUi(0);
+            // MOBILE: Touch slider independente do scroll - só touch/drag
+            if (!window.matchMedia('(min-width:1024px)').matches) {
+                const stack = howSection.querySelector('.sopy-how-stack');
+                const cards = stack ? Array.from(stack.querySelectorAll('.sopy-how-mobile-card')) : [];
+                const dots = howSection.querySelectorAll('.sopy-how-progress-dot');
+                if (stack && cards.length) {
+                    let currentIndex = 0;
+                    let isAnimating = false;
+                    
+                    // Mostrar progress bar no mobile também
+                    if (progressWrap) progressWrap.classList.add('visible');
+                    
+                    // Position cards
+                    const positionCards = (animate = true) => {
+                        const gap = 24;
+                        const containerWidth = stack.clientWidth;
+                        cards.forEach((card, index) => {
+                            const offset = (index - currentIndex) * (containerWidth + gap);
+                            if (typeof gsap !== 'undefined') {
+                                gsap.to(card, { x: offset, opacity: index === currentIndex ? 1 : 0.7, duration: animate ? 0.4 : 0, ease: 'power2.out' });
+                            } else {
+                                card.style.transform = `translateX(${offset}px)`;
+                                card.style.opacity = index === currentIndex ? 1 : 0.7;
+                            }
+                        });
+                        // update dots
+                        dots.forEach((dot, i) => dot.classList.toggle('active', i === currentIndex));
+                        // update section progress pill as fraction
+                        if (progressPill) {
+                            const p = cards.length > 1 ? currentIndex / (cards.length - 1) : 0;
+                            progressPill.style.transform = `scaleX(${p})`;
+                        }
+                    };
 
-            ScrollTrigger.create({
-                trigger: howSection,
-                start: 'top top',
-                end: () => `+=${window.innerHeight * (slides.length - 1)}`,
-                onUpdate: (self) => {
-                    const step = 1 / (slides.length - 1);
-                    const idx = Math.round(self.progress / step);
-                    const clamped = Math.max(0, Math.min(slides.length - 1, idx));
-                    updateUi(clamped);
-                }
-            });
+                    const slideTo = (index) => {
+                        if (isAnimating || index === currentIndex) return;
+                        const target = Math.max(0, Math.min(cards.length - 1, index));
+                        isAnimating = true;
+                        currentIndex = target;
+                        positionCards();
+                        setTimeout(() => { isAnimating = false; }, 400);
+                    };
 
-            window.addEventListener('resize', () => {
-                try { ScrollTrigger.refresh(); } catch (e) {}
-            });
+                    // touch handlers
+                    let isDragging = false;
+                    let startX = 0;
+                    let startY = 0;
+                    let deltaX = 0;
+
+                    const handleStart = (e) => {
+                        if (isAnimating) return;
+                        isDragging = true;
+                        startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                        startY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                        deltaX = 0;
+                        stack.classList.add('sopy-how-grabbing');
+                        if (e.type === 'mousedown') e.preventDefault();
+                    };
+
+                    const handleMove = (e) => {
+                        if (!isDragging) return;
+                        const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                        const currentY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+                        deltaX = currentX - startX;
+                        const deltaY = Math.abs(currentY - startY);
+                        if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
+                            e.preventDefault();
+                            const gap = 24;
+                            const containerWidth = stack.clientWidth;
+                            cards.forEach((card, index) => {
+                                const baseOffset = (index - currentIndex) * (containerWidth + gap);
+                                const offset = baseOffset + deltaX;
+                                if (typeof gsap !== 'undefined') gsap.set(card, { x: offset }); else card.style.transform = `translateX(${offset}px)`;
+                            });
+                        }
+                    };
+
+                    const handleEnd = () => {
+                        if (!isDragging) return;
+                        isDragging = false;
+                        stack.classList.remove('sopy-how-grabbing');
+                        const threshold = stack.clientWidth * 0.2;
+                        if (Math.abs(deltaX) > threshold) {
+                            const direction = deltaX > 0 ? -1 : 1;
+                            slideTo(currentIndex + direction);
+                        } else {
+                            positionCards();
+                        }
+                    };
+
+                    // listeners
+                    stack.addEventListener('touchstart', handleStart, { passive: false });
+                    stack.addEventListener('touchmove', handleMove, { passive: false });
+                    stack.addEventListener('touchend', handleEnd);
+                    stack.addEventListener('mousedown', handleStart);
+                    document.addEventListener('mousemove', handleMove);
+                    document.addEventListener('mouseup', handleEnd);
+
+                    // dots
+                    dots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
+
+                    // init
+                    positionCards(false);
+                    let resizeTimeout;
+                    window.addEventListener('resize', () => { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(() => positionCards(false), 100); });
+                }
+            }
         }
     }
 
