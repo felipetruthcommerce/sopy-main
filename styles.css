@@ -1093,6 +1093,24 @@ body.theme-citrus .benefit-title h2 {
   padding: 0;
 }
 
+.sopy-how-stacked {
+  position: relative;
+}
+.sopy-how-stacked .how-panel {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+.sopy-how-stacked .how-panel .how-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
 .sopy-how-horizontal { position: relative; }
 .sopy-how-horizontal .how-sticky {
   position: sticky;

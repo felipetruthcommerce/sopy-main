@@ -751,12 +751,11 @@ if (heroVideo && heroPoster) {
 
 
     // ===================================
-    //  COMO USAR — Horizontal sticky (4 slides) simples
+    //  COMO USAR — Sticky empilhado (estilo sustentabilidade), lateral
     // ===================================
-    const howSection = document.querySelector('.sopy-how-horizontal');
+    const howSection = document.querySelector('.sopy-how-stacked');
     if (howSection && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        const track = howSection.querySelector('#sopyHowTrack');
-        const slides = Array.from(howSection.querySelectorAll('.how-slide'));
+        const panels = Array.from(howSection.querySelectorAll('.how-panel'));
         const bgs = Array.from(howSection.querySelectorAll('.how-bg'));
         const textEl = howSection.querySelector('#sopy-how-text');
         const navItems = Array.from(howSection.querySelectorAll('.nav-item'));
@@ -768,35 +767,32 @@ if (heroVideo && heroPoster) {
             '04 Retire e estenda. Pronto!'
         ];
 
-        // Tamanho do container para permitir scroll horizontal de 4 telas
-        const totalPanels = slides.length;
-        const scrollLen = (totalPanels - 1) * 100; // em vw
+        // Estado inicial dos painéis (primeiro visível, demais à direita)
+        panels.forEach((p, i) => gsap.set(p, { xPercent: i === 0 ? 0 : 100 }));
+        bgs.forEach((bg) => gsap.set(bg, { xPercent: 0, scale: 1.05 }));
 
-        // Timeline para mover o track horizontalmente
-        const tl = gsap.timeline({
-            defaults: { ease: 'none' }
-        });
+        // Timeline mestre com 3 etapas (entre 4 painéis)
+        const tl = gsap.timeline({ defaults: { ease: 'none' } });
+        for (let i = 0; i < panels.length - 1; i++) {
+            // Próximo entra da direita -> centro
+            tl.to(panels[i + 1], { xPercent: 0 }, i);
+            // Atual sai do centro -> esquerda
+            tl.to(panels[i], { xPercent: -100 }, i);
+            // Parallax leve no bg do próximo
+            tl.to(bgs[i + 1], { xPercent: -10, scale: 1.02 }, i);
+        }
 
-        // Move o track de 0 a -300vw (4 slides)
-        tl.to(track, { xPercent: -((totalPanels - 1) * 100) });
-
-        // Parallax leve nos backgrounds
-        bgs.forEach((bg, i) => {
-            tl.to(bg, { scale: 1, xPercent: -10 }, i / (totalPanels - 1));
-        });
-
-        // ScrollTrigger que pinnings a seção e mapeia scroll -> timeline
+        // ScrollTrigger mapeando o scroll da seção para o timeline (sem pin, sticky via CSS)
         const st = ScrollTrigger.create({
             animation: tl,
             trigger: howSection,
             start: 'top top',
-            end: `+=${(totalPanels - 1) * 100}%`,
+            end: `+=${(panels.length - 1) * 100}%`,
             scrub: 1,
-            pin: true,
-            snap: { snapTo: 1 / (totalPanels - 1), duration: { min: 0.2, max: 0.6 }, ease: 'power1.inOut' },
+            snap: { snapTo: 1 / (panels.length - 1), duration: { min: 0.2, max: 0.6 }, ease: 'power1.inOut' },
             onUpdate: (self) => {
                 const p = self.progress; // 0..1
-                const segment = 1 / (totalPanels - 1);
+                const segment = 1 / (panels.length - 1);
                 const idx = Math.round(p / segment);
                 navItems.forEach((el, j) => {
                     el.classList.toggle('active', j === idx);
@@ -813,15 +809,14 @@ if (heroVideo && heroPoster) {
             }
         });
 
-        // Clique nos nav items -> rolar até o painel correspondente
+        // Clique nas barras leva ao painel correto
         navItems.forEach((item, i) => {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
-                const targetY = st.start + (st.end - st.start) * (i / (totalPanels - 1));
+                const targetY = st.start + (st.end - st.start) * (i / (panels.length - 1));
                 if (typeof ScrollToPlugin !== 'undefined') {
                     gsap.to(window, { duration: 0.6, scrollTo: targetY, ease: 'power2.out' });
                 } else {
-                    // fallback simples
                     const from = window.pageYOffset;
                     const dist = targetY - from;
                     gsap.to({ p: 0 }, { p: 1, duration: 0.6, ease: 'power2.out', onUpdate: function(){ window.scrollTo(0, from + dist * this.p); } });

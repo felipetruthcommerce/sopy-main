@@ -126,45 +126,41 @@
 
 
       <!-- ===================== COMO USAR ===================== -->
-      <section class="sopy-how-section sopy-how-horizontal" id="como-usar">
-        <div class="how-sticky" id="sopy-how-wrapper">
-          <div class="how-track" id="sopyHowTrack">
-            <div class="how-slide" data-index="0">
-              <div class="how-bg" style="background-image:url('assets/images/1.png')"></div>
-              <!-- conteúdo opcional por slide -->
-            </div>
-            <div class="how-slide" data-index="1">
-              <div class="how-bg" style="background-image:url('assets/images/2.png')"></div>
-            </div>
-            <div class="how-slide" data-index="2">
-              <div class="how-bg" style="background-image:url('assets/images/3.png')"></div>
-            </div>
-            <div class="how-slide" data-index="3">
-              <div class="how-bg" style="background-image:url('assets/images/4.png')"></div>
-            </div>
+      <section class="sopy-how-section sopy-how-stacked" id="como-usar">
+        <!-- 4 painéis sticky como na seção de sustentabilidade, mas animando lateralmente -->
+        <div class="how-panel" data-index="0">
+          <div class="how-bg" style="background-image:url('assets/images/1.png')"></div>
+        </div>
+        <div class="how-panel" data-index="1">
+          <div class="how-bg" style="background-image:url('assets/images/2.png')"></div>
+        </div>
+        <div class="how-panel" data-index="2">
+          <div class="how-bg" style="background-image:url('assets/images/3.png')"></div>
+        </div>
+        <div class="how-panel" data-index="3">
+          <div class="how-bg" style="background-image:url('assets/images/4.png')"></div>
+        </div>
+
+        <!-- Texto fixo -->
+        <div class="text" id="sopy-how-text">01 Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</div>
+
+        <!-- Navegação/barras -->
+        <div class="nav" id="sopy-how-nav">
+          <div class="nav-item active" data-to="0">
+            <span>01 Passo</span>
+            <div class="nav-bar"></div>
           </div>
-
-          <!-- Texto fixo que muda conforme o slide -->
-          <div class="text" id="sopy-how-text">01 Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</div>
-
-          <!-- Navegação/barras -->
-          <div class="nav" id="sopy-how-nav">
-            <div class="nav-item active" data-to="0">
-              <span>01 Passo</span>
-              <div class="nav-bar"></div>
-            </div>
-            <div class="nav-item" data-to="1">
-              <span>02 Passo</span>
-              <div class="nav-bar"></div>
-            </div>
-            <div class="nav-item" data-to="2">
-              <span>03 Passo</span>
-              <div class="nav-bar"></div>
-            </div>
-            <div class="nav-item" data-to="3">
-              <span>04 Passo</span>
-              <div class="nav-bar"></div>
-            </div>
+          <div class="nav-item" data-to="1">
+            <span>02 Passo</span>
+            <div class="nav-bar"></div>
+          </div>
+          <div class="nav-item" data-to="2">
+            <span>03 Passo</span>
+            <div class="nav-bar"></div>
+          </div>
+          <div class="nav-item" data-to="3">
+            <span>04 Passo</span>
+            <div class="nav-bar"></div>
           </div>
         </div>
       </section>
