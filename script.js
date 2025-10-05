@@ -795,26 +795,37 @@ if (heroVideo && heroPoster) {
             const prev = slides[i - 1];
             tl.addLabel(`slide${i}`)
               .to(prev, { xPercent: -100, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`)
-              .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`)
-              .add(() => {
-                  // update text and nav after transition
-                  textEl.style.transition = 'opacity .6s, transform .6s';
-                  textEl.style.opacity = '0';
-                  setTimeout(() => {
-                      textEl.textContent = `${String(i+1).padStart(2,'0')} Slide ${i+1} Title`;
-                      textEl.style.transform = 'translateY(50px)';
-                      requestAnimationFrame(() => {
-                          textEl.style.opacity = '1';
-                          textEl.style.transform = 'translateY(0)';
-                      });
-                  }, 200);
-                  navItems.forEach((n, idx) => n.classList.toggle('active', idx === i));
-              });
+              .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`);
         });
 
         const totalDur = slides.length - 1; // one unit per slide transition
-        // Map scroll to timeline
-        ScrollTrigger.create({
+
+        // Helper to update text and nav from a slide index
+        const titles = slides.map((_, i) => `${String(i+1).padStart(2,'0')} Slide ${i+1} Title`);
+        let lastIdx = -1;
+        const applyActive = (idx) => {
+            if (idx === lastIdx) return;
+            lastIdx = idx;
+            // Nav active state
+            navItems.forEach((n, i) => n.classList.toggle('active', i === idx));
+            // Text animation
+            if (textEl) {
+                textEl.style.transition = 'opacity .45s, transform .45s';
+                textEl.style.opacity = '0';
+                setTimeout(() => {
+                    textEl.textContent = titles[idx] || titles[0];
+                    textEl.style.transform = 'translateY(50px)';
+                    requestAnimationFrame(() => {
+                        textEl.style.opacity = '1';
+                        textEl.style.transform = 'translateY(0)';
+                    });
+                }, 150);
+            }
+        };
+
+        // Map scroll to timeline and keep UI in sync in both directions
+        const howTrigger = ScrollTrigger.create({
+            id: 'how-scroll',
             trigger: howSection,
             start: 'top top',
             end: () => `+=${window.innerHeight * totalDur}`,
@@ -823,12 +834,14 @@ if (heroVideo && heroPoster) {
             invalidateOnRefresh: true,
             onUpdate: (self) => {
                 tl.progress(self.progress);
+                const idx = Math.round(self.progress * (slides.length - 1));
+                applyActive(idx);
             }
         });
 
         // Clicks on nav items: jump to the right slide position (via Lenis/scroll)
         const scrollToSlide = (index) => {
-            const st = ScrollTrigger.getById && ScrollTrigger.getAll ? ScrollTrigger.getAll().find(tr => tr.vars.trigger === howSection) : null;
+            const st = ScrollTrigger.getById ? ScrollTrigger.getById('how-scroll') : null;
             const duration = 0.8;
             if (!st) return;
             const start = st.start;
@@ -846,6 +859,9 @@ if (heroVideo && heroPoster) {
             const next = Math.min(slides.length - 1, cur + 1);
             scrollToSlide(next);
         });
+
+        // Ensure UI matches initial state (slide 0)
+        applyActive(0);
 
         window.addEventListener('resize', () => { try { ScrollTrigger.refresh(); } catch(e){} });
     })();
