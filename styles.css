@@ -1086,13 +1086,11 @@ body.theme-citrus .benefit-title h2 {
 /* ========== COMO USAR (Scroll-driven Slider) ========== */
 .sopy-how-section {
   width: 100%;
-  height: 300vh; /* Extended height for scroll-driven animation */
+  height: 100vh;
   position: relative;
   overflow: hidden;
   background-color: var(--brand-dark);
   padding: 0;
-  /* Ensure smooth scrolling performance */
-  will-change: transform;
 }
 
 .sopy-how-section .wrapper {
@@ -1108,10 +1106,8 @@ body.theme-citrus .benefit-title h2 {
 .sopy-how-section .slider {
   width: 100%;
   height: 100vh;
-  position: sticky;
-  top: 0;
+  position: relative;
   overflow: hidden;
-  z-index: 1;
 }
 
 .sopy-how-section .slide {
@@ -1125,52 +1121,20 @@ body.theme-citrus .benefit-title h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease;
-  will-change: transform, opacity;
-  z-index: 1;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
 }
 
 .sopy-how-section .slide[data-step="01"] {
-  background: url('./assets/images/casa.jpg') center/cover;
-  background-attachment: fixed;
-  /* Add overlay for better text readability */
-  position: relative;
-}
-
-.sopy-how-section .slide[data-step="01"]::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
-  pointer-events: none;
+  background: url('https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
 }
 
 .sopy-how-section .slide[data-step="02"] {
-  background: url('./assets/images/praia.jpg') center/cover;
-  background-attachment: fixed;
-  position: relative;
-}
-
-.sopy-how-section .slide[data-step="02"]::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
-  pointer-events: none;
+  background: url('https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
 }
 
 .sopy-how-section .slide[data-step="03"] {
-  background: url('./assets/images/riacho.jpg') center/cover;
-  background-attachment: fixed;
-  position: relative;
-}
-
-.sopy-how-section .slide[data-step="03"]::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
-  pointer-events: none;
+  background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
 }
 
 .sopy-how-section .text {
@@ -1179,19 +1143,18 @@ body.theme-citrus .benefit-title h2 {
   left: 120px;
   color: white;
   font-size: 60px;
-  z-index: 15; /* Above slide overlays */
+  z-index: 10;
   opacity: 1;
   transform: translateY(-50px);
   max-width: 60%;
   font-weight: 700;
   line-height: 1.2;
   text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8), 1px 1px 0 rgba(0, 0, 0, 1);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
   padding: 20px;
-  border-radius: 16px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: opacity, transform;
 }
@@ -1202,13 +1165,12 @@ body.theme-citrus .benefit-title h2 {
   left: 100px;
   display: flex;
   flex-direction: row;
-  z-index: 15; /* Above slide overlays */
-  background: rgba(0, 0, 0, 0.4);
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.3);
   padding: 20px;
-  border-radius: 16px;
+  border-radius: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sopy-how-section .nav-item {
@@ -1271,13 +1233,6 @@ body.theme-citrus .benefit-title h2 {
 
 /* Responsive Styles for smaller screens */
 @media (max-width: 768px) {
-  /* Fix background-attachment for mobile */
-  .sopy-how-section .slide[data-step="01"],
-  .sopy-how-section .slide[data-step="02"],
-  .sopy-how-section .slide[data-step="03"] {
-    background-attachment: scroll; /* Fixed doesn't work well on mobile */
-  }
-  
   .sopy-how-section .text {
     font-size: 40px;
     top: 20%;
@@ -1285,13 +1240,11 @@ body.theme-citrus .benefit-title h2 {
     transform: translate(-50%, -50%);
     max-width: 90%;
     text-align: center;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.4);
     padding: 15px;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 15;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
   .sopy-how-section .nav {
@@ -1301,13 +1254,12 @@ body.theme-citrus .benefit-title h2 {
     width: calc(100% - 20px);
     display: flex;
     justify-content: space-between;
-    z-index: 15; /* Above slide overlays */
-    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
     padding: 15px;
-    border-radius: 12px;
+    border-radius: 10px;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .sopy-how-section .nav-item {
@@ -1369,13 +1321,11 @@ body.theme-citrus .benefit-title h2 {
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     padding: 18px;
-    border-radius: 16px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 15;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
   .sopy-how-section .nav {
@@ -1384,13 +1334,12 @@ body.theme-citrus .benefit-title h2 {
     left: 20px;
     display: flex;
     flex-direction: row;
-    z-index: 15; /* Above slide overlays */
-    background: rgba(0, 0, 0, 0.4);
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.3);
     padding: 18px;
-    border-radius: 16px;
+    border-radius: 12px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .sopy-how-section .nav-bar {

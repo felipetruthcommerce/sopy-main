@@ -815,39 +815,30 @@ if (heroVideo && heroPoster) {
             if (index === 0) {
                 slide.style.zIndex = "2";
                 slide.style.transform = "translateX(0%)";
-                slide.style.opacity = "1";
-                slide.style.scale = "1";
             } else {
                 slide.style.zIndex = "1";
                 slide.style.transform = "translateX(100%)";
-                slide.style.opacity = "0.3";
-                slide.style.scale = "0.95";
             }
         });
         
-        // ScrollTrigger para controlar o slider com animação sticky melhorada
+        // ScrollTrigger para controlar o slider
         ScrollTrigger.create({
             trigger: howSection,
             start: "top top",
-            end: "bottom bottom",
-            pin: ".sopy-how-section .slider",
-            pinSpacing: false,
-            scrub: 1.2,
+            end: "+=200%",
+            pin: true,
+            scrub: 0.8,
             onUpdate: self => {
                 const progress = self.progress;
                 let targetIndex = 0;
-                let smoothProgress = 0;
                 
                 // Definir qual slide deve estar ativo baseado no progresso
                 if (progress < 0.33) {
                     targetIndex = 0;
-                    smoothProgress = progress * 3; // 0 to 1 for first third
                 } else if (progress < 0.66) {
                     targetIndex = 1;
-                    smoothProgress = (progress - 0.33) * 3; // 0 to 1 for second third
                 } else {
                     targetIndex = 2;
-                    smoothProgress = (progress - 0.66) * 3; // 0 to 1 for final third
                 }
                 
                 // Só mudar se for diferente do atual
@@ -855,50 +846,25 @@ if (heroVideo && heroPoster) {
                     gotoSlideDirect(targetIndex);
                 }
                 
-                // Atualizar posições dos slides com animação mais suave
+                // Atualizar posições dos slides baseado no progresso
                 slides.forEach((slide, index) => {
                     let xPos = 0;
-                    let opacity = 1;
-                    let scale = 1;
                     
                     if (index < targetIndex) {
                         xPos = -100; // Slides anteriores saem pela esquerda
-                        opacity = 0.3;
-                        scale = 0.95;
                     } else if (index > targetIndex) {
-                        xPos = 100; // Slides seguintes ficam à direita  
-                        opacity = 0.3;
-                        scale = 0.95;
+                        xPos = 100; // Slides seguintes ficam à direita
                     } else {
-                        // Slide atual - interpolação suave baseada no progresso
-                        const easeProgress = gsap.utils.interpolate(0, 1, smoothProgress);
-                        xPos = 0;
-                        opacity = 1;
-                        scale = 1;
-                        
-                        // Adiciona um leve parallax ao slide ativo
-                        const parallaxOffset = (smoothProgress - 0.5) * 10;
-                        gsap.set(slide, { 
-                            x: xPos + "%", 
-                            opacity: opacity,
-                            scale: scale,
-                            backgroundPosition: `${50 + parallaxOffset}% center`
-                        });
-                        return; // Skip the default gsap.set below
+                        xPos = 0; // Slide atual no centro
                     }
                     
-                    gsap.set(slide, { 
-                        x: xPos + "%", 
-                        opacity: opacity,
-                        scale: scale
-                    });
+                    gsap.set(slide, { x: xPos + "%" });
                 });
             },
             snap: {
                 snapTo: [0, 0.33, 0.66, 1],
-                duration: { min: 0.3, max: 0.8 },
-                delay: 0.15,
-                ease: "power2.inOut"
+                duration: { min: 0.2, max: 0.6 },
+                delay: 0.1
             }
         });
         
