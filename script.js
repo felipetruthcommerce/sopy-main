@@ -26,8 +26,7 @@ function setupGsapPlugins() {
     const plugs = [];
     if (typeof ScrollTrigger !== "undefined") plugs.push(ScrollTrigger);
     if (typeof CustomEase !== "undefined") plugs.push(CustomEase);
-    if (typeof SplitText !== "undefined") plugs.push(SplitText);
-    if (typeof ScrollToPlugin !== "undefined") plugs.push(ScrollToPlugin); // Para navegação suave
+    if (typeof SplitText !== "undefined") plugs.push(SplitText); // Adicione se você usa SplitText
     
     if (plugs.length) gsap.registerPlugin(...plugs);
 
@@ -750,200 +749,84 @@ if (heroVideo && heroPoster) {
     }
 
 
-    // COMO USAR SLIDER
-    (function () {
-      const howSection = document.getElementById('sopy-how');
-      if (!howSection) return;
+    // ===================================
+    //  BLOCO COMO USAR (Scroll-driven Slider)
+    // ===================================
     
-      const slideTexts = [
-        "Despeje o conteúdo de uma cápsula em 500ml de água.",
-        "Aguarde 15 minutos para a ativação completa do produto.",
-        "Transfira para o seu frasco e está pronto para uso.",
-        "Use 50ml do produto para uma máquina de 8kg."
-      ];
-    
-      const navItems = Array.from(document.querySelectorAll("#sopy-how-nav .nav-item"));
-      const slides = Array.from(document.querySelectorAll("#sopy-how .slide"));
-      const textElement = document.getElementById("sopy-how-text");
-      const nextButton = document.getElementById("sopy-how-next");
-      const wrapper = document.getElementById("sopy-how-wrapper");
-    
-      if (!wrapper || slides.length === 0 || !textElement || !nextButton || navItems.length === 0) {
-        console.error("Slider 'Como Usar' não pôde ser inicializado. Elementos faltando.");
-        return;
-      }
-    
-      const currentIndexRef = { current: 0 };
-      const isTweeningRef = { current: false };
-      let autoPlayTimer = null;
-    
-      let touchStartX = 0;
-      let touchEndX = 0;
-    
-      function handleGesture() {
-        if (isTweeningRef.current) return;
-        const deltaX = touchEndX - touchStartX;
-        if (deltaX < -50) { // Swiped left
-          gotoSlide(1);
-        } else if (deltaX > 50) { // Swiped right
-          gotoSlide(-1);
-        }
-      }
-    
-      function setupEventListeners() {
-        wrapper.addEventListener("touchstart", (event) => {
-          touchStartX = event.changedTouches[0].screenX;
-          stopAutoPlay();
-        }, { passive: true });
-    
-        wrapper.addEventListener("touchend", (event) => {
-          touchEndX = event.changedTouches[0].screenX;
-          handleGesture();
-          resetAutoPlay();
-        });
-    
-        let isMouseDown = false;
-        wrapper.addEventListener("mousedown", (event) => {
-          isMouseDown = true;
-          touchStartX = event.clientX;
-          stopAutoPlay();
-        });
-    
-        wrapper.addEventListener("mouseup", (event) => {
-          if (!isMouseDown) return;
-          isMouseDown = false;
-          touchEndX = event.clientX;
-          handleGesture();
-          resetAutoPlay();
-        });
-    
-        wrapper.addEventListener("mouseleave", () => {
-          if (isMouseDown) {
-            isMouseDown = false;
-            resetAutoPlay();
-          }
-        });
-    
-        navItems.forEach((item, index) => {
-          item.addEventListener("click", () => gotoSlideDirect(index));
-        });
-    
-        nextButton.addEventListener("click", () => gotoSlide(1));
-      }
-    
-      function updateNav(activeIndex) {
-        navItems.forEach((item, index) => {
-          const bar = item.querySelector(".nav-bar");
-          if (!bar) return;
-    
-          bar.classList.remove('progress');
-    
-          if (index === activeIndex) {
-            item.classList.add("active");
-            void bar.offsetWidth; // Trigger reflow
-            bar.classList.add('progress');
-          } else {
-            item.classList.remove("active");
-          }
-        });
-      }
-    
-      function startAutoPlay() {
-        stopAutoPlay();
-        autoPlayTimer = setInterval(() => {
-          gotoSlide(1);
-        }, 5000);
-      }
-    
-      function stopAutoPlay() {
-        clearInterval(autoPlayTimer);
-      }
-    
-      function resetAutoPlay() {
-        stopAutoPlay();
-        startAutoPlay();
-      }
-    
-      function gotoSlide(value) {
-        if (isTweeningRef.current) return;
+    const howSection = document.querySelector('.sopy-how-section');
+    if (howSection && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        console.log('[COMO USAR] Inicializando slider controlado por scroll...');
         
-        let nextIndex = currentIndexRef.current + value;
-        const totalSlides = slides.length;
-    
-        if (nextIndex >= totalSlides) nextIndex = 0;
-        else if (nextIndex < 0) nextIndex = totalSlides - 1;
-    
-        performSlideTransition(currentIndexRef.current, nextIndex);
-      }
-    
-      function gotoSlideDirect(index) {
-        if (isTweeningRef.current || currentIndexRef.current === index) return;
-        performSlideTransition(currentIndexRef.current, index);
-      }
-    
-      function performSlideTransition(current, next) {
-        isTweeningRef.current = true;
-        resetAutoPlay();
-    
-        const currentSlide = slides[current];
-        const nextSlide = slides[next];
-    
-        updateNav(next);
-    
-        // Text animation out
-        textElement.style.transition = "opacity 0.4s ease-out, transform 0.4s ease-out";
-        textElement.style.opacity = "0";
-        textElement.style.transform = "translateY(20px)";
-    
-        // Slide animation
-        nextSlide.style.zIndex = 2;
-        nextSlide.style.transform = "translateX(100%)";
+        const slideTexts = [
+            "01 Pegue 1 cápsula (2 para cargas grandes/alta sujeira).",
+            "02 Coloque direto no tambor, antes das roupas.",
+            "03 Inicie o ciclo — a cápsula dissolve 100%"
+        ];
         
-        setTimeout(() => {
-          nextSlide.style.transition = "transform 1.5s cubic-bezier(0.77, 0, 0.175, 1)";
-          nextSlide.style.transform = "translateX(0%)";
-        }, 50);
-    
-        // Text animation in
-        setTimeout(() => {
-          textElement.innerHTML = slideTexts[next];
-          textElement.style.transition = "opacity 0.8s ease-out, transform 0.8s ease-out";
-          textElement.style.opacity = "1";
-          textElement.style.transform = "translateY(0px)";
-        }, 800);
-    
-        // Cleanup
-        setTimeout(() => {
-          currentSlide.style.zIndex = 1;
-          currentSlide.style.transition = "none";
-          currentSlide.style.transform = "translateX(100%)"; // Move old slide away
-          nextSlide.style.zIndex = 2;
-          
-          // Reset other slides
-          slides.forEach((s, i) => {
-            if (i !== next) {
-                s.style.zIndex = 1;
-            }
-          });
-    
-          isTweeningRef.current = false;
-        }, 1600);
-    
-        currentIndexRef.current = next;
-      }
-    
-      // Initial setup
-      slides.forEach((slide, index) => {
-        slide.style.zIndex = index === 0 ? 2 : 1;
-        slide.style.transform = index === 0 ? "translateX(0%)" : "translateX(100%)";
-      });
-      textElement.innerHTML = slideTexts[0];
-      updateNav(0);
-      setupEventListeners();
-      startAutoPlay();
-    })();
-    // END COMO USAR SLIDER
+        const navItems = Array.from(howSection.querySelectorAll(".nav-item"));
+        const slides = Array.from(howSection.querySelectorAll(".slide"));
+        const textElement = howSection.querySelector(".text");
+        let currentIndex = -1;
 
+        function updateActiveSlide(index) {
+            if (index === currentIndex) return;
+
+            currentIndex = index;
+
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            navItems.forEach((nav, i) => {
+                if (i === index) {
+                    nav.classList.add('active');
+                } else {
+                    nav.classList.remove('active');
+                }
+            });
+
+            if (textElement) {
+                gsap.to(textElement, {
+                    opacity: 0,
+                    y: 20,
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        textElement.textContent = slideTexts[index];
+                        gsap.to(textElement, {
+                            opacity: 1,
+                            y: 0,
+                            duration: 0.5,
+                            ease: 'power2.out'
+                        });
+                    }
+                });
+            }
+        }
+
+        ScrollTrigger.create({
+            trigger: howSection,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+            pin: '.sopy-how-section .wrapper',
+            onUpdate: (self) => {
+                const progress = self.progress;
+                const slideIndex = Math.floor(progress * slides.length);
+                
+                if (slideIndex < slides.length) {
+                    updateActiveSlide(slideIndex);
+                }
+            }
+        });
+
+        // Initial state
+        updateActiveSlide(0);
+    }
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---
     // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível

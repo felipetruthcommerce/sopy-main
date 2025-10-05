@@ -1084,27 +1084,32 @@ body.theme-citrus .benefit-title h2 {
 .benefit-item h3 { font-size: .98rem; color: var(--text); }
 
 /* ========== COMO USAR (Scroll-driven Slider) ========== */
-/* HOW TO USE SLIDER */
-#sopy-how .wrapper {
+.sopy-how-section {
+  width: 100%;
+  height: 300vh; /* Triple height for 3 slides */
+  position: relative;
+  background-color: var(--brand-dark);
+}
+
+.sopy-how-section .wrapper {
   width: 100%;
   height: 100vh;
-  background-color: #111;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
+  position: sticky;
+  top: 0;
   overflow: hidden;
 }
 
-#sopy-how .slider {
+.sopy-how-section .slider {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   position: relative;
-  overflow: hidden;
 }
 
-#sopy-how .slide {
+.sopy-how-section .slide {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -1117,31 +1122,70 @@ body.theme-citrus .benefit-title h2 {
   align-items: center;
   background-size: cover;
   background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity;
+  opacity: 0;
 }
 
-#sopy-how .text {
+.sopy-how-section .slide.active {
+  opacity: 1;
+}
+
+.sopy-how-section .slide[data-step="01"] {
+  background-image: url('assets/images/casa.jpg');
+}
+
+.sopy-how-section .slide[data-step="02"] {
+  background-image: url('assets/images/praia.jpg');
+}
+
+.sopy-how-section .slide[data-step="03"] {
+  background-image: url('assets/images/riacho.jpg');
+}
+
+.sopy-how-section .text {
   position: absolute;
   top: 120px;
   left: 120px;
   color: white;
   font-size: 60px;
   z-index: 10;
-  opacity: 1;
-  transform: translateY(0px);
-  max-width: 600px;
+  opacity: 0;
+  transform: translateY(50px);
+  max-width: 60%;
+  font-weight: 700;
   line-height: 1.2;
+  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8), 1px 1px 0 rgba(0, 0, 0, 1);
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
 }
 
-#sopy-how .nav {
+.sopy-how-section .slide.active .text {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sopy-how-section .nav {
   position: absolute;
   bottom: 80px;
   left: 100px;
   display: flex;
   flex-direction: row;
   z-index: 10;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-#sopy-how .nav-item {
+.sopy-how-section .nav-item {
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -1149,169 +1193,297 @@ body.theme-citrus .benefit-title h2 {
   cursor: pointer;
 }
 
-#sopy-how .nav-item span {
+.sopy-how-section .nav-item span {
   color: white;
   opacity: 0.5;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  font-weight: 600;
+  font-size: 16px;
 }
 
-#sopy-how .nav-item.active span {
+.sopy-how-section .nav-item.active span {
   opacity: 1;
 }
 
-#sopy-how .nav-bar {
-  width: 150px;
+.sopy-how-section .nav-bar {
+  width: 100%;
   height: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
-  opacity: 0.5;
-  transition: opacity 0.5s ease, width 0.5s ease;
   margin-top: 20px;
 }
 
-#sopy-how .nav-bar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
+.sopy-how-section .nav-bar-progress {
+  width: 0%;
   height: 100%;
-  width: 100%;
   background-color: white;
-  transform: translateX(-100%);
+  transition: width 0.3s ease-out;
+}
+
+.sopy-how-section .nav-item.active .nav-bar {
   opacity: 1;
 }
 
-#sopy-how .nav-item.active .nav-bar.progress::before {
-  transform: translateX(0);
-  transition: transform 5s linear;
-}
-
-
-#sopy-how .nav-item.active .nav-bar {
-  opacity: 1;
-}
-
-#sopy-how .nav-item:hover .nav-bar {
+.sopy-how-section .nav-item:hover .nav-bar {
   background-color: white;
   opacity: 1;
 }
 
-#sopy-how .button {
-  position: absolute;
-  bottom: 60px;
-  right: 40px;
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  z-index: 10;
-  padding: 0;
-}
-
-#sopy-how .arrow {
-  fill: white;
-  width: 60px;
-  height: 60px;
-}
-
+/* Responsive Styles for smaller screens */
 @media (max-width: 768px) {
-  #sopy-how .button {
-    bottom: 60px;
-    right: 10px;
-    width: 60px;
-    height: 50px;
-  }
-
-  #sopy-how .arrow {
-    width: 30px;
-    height: 30px;
-  }
-
-  #sopy-how .text {
-    font-size: 24px;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 80%;
-    text-align: center;
-  }
-
-  #sopy-how .nav {
-    bottom: 60px;
-    left: 10px;
-    width: calc(100% - 80px);
-    display: flex;
-    justify-content: space-between;
-  }
-
-  #sopy-how .nav-item {
-    flex: 1;
-    margin-right: 5px;
-  }
-  #sopy-how .nav-item:last-child {
-    margin-right: 0;
-  }
-
-  #sopy-how .nav-bar {
-    width: 100%;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.5);
-    margin-top: 10px;
-  }
-
-  #sopy-how .nav-item.active .nav-bar {
-    opacity: 1;
-  }
-
-  #sopy-how .nav-bar::before {
-    transition: transform 5s linear;
-  }
-
-  #sopy-how .nav-item span {
-    font-size: 14px;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1366px) {
-  #sopy-how .text {
+  .sopy-how-section .text {
     font-size: 40px;
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
+    max-width: 90%;
     text-align: center;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
   }
 
-  #sopy-how .button {
-    bottom: 11vh;
-    right: 1vh;
-    width: 120px;
-    height: 40px;
+  .sopy-how-section .nav {
+    position: absolute;
+    bottom: 60px;
+    left: 10px;
+    width: calc(100% - 20px);
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px;
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
-  #sopy-how .arrow {
-    width: 7vh;
-    height: 7vh;
+  .sopy-how-section .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    margin-right: 0;
+    cursor: pointer;
   }
 
-  #sopy-how .nav {
+  .sopy-how-section .nav-bar {
+    width: 60px;
+    height: 4px;
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+    opacity: 0.5;
+    transition: opacity 0.5s ease, width 0.5s ease;
+  }
+
+  .sopy-how-section .nav-item.active .nav-bar {
+    width: 90px;
+    opacity: 1;
+  }
+
+  .sopy-how-section .nav-bar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    transform: translateX(-100%);
+    opacity: 0.5;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+
+  .sopy-how-section .nav-item.active .nav-bar::before {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .sopy-how-section .nav-item span {
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  .sopy-how-section .nav-item.active span {
+    opacity: 1;
+  }
+}
+
+/* Keep the design for larger displays */
+@media (min-width: 769px) and (max-width: 1366px) {
+  .sopy-how-section .text {
+    font-size: 80px;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.3);
+    padding: 18px;
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+  }
+
+  .sopy-how-section .nav {
+    position: absolute;
     bottom: 7vh;
     left: 20px;
+    display: flex;
+    flex-direction: row;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 18px;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
 
-  #sopy-how .nav-bar {
+  .sopy-how-section .nav-bar {
     width: 200px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    overflow: hidden;
+    opacity: 0.5;
+    transition: opacity 0.5s ease;
   }
 
-  #sopy-how .nav-item {
+  .sopy-how-section .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
     margin-right: 10px;
+    cursor: pointer;
   }
 
-  #sopy-how .nav-item span {
+  .sopy-how-section .nav-item:last-child {
+    margin-right: 0;
+  }
+
+  .sopy-how-section .nav-item span {
     font-size: 14px;
   }
 }
-/* END HOW TO USE SLIDER */
+
+.sopy-how-card {
+  /* Glassmorphism: translucent surface with blur */
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 28px;
+  padding: 40px 40px 70px 40px;
+  max-width: 520px;             /* um pouco mais largo, como na referência */
+  min-height: 200px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: var(--muted);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.02);
+  transition: transform .28s cubic-bezier(.2,.9,.25,1), box-shadow .28s cubic-bezier(.2,.9,.25,1);
+  margin: 0 auto;                /* centraliza no painel */
+}
+
+@supports ((-webkit-backdrop-filter: blur(0)) or (backdrop-filter: blur(0))) {
+  .sopy-how-card {
+    -webkit-backdrop-filter: blur(8px) saturate(1.06);
+    backdrop-filter: blur(8px) saturate(1.06);
+    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+}
+
+/* Slight hover lift for desktop to emphasize glass cards */
+.sopy-how-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+/* Theme tweaks so glass reads well on both brand backgrounds */
+body.theme-citrus .sopy-how-card,
+body.theme-aqua .sopy-how-card {
+  /* on strong brand backgrounds, keep the glass slightly lighter */
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--muted);
+}
+
+.sopy-how-step-number {
+  background-color: var(--brand);
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-sizing: border-box;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  margin-bottom: 25px;
+  flex-shrink: 0;
+}
+
+.sopy-how-card p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  font-weight: 500;
+  color: #fff;
+}
+
+.sopy-how-progress {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;                 /* como a referência sugere */
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 50;
+  width: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.34s cubic-bezier(.22,1,.36,1);
+}
+
+.sopy-how-progress.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sopy-how-progress-dot {
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.26);
+  transition: transform .2s ease, background-color .2s ease, border-color .2s ease, filter .2s ease;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 18px 18px;
+}
+.sopy-how-progress-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.4); /* dots discretos */
+  border-radius: 50%;
+  transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              background-color .25s ease, transform .2s ease;
+}
+
+.sopy-how-progress-dot.active { background-color: rgba(255,255,255,0.28); border-color: transparent; transform: translateY(-2px); filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
+.sopy-how-progress-dot.active {
+  width: 56px;           /* pílula longa */
+  height: 12px;
+  border-radius: 999px;
+  background-color: #F8C537; /* amarelo destaque */
+  transform: translateY(-1px);
+}
 
 
 /* Painel em tela cheia com posição sticky */
