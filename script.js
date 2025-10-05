@@ -789,13 +789,13 @@ if (heroVideo && heroPoster) {
 
         // Timeline: one segment per slide; scrubbed by scroll; pinned section
         const tl = gsap.timeline({ paused: true });
-        slides.forEach((slide, i) => {
+                slides.forEach((slide, i) => {
             if (i === 0) return; // first is visible initially
             // animate previous out left and this in from right
             const prev = slides[i - 1];
-            tl.addLabel(`slide${i}`)
-              .to(prev, { xPercent: -100, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`)
-              .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`);
+                        tl.addLabel(`slide${i}`)
+                            .to(prev, { xPercent: -100, opacity: 0.9, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`)
+                            .fromTo(slide, { xPercent: 100, opacity: 0.9, scale: 1.015 }, { xPercent: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`);
         });
 
         const totalDur = slides.length - 1; // one unit per slide transition
@@ -830,7 +830,7 @@ if (heroVideo && heroPoster) {
             start: 'top top',
             end: () => `+=${window.innerHeight * totalDur}`,
             pin: true,
-            scrub: 0.6,
+            scrub: 1.1,
             invalidateOnRefresh: true,
             onEnter: (self) => applyActive(0),
             onEnterBack: (self) => {
