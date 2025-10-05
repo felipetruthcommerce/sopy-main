@@ -1083,291 +1083,58 @@ body.theme-citrus .benefit-title h2 {
 .benefit-item img { width: 40px; height: 40px; margin: 0 auto .25rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,.06)); }
 .benefit-item h3 { font-size: .98rem; color: var(--text); }
 
-/* ========== COMO USAR (Scroll-driven Slider) ========== */
+/* ========== COMO USAR (Horizontal Scroll) ========== */
 .sopy-how-section {
-  width: 100%;
-  height: 100vh;
+  height: 100vh;            /* ocupa toda a viewport */
   position: relative;
   overflow: hidden;
   background-color: var(--brand-dark);
-  padding: 0;
+  padding: 0;               /* sem padding para centralizar perfeitamente */
 }
 
-.sopy-how-section .wrapper {
-  width: 100%;
-  height: 100vh;
+.sopy-how-title { display: none; }
+/* Hide mobile slider by default (desktop) */
+.sopy-how-stack{ display:none; }
+
+.sopy-how-track {
   display: flex;
-  flex-direction: column;
+  position: relative; /* GSAP pinna a seção, não o track */
+  height: 100vh;      /* ocupa toda a viewport conforme solicitado */
+  will-change: transform; /* performance */
+}
+
+.sopy-how-background-text {
+  position: absolute;
+  inset: 0;
+  display: grid; place-items: center;
+  font-size: 18vw;
+  text-align: center;
+  color: rgba(255,255,255,0.35);
+  font-weight: 800;
+  z-index: 1; /* por trás do card */
+  pointer-events: none;
+}
+
+.sopy-how-panel {
+  flex: 0 0 100vw;   /* cada painel ocupa 100% da largura da viewport */
+  height: 100vh;     /* cada painel usa a altura inteira da viewport */
+  display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; 
+  padding: 0 10%;
+  box-sizing: border-box;
   position: relative;
+  z-index: 2;
 }
 
-.sopy-how-section .slider {
-  width: 100%;
-  height: 100vh;
-  position: relative;
-  overflow: hidden;
+@media (max-width: 768px){
+  .sopy-how-track{ height: 78vh; }
 }
 
-.sopy-how-section .slide {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: white;
-  font-size: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform;
-}
-
-.sopy-how-section .slide[data-step="01"] {
-  background: url('https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
-}
-
-.sopy-how-section .slide[data-step="02"] {
-  background: url('https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
-}
-
-.sopy-how-section .slide[data-step="03"] {
-  background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
-}
-
-.sopy-how-section .text {
-  position: absolute;
-  top: 120px;
-  left: 120px;
-  color: white;
-  font-size: 60px;
-  z-index: 10;
-  opacity: 1;
-  transform: translateY(-50px);
-  max-width: 60%;
-  font-weight: 700;
-  line-height: 1.2;
-  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8), 1px 1px 0 rgba(0, 0, 0, 1);
-  background: rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  border-radius: 12px;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-}
-
-.sopy-how-section .nav {
-  position: absolute;
-  bottom: 80px;
-  left: 100px;
-  display: flex;
-  flex-direction: row;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 20px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.sopy-how-section .nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  margin-right: 30px;
-  cursor: pointer;
-}
-
-.sopy-how-section .nav-item span {
-  color: white;
-  opacity: 0.5;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-weight: 600;
-  font-size: 16px;
-}
-
-.sopy-how-section .nav-item.active span {
-  opacity: 1;
-}
-
-.sopy-how-section .nav-bar {
-  width: 370px;
-  height: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  position: relative;
-  overflow: hidden;
-  opacity: 0.5;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  margin-top: 20px;
-}
-
-.sopy-how-section .nav-bar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-color: white;
-  transform: translateX(-100%);
-  opacity: 1;
-  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.sopy-how-section .nav-item.active .nav-bar::before {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.sopy-how-section .nav-item.active .nav-bar {
-  opacity: 1;
-}
-
-.sopy-how-section .nav-item:hover .nav-bar {
-  background-color: white;
-  opacity: 1;
-}
-
-/* Responsive Styles for smaller screens */
-@media (max-width: 768px) {
-  .sopy-how-section .text {
-    font-size: 40px;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 90%;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 15px;
-    border-radius: 10px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-  }
-
-  .sopy-how-section .nav {
-    position: absolute;
-    bottom: 60px;
-    left: 10px;
-    width: calc(100% - 20px);
-    display: flex;
-    justify-content: space-between;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 15px;
-    border-radius: 10px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  .sopy-how-section .nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    margin-right: 0;
-    cursor: pointer;
-  }
-
-  .sopy-how-section .nav-bar {
-    width: 60px;
-    height: 4px;
-    background-color: transparent;
-    position: relative;
-    overflow: hidden;
-    opacity: 0.5;
-    transition: opacity 0.5s ease, width 0.5s ease;
-  }
-
-  .sopy-how-section .nav-item.active .nav-bar {
-    width: 90px;
-    opacity: 1;
-  }
-
-  .sopy-how-section .nav-bar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: white;
-    transform: translateX(-100%);
-    opacity: 0.5;
-    transition: transform 0.5s ease, opacity 0.5s ease;
-  }
-
-  .sopy-how-section .nav-item.active .nav-bar::before {
-    transform: translateX(0);
-    opacity: 1;
-  }
-
-  .sopy-how-section .nav-item span {
-    font-size: 14px;
-    opacity: 0.5;
-  }
-
-  .sopy-how-section .nav-item.active span {
-    opacity: 1;
-  }
-}
-
-/* Keep the design for larger displays */
-@media (min-width: 769px) and (max-width: 1366px) {
-  .sopy-how-section .text {
-    font-size: 80px;
-    top: 20%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.3);
-    padding: 18px;
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-  }
-
-  .sopy-how-section .nav {
-    position: absolute;
-    bottom: 7vh;
-    left: 20px;
-    display: flex;
-    flex-direction: row;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 18px;
-    border-radius: 12px;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .sopy-how-section .nav-bar {
-    width: 200px;
-    height: 5px;
-    background-color: rgba(255, 255, 255, 0.7);
-    position: relative;
-    overflow: hidden;
-    opacity: 0.5;
-    transition: opacity 0.5s ease;
-  }
-
-  .sopy-how-section .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    margin-right: 10px;
-    cursor: pointer;
-  }
-
-  .sopy-how-section .nav-item:last-child {
-    margin-right: 0;
-  }
-
-  .sopy-how-section .nav-item span {
-    font-size: 14px;
-  }
-}
+/* todos os painéis centralizados verticalmente, sem offsets */
+.sopy-how-panel:nth-child(2),
+.sopy-how-panel:nth-child(3),
+.sopy-how-panel:nth-child(4) { align-self: center; padding: 0; }
 
 .sopy-how-card {
   /* Glassmorphism: translucent surface with blur */
@@ -2392,3 +2159,5 @@ body.theme-aqua {
 
 /* Ensure testimonials section is a positioned container for absolute dots */
 #testemunhos { position: relative; }
+
+
