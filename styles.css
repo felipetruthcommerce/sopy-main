@@ -1084,86 +1084,42 @@ body.theme-citrus .benefit-title h2 {
 .benefit-item h3 { font-size: .98rem; color: var(--text); }
 
 /* ========== COMO USAR (Scroll-driven Slider) ========== */
-.sopy-how-section {
+/* HOW TO USE SLIDER */
+.sopy-how.wrapper {
   width: 100%;
   height: 100vh;
-  position: relative;
-  overflow: hidden;
-  background-color: var(--brand-dark);
-  padding: 0;
-}
-
-.sopy-how-stacked {
-  position: relative;
-}
-.sopy-how-stacked .how-panel {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-}
-.sopy-how-stacked .how-panel .how-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  will-change: transform;
-}
-
-.sopy-how-horizontal { position: relative; }
-.sopy-how-horizontal .how-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-}
-.sopy-how-horizontal .how-track {
-  display: flex;
-  width: 400vw; /* 4 slides */
-  height: 100vh;
-}
-.sopy-how-horizontal .how-slide {
-  width: 100vw;
-  height: 100vh;
-  position: relative;
-  flex: 0 0 100vw;
-  overflow: hidden;
-}
-.sopy-how-horizontal .how-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transform: translateZ(0) scale(1.05); /* leve parallax scale */
-  will-change: transform;
-}
-
-.sopy-how-section .wrapper {
-  width: 100%;
-  height: 100vh;
+  background-color: #111;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: hidden;
 }
 
-/* legacy .slide styles no longer used for horizontal track */
-
-.sopy-how-section .slide[data-step="01"] {
-  background: url('https://images.unsplash.com/photo-1559181567-c3190ca9959b?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
+.sopy-how .slider {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
 }
 
-.sopy-how-section .slide[data-step="02"] {
-  background: url('https://images.unsplash.com/photo-1582735689369-4fe89db7114c?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
+.sopy-how .slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: white;
+  font-size: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
 }
 
-.sopy-how-section .slide[data-step="03"] {
-  background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1920&h=1080&fit=crop&auto=format&q=80') center/cover;
-}
-
-.sopy-how-section .text {
+.sopy-how .text {
   position: absolute;
   top: 120px;
   left: 120px;
@@ -1171,441 +1127,191 @@ body.theme-citrus .benefit-title h2 {
   font-size: 60px;
   z-index: 10;
   opacity: 1;
-  transform: translateY(0);
-  max-width: 60%;
-  font-weight: 700;
+  transform: translateY(0px);
+  max-width: 600px;
   line-height: 1.2;
-  text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8), 1px 1px 0 rgba(0, 0, 0, 1);
-  background: rgba(0, 0, 0, 0.4);
-  padding: 25px 30px;
-  border-radius: 16px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity, transform;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
 }
 
-.sopy-how-section .nav {
+.sopy-how .nav {
   position: absolute;
   bottom: 80px;
   left: 100px;
   display: flex;
   flex-direction: row;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.4);
-  padding: 25px 30px;
-  border-radius: 16px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  gap: 10px;
 }
 
-.sopy-how-section .nav-item {
+.sopy-how .nav-item {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: left;
   margin-right: 30px;
   cursor: pointer;
-  position: relative;
-  transition: all 0.3s ease;
 }
 
-.sopy-how-section .nav-item:hover {
-  transform: translateY(-2px);
-}
-
-.sopy-how-section .nav-item span {
+.sopy-how .nav-item span {
   color: white;
-  opacity: 0.6;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  font-weight: 600;
-  font-size: 16px;
-  pointer-events: none;
-  user-select: none;
+  opacity: 0.5;
+  transition: opacity 0.5s ease;
 }
 
-.sopy-how-section .nav-item.active span {
+.sopy-how .nav-item.active span {
   opacity: 1;
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-.sopy-how-section .nav-bar {
-  width: 370px;
+.sopy-how .nav-bar {
+  width: 150px;
   height: 5px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
-  opacity: 0.6;
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  margin-top: 15px;
-  border-radius: 3px;
+  opacity: 0.5;
+  transition: opacity 0.5s ease, width 0.5s ease;
+  margin-top: 20px;
 }
 
-.sopy-how-section .nav-bar::before {
+.sopy-how .nav-bar::before {
   content: "";
   position: absolute;
   top: 0;
   left: 0;
   height: 100%;
-  width: var(--bar, 0%);
-  background: linear-gradient(90deg, #fff, #f0f0f0);
-  transform-origin: left center;
-  transition: width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  border-radius: 3px;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
-}
-
-.sopy-how-section .nav-item.active .nav-bar::before {
-  width: var(--bar, 100%);
-}
-
-.sopy-how-section .nav-item.active .nav-bar {
+  width: 100%;
+  background-color: white;
+  transform: translateX(-100%);
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.4);
+  transition: transform 5s linear; /* Changed to linear and 5s for progress bar effect */
 }
 
-.sopy-how-section .nav-item:hover .nav-bar {
-  background-color: rgba(255, 255, 255, 0.5);
-  opacity: 0.8;
+.sopy-how .nav-item.active .nav-bar.progress::before {
+  transform: translateX(0);
 }
 
-.sopy-how-section .nav-item:hover span {
-  opacity: 0.9;
+
+.sopy-how .nav-item.active .nav-bar {
+  opacity: 1;
 }
 
-/* Indicador de progresso do scroll */
-.scroll-progress-indicator {
+.sopy-how .nav-item:hover .nav-bar {
+  background-color: white;
+  opacity: 1;
+}
+
+.sopy-how .button {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.2);
-  z-index: 20;
-  overflow: hidden;
+  bottom: 60px;
+  right: 40px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  padding: 0;
 }
 
-.scroll-progress-indicator .progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, #4CAF50, #81C784);
-  transition: width 0.1s ease;
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+.sopy-how .arrow {
+  fill: white;
+  width: 60px;
+  height: 60px;
 }
 
-/* Responsive Styles for smaller screens */
 @media (max-width: 768px) {
-  .sopy-how-section .text {
-    font-size: 32px;
-    top: 15%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 85%;
-    text-align: center;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px 25px;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  .sopy-how .button {
+    bottom: 60px;
+    right: 10px;
+    width: 60px;
+    height: 50px;
   }
 
-  .sopy-how-section .nav {
-    position: absolute;
-    bottom: 40px;
-    left: 15px;
-    right: 15px;
-    width: auto;
+  .sopy-how .arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .sopy-how .text {
+    font-size: 24px;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+  }
+
+  .sopy-how .nav {
+    bottom: 60px;
+    left: 10px;
+    width: calc(100% - 80px);
     display: flex;
     justify-content: space-between;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 20px 25px;
-    border-radius: 12px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    gap: 15px;
   }
 
-  .sopy-how-section .nav-item {
+  .sopy-how .nav-item {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    margin-right: 5px;
+  }
+  .sopy-how .nav-item:last-child {
     margin-right: 0;
-    cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 8px;
-    transition: all 0.3s ease;
   }
 
-  .sopy-how-section .nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .sopy-how-section .nav-item.active {
-    background: rgba(255, 255, 255, 0.15);
-  }
-
-  .sopy-how-section .nav-bar {
+  .sopy-how .nav-bar {
     width: 100%;
-    min-width: 50px;
     height: 4px;
-    background-color: rgba(255, 255, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-    opacity: 0.6;
-    transition: all 0.4s ease;
-    border-radius: 2px;
-    margin-top: 8px;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin-top: 10px;
   }
 
-  .sopy-how-section .nav-item.active .nav-bar {
+  .sopy-how .nav-item.active .nav-bar {
     opacity: 1;
-    background-color: rgba(255, 255, 255, 0.4);
   }
 
-  .sopy-how-section .nav-bar::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #fff, #f0f0f0);
-    transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    border-radius: 2px;
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  .sopy-how .nav-bar::before {
+    transition: transform 5s linear;
   }
 
-  .sopy-how-section .nav-item.active .nav-bar::before {
-    width: 100%;
-  }
-
-  .sopy-how-section .nav-item span {
-    font-size: 13px;
-    opacity: 0.7;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .sopy-how-section .nav-item.active span {
-    opacity: 1;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  .sopy-how .nav-item span {
+    font-size: 14px;
   }
 }
 
-/* Tablets e displays médios */
 @media (min-width: 769px) and (max-width: 1366px) {
-  .sopy-how-section .text {
-    font-size: 48px;
-    top: 15%;
+  .sopy-how .text {
+    font-size: 40px;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 80%;
+    width: 80%;
     text-align: center;
-    background: rgba(0, 0, 0, 0.45);
-    padding: 22px 28px;
-    border-radius: 14px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
   }
 
-  .sopy-how-section .nav {
-    position: absolute;
-    bottom: 60px;
-    left: 30px;
-    right: 30px;
-    width: auto;
-    display: flex;
-    justify-content: center;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.45);
-    padding: 22px 28px;
-    border-radius: 14px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-    gap: 20px;
+  .sopy-how .button {
+    bottom: 11vh;
+    right: 1vh;
+    width: 120px;
+    height: 40px;
   }
 
-  .sopy-how-section .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 10px;
-    transition: all 0.3s ease;
+  .sopy-how .arrow {
+    width: 7vh;
+    height: 7vh;
   }
 
-  .sopy-how-section .nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
+  .sopy-how .nav {
+    bottom: 7vh;
+    left: 20px;
   }
 
-  .sopy-how-section .nav-item.active {
-    background: rgba(255, 255, 255, 0.15);
+  .sopy-how .nav-bar {
+    width: 200px;
   }
 
-  .sopy-how-section .nav-bar {
-    width: 150px;
-    height: 5px;
-    background-color: rgba(255, 255, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-    opacity: 0.6;
-    transition: all 0.4s ease;
-    border-radius: 3px;
-    margin-top: 12px;
+  .sopy-how .nav-item {
+    margin-right: 10px;
   }
 
-  .sopy-how-section .nav-item.active .nav-bar {
-    opacity: 1;
-    background-color: rgba(255, 255, 255, 0.4);
-  }
-
-  .sopy-how-section .nav-item span {
-    font-size: 15px;
-    font-weight: 600;
-    opacity: 0.7;
-    transition: all 0.3s ease;
-  }
-
-  .sopy-how-section .nav-item.active span {
-    opacity: 1;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  .sopy-how .nav-item span {
+    font-size: 14px;
   }
 }
-
-.sopy-how-card {
-  /* Glassmorphism: translucent surface with blur */
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.10);
-  border-radius: 28px;
-  padding: 40px 40px 70px 40px;
-  max-width: 520px;             /* um pouco mais largo, como na referência */
-  min-height: 200px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  color: var(--muted);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.02);
-  transition: transform .28s cubic-bezier(.2,.9,.25,1), box-shadow .28s cubic-bezier(.2,.9,.25,1);
-  margin: 0 auto;                /* centraliza no painel */
-}
-
-@supports ((-webkit-backdrop-filter: blur(0)) or (backdrop-filter: blur(0))) {
-  .sopy-how-card {
-    -webkit-backdrop-filter: blur(8px) saturate(1.06);
-    backdrop-filter: blur(8px) saturate(1.06);
-    background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-    border: 1px solid rgba(255,255,255,0.12);
-  }
-}
-
-/* Slight hover lift for desktop to emphasize glass cards */
-.sopy-how-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.02);
-}
-
-/* Theme tweaks so glass reads well on both brand backgrounds */
-body.theme-citrus .sopy-how-card,
-body.theme-aqua .sopy-how-card {
-  /* on strong brand backgrounds, keep the glass slightly lighter */
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  border: 1px solid rgba(255,255,255,0.12);
-  color: var(--muted);
-}
-
-.sopy-how-step-number {
-  background-color: var(--brand);
-  color: #fff;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  box-sizing: border-box;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 700;
-  margin-bottom: 25px;
-  flex-shrink: 0;
-}
-
-.sopy-how-card p {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  font-weight: 500;
-  color: #fff;
-}
-
-.sopy-how-progress {
-  position: fixed;
-  left: 50%;
-  bottom: 32px;                 /* como a referência sugere */
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  z-index: 50;
-  width: auto;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.34s cubic-bezier(.22,1,.36,1);
-}
-
-.sopy-how-progress.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.sopy-how-progress-dot {
-  width: 36px;
-  height: 36px;
-  background-color: rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  border: 1px solid rgba(255,255,255,.26);
-  transition: transform .2s ease, background-color .2s ease, border-color .2s ease, filter .2s ease;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 18px 18px;
-}
-.sopy-how-progress-dot {
-  width: 10px;
-  height: 10px;
-  background-color: rgba(255, 255, 255, 0.4); /* dots discretos */
-  border-radius: 50%;
-  transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              background-color .25s ease, transform .2s ease;
-}
-
-.sopy-how-progress-dot.active { background-color: rgba(255,255,255,0.28); border-color: transparent; transform: translateY(-2px); filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
-.sopy-how-progress-dot.active {
-  width: 56px;           /* pílula longa */
-  height: 12px;
-  border-radius: 999px;
-  background-color: #F8C537; /* amarelo destaque */
-  transform: translateY(-1px);
-}
+/* END HOW TO USE SLIDER */
 
 
 /* Painel em tela cheia com posição sticky */

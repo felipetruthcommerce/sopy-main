@@ -750,80 +750,193 @@ if (heroVideo && heroPoster) {
     }
 
 
-    // ===================================
-    //  COMO USAR — Sticky empilhado (estilo sustentabilidade), lateral
-    // ===================================
-    const howSection = document.querySelector('.sopy-how-stacked');
-    if (howSection && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-        const panels = Array.from(howSection.querySelectorAll('.how-panel'));
-        const bgs = Array.from(howSection.querySelectorAll('.how-bg'));
-        const textEl = howSection.querySelector('#sopy-how-text');
-        const navItems = Array.from(howSection.querySelectorAll('.nav-item'));
+    // COMO USAR SLIDER
+document.addEventListener("DOMContentLoaded", function () {
+  const howSection = document.querySelector('.sopy-how');
+  if (!howSection) return;
 
-        const texts = [
-            '01 Pegue 1 cápsula (2 para cargas grandes/alta sujeira).',
-            '02 Coloque direto no tambor, antes das roupas.',
-            '03 Inicie o ciclo — a cápsula dissolve 100%.',
-            '04 Retire e estenda. Pronto!'
-        ];
+  const slideTexts = [
+    "Despeje o conteúdo de uma cápsula em 500ml de água.",
+    "Aguarde 15 minutos para a ativação completa do produto.",
+    "Transfira para o seu frasco e está pronto para uso.",
+    "Use 50ml do produto para uma máquina de 8kg."
+  ];
 
-        // Estado inicial dos painéis (primeiro visível, demais à direita)
-        panels.forEach((p, i) => gsap.set(p, { xPercent: i === 0 ? 0 : 100 }));
-        bgs.forEach((bg) => gsap.set(bg, { xPercent: 0, scale: 1.05 }));
+  const navItems = Array.from(howSection.querySelectorAll(".nav-item"));
+  const slides = Array.from(howSection.querySelectorAll(".slide"));
+  const textElement = howSection.querySelector("#text");
+  const nextButton = howSection.querySelector("#next");
+  const wrapper = howSection;
 
-        // Timeline mestre com 3 etapas (entre 4 painéis)
-        const tl = gsap.timeline({ defaults: { ease: 'none' } });
-        for (let i = 0; i < panels.length - 1; i++) {
-            // Próximo entra da direita -> centro
-            tl.to(panels[i + 1], { xPercent: 0 }, i);
-            // Atual sai do centro -> esquerda
-            tl.to(panels[i], { xPercent: -100 }, i);
-            // Parallax leve no bg do próximo
-            tl.to(bgs[i + 1], { xPercent: -10, scale: 1.02 }, i);
-        }
+  if (slides.length === 0) return;
 
-        // ScrollTrigger mapeando o scroll da seção para o timeline (sem pin, sticky via CSS)
-        const st = ScrollTrigger.create({
-            animation: tl,
-            trigger: howSection,
-            start: 'top top',
-            end: `+=${(panels.length - 1) * 100}%`,
-            scrub: 1,
-            snap: { snapTo: 1 / (panels.length - 1), duration: { min: 0.2, max: 0.6 }, ease: 'power1.inOut' },
-            onUpdate: (self) => {
-                const p = self.progress; // 0..1
-                const segment = 1 / (panels.length - 1);
-                const idx = Math.round(p / segment);
-                navItems.forEach((el, j) => {
-                    el.classList.toggle('active', j === idx);
-                    const start = j * segment;
-                    const end = (j + 1) * segment;
-                    let bar = 0;
-                    if (p >= end) bar = 100;
-                    else if (p <= start) bar = 0;
-                    else bar = ((p - start) / (end - start)) * 100;
-                    const barEl = el.querySelector('.nav-bar');
-                    if (barEl) barEl.style.setProperty('--bar', `${bar}%`);
-                });
-                if (textEl) textEl.textContent = texts[idx] || '';
-            }
-        });
+  const currentIndexRef = { current: 0 };
+  const isTweeningRef = { current: false };
+  let autoPlayTimer = null;
 
-        // Clique nas barras leva ao painel correto
-        navItems.forEach((item, i) => {
-            item.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetY = st.start + (st.end - st.start) * (i / (panels.length - 1));
-                if (typeof ScrollToPlugin !== 'undefined') {
-                    gsap.to(window, { duration: 0.6, scrollTo: targetY, ease: 'power2.out' });
-                } else {
-                    const from = window.pageYOffset;
-                    const dist = targetY - from;
-                    gsap.to({ p: 0 }, { p: 1, duration: 0.6, ease: 'power2.out', onUpdate: function(){ window.scrollTo(0, from + dist * this.p); } });
-                }
-            });
-        });
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  function handleGesture() {
+    const deltaX = touchEndX - touchStartX;
+    if (isTweeningRef.current) return;
+    if (deltaX < -50) { // Swiped left
+      gotoSlide(1);
+    } else if (deltaX > 50) { // Swiped right
+      gotoSlide(-1);
     }
+  }
+
+  wrapper.addEventListener("touchstart", (event) => {
+    touchStartX = event.changedTouches[0].screenX;
+    stopAutoPlay();
+  }, { passive: true });
+
+  wrapper.addEventListener("touchend", (event) => {
+    touchEndX = event.changedTouches[0].screenX;
+    handleGesture();
+    resetAutoPlay();
+  });
+
+  let isMouseDown = false;
+  wrapper.addEventListener("mousedown", (event) => {
+    isMouseDown = true;
+    touchStartX = event.clientX;
+    stopAutoPlay();
+  });
+
+  wrapper.addEventListener("mouseup", (event) => {
+    if (!isMouseDown) return;
+    isMouseDown = false;
+    touchEndX = event.clientX;
+    handleGesture();
+    resetAutoPlay();
+  });
+   wrapper.addEventListener("mouseleave", () => {
+    if(isMouseDown) {
+        isMouseDown = false;
+        resetAutoPlay();
+    }
+  });
+
+
+  function updateNav(activeIndex) {
+    navItems.forEach((item, index) => {
+      const bar = item.querySelector(".nav-bar");
+      
+      // Reset animation
+      bar.classList.remove('progress');
+
+      if (index === activeIndex) {
+        item.classList.add("active");
+        // Trigger reflow to restart animation
+        void bar.offsetWidth;
+        bar.classList.add('progress');
+
+      } else {
+        item.classList.remove("active");
+      }
+    });
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay(); // Ensure no multiple timers are running
+    autoPlayTimer = setInterval(() => {
+      gotoSlide(1);
+    }, 5000); // 5 seconds
+  }
+
+  function stopAutoPlay() {
+    clearInterval(autoPlayTimer);
+  }
+
+  function resetAutoPlay() {
+    stopAutoPlay();
+    startAutoPlay();
+  }
+
+  function gotoSlide(value) {
+    if (isTweeningRef.current) return;
+    
+    let nextIndex = currentIndexRef.current + value;
+    const totalSlides = slides.length;
+
+    if (nextIndex >= totalSlides) nextIndex = 0;
+    else if (nextIndex < 0) nextIndex = totalSlides - 1;
+
+    performSlideTransition(currentIndexRef.current, nextIndex, value);
+  }
+
+  function gotoSlideDirect(index) {
+    if (isTweeningRef.current || currentIndexRef.current === index) return;
+    
+    const direction = index > currentIndexRef.current ? 1 : -1;
+    performSlideTransition(currentIndexRef.current, index, direction);
+  }
+
+  function performSlideTransition(current, next, direction) {
+    isTweeningRef.current = true;
+    resetAutoPlay();
+
+    const currentSlide = slides[current];
+    const nextSlide = slides[next];
+
+    updateNav(next);
+
+    // Animate text out
+    textElement.style.transition = "opacity 0.4s ease-out, transform 0.4s ease-out";
+    textElement.style.opacity = "0";
+    textElement.style.transform = "translateY(20px)";
+
+    // Position next slide
+    nextSlide.style.zIndex = 2;
+    nextSlide.style.transform = direction === 1 ? "translateX(100%)" : "translateX(-100%)";
+    
+    // Animate slides
+    setTimeout(() => {
+        nextSlide.style.transition = "transform 1.5s cubic-bezier(0.77, 0, 0.175, 1)";
+        nextSlide.style.transform = "translateX(0%)";
+        
+        currentSlide.style.transition = "transform 1.5s cubic-bezier(0.77, 0, 0.175, 1)";
+        currentSlide.style.transform = direction === 1 ? "translateX(-100%)" : "translateX(100%)";
+    }, 50);
+
+    // Animate text in
+    setTimeout(() => {
+      textElement.innerHTML = slideTexts[next];
+      textElement.style.transition = "opacity 0.8s ease-out, transform 0.8s ease-out";
+      textElement.style.opacity = "1";
+      textElement.style.transform = "translateY(0px)";
+    }, 800);
+
+    // Cleanup
+    setTimeout(() => {
+      currentSlide.style.zIndex = 1;
+      currentSlide.style.transition = "none";
+      nextSlide.style.zIndex = 2;
+
+      isTweeningRef.current = false;
+    }, 1600);
+
+    currentIndexRef.current = next;
+  }
+
+  navItems.forEach((item, index) => {
+    item.addEventListener("click", () => gotoSlideDirect(index));
+  });
+
+  nextButton.addEventListener("click", () => gotoSlide(1));
+
+  // Initial setup
+  slides.forEach((slide, index) => {
+    slide.style.zIndex = index === 0 ? 2 : 1;
+    slide.style.transform = "translateX(0%)";
+  });
+  textElement.innerHTML = slideTexts[0];
+  updateNav(0);
+  startAutoPlay();
+});
+// END COMO USAR SLIDER
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---
     // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
