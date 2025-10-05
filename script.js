@@ -765,67 +765,150 @@ if (heroVideo && heroPoster) {
         
         const navItems = Array.from(howSection.querySelectorAll(".nav-item"));
         const slides = Array.from(howSection.querySelectorAll(".slide"));
-        const textElement = howSection.querySelector(".text");
-        let currentIndex = -1;
-
-        function updateActiveSlide(index) {
-            if (index === currentIndex) return;
-
-            currentIndex = index;
-
-            slides.forEach((slide, i) => {
-                if (i === index) {
-                    slide.classList.add('active');
+        const textElement = howSection.querySelector("#sopy-how-text");
+        const currentIndexRef = { current: 0 };
+        
+        function updateNav(activeIndex) {
+            navItems.forEach((item, index) => {
+                const text = item.querySelector("span");
+                const bar = item.querySelector(".nav-bar");
+                
+                if (index === activeIndex) {
+                    item.classList.add("active");
+                    if (text) text.style.opacity = "1";
+                    if (bar) bar.style.opacity = "1";
                 } else {
-                    slide.classList.remove('active');
+                    item.classList.remove("active");
+                    if (text) text.style.opacity = "0.5";
+                    if (bar) bar.style.opacity = "0.3";
                 }
             });
-
-            navItems.forEach((nav, i) => {
-                if (i === index) {
-                    nav.classList.add('active');
-                } else {
-                    nav.classList.remove('active');
-                }
-            });
-
+        }
+        
+        function gotoSlideDirect(index) {
+            if (currentIndexRef.current === index) return;
+            
+            updateNav(index);
+            
+            // Anima texto de forma mais suave
             if (textElement) {
                 gsap.to(textElement, {
                     opacity: 0,
-                    y: 20,
-                    duration: 0.3,
-                    ease: 'power2.in',
+                    y: -15,
+                    duration: 0.4,
+                    ease: "power2.inOut",
                     onComplete: () => {
-                        textElement.textContent = slideTexts[index];
-                        gsap.to(textElement, {
-                            opacity: 1,
-                            y: 0,
-                            duration: 0.5,
-                            ease: 'power2.out'
-                        });
+                        textElement.innerHTML = slideTexts[index];
+                        gsap.fromTo(textElement, 
+                            { y: 15, opacity: 0 },
+                            { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }
+                        );
                     }
                 });
             }
+            
+            currentIndexRef.current = index;
         }
-
+        
+        // Configuração inicial dos slides
+        slides.forEach((slide, index) => {
+            if (index === 0) {
+                slide.style.zIndex = "2";
+                slide.style.transform = "translateX(0%)";
+                slide.style.opacity = "1";
+                slide.style.scale = "1";
+            } else {
+                slide.style.zIndex = "1";
+                slide.style.transform = "translateX(100%)";
+                slide.style.opacity = "0.3";
+                slide.style.scale = "0.95";
+            }
+        });
+        
+        // ScrollTrigger para controlar o slider com animação sticky melhorada
         ScrollTrigger.create({
             trigger: howSection,
             start: "top top",
             end: "bottom bottom",
-            scrub: true,
-            pin: '.sopy-how-section .wrapper',
-            onUpdate: (self) => {
+            pin: ".sopy-how-section .slider",
+            pinSpacing: false,
+            scrub: 1.2,
+            onUpdate: self => {
                 const progress = self.progress;
-                const slideIndex = Math.floor(progress * slides.length);
+                let targetIndex = 0;
+                let smoothProgress = 0;
                 
-                if (slideIndex < slides.length) {
-                    updateActiveSlide(slideIndex);
+                // Definir qual slide deve estar ativo baseado no progresso
+                if (progress < 0.33) {
+                    targetIndex = 0;
+                    smoothProgress = progress * 3; // 0 to 1 for first third
+                } else if (progress < 0.66) {
+                    targetIndex = 1;
+                    smoothProgress = (progress - 0.33) * 3; // 0 to 1 for second third
+                } else {
+                    targetIndex = 2;
+                    smoothProgress = (progress - 0.66) * 3; // 0 to 1 for final third
                 }
+                
+                // Só mudar se for diferente do atual
+                if (targetIndex !== currentIndexRef.current) {
+                    gotoSlideDirect(targetIndex);
+                }
+                
+                // Atualizar posições dos slides com animação mais suave
+                slides.forEach((slide, index) => {
+                    let xPos = 0;
+                    let opacity = 1;
+                    let scale = 1;
+                    
+                    if (index < targetIndex) {
+                        xPos = -100; // Slides anteriores saem pela esquerda
+                        opacity = 0.3;
+                        scale = 0.95;
+                    } else if (index > targetIndex) {
+                        xPos = 100; // Slides seguintes ficam à direita  
+                        opacity = 0.3;
+                        scale = 0.95;
+                    } else {
+                        // Slide atual - interpolação suave baseada no progresso
+                        const easeProgress = gsap.utils.interpolate(0, 1, smoothProgress);
+                        xPos = 0;
+                        opacity = 1;
+                        scale = 1;
+                        
+                        // Adiciona um leve parallax ao slide ativo
+                        const parallaxOffset = (smoothProgress - 0.5) * 10;
+                        gsap.set(slide, { 
+                            x: xPos + "%", 
+                            opacity: opacity,
+                            scale: scale,
+                            backgroundPosition: `${50 + parallaxOffset}% center`
+                        });
+                        return; // Skip the default gsap.set below
+                    }
+                    
+                    gsap.set(slide, { 
+                        x: xPos + "%", 
+                        opacity: opacity,
+                        scale: scale
+                    });
+                });
+            },
+            snap: {
+                snapTo: [0, 0.33, 0.66, 1],
+                duration: { min: 0.3, max: 0.8 },
+                delay: 0.15,
+                ease: "power2.inOut"
             }
         });
-
-        // Initial state
-        updateActiveSlide(0);
+        
+        // Event listeners para nav items (opcional - permite clique direto)
+        navItems.forEach((item, index) => {
+            item.addEventListener("click", () => gotoSlideDirect(index));
+        });
+        
+        // Setup inicial
+        updateNav(0);
     }
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---

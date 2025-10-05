@@ -1086,9 +1086,13 @@ body.theme-citrus .benefit-title h2 {
 /* ========== COMO USAR (Scroll-driven Slider) ========== */
 .sopy-how-section {
   width: 100%;
-  height: 300vh; /* Triple height for 3 slides */
+  height: 300vh; /* Extended height for scroll-driven animation */
   position: relative;
+  overflow: hidden;
   background-color: var(--brand-dark);
+  padding: 0;
+  /* Ensure smooth scrolling performance */
+  will-change: transform;
 }
 
 .sopy-how-section .wrapper {
@@ -1098,15 +1102,16 @@ body.theme-citrus .benefit-title h2 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: sticky;
-  top: 0;
-  overflow: hidden;
+  position: relative;
 }
 
 .sopy-how-section .slider {
   width: 100%;
-  height: 100%;
-  position: relative;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  z-index: 1;
 }
 
 .sopy-how-section .slide {
@@ -1120,28 +1125,52 @@ body.theme-citrus .benefit-title h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: opacity;
-  opacity: 0;
-}
-
-.sopy-how-section .slide.active {
-  opacity: 1;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease;
+  will-change: transform, opacity;
+  z-index: 1;
 }
 
 .sopy-how-section .slide[data-step="01"] {
-  background-image: url('assets/images/casa.jpg');
+  background: url('./assets/images/casa.jpg') center/cover;
+  background-attachment: fixed;
+  /* Add overlay for better text readability */
+  position: relative;
+}
+
+.sopy-how-section .slide[data-step="01"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
 }
 
 .sopy-how-section .slide[data-step="02"] {
-  background-image: url('assets/images/praia.jpg');
+  background: url('./assets/images/praia.jpg') center/cover;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.sopy-how-section .slide[data-step="02"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
 }
 
 .sopy-how-section .slide[data-step="03"] {
-  background-image: url('assets/images/riacho.jpg');
+  background: url('./assets/images/riacho.jpg') center/cover;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.sopy-how-section .slide[data-step="03"]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
+  pointer-events: none;
 }
 
 .sopy-how-section .text {
@@ -1150,25 +1179,21 @@ body.theme-citrus .benefit-title h2 {
   left: 120px;
   color: white;
   font-size: 60px;
-  z-index: 10;
-  opacity: 0;
-  transform: translateY(50px);
+  z-index: 15; /* Above slide overlays */
+  opacity: 1;
+  transform: translateY(-50px);
   max-width: 60%;
   font-weight: 700;
   line-height: 1.2;
   text-shadow: 3px 3px 12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8), 1px 1px 0 rgba(0, 0, 0, 1);
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
   padding: 20px;
-  border-radius: 12px;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: opacity, transform;
-}
-
-.sopy-how-section .slide.active .text {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .sopy-how-section .nav {
@@ -1177,12 +1202,13 @@ body.theme-citrus .benefit-title h2 {
   left: 100px;
   display: flex;
   flex-direction: row;
-  z-index: 10;
-  background: rgba(0, 0, 0, 0.3);
+  z-index: 15; /* Above slide overlays */
+  background: rgba(0, 0, 0, 0.4);
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 16px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sopy-how-section .nav-item {
@@ -1206,19 +1232,32 @@ body.theme-citrus .benefit-title h2 {
 }
 
 .sopy-how-section .nav-bar {
-  width: 100%;
+  width: 370px;
   height: 5px;
   background-color: rgba(255, 255, 255, 0.5);
   position: relative;
   overflow: hidden;
+  opacity: 0.5;
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   margin-top: 20px;
 }
 
-.sopy-how-section .nav-bar-progress {
-  width: 0%;
+.sopy-how-section .nav-bar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
+  width: 100%;
   background-color: white;
-  transition: width 0.3s ease-out;
+  transform: translateX(-100%);
+  opacity: 1;
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.sopy-how-section .nav-item.active .nav-bar::before {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 .sopy-how-section .nav-item.active .nav-bar {
@@ -1232,6 +1271,13 @@ body.theme-citrus .benefit-title h2 {
 
 /* Responsive Styles for smaller screens */
 @media (max-width: 768px) {
+  /* Fix background-attachment for mobile */
+  .sopy-how-section .slide[data-step="01"],
+  .sopy-how-section .slide[data-step="02"],
+  .sopy-how-section .slide[data-step="03"] {
+    background-attachment: scroll; /* Fixed doesn't work well on mobile */
+  }
+  
   .sopy-how-section .text {
     font-size: 40px;
     top: 20%;
@@ -1239,11 +1285,13 @@ body.theme-citrus .benefit-title h2 {
     transform: translate(-50%, -50%);
     max-width: 90%;
     text-align: center;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     padding: 15px;
-    border-radius: 10px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 15;
   }
 
   .sopy-how-section .nav {
@@ -1253,12 +1301,13 @@ body.theme-citrus .benefit-title h2 {
     width: calc(100% - 20px);
     display: flex;
     justify-content: space-between;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.4);
+    z-index: 15; /* Above slide overlays */
+    background: rgba(0, 0, 0, 0.5);
     padding: 15px;
-    border-radius: 10px;
+    border-radius: 12px;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .sopy-how-section .nav-item {
@@ -1320,11 +1369,13 @@ body.theme-citrus .benefit-title h2 {
     top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.4);
     padding: 18px;
-    border-radius: 12px;
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 15;
   }
 
   .sopy-how-section .nav {
@@ -1333,12 +1384,13 @@ body.theme-citrus .benefit-title h2 {
     left: 20px;
     display: flex;
     flex-direction: row;
-    z-index: 10;
-    background: rgba(0, 0, 0, 0.3);
+    z-index: 15; /* Above slide overlays */
+    background: rgba(0, 0, 0, 0.4);
     padding: 18px;
-    border-radius: 12px;
+    border-radius: 16px;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .sopy-how-section .nav-bar {
