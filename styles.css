@@ -1085,7 +1085,7 @@ body.theme-citrus .benefit-title h2 {
 
 /* ========== COMO USAR (Scroll-driven Slider) ========== */
 /* HOW TO USE SLIDER */
-.sopy-how.wrapper {
+#sopy-how .wrapper {
   width: 100%;
   height: 100vh;
   background-color: #111;
@@ -1097,14 +1097,14 @@ body.theme-citrus .benefit-title h2 {
   overflow: hidden;
 }
 
-.sopy-how .slider {
+#sopy-how .slider {
   width: 100%;
   height: 100vh;
   position: relative;
   overflow: hidden;
 }
 
-.sopy-how .slide {
+#sopy-how .slide {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -1119,7 +1119,7 @@ body.theme-citrus .benefit-title h2 {
   background-position: center;
 }
 
-.sopy-how .text {
+#sopy-how .text {
   position: absolute;
   top: 120px;
   left: 120px;
@@ -1132,7 +1132,7 @@ body.theme-citrus .benefit-title h2 {
   line-height: 1.2;
 }
 
-.sopy-how .nav {
+#sopy-how .nav {
   position: absolute;
   bottom: 80px;
   left: 100px;
@@ -1141,7 +1141,7 @@ body.theme-citrus .benefit-title h2 {
   z-index: 10;
 }
 
-.sopy-how .nav-item {
+#sopy-how .nav-item {
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -1149,17 +1149,17 @@ body.theme-citrus .benefit-title h2 {
   cursor: pointer;
 }
 
-.sopy-how .nav-item span {
+#sopy-how .nav-item span {
   color: white;
   opacity: 0.5;
   transition: opacity 0.5s ease;
 }
 
-.sopy-how .nav-item.active span {
+#sopy-how .nav-item.active span {
   opacity: 1;
 }
 
-.sopy-how .nav-bar {
+#sopy-how .nav-bar {
   width: 150px;
   height: 5px;
   background-color: rgba(255, 255, 255, 0.5);
@@ -1170,7 +1170,7 @@ body.theme-citrus .benefit-title h2 {
   margin-top: 20px;
 }
 
-.sopy-how .nav-bar::before {
+#sopy-how .nav-bar::before {
   content: "";
   position: absolute;
   top: 0;
@@ -1180,24 +1180,24 @@ body.theme-citrus .benefit-title h2 {
   background-color: white;
   transform: translateX(-100%);
   opacity: 1;
-  transition: transform 5s linear; /* Changed to linear and 5s for progress bar effect */
 }
 
-.sopy-how .nav-item.active .nav-bar.progress::before {
+#sopy-how .nav-item.active .nav-bar.progress::before {
   transform: translateX(0);
+  transition: transform 5s linear;
 }
 
 
-.sopy-how .nav-item.active .nav-bar {
+#sopy-how .nav-item.active .nav-bar {
   opacity: 1;
 }
 
-.sopy-how .nav-item:hover .nav-bar {
+#sopy-how .nav-item:hover .nav-bar {
   background-color: white;
   opacity: 1;
 }
 
-.sopy-how .button {
+#sopy-how .button {
   position: absolute;
   bottom: 60px;
   right: 40px;
@@ -1208,26 +1208,26 @@ body.theme-citrus .benefit-title h2 {
   padding: 0;
 }
 
-.sopy-how .arrow {
+#sopy-how .arrow {
   fill: white;
   width: 60px;
   height: 60px;
 }
 
 @media (max-width: 768px) {
-  .sopy-how .button {
+  #sopy-how .button {
     bottom: 60px;
     right: 10px;
     width: 60px;
     height: 50px;
   }
 
-  .sopy-how .arrow {
+  #sopy-how .arrow {
     width: 30px;
     height: 30px;
   }
 
-  .sopy-how .text {
+  #sopy-how .text {
     font-size: 24px;
     top: 20%;
     left: 50%;
@@ -1236,7 +1236,7 @@ body.theme-citrus .benefit-title h2 {
     text-align: center;
   }
 
-  .sopy-how .nav {
+  #sopy-how .nav {
     bottom: 60px;
     left: 10px;
     width: calc(100% - 80px);
@@ -1244,36 +1244,36 @@ body.theme-citrus .benefit-title h2 {
     justify-content: space-between;
   }
 
-  .sopy-how .nav-item {
+  #sopy-how .nav-item {
     flex: 1;
     margin-right: 5px;
   }
-  .sopy-how .nav-item:last-child {
+  #sopy-how .nav-item:last-child {
     margin-right: 0;
   }
 
-  .sopy-how .nav-bar {
+  #sopy-how .nav-bar {
     width: 100%;
     height: 4px;
     background-color: rgba(255, 255, 255, 0.5);
     margin-top: 10px;
   }
 
-  .sopy-how .nav-item.active .nav-bar {
+  #sopy-how .nav-item.active .nav-bar {
     opacity: 1;
   }
 
-  .sopy-how .nav-bar::before {
+  #sopy-how .nav-bar::before {
     transition: transform 5s linear;
   }
 
-  .sopy-how .nav-item span {
+  #sopy-how .nav-item span {
     font-size: 14px;
   }
 }
 
 @media (min-width: 769px) and (max-width: 1366px) {
-  .sopy-how .text {
+  #sopy-how .text {
     font-size: 40px;
     top: 20%;
     left: 50%;
@@ -1282,32 +1282,32 @@ body.theme-citrus .benefit-title h2 {
     text-align: center;
   }
 
-  .sopy-how .button {
+  #sopy-how .button {
     bottom: 11vh;
     right: 1vh;
     width: 120px;
     height: 40px;
   }
 
-  .sopy-how .arrow {
+  #sopy-how .arrow {
     width: 7vh;
     height: 7vh;
   }
 
-  .sopy-how .nav {
+  #sopy-how .nav {
     bottom: 7vh;
     left: 20px;
   }
 
-  .sopy-how .nav-bar {
+  #sopy-how .nav-bar {
     width: 200px;
   }
 
-  .sopy-how .nav-item {
+  #sopy-how .nav-item {
     margin-right: 10px;
   }
 
-  .sopy-how .nav-item span {
+  #sopy-how .nav-item span {
     font-size: 14px;
   }
 }
