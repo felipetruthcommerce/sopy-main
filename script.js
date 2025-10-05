@@ -750,89 +750,104 @@ if (heroVideo && heroPoster) {
 
 
     // ===================================
-    //  BLOCO COMO USAR (Fullscreen vertical slides com snap)
+    //  BLOCO COMO USAR (Slider estilo referência, animado pelo scroll)
     // ===================================
 
     (function initComoUsar(){
         const howSection = document.querySelector('.sopy-how-section.how-fullscreen');
         if (!howSection) return;
-        console.log('[COMO USAR] Nova estrutura fullscreen encontrada. Configurando...');
-
         const track = howSection.querySelector('.how-slides-track');
         const slides = track ? Array.from(track.querySelectorAll('.how-slide')) : [];
-        let progressWrap = howSection.querySelector('.sopy-how-progress');
-        if (!track || !slides.length) return;
+        const textEl = howSection.querySelector('#how-text');
+        const navEl = howSection.querySelector('#how-nav');
+        const nextBtn = howSection.querySelector('#how-next');
+        if (!track || !slides.length || !navEl || !textEl) return;
 
-        // Criar dots dinamicamente
-        if (progressWrap) {
-            progressWrap.innerHTML = '';
-            slides.forEach((_, i) => {
-                const d = document.createElement('div');
-                d.className = 'sopy-how-progress-dot';
-                d.setAttribute('data-index', i);
-                progressWrap.appendChild(d);
-            });
-        }
-        const dots = progressWrap ? Array.from(progressWrap.querySelectorAll('.sopy-how-progress-dot')) : [];
+        // Nav items with labels 01..04 Slide
+        const labels = ['01 Slide', '02 Slide', '03 Slide', '04 Slide'];
+        navEl.innerHTML = '';
+        labels.slice(0, slides.length).forEach((label, i) => {
+            const item = document.createElement('div');
+            item.className = 'how-nav-item';
+            item.setAttribute('data-index', i);
+            item.innerHTML = `<span>${label}</span><div class="how-nav-bar"></div>`;
+            navEl.appendChild(item);
+        });
+        const navItems = Array.from(navEl.querySelectorAll('.how-nav-item'));
+
+        // Initial z-order and positions for a horizontal slide feel
+        slides.forEach((s, i) => {
+            s.style.position = 'absolute';
+            s.style.inset = '0';
+            s.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
+            s.style.zIndex = i === 0 ? '2' : '1';
+        });
+        navItems[0]?.classList.add('active');
+        textEl.textContent = '01 Slide 1 Title';
 
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-        const getYPercent = () => -100 * (slides.length - 1);
-        const getTotalScroll = () => window.innerHeight * (slides.length - 1);
+        // Timeline: one segment per slide; scrubbed by scroll; pinned section
+        const tl = gsap.timeline({ paused: true });
+        slides.forEach((slide, i) => {
+            if (i === 0) return; // first is visible initially
+            // animate previous out left and this in from right
+            const prev = slides[i - 1];
+            tl.addLabel(`slide${i}`)
+              .to(prev, { xPercent: -100, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`)
+              .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 0.8, ease: 'power2.inOut' }, `slide${i}`)
+              .add(() => {
+                  // update text and nav after transition
+                  textEl.style.transition = 'opacity .6s, transform .6s';
+                  textEl.style.opacity = '0';
+                  setTimeout(() => {
+                      textEl.textContent = `${String(i+1).padStart(2,'0')} Slide ${i+1} Title`;
+                      textEl.style.transform = 'translateY(50px)';
+                      requestAnimationFrame(() => {
+                          textEl.style.opacity = '1';
+                          textEl.style.transform = 'translateY(0)';
+                      });
+                  }, 200);
+                  navItems.forEach((n, idx) => n.classList.toggle('active', idx === i));
+              });
+        });
 
-        let tween = gsap.to(track, {
-            yPercent: getYPercent,
-            ease: 'none',
-            scrollTrigger: {
-                trigger: howSection,
-                start: 'top top',
-                end: () => `+=${getTotalScroll()}`,
-                pin: true,
-                scrub: 0.6,
-                anticipatePin: 1,
-                invalidateOnRefresh: true,
-                onRefresh: () => {
-                    // nada específico aqui, mas força re-cálculo
-                },
-                onEnter: () => progressWrap?.classList.add('visible'),
-                onEnterBack: () => progressWrap?.classList.add('visible'),
-                onLeave: () => progressWrap?.classList.remove('visible'),
-                onLeaveBack: () => progressWrap?.classList.remove('visible'),
-                snap: slides.length > 1 ? (1 / (slides.length - 1)) : 1,
-                onUpdate: self => {
-                    // Atualiza dots
-                    if (dots && dots.length) {
-                        const steps = dots.length;
-                        const idx = Math.min(steps - 1, Math.max(0, Math.round(self.progress * (steps - 1))));
-                        dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-                    }
-                }
+        const totalDur = slides.length - 1; // one unit per slide transition
+        // Map scroll to timeline
+        ScrollTrigger.create({
+            trigger: howSection,
+            start: 'top top',
+            end: () => `+=${window.innerHeight * totalDur}`,
+            pin: true,
+            scrub: 0.6,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => {
+                tl.progress(self.progress);
             }
         });
 
-        const st = () => tween && tween.scrollTrigger;
-
-        // click nos dots para navegar
-        if (dots && dots.length) {
-            dots.forEach((dot, i) => {
-                dot.addEventListener('click', () => {
-                    const trig = st();
-                    if (!trig) return;
-                    const total = getTotalScroll();
-                    const start = trig.start;
-                    const yTarget = Math.round(start + (total * (i / (slides.length - 1))));
-                    if (window.lenis && typeof window.lenis.scrollTo === 'function') {
-                        window.lenis.scrollTo(yTarget, { duration: 0.8, easing: (t)=>1 - Math.pow(1 - t, 3) });
-                    } else {
-                        window.scrollTo({ top: yTarget, behavior: 'smooth' });
-                    }
-                });
-            });
-        }
-
-        window.addEventListener('resize', () => {
-            try { ScrollTrigger.refresh(); } catch(e){}
+        // Clicks on nav items: jump to the right slide position (via Lenis/scroll)
+        const scrollToSlide = (index) => {
+            const st = ScrollTrigger.getById && ScrollTrigger.getAll ? ScrollTrigger.getAll().find(tr => tr.vars.trigger === howSection) : null;
+            const duration = 0.8;
+            if (!st) return;
+            const start = st.start;
+            const total = (slides.length - 1) * window.innerHeight;
+            const yTarget = Math.round(start + (total * (index / (slides.length - 1))));
+            if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+                window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
+            } else {
+                window.scrollTo({ top: yTarget, behavior: 'smooth' });
+            }
+        };
+        navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
+        nextBtn?.addEventListener('click', () => {
+            const cur = Math.round(tl.progress() * (slides.length - 1));
+            const next = Math.min(slides.length - 1, cur + 1);
+            scrollToSlide(next);
         });
+
+        window.addEventListener('resize', () => { try { ScrollTrigger.refresh(); } catch(e){} });
     })();
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---

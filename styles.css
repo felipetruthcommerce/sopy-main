@@ -1256,8 +1256,31 @@ body.theme-aqua .sopy-how-card {
 /* ========== COMO USAR (Fullscreen vertical slides) ========== */
 .how-fullscreen { position: relative; height: 100vh; overflow: hidden; }
 .how-fullscreen .how-slides-track { position: absolute; inset: 0; will-change: transform; }
-.how-fullscreen .how-slide { position: relative; width: 100%; height: 100vh; }
-.how-fullscreen .how-slide img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.how-fullscreen .how-slide { position: relative; width: 100%; height: 100vh; background-size: cover; background-position: center; }
+
+/* Overlay text top-left */
+.how-fullscreen .how-text {
+  position: absolute; top: 120px; left: clamp(16px, 7vw, 120px);
+  color: #fff; font-size: clamp(28px, 6vw, 60px); z-index: 10;
+  opacity: 1; transform: translateY(-50px); pointer-events: none;
+}
+
+/* Labeled nav with loading bars */
+.how-fullscreen .how-nav {
+  position: absolute; bottom: clamp(24px, 6vh, 80px); left: clamp(12px, 6vw, 100px);
+  display: flex; flex-direction: row; gap: 24px; z-index: 10;
+}
+.how-fullscreen .how-nav-item { display: flex; flex-direction: column; align-items: start; cursor: pointer; }
+.how-fullscreen .how-nav-item span { color: #fff; opacity: .5; transition: opacity .5s ease; font-size: 14px; }
+.how-fullscreen .how-nav-item.active span { opacity: 1; }
+.how-fullscreen .how-nav-bar { width: 260px; max-width: 32vw; height: 5px; background: rgba(255,255,255,.5); position: relative; overflow: hidden; opacity: .5; transition: opacity .5s ease, width .5s ease; margin-top: 12px; }
+.how-fullscreen .how-nav-bar::before { content:""; position: absolute; inset: 0; background:#fff; transform: translateX(-100%); opacity: 1; transition: transform .6s ease, opacity .5s ease; }
+.how-fullscreen .how-nav-item.active .how-nav-bar { opacity: 1; }
+.how-fullscreen .how-nav-item.active .how-nav-bar::before { transform: translateX(0); }
+
+/* Next button bottom-right */
+.how-fullscreen .how-button { position: absolute; bottom: clamp(24px, 6vh, 60px); right: clamp(12px, 6vw, 40px); background: transparent; border: none; cursor: pointer; z-index: 10; padding: 0; color: #fff; font-weight: 700; }
+.how-fullscreen .how-button span { pointer-events: none; }
 
 /* Mobile: allow natural scroll with scroll-snap as graceful fallback when no JS */
 @media (max-width: 900px) {
