@@ -832,6 +832,12 @@ if (heroVideo && heroPoster) {
             pin: true,
             scrub: 0.6,
             invalidateOnRefresh: true,
+            onEnter: (self) => applyActive(0),
+            onEnterBack: (self) => {
+                const idx = Math.round(self.progress * (slides.length - 1));
+                applyActive(idx);
+            },
+            onLeaveBack: () => applyActive(0),
             onUpdate: (self) => {
                 tl.progress(self.progress);
                 const idx = Math.round(self.progress * (slides.length - 1));
