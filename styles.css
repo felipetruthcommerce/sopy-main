@@ -411,7 +411,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   gap: .5rem; padding: .85rem 1.8rem; border-radius: 999rem;
   border: 1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
   font-weight: 600; letter-spacing: .05em; box-shadow: none; 
-  transition: all 0.3s ease; /* animação suave igual ao card 3D */
+  transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease; /* velocidade original */
   overflow: hidden;
 }
 
@@ -425,8 +425,8 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   height: 0;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  transition: all 0.3s ease; /* animação suave */
-  z-index: 0;
+  transition: width 1.5s ease, height 1.5s ease; /* animação original mais lenta */
+  z-index: -1; /* fica atrás do texto */
 }
 
 .sopy-btn:hover::before {
@@ -1919,7 +1919,7 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   padding:.85rem 1.8rem; border-radius:999rem;
   border:1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
   font-weight:600; letter-spacing:.05em; text-decoration:none; box-shadow:none;
-  transition: all 0.3s ease; /* animação suave igual ao card 3D */
+  transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease; /* velocidade original */
   overflow:hidden;
 }
 
@@ -1928,8 +1928,8 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   position:absolute; left:var(--xPos, 50%); top:var(--yPos, 50%);
   transform:translate(-50%, -50%);
   width:0; height:0; background-color:rgba(255,255,255,0.15);
-  border-radius:50%; transition: all 0.3s ease; /* animação suave */
-  z-index:0;
+  border-radius:50%; transition: width 1.5s ease, height 1.5s ease; /* animação original mais lenta */
+  z-index:-1; /* fica atrás do texto */
 }
 .sopy-tc-btn *{ position:relative; z-index:1; }
 .sopy-tc-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
