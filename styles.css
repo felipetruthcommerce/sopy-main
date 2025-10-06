@@ -1638,7 +1638,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   background-color: #FFFFFF !important; /* FORÇA FUNDO BRANCO DA SEÇÃO */
 }
 
-#faq h2 { color: #fff; }
+#faq h2 { color: black; }
 
 #faq .sopy-faq-accordion {
   --d: 0deg;
@@ -1766,30 +1766,10 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 body.theme-aqua #faq .sopy-faq-accordion,
 body.theme-citrus #faq .sopy-faq-accordion { 
   background: #fff; 
-  color: #000000 !important; /* forçar fonte preta */
   border: 2px solid #000000 !important; /* borda preta bem visível */
   box-shadow: none;
 }
 
-/* Regras de alta especificidade para garantir texto preto em todos os elementos do FAQ
-   (títulos, setinha, conteúdo), mesmo quando o card estiver com a animação/overlay) */
-#faq .sopy-faq-accordion,
-#faq .sopy-faq-accordion .sopy-title,
-#faq .sopy-faq-accordion .sopy-title a,
-#faq .sopy-faq-accordion .sopy-title a::before,
-#faq .sopy-faq-accordion .sopy-content,
-#faq .sopy-faq-accordion .sopy-content p {
-  color: #000000 !important;
-}
-
-/* Forçar que os textos do card aberto continuem pretos (mesmo que a pseudo overlay apareça) */
-#faq .sopy-faq-accordion.open,
-#faq .sopy-faq-accordion.open .sopy-title,
-#faq .sopy-faq-accordion.open .sopy-title a,
-#faq .sopy-faq-accordion.open .sopy-content,
-#faq .sopy-faq-accordion.open .sopy-content p {
-  color: #000000 !important;
-}
 
 
 
