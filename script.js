@@ -946,95 +946,116 @@ if (heroVideo && heroPoster) {
             console.warn('[DEPOIMENTOS] Falha ao popular avatares:', e);
         }
 
-            if (track && cards.length > 0) {
-            // Carousel estilo Flickity: células lado-a-lado, com card central destacado (is-selected)
+        if (track && cards.length > 0) {
             let currentIndex = 0;
             let isAnimating = false;
             let autoInterval;
 
-            const getCellWidth = () => cards[0]?.getBoundingClientRect().width || 201;
-            const getGap = () => {
-                // spacing is margin-right on the cells
-                const cs = getComputedStyle(cards[0]);
-                const mr = parseFloat(cs.marginRight || '0') || 0;
-                return mr;
-            };
+            const slideTo = (targetIndex) => {
+                if (isAnimating) return;
+                
+                // Carrossel infinito
+                if (targetIndex >= cards.length) targetIndex = 0;
+                if (targetIndex < 0) targetIndex = cards.length - 1;
+                
+                if (targetIndex === currentIndex) return;
 
-            const setActive = (idx) => {
-                cards.forEach((c, i) => c.classList.toggle('is-selected', i === idx));
-                dots.forEach((d, i) => d.classList.toggle('active', i === idx));
-            };
-
-            const scrollToIndex = (idx, animate = true) => {
-                const n = cards.length;
-                if (idx < 0) idx = n - 1; if (idx >= n) idx = 0;
-                const cw = getCellWidth(); const gap = getGap();
-                const total = cw + gap;
-                const containerW = track.getBoundingClientRect().width;
-                const offset = idx * total;
-                const centerOffset = (containerW - cw) / 2; // centraliza o item
-                const x = -(offset - centerOffset);
                 isAnimating = true;
-                const done = () => { currentIndex = idx; isAnimating = false; setActive(currentIndex); startAutoPlay(); };
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(track, { x, duration: 0.75, ease: 'power3.inOut', onComplete: done });
-                } else {
-                    track.style.transform = `translate3d(${x}px,0,0)`; done();
-                }
+                clearInterval(autoInterval);
+
+                const currentCard = cards[currentIndex];
+                const nextCard = cards[targetIndex];
+                const direction = targetIndex > currentIndex || (currentIndex === cards.length - 1 && targetIndex === 0) ? 1 : -1;
+
+                // Animação horizontal igual ao Como Usar
+                gsap.timeline({
+                    defaults: { duration: 0.2, ease: 'power2.out' },
+                    onComplete: () => {
+                        currentIndex = targetIndex;
+                        isAnimating = false;
+                        startAutoPlay();
+                        updateDots();
+                    }
+                })
+                .to(currentCard, { x: direction * -100 + '%', opacity: 0 }, 0)
+                .fromTo(nextCard, 
+                    { x: direction * 100 + '%', opacity: 0 },
+                    { x: '0%', opacity: 1 }, 0.1
+                );
             };
 
-            const slideTo = (idx) => { if (!isAnimating) { clearInterval(autoInterval); scrollToIndex(idx); } };
+            const updateDots = () => {
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
+            };
 
             const startAutoPlay = () => {
                 clearInterval(autoInterval);
-                autoInterval = setInterval(() => slideTo(currentIndex + 1), 6500);
+                autoInterval = setInterval(() => {
+                    slideTo(currentIndex + 1); // Infinito
+                }, 6000);
             };
 
-            // Drag/Touch
-            let isDragging = false; let startX = 0; let lastX = 0; let baseX = 0;
-            const getTrackX = () => {
-                // Prefer gsap cached value if present
-                if (track._gsap && typeof track._gsap.x !== 'undefined') return parseFloat(track._gsap.x) || 0;
-                const tf = getComputedStyle(track).transform;
-                if (tf && tf !== 'none') {
-                    if (tf.startsWith('matrix3d(')) {
-                        const parts = tf.slice(9, -1).split(',').map(parseFloat);
-                        return parts[12] || 0; // tx at index 12
-                    }
-                    if (tf.startsWith('matrix(')) {
-                        const parts = tf.slice(7, -1).split(',').map(parseFloat);
-                        return parts[4] || 0; // tx at index 4
-                    }
+            // Drag/Touch igual ao Como Usar
+            let isDragging = false;
+            let startX = 0;
+            let deltaX = 0;
+
+            const handleStart = (e) => {
+                if (isAnimating) return;
+                isDragging = true;
+                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                deltaX = 0;
+                track.classList.add('tc-grabbing');
+                clearInterval(autoInterval);
+            };
+
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                deltaX = currentX - startX;
+                gsap.set(cards[currentIndex], { x: deltaX });
+            };
+
+            const handleEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                track.classList.remove('tc-grabbing');
+                
+                const threshold = track.offsetWidth * 0.2;
+                if (Math.abs(deltaX) > threshold) {
+                    const direction = deltaX > 0 ? -1 : 1;
+                    slideTo(currentIndex + direction);
+                } else {
+                    gsap.to(cards[currentIndex], { x: 0, duration: 0.3 });
+                    startAutoPlay();
                 }
-                return 0;
             };
-            const onStart = (e) => { if (isAnimating) return; isDragging = true; startX = lastX = (e.touches?e.touches[0].clientX:e.clientX); baseX = getTrackX(); track.classList.add('tc-grabbing'); clearInterval(autoInterval); };
-            const onMove  = (e) => { if (!isDragging) return; const x = (e.touches?e.touches[0].clientX:e.clientX); const dx = x - startX; lastX = x; const nx = baseX + dx; if (typeof gsap !== 'undefined') gsap.set(track, { x: nx }); else track.style.transform = `translate3d(${nx}px,0,0)`; };
-            const onEnd   = () => { if (!isDragging) return; isDragging = false; track.classList.remove('tc-grabbing'); const dx = lastX - startX; const threshold = getCellWidth()*0.25; if (Math.abs(dx) > threshold) { slideTo(currentIndex + (dx<0?1:-1)); } else { scrollToIndex(currentIndex); } };
 
-            track.addEventListener('mousedown', onStart);
-            document.addEventListener('mousemove', onMove);
-            document.addEventListener('mouseup', onEnd);
-            track.addEventListener('touchstart', onStart, { passive: true });
-            track.addEventListener('touchmove', onMove, { passive: true });
-            track.addEventListener('touchend', onEnd);
-
-            // Dots click
-            dots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
-
-            // Init layout: garante que todos os cards estejam visíveis em linha
-            if (typeof gsap !== 'undefined') gsap.set(track, { x: 0 }); else track.style.transform = 'translate3d(0,0,0)';
-            setActive(0);
-            // Centraliza o primeiro
-            setTimeout(() => scrollToIndex(0, false), 0);
-            startAutoPlay();
-
-            // Recenter on resize
-            let resizeTO;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTO);
-                resizeTO = setTimeout(() => scrollToIndex(currentIndex, false), 80);
+            // Event listeners
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => slideTo(index));
             });
+            
+            track.addEventListener('mousedown', handleStart);
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+            track.addEventListener('touchstart', handleStart, { passive: false });
+            track.addEventListener('touchmove', handleMove, { passive: false });
+            track.addEventListener('touchend', handleEnd);
+
+            // Setup inicial
+            cards.forEach((card, index) => {
+                if (index === 0) {
+                    gsap.set(card, { x: 0, opacity: 1 });
+                } else {
+                    gsap.set(card, { x: '100%', opacity: 0 });
+                }
+            });
+            
+            updateDots();
+            startAutoPlay();
             
             // Mostrar progress quando entrar na seção
             const observer = new IntersectionObserver((entries) => {
@@ -1080,6 +1101,100 @@ if (heroVideo && heroPoster) {
                 observer.unobserve(threeSection);
             }
         }, { threshold: 0.1 }).observe(threeSection);
+    }
+
+    // ===================================
+    //  BLOCO COMO USAR (Horizontal Scroll com efeito Flickity)
+    // ===================================
+    const comoUsarSection = document.querySelector('.sopy-how-section');
+    if (comoUsarSection && !comoUsarSection.classList.contains('how-fullscreen')) {
+        console.log('[COMO USAR] Seção encontrada. Inicializando efeito Flickity...');
+        
+        const track = comoUsarSection.querySelector('.sopy-how-track');
+        const panels = track ? Array.from(track.querySelectorAll('.sopy-how-panel')) : [];
+        const progressDots = comoUsarSection.querySelectorAll('.sopy-how-progress-dot');
+        
+        if (track && panels.length > 0 && typeof ScrollTrigger !== 'undefined') {
+            
+            // Função para atualizar qual card está ativo baseado no progresso
+            const updateActiveCard = (progress) => {
+                // Calcula qual painel deve estar ativo baseado no progresso (0-1)
+                const totalPanels = panels.length;
+                const currentFloat = progress * (totalPanels - 1);
+                const activeIndex = Math.round(currentFloat);
+                
+                // Sistema de proximidade suave para blur/opacity
+                panels.forEach((panel, index) => {
+                    const distance = Math.abs(index - currentFloat);
+                    const isActive = distance < 0.5;
+                    
+                    // Aplica classe is-selected baseado na proximidade
+                    if (isActive) {
+                        panel.classList.add('is-selected');
+                    } else {
+                        panel.classList.remove('is-selected');
+                    }
+                });
+                
+                // Atualiza dots de progresso (só o mais próximo fica ativo)
+                progressDots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index === activeIndex);
+                });
+            };
+            
+            // Aplica estado inicial (primeiro card ativo)
+            updateActiveCard(0);
+            
+            // ScrollTrigger para animar o scroll horizontal e controlar qual card está ativo
+            ScrollTrigger.create({
+                trigger: comoUsarSection,
+                start: 'top top',
+                end: 'bottom bottom',
+                pin: true,
+                scrub: 1,
+                onUpdate: (self) => {
+                    // Move o track horizontalmente
+                    const progress = self.progress;
+                    const moveDistance = -(panels.length - 1) * 100; // Move 100% * (num panels - 1)
+                    gsap.set(track, { 
+                        xPercent: progress * moveDistance 
+                    });
+                    
+                    // Atualiza qual card está ativo
+                    updateActiveCard(progress);
+                },
+                onEnter: () => {
+                    // Mostra progress dots quando entra na seção
+                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
+                    if (progressEl) {
+                        progressEl.classList.add('visible');
+                    }
+                },
+                onLeave: () => {
+                    // Esconde progress dots quando sai da seção
+                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
+                    if (progressEl) {
+                        progressEl.classList.remove('visible');
+                    }
+                },
+                onEnterBack: () => {
+                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
+                    if (progressEl) {
+                        progressEl.classList.add('visible');
+                    }
+                },
+                onLeaveBack: () => {
+                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
+                    if (progressEl) {
+                        progressEl.classList.remove('visible');
+                    }
+                }
+            });
+        } else {
+            console.warn('[COMO USAR] Elementos necessários não encontrados ou ScrollTrigger não disponível.');
+        }
+    } else {
+        console.log('[COMO USAR] Seção horizontal não encontrada.');
     }
 
     // 4. Refresh final de segurança
