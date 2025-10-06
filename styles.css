@@ -411,7 +411,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   gap: .5rem; padding: .85rem 1.8rem; border-radius: 999rem;
   border: 1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
   font-weight: 600; letter-spacing: .05em; box-shadow: none; 
-  transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease; /* velocidade original */
+  transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease;
   overflow: hidden;
 }
 
@@ -425,8 +425,8 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   height: 0;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
-  transition: width 1.5s ease, height 1.5s ease; /* animação original mais lenta */
-  z-index: -1; /* fica atrás do texto */
+  transition: width 1.5s ease, height 1.5s ease;
+  z-index: 0;
 }
 
 .sopy-btn:hover::before {
@@ -1917,27 +1917,59 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   position: relative;
   display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
   padding:.85rem 1.8rem; border-radius:999rem;
-  border:2px solid var(--_bd); background: var(--_bg); color: var(--_fg);
+  border:1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
   font-weight:600; letter-spacing:.05em; text-decoration:none; box-shadow:none;
-  transition: all 0.3s ease; /* igual ao botão do card 3D */
+  transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease;
   overflow:hidden;
 }
 
+.sopy-tc-btn::before{
+  content:"";
+  position:absolute; left:var(--xPos, 50%); top:var(--yPos, 50%);
+  transform:translate(-50%, -50%);
+  width:0; height:0; background-color:rgba(255,255,255,0.15);
+  border-radius:50%; transition: width 1.5s ease, height 1.5s ease; z-index:0;
+}
 .sopy-tc-btn *{ position:relative; z-index:1; }
-.sopy-tc-btn:hover{ 
-  background: rgba(255,255,255,0.3); /* hover igual ao card 3D */
-  border-color: rgba(255,255,255,0.5);
-}
-.sopy-tc-btn:active{ 
-  background: rgba(255,255,255,0.25);
-  border-color: rgba(255,255,255,0.4);
-}
+.sopy-tc-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
+.sopy-tc-btn:active{ transform: translateY(0); box-shadow: none; }
+.sopy-tc-btn:hover::before{ width:400px; height:400px; }
 .sopy-tc-btn:focus-visible{ outline:2px solid #fff2; outline-offset:2px }
 /* Keep the visual variant similar but on top of header-like base */
 .sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
 .sopy-tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
 .sopy-tc-btn--ghost{ background: transparent; color:#e9e9ee; border:1px solid rgba(255,255,255,0.06) }
 .sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.02) }
+
+/* Testimonials CTA must match 3D card button animation exactly */
+.tc-testimonials .sopy-tc-btn{
+  /* visuals equivalent to .capsule-3d-cta .sopy-product-cta */
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50px;
+  backdrop-filter: blur(5px);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  /* interaction/animation */
+  transition: all 0.3s ease;
+  box-shadow: none;
+  transform: none;
+}
+.tc-testimonials .sopy-tc-btn:hover{
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: none;
+  transform: none;
+}
+.tc-testimonials .sopy-tc-btn:active{
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: none;
+  transform: none;
+}
+/* Disable ripple pseudo-element inside testimonials */
+.tc-testimonials .sopy-tc-btn::before{ content: none !important; display: none !important; }
 
 .tc-right{ position:relative; min-width:0 }
 .tc-topActions{ display:none !important }
