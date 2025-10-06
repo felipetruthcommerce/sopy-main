@@ -706,11 +706,14 @@ if (heroVideo && heroPoster) {
         if (titleLink) {
             titleLink.addEventListener('click', (event) => {
                 event.preventDefault();
-                // Atualiza a origem do círculo usando a posição do clique
+                // Atualiza a origem do círculo para o ponto do clique, para o overlay temático
                 try {
                     const rect = accordion.getBoundingClientRect();
-                    const x = (event.clientX || (event.touches && event.touches[0]?.clientX) || rect.left + 24) - rect.left;
-                    const y = (event.clientY || (event.touches && event.touches[0]?.clientY) || rect.top + rect.height/2) - rect.top;
+                    const isTouch = event.touches && event.touches[0];
+                    const cx = isTouch ? event.touches[0].clientX : event.clientX;
+                    const cy = isTouch ? event.touches[0].clientY : event.clientY;
+                    const x = (typeof cx === 'number' ? cx : rect.left + 24) - rect.left;
+                    const y = (typeof cy === 'number' ? cy : rect.top + rect.height/2) - rect.top;
                     accordion.style.setProperty('--circle-x', `${x}px`);
                     accordion.style.setProperty('--circle-y', `${y}px`);
                 } catch(e) {}
@@ -727,13 +730,9 @@ if (heroVideo && heroPoster) {
                 allAccordions.forEach(acc => {
                     if (acc !== accordion && acc.classList.contains('open')) {
                         acc.classList.remove('open');
-                        acc.classList.remove('pulse');
                     }
                 });
-                // Dispara um pulso visual do overlay temático enquanto alterna o card
-                accordion.classList.add('pulse');
                 accordion.classList.toggle('open');
-                setTimeout(() => accordion.classList.remove('pulse'), 260);
             });
         }
     });
