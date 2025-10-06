@@ -1382,6 +1382,13 @@ body.theme-aqua .sopy-how-card {
 @media (max-width: 900px) {
   .how-fullscreen { scroll-snap-type: y mandatory; overflow-y: auto; height: 100vh; }
   .how-fullscreen .how-slide { scroll-snap-align: start; }
+  /* When JS enables mobile swipe, switch to horizontal drag layout */
+  .how-fullscreen.mobile-swipe { scroll-snap-type: none; overflow: hidden; }
+  .how-fullscreen.mobile-swipe .how-slides-track { cursor: grab; touch-action: pan-y; }
+  .how-fullscreen.mobile-swipe .how-slides-track.is-grabbing { cursor: grabbing; }
+  .how-fullscreen.mobile-swipe .how-text { top: 88px; left: 16px; font-size: clamp(22px, 7vw, 36px); }
+  .how-fullscreen.mobile-swipe .how-nav { left: 16px; right: 16px; bottom: 20px; gap: 12px; }
+  .how-fullscreen.mobile-swipe .how-nav-bar { width: 42vw; max-width: none; }
 }
 
 

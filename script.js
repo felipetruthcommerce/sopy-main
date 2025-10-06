@@ -851,30 +851,12 @@ if (heroVideo && heroPoster) {
         navItems[0]?.classList.add('active');
         textEl.textContent = '01 Slide 1 Title';
 
-        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-
-        // Timeline: one segment per slide; scrubbed by scroll; pinned section
-        const tl = gsap.timeline({ paused: true });
-                slides.forEach((slide, i) => {
-            if (i === 0) return; // first is visible initially
-            // animate previous out left and this in from right
-            const prev = slides[i - 1];
-                        tl.addLabel(`slide${i}`)
-                            .to(prev, { xPercent: -100, opacity: 0.9, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`)
-                            .fromTo(slide, { xPercent: 100, opacity: 0.9, scale: 1.015 }, { xPercent: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`);
-        });
-
-        const totalDur = slides.length - 1; // one unit per slide transition
-
-        // Helper to update text and nav from a slide index
         const titles = slides.map((_, i) => `${String(i+1).padStart(2,'0')} Slide ${i+1} Title`);
         let lastIdx = -1;
         const applyActive = (idx) => {
             if (idx === lastIdx) return;
             lastIdx = idx;
-            // Nav active state
             navItems.forEach((n, i) => n.classList.toggle('active', i === idx));
-            // Text animation
             if (textEl) {
                 textEl.style.transition = 'opacity .45s, transform .45s';
                 textEl.style.opacity = '0';
@@ -889,53 +871,143 @@ if (heroVideo && heroPoster) {
             }
         };
 
-        // Map scroll to timeline and keep UI in sync in both directions
-        const howTrigger = ScrollTrigger.create({
-            id: 'how-scroll',
-            trigger: howSection,
-            start: 'top top',
-            end: () => `+=${window.innerHeight * totalDur}`,
-            pin: true,
-            scrub: 1.1,
-            invalidateOnRefresh: true,
-            onEnter: (self) => applyActive(0),
-            onEnterBack: (self) => {
-                const idx = Math.round(self.progress * (slides.length - 1));
-                applyActive(idx);
-            },
-            onLeaveBack: () => applyActive(0),
-            onUpdate: (self) => {
-                tl.progress(self.progress);
-                const idx = Math.round(self.progress * (slides.length - 1));
-                applyActive(idx);
-            }
-        });
+        const isMobile = window.matchMedia('(max-width: 900px)').matches;
+        if (isMobile) {
+            howSection.classList.add('mobile-swipe');
+        } else {
+            howSection.classList.remove('mobile-swipe');
+        }
 
-        // Clicks on nav items: jump to the right slide position (via Lenis/scroll)
-        const scrollToSlide = (index) => {
-            const st = ScrollTrigger.getById ? ScrollTrigger.getById('how-scroll') : null;
-            const duration = 0.8;
-            if (!st) return;
-            const start = st.start;
-            const total = (slides.length - 1) * window.innerHeight;
-            const yTarget = Math.round(start + (total * (index / (slides.length - 1))));
-            if (window.lenis && typeof window.lenis.scrollTo === 'function') {
-                window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
-            } else {
-                window.scrollTo({ top: yTarget, behavior: 'smooth' });
-            }
-        };
-        navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
-        nextBtn?.addEventListener('click', () => {
-            const cur = Math.round(tl.progress() * (slides.length - 1));
-            const next = Math.min(slides.length - 1, cur + 1);
-            scrollToSlide(next);
-        });
+        if (isMobile || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+            // Mobile: touch/drag slider left/right
+            let currentIndex = 0;
+            let isAnimating = false;
+            let isDragging = false;
+            let startX = 0;
+            let deltaX = 0;
 
-        // Ensure UI matches initial state (slide 0)
-        applyActive(0);
+            const slideTo = (targetIndex) => {
+                if (isAnimating) return;
+                if (targetIndex >= slides.length) targetIndex = 0;
+                if (targetIndex < 0) targetIndex = slides.length - 1;
+                if (targetIndex === currentIndex) return;
+                isAnimating = true;
+                const direction = targetIndex > currentIndex || (currentIndex === slides.length - 1 && targetIndex === 0) ? 1 : -1;
+                const currentSlide = slides[currentIndex];
+                const nextSlide = slides[targetIndex];
 
-        window.addEventListener('resize', () => { try { ScrollTrigger.refresh(); } catch(e){} });
+                gsap.timeline({
+                    defaults: { duration: 0.6, ease: 'power3.inOut' },
+                    onComplete: () => {
+                        currentIndex = targetIndex;
+                        isAnimating = false;
+                        applyActive(currentIndex);
+                    }
+                })
+                .to(currentSlide, { x: direction * -100 + '%', opacity: 0.9 }, 0)
+                .fromTo(nextSlide, { x: direction * 100 + '%', opacity: 0.9, scale: 1.01 }, { x: '0%', opacity: 1, scale: 1 }, 0.05);
+            };
+
+            const handleStart = (e) => {
+                if (isAnimating) return;
+                isDragging = true;
+                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                deltaX = 0;
+                track.classList.add('is-grabbing');
+            };
+            const handleMove = (e) => {
+                if (!isDragging) return;
+                if (e.cancelable) e.preventDefault(); // impede scroll vertical durante o swipe
+                const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+                deltaX = currentX - startX;
+                gsap.set(slides[currentIndex], { x: deltaX });
+            };
+            const handleEnd = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                track.classList.remove('is-grabbing');
+                const threshold = howSection.offsetWidth * 0.2;
+                if (Math.abs(deltaX) > threshold) {
+                    const direction = deltaX > 0 ? -1 : 1;
+                    slideTo(currentIndex + direction);
+                } else {
+                    gsap.to(slides[currentIndex], { x: 0, duration: 0.3 });
+                }
+            };
+
+            // Listeners
+            track.addEventListener('mousedown', handleStart);
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+            track.addEventListener('touchstart', handleStart, { passive: false });
+            track.addEventListener('touchmove', handleMove, { passive: false });
+            track.addEventListener('touchend', handleEnd);
+
+            // Nav clicks
+            navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
+            nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
+
+            // Initial
+            applyActive(0);
+        } else {
+            // Desktop: ScrollTrigger pin + scrub timeline
+            const tl = gsap.timeline({ paused: true });
+            slides.forEach((slide, i) => {
+                if (i === 0) return;
+                const prev = slides[i - 1];
+                tl.addLabel(`slide${i}`)
+                  .to(prev, { xPercent: -100, opacity: 0.9, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`)
+                  .fromTo(slide, { xPercent: 100, opacity: 0.9, scale: 1.015 }, { xPercent: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`);
+            });
+
+            const totalDur = slides.length - 1;
+
+            const howTrigger = ScrollTrigger.create({
+                id: 'how-scroll',
+                trigger: howSection,
+                start: 'top top',
+                end: () => `+=${window.innerHeight * totalDur}`,
+                pin: true,
+                scrub: 1.1,
+                invalidateOnRefresh: true,
+                onEnter: () => applyActive(0),
+                onEnterBack: (self) => {
+                    const idx = Math.round(self.progress * (slides.length - 1));
+                    applyActive(idx);
+                },
+                onLeaveBack: () => applyActive(0),
+                onUpdate: (self) => {
+                    tl.progress(self.progress);
+                    const idx = Math.round(self.progress * (slides.length - 1));
+                    applyActive(idx);
+                }
+            });
+
+            // Nav scroll to slide
+            const scrollToSlide = (index) => {
+                const st = ScrollTrigger.getById ? ScrollTrigger.getById('how-scroll') : null;
+                const duration = 0.8;
+                if (!st) return;
+                const start = st.start;
+                const total = (slides.length - 1) * window.innerHeight;
+                const yTarget = Math.round(start + (total * (index / (slides.length - 1))));
+                if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+                    window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
+                } else {
+                    window.scrollTo({ top: yTarget, behavior: 'smooth' });
+                }
+            };
+            navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
+            nextBtn?.addEventListener('click', () => {
+                const cur = Math.round(tl.progress() * (slides.length - 1));
+                const next = Math.min(slides.length - 1, cur + 1);
+                scrollToSlide(next);
+            });
+
+            applyActive(0);
+
+            window.addEventListener('resize', () => { try { ScrollTrigger.refresh(); } catch(e){} });
+        }
     })();
 
     // --- Parte 2: Lógica para a Barra de Progresso Global ---
