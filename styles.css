@@ -1682,11 +1682,11 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   background-clip: padding-box !important; /* avoid strokes showing beyond radius */
 }
 
-/* Estado aberto - texto fica branco */
+/* Estado aberto - texto usa a cor do tema (var(--brand)) */
 #faq .sopy-faq-accordion.open {
   --d: 90deg;
   grid-template-rows: auto 1fr; 
-  color: #FFFFFF; /* Texto fica branco */
+  color: var(--brand); /* Texto fica na cor do tema (verde/azul) */
 }
 
 #faq .sopy-faq-accordion .sopy-content {
@@ -1740,15 +1740,20 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #1E1E1E; /* A cor preta do fundo */
-  transition: clip-path var(--circle-duration) ease;
+  /* leve realce com cor do tema sobre fundo branco */
+  background-color: color-mix(in oklab, var(--brand) 12%, white);
+  transition: clip-path var(--circle-duration) ease, background-color 200ms ease;
   pointer-events: none;
   clip-path: circle(0% at var(--circle-x) var(--circle-y));
   border-radius: inherit;
   z-index: 1; /* Fica entre o fundo branco e o conteúdo */
 }
 
-/* Expande o círculo preto quando o card está aberto */
+/* Fallbacks por tema (para navegadores sem suporte total a color-mix) */
+body.theme-aqua #faq .sopy-faq-accordion::before { background-color: rgba(7, 109, 242, 0.12); }
+body.theme-citrus #faq .sopy-faq-accordion::before { background-color: rgba(95, 217, 126, 0.12); }
+
+/* Expande o círculo quando o card está aberto */
 #faq .sopy-faq-accordion.open::before {
   clip-path: circle(var(--circle-r) at var(--circle-x) var(--circle-y));
 }
