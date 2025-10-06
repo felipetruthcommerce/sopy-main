@@ -1766,7 +1766,8 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 body.theme-aqua #faq .sopy-faq-accordion,
 body.theme-citrus #faq .sopy-faq-accordion { 
   background: #fff; 
-  border: 1px solid rgba(0, 0, 0, 0.1) !important; /* forçar borda nos temas */
+  color: #000000 !important; /* forçar fonte preta */
+  border: 1px solid #000000 !important; /* borda preta bem visível */
   box-shadow: none;
 }
 
