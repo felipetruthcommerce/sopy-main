@@ -215,6 +215,20 @@ function setTheme(theme) {
     document.body.classList.toggle("theme-citrus", theme === "citrus");
     document.body.classList.toggle("theme-aqua", theme === "aqua");
 
+    // Sincroniza o estado visual do toggle com o tema atual
+    try {
+        const toggleEl = document.getElementById('product-toggle');
+        if (toggleEl) {
+            const shouldBeChecked = theme === 'aqua';
+            if (toggleEl.checked !== shouldBeChecked) {
+                console.log('[TEMA] Sync toggle → checked:', shouldBeChecked);
+                toggleEl.checked = shouldBeChecked;
+            }
+        }
+    } catch (e) {
+        console.warn('[TEMA] Falha ao sincronizar toggle:', e);
+    }
+
     const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
     if (gelA && gelB && gelC) {
         const toCol = (mat, hex) => {
@@ -512,7 +526,9 @@ new THREE.RGBELoader()
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
         productToggle.addEventListener('change', () => {
-            setTheme(productToggle.checked ? 'aqua' : 'citrus');
+            const newTheme = productToggle.checked ? 'aqua' : 'citrus';
+            console.log('[TEMA] Toggle change →', { checked: productToggle.checked, newTheme });
+            setTheme(newTheme);
         });
     }
     
@@ -529,8 +545,10 @@ new THREE.RGBELoader()
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
-        console.log('[TEMA] Aplicando tema inicial: theme-citrus');
-    document.body.classList.add("theme-citrus");
+        console.log('[TEMA] Aplicando tema inicial (apenas se não houver tema)');
+    if (!document.body.classList.contains('theme-aqua') && !document.body.classList.contains('theme-citrus')) {
+        document.body.classList.add("theme-citrus");
+    }
 
 
     // 1. Configurar Lenis (SEMPRE PRIMEIRO)
