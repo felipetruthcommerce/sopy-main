@@ -780,11 +780,11 @@ body.theme-aqua .capsule-3d-cta {
 @media (max-width: 900px) {
   .capsule-3d-cta { 
     position: absolute;
-    bottom: 60vh; /* ainda mais alto */
+    bottom: 68vh; /* ainda mais alto */
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    max-width: 280px;
+    width: 95%; /* mais largo */
+    max-width: 320px; /* largura máxima maior */
     right: auto;
   }
   
@@ -806,9 +806,9 @@ body.theme-aqua .capsule-3d-cta {
 /* Limita o deslocamento direito para evitar overflow em telas muito pequenas */
 @media (max-width: 480px) {
   .capsule-3d-cta {
-    max-width: 260px;
-    width: 88%;
-    bottom: 55vh; /* mais alto também */
+    max-width: 290px; /* mais largo */
+    width: 92%; /* largura maior */
+    bottom: 62vh; /* mais alto também */
   }
   
   .capsule-3d-cta-inner {
@@ -826,8 +826,8 @@ body.theme-aqua .capsule-3d-cta {
     left: 50%; 
     right: auto;
     transform: translateX(-50%);
-    bottom: 60vh; /* consistente com o posicionamento acima */
-    max-width: 280px; 
+    bottom: 68vh; /* consistente com o posicionamento acima */
+    max-width: 320px; /* largura maior também */
   }
 }
 
