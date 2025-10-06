@@ -1660,36 +1660,32 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   width: min(900px, 92%);
   margin: 0 auto 1rem;
   border-radius: min(12px, 0.5rem);
+  border: 1px solid rgba(0, 0, 0, 0.1); /* borda sutil */
   display: grid;
   grid-template-rows: auto 0fr; 
   overflow: hidden;
   position: relative;
   
-  /* Transições incluindo cor do texto */
+  /* Transições SEM mudança de cor do texto */
   transition: box-shadow 200ms ease, 
-              grid-template-rows var(--slide-duration) var(--slide-ease),
-              color var(--slide-duration) ease;
+              grid-template-rows var(--slide-duration) var(--slide-ease);
   box-shadow: none;
-  border: none;
   scroll-margin-top: 88px;
 }
 
-/* Force-remove any stray borders/lines on the FAQ cards or their pseudos
-   (some browsers/overlapping backgrounds could cause faint corner lines) */
-#faq .sopy-faq-accordion,
+/* Permitir bordas nos cards mas remover sombras conflitantes */
 #faq .sopy-faq-accordion::before,
 #faq .sopy-faq-accordion::after {
   box-shadow: none !important;
-  border: none !important;
   outline: none !important;
   background-clip: padding-box !important; /* avoid strokes showing beyond radius */
 }
 
-/* Estado aberto - texto fica branco (contraste sobre o fundo colorido) */
+/* Estado aberto - mantém texto preto */
 #faq .sopy-faq-accordion.open {
   --d: 90deg;
   grid-template-rows: auto 1fr; 
-  color: #FFFFFF; /* Texto fica branco */
+  /* cor do texto continua a mesma (preto) */
 }
 
 #faq .sopy-faq-accordion .sopy-content {
