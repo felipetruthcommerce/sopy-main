@@ -741,12 +741,7 @@ body.theme-aqua .capsule-3d-cta {
     margin: 0 0 2px 0; 
   }
   .capsule-3d-cta .product-copy { 
-    margin: 0 0 15px 0; /* volta margin normal */
-    font-size: 0.7rem; /* menor para ocupar 1 linha */
-    line-height: 1.1; /* mais compacto */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; /* força 1 linha só */
+    display: none; /* remove o texto da descrição */
   }
   
   /* Botão volta ao normal */
@@ -780,11 +775,11 @@ body.theme-aqua .capsule-3d-cta {
 @media (max-width: 900px) {
   .capsule-3d-cta { 
     position: absolute;
-    bottom: 68vh; /* ainda mais alto */
+    bottom: 72vh; /* ainda mais alto */
     left: 50%;
     transform: translateX(-50%);
-    width: 95%; /* mais largo */
-    max-width: 320px; /* largura máxima maior */
+    width: 96%; /* mais largo */
+    max-width: 340px; /* largura máxima maior */
     right: auto;
   }
   
@@ -806,19 +801,16 @@ body.theme-aqua .capsule-3d-cta {
 /* Limita o deslocamento direito para evitar overflow em telas muito pequenas */
 @media (max-width: 480px) {
   .capsule-3d-cta {
-    max-width: 290px; /* mais largo */
-    width: 92%; /* largura maior */
-    bottom: 62vh; /* mais alto também */
+    max-width: 310px; /* mais largo */
+    width: 94%; /* largura maior */
+    bottom: 66vh; /* mais alto também */
   }
   
   .capsule-3d-cta-inner {
     padding: 12px 16px; /* padding ainda menor */
   }
   
-  .capsule-3d-cta .product-copy {
-    font-size: 0.65rem; /* ainda menor em telas pequenas */
-    margin: 0 0 12px 0;
-  }
+  /* Texto removido - sem necessidade de estilizar */
 }
 
 @media (max-width: 900px) {
@@ -826,8 +818,8 @@ body.theme-aqua .capsule-3d-cta {
     left: 50%; 
     right: auto;
     transform: translateX(-50%);
-    bottom: 68vh; /* consistente com o posicionamento acima */
-    max-width: 320px; /* largura maior também */
+    bottom: 72vh; /* consistente com o posicionamento acima */
+    max-width: 340px; /* largura maior também */
   }
 }
 
