@@ -39,7 +39,8 @@ function setupGsapPlugins() {
 
 function setupButtonRipples() {
     console.log('[SETUP] Configurando efeito ripple nos botões...');
-    document.querySelectorAll('.sopy-btn').forEach(btn => {
+    const rippleSelectors = ['.sopy-btn', '.sopy-tc-btn', '.sopy-product-cta'];
+    document.querySelectorAll(rippleSelectors.join(',')).forEach(btn => {
         btn.addEventListener('mousemove', (event) => {
             const rect = btn.getBoundingClientRect();
             const x = event.clientX - rect.left;

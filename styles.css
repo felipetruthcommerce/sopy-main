@@ -1956,6 +1956,19 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   box-shadow: none;
   transform: none;
 }
+.tc-testimonials .sopy-tc-btn::before{
+  content: "";
+  position: absolute;
+  left: var(--xPos, 50%);
+  top: var(--yPos, 50%);
+  transform: translate(-50%, -50%);
+  width: 0; height: 0;
+  background-color: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  transition: width 1.5s ease, height 1.5s ease;
+  z-index: 0;
+}
+.tc-testimonials .sopy-tc-btn:hover::before{ width: 400px; height: 400px; }
 .tc-testimonials .sopy-tc-btn:hover{
   background: rgba(255,255,255,0.3);
   border-color: rgba(255,255,255,0.5);
@@ -1968,8 +1981,7 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   box-shadow: none;
   transform: none;
 }
-/* Disable ripple pseudo-element inside testimonials */
-.tc-testimonials .sopy-tc-btn::before{ content: none !important; display: none !important; }
+/* Keep ripple enabled so it can start from mouse position (set via --xPos/--yPos) */
 
 .tc-right{ position:relative; min-width:0 }
 .tc-topActions{ display:none !important }
