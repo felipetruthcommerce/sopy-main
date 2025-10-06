@@ -1917,24 +1917,21 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   position: relative;
   display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
   padding:.85rem 1.8rem; border-radius:999rem;
-  border:1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
+  border:2px solid var(--_bd); background: var(--_bg); color: var(--_fg);
   font-weight:600; letter-spacing:.05em; text-decoration:none; box-shadow:none;
-  transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease; /* velocidade original */
+  transition: all 0.3s ease; /* igual ao botão do card 3D */
   overflow:hidden;
 }
 
-.sopy-tc-btn::before{
-  content:"";
-  position:absolute; left:var(--xPos, 50%); top:var(--yPos, 50%);
-  transform:translate(-50%, -50%);
-  width:0; height:0; background-color:rgba(255,255,255,0.15);
-  border-radius:50%; transition: width 1.5s ease, height 1.5s ease; /* animação original mais lenta */
-  z-index:-1; /* fica atrás do texto */
-}
 .sopy-tc-btn *{ position:relative; z-index:1; }
-.sopy-tc-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
-.sopy-tc-btn:active{ transform: translateY(0); box-shadow: none; }
-.sopy-tc-btn:hover::before{ width:400px; height:400px; }
+.sopy-tc-btn:hover{ 
+  background: rgba(255,255,255,0.3); /* hover igual ao card 3D */
+  border-color: rgba(255,255,255,0.5);
+}
+.sopy-tc-btn:active{ 
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.4);
+}
 .sopy-tc-btn:focus-visible{ outline:2px solid #fff2; outline-offset:2px }
 /* Keep the visual variant similar but on top of header-like base */
 .sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
