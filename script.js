@@ -946,123 +946,90 @@ if (heroVideo && heroPoster) {
             console.warn('[DEPOIMENTOS] Falha ao popular avatares:', e);
         }
 
-    if (track && cards.length > 0) {
+            if (track && cards.length > 0) {
+            // Carousel estilo Flickity: células lado-a-lado, com card central destacado (is-selected)
             let currentIndex = 0;
             let isAnimating = false;
             let autoInterval;
 
-            const slideTo = (targetIndex) => {
-                if (isAnimating) return;
-                
-                // Carrossel infinito
-                if (targetIndex >= cards.length) targetIndex = 0;
-                if (targetIndex < 0) targetIndex = cards.length - 1;
-                
-                if (targetIndex === currentIndex) return;
+            const getCellWidth = () => cards[0]?.getBoundingClientRect().width || 260;
+            const getGap = () => parseFloat(getComputedStyle(track).gap || '0') || 0;
 
+            const setActive = (idx) => {
+                cards.forEach((c, i) => c.classList.toggle('is-selected', i === idx));
+                dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+            };
+
+            const scrollToIndex = (idx, animate = true) => {
+                const n = cards.length;
+                if (idx < 0) idx = n - 1; if (idx >= n) idx = 0;
+                const cw = getCellWidth(); const gap = getGap();
+                const total = cw + gap;
+                const containerW = track.getBoundingClientRect().width;
+                const offset = idx * total;
+                const centerOffset = (containerW - cw) / 2; // centraliza o item
+                const x = -(offset - centerOffset);
                 isAnimating = true;
-                clearInterval(autoInterval);
-
-                const currentCard = cards[currentIndex];
-                const nextCard = cards[targetIndex];
-                const direction = targetIndex > currentIndex || (currentIndex === cards.length - 1 && targetIndex === 0) ? 1 : -1;
-
-                // Nova animação: crossfade + leve parallax/scale para suavidade
-                gsap.set(nextCard, { opacity: 0, scale: 0.985, xPercent: direction * 12, filter: 'blur(4px)' });
-
-                gsap.timeline({
-                    defaults: { ease: 'power3.inOut' },
-                    onComplete: () => {
-                        currentIndex = targetIndex;
-                        isAnimating = false;
-                        startAutoPlay();
-                        updateDots();
-                    }
-                })
-                .to(currentCard, { opacity: 0, scale: 0.985, xPercent: direction * -12, filter: 'blur(6px)', duration: 0.6 }, 0)
-                .to(nextCard,   { opacity: 1, scale: 1,     xPercent: 0,         filter: 'blur(0px)', duration: 0.8 }, 0.05);
+                const done = () => { currentIndex = idx; isAnimating = false; setActive(currentIndex); startAutoPlay(); };
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(track, { x, duration: 0.75, ease: 'power3.inOut', onComplete: done });
+                } else {
+                    track.style.transform = `translate3d(${x}px,0,0)`; done();
+                }
             };
 
-            const updateDots = () => {
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentIndex);
-                });
-            };
+            const slideTo = (idx) => { if (!isAnimating) { clearInterval(autoInterval); scrollToIndex(idx); } };
 
             const startAutoPlay = () => {
                 clearInterval(autoInterval);
-                autoInterval = setInterval(() => {
-                    slideTo(currentIndex + 1); // Infinito
-                }, 6000);
+                autoInterval = setInterval(() => slideTo(currentIndex + 1), 6500);
             };
 
-            // Drag/Touch igual ao Como Usar
-            let isDragging = false;
-            let startX = 0;
-            let deltaX = 0;
-
-            const handleStart = (e) => {
-                if (isAnimating) return;
-                isDragging = true;
-                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                deltaX = 0;
-                track.classList.add('tc-grabbing');
-                clearInterval(autoInterval);
-            };
-
-            const handleMove = (e) => {
-                if (!isDragging) return;
-                const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                deltaX = currentX - startX;
-                // live feedback: move current slightly and pre-move next with parallax
-                const parallax = 0.25;
-                gsap.set(cards[currentIndex], { x: deltaX, scale: 1 - Math.min(Math.abs(deltaX)/(track.offsetWidth*4), 0.02) });
-            };
-
-            const handleEnd = () => {
-                if (!isDragging) return;
-                isDragging = false;
-                track.classList.remove('tc-grabbing');
-                
-                const threshold = track.offsetWidth * 0.16;
-                if (Math.abs(deltaX) > threshold) {
-                    const direction = deltaX > 0 ? -1 : 1;
-                    slideTo(currentIndex + direction);
-                } else {
-                    gsap.to(cards[currentIndex], { x: 0, scale: 1, duration: 0.35, ease: 'power3.out' });
-                    startAutoPlay();
+            // Drag/Touch
+            let isDragging = false; let startX = 0; let lastX = 0; let baseX = 0;
+            const getTrackX = () => {
+                // Prefer gsap cached value if present
+                if (track._gsap && typeof track._gsap.x !== 'undefined') return parseFloat(track._gsap.x) || 0;
+                const tf = getComputedStyle(track).transform;
+                if (tf && tf !== 'none') {
+                    if (tf.startsWith('matrix3d(')) {
+                        const parts = tf.slice(9, -1).split(',').map(parseFloat);
+                        return parts[12] || 0; // tx at index 12
+                    }
+                    if (tf.startsWith('matrix(')) {
+                        const parts = tf.slice(7, -1).split(',').map(parseFloat);
+                        return parts[4] || 0; // tx at index 4
+                    }
                 }
+                return 0;
             };
+            const onStart = (e) => { if (isAnimating) return; isDragging = true; startX = lastX = (e.touches?e.touches[0].clientX:e.clientX); baseX = getTrackX(); track.classList.add('tc-grabbing'); clearInterval(autoInterval); };
+            const onMove  = (e) => { if (!isDragging) return; const x = (e.touches?e.touches[0].clientX:e.clientX); const dx = x - startX; lastX = x; const nx = baseX + dx; if (typeof gsap !== 'undefined') gsap.set(track, { x: nx }); else track.style.transform = `translate3d(${nx}px,0,0)`; };
+            const onEnd   = () => { if (!isDragging) return; isDragging = false; track.classList.remove('tc-grabbing'); const dx = lastX - startX; const threshold = getCellWidth()*0.25; if (Math.abs(dx) > threshold) { slideTo(currentIndex + (dx<0?1:-1)); } else { scrollToIndex(currentIndex); } };
 
-            // Prev/Next buttons if present
-            const prevBtn = testimonialsSection.querySelector('.tc-prev');
-            const nextBtn = testimonialsSection.querySelector('.tc-next');
-            prevBtn?.addEventListener('click', () => slideTo(currentIndex - 1));
-            nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
+            track.addEventListener('mousedown', onStart);
+            document.addEventListener('mousemove', onMove);
+            document.addEventListener('mouseup', onEnd);
+            track.addEventListener('touchstart', onStart, { passive: true });
+            track.addEventListener('touchmove', onMove, { passive: true });
+            track.addEventListener('touchend', onEnd);
 
-            // Event listeners
-            dots.forEach((dot, index) => {
-                dot.addEventListener('click', () => slideTo(index));
-            });
-            
-            track.addEventListener('mousedown', handleStart);
-            document.addEventListener('mousemove', handleMove);
-            document.addEventListener('mouseup', handleEnd);
-            track.addEventListener('touchstart', handleStart, { passive: false });
-            track.addEventListener('touchmove', handleMove, { passive: false });
-            track.addEventListener('touchend', handleEnd);
+            // Dots click
+            dots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
 
-            // Setup inicial
-            cards.forEach((card, index) => {
-                if (index === 0) {
-                    gsap.set(card, { x: 0, opacity: 1, scale: 1 });
-                } else {
-                    gsap.set(card, { xPercent: 12, opacity: 0, scale: 0.985 });
-                }
-            });
-            
-            updateDots();
+            // Init layout: garante que todos os cards estejam visíveis em linha
+            if (typeof gsap !== 'undefined') gsap.set(track, { x: 0 }); else track.style.transform = 'translate3d(0,0,0)';
+            setActive(0);
+            // Centraliza o primeiro
+            setTimeout(() => scrollToIndex(0, false), 0);
             startAutoPlay();
+
+            // Recenter on resize
+            let resizeTO;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTO);
+                resizeTO = setTimeout(() => scrollToIndex(currentIndex, false), 80);
+            });
             
             // Mostrar progress quando entrar na seção
             const observer = new IntersectionObserver((entries) => {
