@@ -579,33 +579,50 @@ if (heroVideo && heroPoster) {
 
 
 // =======================================================
-//  TIRAR HEADER COM O SCROLL
+//  TIRAR HEADER COM O SCROLL (ignora micro-shifts e cliques no FAQ)
 // =======================================================
 
- // 1. Selecionamos o header. Usar uma classe curta como '.js-head-main' é mais seguro.
+    // Guard de estado para evitar que o header apareça por "jump" de layout
+    const headerState = {
+        suppress: false,
+        lastY: (window.lenis && typeof window.lenis.scroll === 'number')
+            ? window.lenis.scroll
+            : (window.pageYOffset || document.documentElement.scrollTop || 0)
+    };
+
+    // 1. Selecionar o header. Usar uma classe curta como '.js-head-main' é mais seguro.
     const header = document.querySelector(".js-head-main");
 
-    if (header) {
-        // 2. Criamos uma animação 'from' que começa com o header escondido (yPercent: -100)
-        //    e a deixamos pausada no estado final (visível).
+    if (header && typeof gsap !== 'undefined') {
+        // 2. Animação que parte de fora da tela
         const showAnim = gsap.from(header, { 
             yPercent: -100,
             paused: true,
-            duration: 0.4, // Duração da animação
+            duration: 0.4,
             ease: 'power2.out'
         }).progress(1);
 
-        // 3. Usamos o ScrollTrigger para controlar a animação com base na direção da rolagem.
+        // 3. Controlar via ScrollTrigger mas com delta de scroll e supressão
         ScrollTrigger.create({
-            start: "top top", // Inicia o monitoramento assim que o topo da página é alcançado
-            end: "max",     // Monitora até o final da página
-            onUpdate: (self) => {
-                // Se a direção for -1, o usuário está rolando para CIMA
-                if (self.direction === -1) {
-                    showAnim.play(); // Mostra o header
-                } else {
-                // Se a direção for 1, o usuário está rolando para BAIXO
-                    showAnim.reverse(); // Esconde o header
+            start: "top top",
+            end: "max",
+            onUpdate: () => {
+                const y = (window.lenis && typeof window.lenis.scroll === 'number')
+                    ? window.lenis.scroll
+                    : (window.pageYOffset || document.documentElement.scrollTop || 0);
+                const dy = y - headerState.lastY;
+                headerState.lastY = y;
+
+                // Ignora micro mudanças de layout (ex.: expandir FAQ) e períodos suprimidos
+                const THRESH = 10; // px
+                if (headerState.suppress || Math.abs(dy) < THRESH) return;
+
+                if (dy < 0) {
+                    // Scroll real para cima
+                    showAnim.play();
+                } else if (dy > 0) {
+                    // Scroll real para baixo
+                    showAnim.reverse();
                 }
             }
         });
@@ -689,6 +706,16 @@ if (heroVideo && heroPoster) {
         if (titleLink) {
             titleLink.addEventListener('click', (event) => {
                 event.preventDefault();
+                // Suprimir temporariamente o header para evitar aparecer por salto de layout
+                try {
+                    if (typeof headerState !== 'undefined' && headerState) {
+                        headerState.suppress = true;
+                        if (headerState.suppressTimer) clearTimeout(headerState.suppressTimer);
+                        headerState.suppressTimer = setTimeout(() => {
+                            headerState.suppress = false;
+                        }, 500);
+                    }
+                } catch(e) {}
                 allAccordions.forEach(acc => {
                     if (acc !== accordion && acc.classList.contains('open')) {
                         acc.classList.remove('open');
