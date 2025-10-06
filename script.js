@@ -946,7 +946,7 @@ if (heroVideo && heroPoster) {
             console.warn('[DEPOIMENTOS] Falha ao popular avatares:', e);
         }
 
-        if (track && cards.length > 0) {
+    if (track && cards.length > 0) {
             let currentIndex = 0;
             let isAnimating = false;
             let autoInterval;
@@ -967,9 +967,11 @@ if (heroVideo && heroPoster) {
                 const nextCard = cards[targetIndex];
                 const direction = targetIndex > currentIndex || (currentIndex === cards.length - 1 && targetIndex === 0) ? 1 : -1;
 
-                // Animação horizontal igual ao Como Usar
+                // Nova animação: crossfade + leve parallax/scale para suavidade
+                gsap.set(nextCard, { opacity: 0, scale: 0.985, xPercent: direction * 12, filter: 'blur(4px)' });
+
                 gsap.timeline({
-                    defaults: { duration: 0.2, ease: 'power2.out' },
+                    defaults: { ease: 'power3.inOut' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
@@ -977,11 +979,8 @@ if (heroVideo && heroPoster) {
                         updateDots();
                     }
                 })
-                .to(currentCard, { x: direction * -100 + '%', opacity: 0 }, 0)
-                .fromTo(nextCard, 
-                    { x: direction * 100 + '%', opacity: 0 },
-                    { x: '0%', opacity: 1 }, 0.1
-                );
+                .to(currentCard, { opacity: 0, scale: 0.985, xPercent: direction * -12, filter: 'blur(6px)', duration: 0.6 }, 0)
+                .to(nextCard,   { opacity: 1, scale: 1,     xPercent: 0,         filter: 'blur(0px)', duration: 0.8 }, 0.05);
             };
 
             const updateDots = () => {
@@ -1015,7 +1014,9 @@ if (heroVideo && heroPoster) {
                 if (!isDragging) return;
                 const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = currentX - startX;
-                gsap.set(cards[currentIndex], { x: deltaX });
+                // live feedback: move current slightly and pre-move next with parallax
+                const parallax = 0.25;
+                gsap.set(cards[currentIndex], { x: deltaX, scale: 1 - Math.min(Math.abs(deltaX)/(track.offsetWidth*4), 0.02) });
             };
 
             const handleEnd = () => {
@@ -1023,15 +1024,21 @@ if (heroVideo && heroPoster) {
                 isDragging = false;
                 track.classList.remove('tc-grabbing');
                 
-                const threshold = track.offsetWidth * 0.2;
+                const threshold = track.offsetWidth * 0.16;
                 if (Math.abs(deltaX) > threshold) {
                     const direction = deltaX > 0 ? -1 : 1;
                     slideTo(currentIndex + direction);
                 } else {
-                    gsap.to(cards[currentIndex], { x: 0, duration: 0.3 });
+                    gsap.to(cards[currentIndex], { x: 0, scale: 1, duration: 0.35, ease: 'power3.out' });
                     startAutoPlay();
                 }
             };
+
+            // Prev/Next buttons if present
+            const prevBtn = testimonialsSection.querySelector('.tc-prev');
+            const nextBtn = testimonialsSection.querySelector('.tc-next');
+            prevBtn?.addEventListener('click', () => slideTo(currentIndex - 1));
+            nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
 
             // Event listeners
             dots.forEach((dot, index) => {
@@ -1048,9 +1055,9 @@ if (heroVideo && heroPoster) {
             // Setup inicial
             cards.forEach((card, index) => {
                 if (index === 0) {
-                    gsap.set(card, { x: 0, opacity: 1 });
+                    gsap.set(card, { x: 0, opacity: 1, scale: 1 });
                 } else {
-                    gsap.set(card, { x: '100%', opacity: 0 });
+                    gsap.set(card, { xPercent: 12, opacity: 0, scale: 0.985 });
                 }
             });
             
