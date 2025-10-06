@@ -826,7 +826,7 @@ if (heroVideo && heroPoster) {
         const slides = track ? Array.from(track.querySelectorAll('.how-slide')) : [];
         const textEl = howSection.querySelector('#how-text');
         const navEl = howSection.querySelector('#how-nav');
-        const nextBtn = howSection.querySelector('#how-next');
+    const nextBtn = howSection.querySelector('#how-next');
         if (!track || !slides.length || !navEl || !textEl) return;
 
         // Nav items with labels 01..04 Slide
@@ -848,8 +848,9 @@ if (heroVideo && heroPoster) {
             s.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
             s.style.zIndex = i === 0 ? '2' : '1';
         });
-        navItems[0]?.classList.add('active');
-        textEl.textContent = '01 Slide 1 Title';
+    navItems[0]?.classList.add('active');
+    textEl.textContent = '01 Slide 1 Title';
+    if (nextBtn) { nextBtn.setAttribute('aria-label', 'Próximo slide'); nextBtn.innerHTML = '<span>➜</span>'; }
 
         const titles = slides.map((_, i) => `${String(i+1).padStart(2,'0')} Slide ${i+1} Title`);
         let lastIdx = -1;
