@@ -184,7 +184,7 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
   margin-bottom: 1.25rem;
 }
 #beneficios .sopy-section-header h2 {
-  color: #000000;
+  color: #ffffff;
   /* slightly reduced size to match card scale */
   font-size: clamp(3.2rem, 8.5vw, 6.8rem);
   font-weight: 900;
@@ -1767,9 +1767,31 @@ body.theme-aqua #faq .sopy-faq-accordion,
 body.theme-citrus #faq .sopy-faq-accordion { 
   background: #fff; 
   color: #000000 !important; /* forçar fonte preta */
-  border: 1px solid #000000 !important; /* borda preta bem visível */
+  border: 2px solid #000000 !important; /* borda preta bem visível */
   box-shadow: none;
 }
+
+/* Regras de alta especificidade para garantir texto preto em todos os elementos do FAQ
+   (títulos, setinha, conteúdo), mesmo quando o card estiver com a animação/overlay) */
+#faq .sopy-faq-accordion,
+#faq .sopy-faq-accordion .sopy-title,
+#faq .sopy-faq-accordion .sopy-title a,
+#faq .sopy-faq-accordion .sopy-title a::before,
+#faq .sopy-faq-accordion .sopy-content,
+#faq .sopy-faq-accordion .sopy-content p {
+  color: #000000 !important;
+}
+
+/* Forçar que os textos do card aberto continuem pretos (mesmo que a pseudo overlay apareça) */
+#faq .sopy-faq-accordion.open,
+#faq .sopy-faq-accordion.open .sopy-title,
+#faq .sopy-faq-accordion.open .sopy-title a,
+#faq .sopy-faq-accordion.open .sopy-content,
+#faq .sopy-faq-accordion.open .sopy-content p {
+  color: #000000 !important;
+}
+
+
 
 
 
