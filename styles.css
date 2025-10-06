@@ -1862,9 +1862,9 @@ body.theme-aqua #testemunhos {
   background: #007BFF !important; /* brand */
 }
 
-body.theme-aqua #faq {
-  background: #0D1B2A !important; /* dark */
-}
+/* body.theme-aqua #faq {
+  background: #0D1B2A !important; 
+} */
 
 body.theme-aqua #capsula-3d {
   background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(103, 167, 194, 1) 93%, rgba(64, 154, 192, 1) 100%);
@@ -1891,9 +1891,9 @@ body.theme-citrus #testemunhos {
   background: #2D6A4F !important; /* brand */
 }
 
-body.theme-citrus #faq {
-  background: #1B4332 !important; /* dark */
-}
+/* body.theme-citrus #faq {
+  background: #1B4332 !important; 
+} */
 
 body.theme-citrus #capsula-3d {
     background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(183, 215, 212, 1) 50%, rgba(21, 135, 84, 1) 100%)
