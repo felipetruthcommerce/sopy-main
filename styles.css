@@ -1682,7 +1682,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   background-clip: padding-box !important; /* avoid strokes showing beyond radius */
 }
 
-/* Estado aberto - texto fica branco */
+/* Estado aberto - texto fica branco (contraste sobre o fundo colorido) */
 #faq .sopy-faq-accordion.open {
   --d: 90deg;
   grid-template-rows: auto 1fr; 
@@ -1694,6 +1694,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   font-size: var(--size-accordion-content);
   line-height: 140%;
   z-index: 2; /* fica na frente da animação de fundo */
+  position: relative;
 }
 
 #faq .sopy-faq-accordion .sopy-wrapper {
@@ -1718,6 +1719,8 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   text-decoration: none;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 2; /* acima do overlay */
 }
 
 #faq .sopy-faq-accordion .sopy-title a::before {
@@ -1734,23 +1737,25 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
   background-color: currentColor; /* Herda a cor (preto ou branco) */
 }
 
-/* Animação de fundo com círculo expandindo */
+/* Animação de fundo com círculo expandindo (preenche o card com a cor do tema) */
 #faq .sopy-faq-accordion::before {
   content: "";
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #1E1E1E; /* A cor preta do fundo */
-  transition: clip-path var(--circle-duration) ease;
+  background-color: var(--brand); /* usa cor do tema (citrus/aqua) */
+  opacity: 0; /* oculto quando fechado */
+  transition: clip-path var(--circle-duration) ease, opacity 220ms ease;
   pointer-events: none;
   clip-path: circle(0% at var(--circle-x) var(--circle-y));
   border-radius: inherit;
   z-index: 1; /* Fica entre o fundo branco e o conteúdo */
 }
 
-/* Expande o círculo preto quando o card está aberto */
+/* Ao abrir, o círculo cresce e o overlay fica visível (card todo colorido) */
 #faq .sopy-faq-accordion.open::before {
   clip-path: circle(var(--circle-r) at var(--circle-x) var(--circle-y));
+  opacity: 1;
 }
 
 #faq .sopy-faq-accordion .sopy-title a:focus-visible { 

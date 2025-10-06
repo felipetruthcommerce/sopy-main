@@ -706,6 +706,17 @@ if (heroVideo && heroPoster) {
         if (titleLink) {
             titleLink.addEventListener('click', (event) => {
                 event.preventDefault();
+                // Atualiza a origem do círculo para o ponto do clique, para o overlay temático
+                try {
+                    const rect = accordion.getBoundingClientRect();
+                    const isTouch = event.touches && event.touches[0];
+                    const cx = isTouch ? event.touches[0].clientX : event.clientX;
+                    const cy = isTouch ? event.touches[0].clientY : event.clientY;
+                    const x = (typeof cx === 'number' ? cx : rect.left + 24) - rect.left;
+                    const y = (typeof cy === 'number' ? cy : rect.top + rect.height/2) - rect.top;
+                    accordion.style.setProperty('--circle-x', `${x}px`);
+                    accordion.style.setProperty('--circle-y', `${y}px`);
+                } catch(e) {}
                 // Suprimir temporariamente o header para evitar aparecer por salto de layout
                 try {
                     if (typeof headerState !== 'undefined' && headerState) {
