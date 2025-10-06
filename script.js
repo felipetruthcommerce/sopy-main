@@ -544,6 +544,8 @@ function bootAnimations() {
     initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
     
 
+
+
 // =======================================================
 //  ✅ BLOCO SUPER ROBUSTO PARA REVELAR O VÍDEO DA HERO
 // =======================================================
@@ -574,6 +576,42 @@ if (heroVideo && heroPoster) {
         setTimeout(revealVideo, 250); 
     });
 }
+
+
+// =======================================================
+//  TIRAR HEADER COM O SCROLL
+// =======================================================
+
+ // 1. Selecionamos o header. Usar uma classe curta como '.js-head-main' é mais seguro.
+    const header = document.querySelector(".js-head-main");
+
+    if (header) {
+        // 2. Criamos uma animação 'from' que começa com o header escondido (yPercent: -100)
+        //    e a deixamos pausada no estado final (visível).
+        const showAnim = gsap.from(header, { 
+            yPercent: -100,
+            paused: true,
+            duration: 0.4, // Duração da animação
+            ease: 'power2.out'
+        }).progress(1);
+
+        // 3. Usamos o ScrollTrigger para controlar a animação com base na direção da rolagem.
+        ScrollTrigger.create({
+            start: "top top", // Inicia o monitoramento assim que o topo da página é alcançado
+            end: "max",     // Monitora até o final da página
+            onUpdate: (self) => {
+                // Se a direção for -1, o usuário está rolando para CIMA
+                if (self.direction === -1) {
+                    showAnim.play(); // Mostra o header
+                } else {
+                // Se a direção for 1, o usuário está rolando para BAIXO
+                    showAnim.reverse(); // Esconde o header
+                }
+            }
+        });
+    }
+
+
 
     // ===================================
     //  BLOCO 2: EFEITO PARALLAX (SUSTENTABILIDADE)
