@@ -741,13 +741,14 @@ body.theme-aqua .capsule-3d-cta {
     margin: 0 0 2px 0; 
   }
   .capsule-3d-cta .product-copy { 
-    margin: 0 0 15px 0; 
+    margin: 0 0 0 0; /* remove margin bottom já que botão sai de dentro */
     font-size: 0.8rem; 
     line-height: 1.3;
   }
-  .capsule-3d-cta .sopy-product-cta { 
-    padding: 10px 20px;
-    font-size: 0.8rem;
+  
+  /* Remove o botão de dentro do cta-inner */
+  .capsule-3d-cta-inner .sopy-product-cta {
+    display: none; /* esconde o botão de dentro do card */
   }
 }
 .capsule-3d-cta .sopy-product-cta { 
@@ -774,30 +775,81 @@ body.theme-aqua .capsule-3d-cta {
 
 @media (max-width: 900px) {
   .capsule-3d-cta { 
-    position: absolute; 
-    bottom: 25vh; /* mais acima que antes (era 15vh) */
-    left: 50%; /* centralizado */
-    transform: translateX(-50%); /* centralização perfeita */
-    max-width: 280px; /* tamanho menor para mobile */
-    width: 90%; /* responsivo */
-    right: auto; /* remove posicionamento à direita */
-  }
-  
-  body.theme-citrus .capsule-3d-cta {
-    right: auto;
-    left: 50%; /* centralizado para ambos temas */
+    position: absolute;
+    bottom: 35vh; /* posição do card de texto */
+    left: 50%;
     transform: translateX(-50%);
+    width: 90%;
+    max-width: 280px;
+    right: auto;
   }
   
+  body.theme-citrus .capsule-3d-cta,
   body.theme-aqua .capsule-3d-cta {
-    left: 50%; /* centralizado para ambos temas */
     right: auto;
+    left: 50%;
     transform: translateX(-50%);
   }
   
+  /* Card de texto (sem botão) */
   .capsule-3d-cta-inner { 
-    border-radius: 12px; 
-    padding: 16px 20px; /* padding menor */
+    background: rgba(255,255,255,0.1);
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    pointer-events: auto;
+    width: 100%;
+  }
+  
+  /* Esconde o botão de dentro do card */
+  .capsule-3d-cta-inner .sopy-product-cta {
+    display: none !important;
+  }
+  
+  /* Cria um pseudo-elemento para o botão separado */
+  #capsula-3d::before {
+    content: 'EXPLORE CITRUS LUSH';
+    position: absolute;
+    bottom: 18vh; /* posição do botão (abaixo do card) */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 280px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.8rem;
+    color: #ffffff;
+    backdrop-filter: blur(5px);
+    text-align: center;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 5;
+    box-sizing: border-box;
+    font-family: inherit;
+    transition: all 0.3s ease;
+  }
+  
+  /* Suporte aos temas */
+  body.theme-aqua #capsula-3d::before {
+    content: 'EXPLORE AQUA BLU';
+  }
+  
+  body.theme-citrus #capsula-3d::before {
+    content: 'EXPLORE CITRUS LUSH';
+  }
+  
+  /* Hover do botão separado */
+  #capsula-3d::before:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
   }
 }
 /* Quando visível, o CTA pode receber eventos do ponteiro */
@@ -805,37 +857,23 @@ body.theme-aqua .capsule-3d-cta {
 
 /* Limita o deslocamento direito para evitar overflow em telas muito pequenas */
 @media (max-width: 480px) {
-  .capsule-3d-cta,
-  .capsule-3d-cta.at-end {
-    position: absolute;
-    bottom: 20vh; /* na parte inferior, mas elevado */
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 260px; /* ainda menor */
+  .capsule-3d-cta {
+    max-width: 260px;
     width: 88%;
-    right: auto;
-    top: auto;
-    margin-right: 0;
-    pointer-events: auto;
-    z-index: 5;
-  }
-  
-  body.theme-citrus .capsule-3d-cta,
-  body.theme-citrus .capsule-3d-cta.at-end {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  
-  body.theme-aqua .capsule-3d-cta,
-  body.theme-aqua .capsule-3d-cta.at-end {
-    right: auto;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: 32vh; /* ajuste da posição do texto */
   }
   
   .capsule-3d-cta-inner {
-    padding: 14px 18px; /* padding ainda menor */
+    padding: 14px 18px;
+  }
+  
+  /* Ajuste do botão separado para telas pequenas */
+  #capsula-3d::before {
+    bottom: 16vh; /* posição do botão */
+    max-width: 260px;
+    width: 88%;
+    padding: 10px 20px;
+    font-size: 0.75rem;
   }
 }
 
