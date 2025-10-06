@@ -952,8 +952,13 @@ if (heroVideo && heroPoster) {
             let isAnimating = false;
             let autoInterval;
 
-            const getCellWidth = () => cards[0]?.getBoundingClientRect().width || 260;
-            const getGap = () => parseFloat(getComputedStyle(track).gap || '0') || 0;
+            const getCellWidth = () => cards[0]?.getBoundingClientRect().width || 201;
+            const getGap = () => {
+                // spacing is margin-right on the cells
+                const cs = getComputedStyle(cards[0]);
+                const mr = parseFloat(cs.marginRight || '0') || 0;
+                return mr;
+            };
 
             const setActive = (idx) => {
                 cards.forEach((c, i) => c.classList.toggle('is-selected', i === idx));

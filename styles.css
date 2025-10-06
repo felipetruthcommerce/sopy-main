@@ -1849,12 +1849,13 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 /* Track container para carousel horizontal tipo 'Flickity-like' */
 .tc-testimonials-track{
   position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; min-height:320px; border-radius:16px;
-  display:flex; align-items:stretch; gap: 35px; padding: 35px 0; will-change: transform; transform: translate3d(0,0,0);
+  display:flex; align-items:stretch; gap: 0; padding: 35px 0; will-change: transform; transform: translate3d(0,0,0);
 }
 .tc-testimonials-track.tc-grabbing{ cursor:grabbing }
 /* Células (cards) lado a lado */
 .tc-testimonial-card{
-  position:relative; flex: 0 0 clamp(220px, 28vw, 280px); height: clamp(300px, 40vw, 380px);
+  position:relative; flex: 0 0 201px; max-width: 201px; height: 335px;
+  margin: 35px 35px 35px 0; /* top/right/bottom like the reference */
   opacity: .3; filter: blur(6px); transform: scale(.98); transition: opacity .3s ease, filter .45s ease, transform .45s ease, box-shadow .45s ease;
 }
 .tc-testimonial-card.is-selected,
