@@ -775,7 +775,7 @@ body.theme-aqua .capsule-3d-cta {
 @media (max-width: 900px) {
   .capsule-3d-cta { 
     position: absolute;
-    bottom: 72vh; /* ainda mais alto */
+    bottom: 76vh; /* ainda mais alto */
     left: 50%;
     transform: translateX(-50%);
     width: 96%; /* mais largo */
@@ -803,7 +803,7 @@ body.theme-aqua .capsule-3d-cta {
   .capsule-3d-cta {
     max-width: 310px; /* mais largo */
     width: 94%; /* largura maior */
-    bottom: 66vh; /* mais alto também */
+    bottom: 70vh; /* mais alto também */
   }
   
   .capsule-3d-cta-inner {
@@ -818,7 +818,7 @@ body.theme-aqua .capsule-3d-cta {
     left: 50%; 
     right: auto;
     transform: translateX(-50%);
-    bottom: 72vh; /* consistente com o posicionamento acima */
+    bottom: 76vh; /* consistente com o posicionamento acima */
     max-width: 340px; /* largura maior também */
   }
 }
