@@ -184,7 +184,7 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
   margin-bottom: 1.25rem;
 }
 #beneficios .sopy-section-header h2 {
-  color: #ffffff;
+  color: #000000;
   /* slightly reduced size to match card scale */
   font-size: clamp(3.2rem, 8.5vw, 6.8rem);
   font-weight: 900;
