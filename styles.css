@@ -631,19 +631,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   z-index: 3;
 }
 
-@media (max-width: 900px) {
-  #three-container {
-    margin-top: 120px; /* espaço para o card no topo */
-    height: calc(100vh - var(--capsule-ui-offset) - 120px);
-  }
-}
-
-@media (max-width: 480px) {
-  #three-container {
-    margin-top: 110px; /* espaço ligeiramente menor */
-    height: calc(100vh - var(--capsule-ui-offset) - 110px);
-  }
-}
+/* Removido o margin-top já que o card voltou para a posição inferior */
 .sopy-capsule3d::before {
   /* bolhinhas discretas na seção deep (sob o canvas) */
   content: "";
@@ -787,7 +775,7 @@ body.theme-aqua .capsule-3d-cta {
 @media (max-width: 900px) {
   .capsule-3d-cta { 
     position: absolute; 
-    top: 10vh; /* posicionado no topo */
+    bottom: 25vh; /* mais acima que antes (era 15vh) */
     left: 50%; /* centralizado */
     transform: translateX(-50%); /* centralização perfeita */
     max-width: 280px; /* tamanho menor para mobile */
@@ -820,13 +808,13 @@ body.theme-aqua .capsule-3d-cta {
   .capsule-3d-cta,
   .capsule-3d-cta.at-end {
     position: absolute;
-    top: 8vh; /* ainda mais no topo em telas pequenas */
+    bottom: 20vh; /* na parte inferior, mas elevado */
     left: 50%;
     transform: translateX(-50%);
     max-width: 260px; /* ainda menor */
     width: 88%;
     right: auto;
-    bottom: auto;
+    top: auto;
     margin-right: 0;
     pointer-events: auto;
     z-index: 5;
@@ -852,8 +840,13 @@ body.theme-aqua .capsule-3d-cta {
 }
 
 @media (max-width: 900px) {
-  .capsule-3d-cta.at-end { right: 8vw; bottom: 4.5rem; max-width: 360px; }
-
+  .capsule-3d-cta.at-end { 
+    left: 50%; 
+    right: auto;
+    transform: translateX(-50%);
+    bottom: 25vh; /* consistente com o posicionamento acima */
+    max-width: 280px; 
+  }
 }
 
 /* Toggle hint - hotfix: always centered above the toggle, single-line, non-interactive */
