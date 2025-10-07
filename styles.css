@@ -428,32 +428,7 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     border-radius: 50%;
 }
 
-/* Elementos decorativos temáticos nos cantos */
-#beneficios .column-sopy-way::after {
-    content: '';
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, var(--brand, #5FD97E), var(--brand-2, #91D9A3));
-    border-radius: 50%;
-    opacity: 0.1;
-    z-index: 0;
-}
 
-#beneficios .column-old-way::after {
-    content: '';
-    position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 80px;
-    height: 80px;
-    background: linear-gradient(135deg, #e74c3c, #c0392b);
-    border-radius: 50%;
-    opacity: 0.1;
-    z-index: 0;
-}
 
 @media (max-width: 768px) {
     #beneficios .section-title h2 { font-size: 2.8rem; }
@@ -461,13 +436,6 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     #beneficios .comparison-column { padding: 2rem; }
     #beneficios .comparison-column h3 { font-size: 1.8rem; }
     #beneficios .comparison-point { font-size: 1.1rem; }
-    #beneficios .column-sopy-way::after,
-    #beneficios .column-old-way::after { 
-        width: 60px; 
-        height: 60px; 
-        top: -15px; 
-        right: -15px; 
-    }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */

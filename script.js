@@ -776,43 +776,73 @@ if (heroVideo && heroPoster) {
     // ===================================
     //  BLOCO DOS BENEFÍCIOS - COMPARAÇÃO INTERATIVA
     // ===================================
+    
+    // Verificação de dependências
+    if (typeof gsap === 'undefined') {
+        console.error('[BENEFÍCIOS] GSAP não está carregado!');
+        return;
+    }
+    if (typeof ScrollTrigger === 'undefined') {
+        console.error('[BENEFÍCIOS] ScrollTrigger não está carregado!');
+        return;
+    }
+    
     const benefitsSection = document.getElementById('beneficios');
     if (benefitsSection) {
         console.log('[BENEFÍCIOS] Seção encontrada. Inicializando comparação interativa...');
 
         const leftPoints = gsap.utils.toArray('.column-old-way .comparison-point');
         const rightPoints = gsap.utils.toArray('.column-sopy-way .comparison-point');
-        const sopyCard = document.querySelector('.column-sopy-way');
+        const comparisonModule = document.querySelector('#comparison-module');
 
-        if (leftPoints.length && rightPoints.length && sopyCard) {
+        console.log('[BENEFÍCIOS] Debug - Left points:', leftPoints.length);
+        console.log('[BENEFÍCIOS] Debug - Right points:', rightPoints.length);
+        console.log('[BENEFÍCIOS] Debug - Comparison module:', comparisonModule);
+
+        if (leftPoints.length && rightPoints.length && comparisonModule) {
+            // Define estado inicial dos elementos (invisíveis)
+            gsap.set([...leftPoints, ...rightPoints], {
+                opacity: 0,
+                y: 30
+            });
+
             // Cria a timeline principal que será controlada pelo scroll
             const comparisonScrubTl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: "#comparison-module",
-                    start: "top 40%",  // Começa a animação quando o topo da seção estiver a 40% da tela
-                    end: "bottom 80%", // Termina a animação quando o fundo da seção estiver a 80%
-                    scrub: 1 // Conecta a animação à barra de rolagem com 1s de suavização
+                    trigger: comparisonModule,
+                    start: "top 70%",
+                    end: "bottom 20%",
+                    scrub: 0.5,
+                    markers: false, // Mude para true para ver os marcadores de debug
+                    onUpdate: (self) => {
+                        console.log('[BENEFÍCIOS] ScrollTrigger progress:', self.progress);
+                    }
                 }
             });
 
             // Adiciona as animações à timeline
             comparisonScrubTl
-                // Animação 1: Pontos da esquerda (simples fade-in)
-                .from(leftPoints, {
-                    opacity: 0,
-                    y: 40,
-                    stagger: 0.2 // Aparecem um após o outro
+                // Animação 1: Pontos da esquerda
+                .to(leftPoints, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    stagger: 0.1,
+                    ease: "power2.out"
                 })
-                // Animação 2: Pontos da direita (aparecem com um efeito mais dinâmico)
-                .from(rightPoints, {
-                    opacity: 0,
-                    x: -40, // Vêm da esquerda para a direita
-                    stagger: 0.2
-                }, "<0.1"); // Inicia um pouco depois (0.1s) do início da animação anterior
+                // Animação 2: Pontos da direita
+                .to(rightPoints, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    stagger: 0.1,
+                    ease: "power2.out"
+                }, "-=0.5"); // Overlap com a animação anterior
 
             console.log('[BENEFÍCIOS] Animação de comparação configurada com sucesso!');
         } else {
             console.warn('[BENEFÍCIOS] Elementos da comparação não encontrados.');
+            console.warn('Left points:', leftPoints.length, 'Right points:', rightPoints.length, 'Module:', !!comparisonModule);
         }
 
     } else {
