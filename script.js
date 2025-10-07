@@ -781,52 +781,38 @@ if (heroVideo && heroPoster) {
     function initBenefitsAnimations(){
         // Verificação de dependências
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-        const benefitsSection = document.getElementById('beneficios');
-        if (!benefitsSection) return;
         
-        const cleanSlateContainer = benefitsSection.querySelector('.clean-slate-container');
-        const pinnedComparison = benefitsSection.querySelector('.pinned-comparison');
-        const greenWave = benefitsSection.querySelector('.green-wave');
-        const oldCard = benefitsSection.querySelector('.card-old-way');
-        const sopyCard = benefitsSection.querySelector('.card-sopy-way');
+        console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation...');
         
-        if (!cleanSlateContainer || !pinnedComparison || !greenWave || !oldCard || !sopyCard) {
-            console.warn('[BENEFÍCIOS] Elementos do Clean Slate não encontrados.');
-            return;
-        }
-        
-        console.log('[BENEFÍCIOS] Seção Clean Slate encontrada. Inicializando animação...');
-        
-        // Cria a timeline principal que será controlada pelo scroll
         const cleanSlateTimeline = gsap.timeline({
             scrollTrigger: {
-                trigger: cleanSlateContainer,
-                pin: pinnedComparison,
+                trigger: "#clean-slate-section",
+                pin: ".pinned-container",
                 scrub: 1.2,
                 start: "top top",
-                end: "+=2500", // Espaço para o scroll suave
-                invalidateOnRefresh: true
+                end: "+=2500" // Aumentamos a "pista" para o respiro ser mais longo
             }
         });
 
         cleanSlateTimeline
-            // 1. Wave verde varre da esquerda para direita
-            .to(greenWave, { 
+            .to(".green-wave", { 
                 transform: "translateX(0%)", 
                 ease: "none"
             })
-            // 2. Card antigo desaparece com escala menor
-            .to(oldCard, {
+            .to(".card-old-way", {
                 opacity: 0,
                 scale: 0.9,
                 ease: "power1.in"
             }, "<0.2")
-            // 3. Card Sopy aparece suavemente
-            .to(sopyCard, {
+            .to(".card-sopy-way", {
                 opacity: 1,
                 ease: "power2.out"
             }, ">-0.5")
-            // 4. Pausa/respiro no final
+
+            // --- A SOLUÇÃO ESTÁ AQUI ---
+            // Adicionamos uma "pausa" ou "respiro" no final da timeline.
+            // A duração aqui é relativa. Um valor de 1 significa que ele vai ocupar
+            // uma porção significativa do tempo total da timeline sem fazer nada.
             .to({}, { duration: 0.2 });
 
         console.log('[BENEFÍCIOS] Clean Slate Timeline configurada com sucesso!');
