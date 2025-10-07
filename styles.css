@@ -296,7 +296,7 @@ p[class*="split"], .sopy-section-header[class*="split"] {
 }
 
 #clean-slate-section { 
-    height: 300vh; /* Altura maior para animação mais longa */
+    height: 250vh; /* EXATAMENTE igual ao teste.html */
     background-color: var(--cor-fundo-inicial); 
     position: relative; 
 }
