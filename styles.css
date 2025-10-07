@@ -289,153 +289,121 @@ p[class*="split"], .sopy-section-header[class*="split"] {
   border: 6px solid rgba(0,0,0,0.95); /* thicker outline to mimic sketch */
 }
 
-/* ===================== NOVA SEÇÃO DE COMPARAÇÃO INTERATIVA ===================== */
+/* ===================== BENEFÍCIOS - CLEAN SLATE EFFECT ===================== */
 #beneficios {
-    background: #ffffff;
+    background: #f0f2f5;
     position: relative;
-    overflow: hidden;
+    min-height: 100vh;
 }
 
-#beneficios .section-title {
+#beneficios .clean-slate-container {
+    height: 250vh; /* Espaço para o scroll com pin */
+    position: relative;
+}
+
+#beneficios .clean-slate-title {
     text-align: center;
     padding: 6rem 1rem 4rem 1rem;
+    position: relative;
+    z-index: 10;
 }
 
-#beneficios .section-title h2 {
+#beneficios .clean-slate-title h2 {
     font-size: 4.5rem;
     text-transform: uppercase;
     font-weight: 800;
     margin: 0;
     color: #000000;
-    text-shadow: none;
 }
 
-#beneficios #comparison-module {
-    padding: 2rem;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    max-width: 1440px;
-    margin: 0 auto;
-}
-
-#beneficios .comparison-column {
-    background: #ffffff;
-    border: 3px solid #f0f0f0;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem 3rem 3rem 3rem;
-    border-radius: 32px;
+#beneficios .pinned-comparison {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Bordas coloridas temáticas para ambos os cards */
-#beneficios .column-sopy-way {
-    border-color: var(--brand, #5FD97E);
-    box-shadow: 0 8px 32px rgba(95, 217, 126, 0.2);
-}
-
-#beneficios .column-old-way {
-    border-color: #e74c3c;
-    box-shadow: 0 8px 32px rgba(231, 76, 60, 0.2);
-}
-
-#beneficios .comparison-column:hover {
-    transform: translateY(-4px);
-}
-
-#beneficios .column-sopy-way:hover {
-    box-shadow: 0 16px 48px rgba(95, 217, 126, 0.3);
-}
-
-#beneficios .column-old-way:hover {
-    box-shadow: 0 16px 48px rgba(231, 76, 60, 0.3);
-}
-
-
-
-#beneficios .column-image-wrapper {
-    width: 100%;
-    margin-bottom: 2.5rem;
-    border-radius: 24px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
-
-#beneficios .column-image-wrapper img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-#beneficios .comparison-column h3, 
-#beneficios .comparison-point {
-    position: relative;
-    z-index: 2;
-}
-
-#beneficios .comparison-column h3 {
-    font-size: 2.2rem;
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 2.5rem;
-    color: #1a1a1a;
-}
-
-/* Títulos com cores temáticas */
-#beneficios .column-sopy-way h3 {
-    color: var(--brand-dark, #2d5a3d);
-}
-
-#beneficios .column-old-way h3 {
-    color: #c0392b;
-}
-
-#beneficios .comparison-point {
-    font-size: 1.25rem;
-    margin-bottom: 2rem;
-    padding-left: 3rem;
-    position: relative;
-    line-height: 1.6;
-    color: #4a4a4a;
-}
-
-#beneficios .comparison-point::before {
-    content: '';
+#beneficios .green-wave {
     position: absolute;
+    top: 0;
     left: 0;
-    top: 8px;
-    width: 30px;
-    height: 30px;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    z-index: 2;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--brand, #5FD97E) 0%, var(--brand-2, #91D9A3) 100%);
+    transform: translateX(-100%);
+    z-index: 1;
 }
 
-#beneficios .column-old-way .comparison-point::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e74c3c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
-    background-color: #fee;
-    border-radius: 50%;
+#beneficios .comparison-card {
+    width: 90%;
+    max-width: 550px;
+    padding: 3rem;
+    border-radius: 32px;
+    position: absolute;
+    z-index: 5;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
 }
 
-#beneficios .column-sopy-way .comparison-point::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
-    background-color: var(--brand, #5FD97E);
-    border-radius: 50%;
+#beneficios .card-old-way {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
 }
 
+#beneficios .card-sopy-way {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    color: #FFF;
+    opacity: 0;
+}
 
+#beneficios .comparison-card h3 {
+    font-size: 2.2rem;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
 
+#beneficios .comparison-card p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 0;
+}
+
+#beneficios .card-sopy-way p, 
+#beneficios .card-sopy-way h3 {
+    color: #FFF;
+}
+
+#beneficios .comparison-card img {
+    width: 100%;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
-    #beneficios .section-title h2 { font-size: 2.8rem; }
-    #beneficios #comparison-module { grid-template-columns: 1fr; padding: 1rem; gap: 2rem; }
-    #beneficios .comparison-column { padding: 2rem; }
-    #beneficios .comparison-column h3 { font-size: 1.8rem; }
-    #beneficios .comparison-point { font-size: 1.1rem; }
+    #beneficios .clean-slate-title h2 { 
+        font-size: 2.8rem; 
+    }
+    #beneficios .comparison-card { 
+        width: 95%; 
+        padding: 2rem; 
+    }
+    #beneficios .comparison-card h3 { 
+        font-size: 1.8rem; 
+    }
+    #beneficios .comparison-card p { 
+        font-size: 1rem; 
+    }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
@@ -1700,36 +1668,198 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background:
 }
 
 /* ========== FAQ (accordeão animado) ========== */
-/* ===================== BENEFÍCIOS (Clean Slate) ===================== */
-#beneficios { background: #fff; position: relative; height: 250vh; }
-#beneficios .section-title { text-align: center; padding: 4rem 1rem 2rem; }
-#beneficios .section-title h2 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; margin: 0; color: #000; }
-
-#beneficios .pinned-container { 
-  width: 100%; height: 100vh; position: relative; overflow: hidden; 
-  display: flex; justify-content: center; align-items: center;
-}
-#beneficios .green-wave { 
-  position: absolute; inset: 0; background: var(--brand-dark, #1A4731); 
-  transform: translateX(-100%); z-index: 1; 
-}
-#beneficios .card { 
-  width: min(90%, 560px); padding: clamp(1.5rem, 4vw, 3rem); border-radius: 32px; 
-  position: absolute; z-index: 5; transform: translate(-50%, -50%); left: 50%; top: 50%;
-}
-#beneficios .card-old-way { background: #fff; border: 1px solid #e6e6e6; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
-#beneficios .card-sopy-way { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); color: #fff; opacity: 0; }
-#beneficios .card h3 { font-size: clamp(1.6rem, 3.5vw, 2.1rem); margin: 0 0 1rem 0; }
-#beneficios .card p { font-size: clamp(1rem, 2.4vw, 1.125rem); line-height: 1.6; color: #555; }
-#beneficios .card-sopy-way h3, 
-#beneficios .card-sopy-way p { color: #fff; }
-#beneficios .card img { width: 100%; border-radius: 16px; margin-bottom: 1.2rem; display: block; }
-
-@media (max-width: 768px){
-  #beneficios .section-title { padding: 3rem 1rem 1rem; }
+#faq { 
+  scroll-margin-top: 96px;
+  background-color: #FFFFFF !important; /* FORÇA FUNDO BRANCO DA SEÇÃO */
 }
 
-/* (fix) removed stray duplicated media rules */
+#faq h2 { color: black; }
+
+#faq .sopy-faq-accordion {
+  --d: 0deg;
+  --circle-x: 1.8rem;
+  --circle-y: 50%;
+  --circle-r: 200%;
+  --size-accordion-title: 1.25rem;
+  --size-accordion-content: 1rem;
+  --animation-speed: 100;
+  --slide-ease: cubic-bezier(0.86, 0, 0.07, 1);
+  --slide-duration: calc(400ms * 100 / var(--animation-speed));
+  --slide-delay: calc(450ms * 100 / var(--animation-speed));
+  --circle-duration: calc(900ms * 100 / var(--animation-speed));
+
+  /* Cores padrão (fundo branco, texto preto) */
+  background-color: #FFFFFF;
+  color: #000000;
+
+  width: min(900px, 92%);
+  margin: 0 auto 1rem;
+  border-radius: min(12px, 0.5rem);
+  border: 1px solid rgba(0, 0, 0, 0.1); /* borda sutil */
+  display: grid;
+  grid-template-rows: auto 0fr; 
+  overflow: hidden;
+  position: relative;
+  
+  /* Transições SEM mudança de cor do texto */
+  transition: box-shadow 200ms ease, 
+              grid-template-rows var(--slide-duration) var(--slide-ease);
+  box-shadow: none;
+  scroll-margin-top: 88px;
+}
+
+/* Permitir bordas nos cards mas remover sombras conflitantes */
+#faq .sopy-faq-accordion::before,
+#faq .sopy-faq-accordion::after {
+  box-shadow: none !important;
+  outline: none !important;
+  background-clip: padding-box !important; /* avoid strokes showing beyond radius */
+}
+
+/* Estado aberto - mantém texto preto */
+#faq .sopy-faq-accordion.open {
+  --d: 90deg;
+  grid-template-rows: auto 1fr; 
+  /* cor do texto continua a mesma (preto) */
+}
+
+#faq .sopy-faq-accordion .sopy-content {
+  overflow: hidden;
+  font-size: var(--size-accordion-content);
+  line-height: 140%;
+  z-index: 2; /* fica na frente da animação de fundo */
+  position: relative;
+}
+
+#faq .sopy-faq-accordion .sopy-wrapper {
+  padding-block: 0 1.05rem;
+  padding-inline: 1.25rem;
+}
+
+#faq .sopy-faq-accordion .sopy-content p { 
+  margin: 0; 
+  color: currentColor; /* herda cor do accordion */
+}
+
+#faq .sopy-faq-accordion .sopy-title {
+  z-index: 2; /* fica na frente da animação de fundo */
+}
+
+#faq .sopy-faq-accordion .sopy-title a {
+  padding: 1rem 1.25rem;
+  font-size: var(--size-accordion-title);
+  font-weight: 800;
+  color: currentColor; /* Herda a cor do .accordion (preto ou branco) */
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2; /* acima do overlay */
+}
+
+#faq .sopy-faq-accordion .sopy-title a::before {
+  --chevron-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath fill='currentColor' d='M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z'/%3E%3C/svg%3E");
+  content: "";
+  width: 0.65rem;
+  aspect-ratio: 320 / 512;
+  display: inline-block;
+  margin-right: 0.75rem;
+  transform: rotate(var(--d, 0deg));
+  transition: transform var(--slide-ease) var(--slide-duration) var(--slide-delay);
+  mask-image: var(--chevron-icon);
+  mask-size: 100%;
+  background-color: currentColor; /* Herda a cor (preto ou branco) */
+}
+
+/* Animação de fundo com círculo expandindo */
+#faq .sopy-faq-accordion::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: var(--brand); /* cor do tema (verde citrus / azul aqua) */
+  transition: clip-path var(--circle-duration) ease;
+  pointer-events: none;
+  clip-path: circle(0% at var(--circle-x) var(--circle-y));
+  border-radius: inherit;
+  z-index: 1; /* Fica entre o fundo branco e o conteúdo */
+}
+
+/* Expande o círculo quando o card está aberto */
+#faq .sopy-faq-accordion.open::before {
+  clip-path: circle(var(--circle-r) at var(--circle-x) var(--circle-y));
+}
+
+#faq .sopy-faq-accordion .sopy-title a:focus-visible { 
+  outline: 2px solid var(--brand); 
+  outline-offset: 3px; 
+  border-radius: 10px; 
+  background: rgba(0,0,0,0.03); 
+}
+
+/* Temas: mantém cartões claros sobre fundos fortes */
+body.theme-aqua #faq .sopy-faq-accordion,
+body.theme-citrus #faq .sopy-faq-accordion { 
+  background: #fff; 
+  border: 2px solid #000000 !important; /* borda preta bem visível */
+  box-shadow: none;
+}
+
+
+
+
+
+
+/* ========== STATES PARA REVEALS (GSAP SplitText) ========== */
+/* (remoção) estilos de reveal por linhas/palavras */
+
+/* Nav e botões no hero (entrada suave) â€“ serão animados no JS */
+.hero .btn,
+.sopy-nav { will-change: transform, opacity; }
+
+/* ========== RESPONSIVO ========== */
+@media (max-width: 1280px) {
+  .benefit-grid { grid-template-columns: repeat(3, 1fr); }
+  .shop .product-grid { grid-template-columns: repeat(3, 1fr); }
+  .badges { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .sopy-nav-links { display: none; }
+  .sopy-capsule3d-ui { grid-template-columns: 1fr; gap: 12px; }
+  .howto-steps { grid-template-columns: 1fr; }
+  .fragrance-grid { grid-template-columns: 1fr; }
+  .shop .product-grid { grid-template-columns: 1fr 1fr; }
+  .testimonial-grid { grid-template-columns: 1fr; }
+  /* Hero adjustments – tighter mask and more room for title */
+  :root { --mask-start: 58%; --seam-height: 18vh; }
+  .sopy-hero-content { width: min(100%, 92%); padding-inline: 16px; }
+  .sopy-hero-content h1 { font-size: clamp(2.2rem, 9.5vw, 3.6rem); line-height: .98; }
+  .sopy-hero-ctas { justify-content: center; gap: 10px; }
+}
+
+@media (max-width: 600px) {
+  .sopy-footer-inner { flex-direction: column; gap: 8px; }
+  .sopy-hero-ctas { width: 100%; justify-content: center; }
+  .fragrance-toggle { right: 12px; bottom: 12px; padding: 6px; }
+  .sopy-btn { width: 100%; }
+  /* Make hero title very bold and multi-line; reduce video seam */
+  :root { --mask-start: 62%; --seam-height: 16vh; }
+  /* Force the hero to start content near the top on small screens */
+  .sopy-hero, #hero { 
+    min-height: 100svh; 
+    height: 100svh; /* força altura completa para preencher */
+    padding-top: calc(110px + env(safe-area-inset-top)); /* mais espaço acima para o header */
+    justify-content: flex-start; /* puxa o conteúdo para o topo */
+    align-items: stretch;
+  }
+  .sopy-hero-content { gap: 10px; }
+  .sopy-hero-content h1 {
+    font-size: clamp(2.4rem, 12vw, 3.2rem);
+    line-height: .96;
+    letter-spacing: -0.01em;
+  }
+}
 
 /* ========== REDUÇÃƒO DE MOVIMENTO (acessibilidade) ========== */
 @media (prefers-reduced-motion: reduce) {

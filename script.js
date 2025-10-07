@@ -776,41 +776,60 @@ if (heroVideo && heroPoster) {
     });
 
     // ===================================
-    //  BLOCO DOS BENEFÍCIOS - COMPARAÇÃO INTERATIVA (adiado até após seções pinned)
+    //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION
     // ===================================
     function initBenefitsAnimations(){
         // Verificação de dependências
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
         const benefitsSection = document.getElementById('beneficios');
         if (!benefitsSection) return;
-        console.log('[BENEFÍCIOS] Seção encontrada. Inicializando comparação interativa...');
-
-        // Clean Slate pinned timeline
-        const pinned = benefitsSection.querySelector('.pinned-container');
-        const wave = benefitsSection.querySelector('.green-wave');
-        const cardOld = benefitsSection.querySelector('.card-old-way');
-        const cardSopy = benefitsSection.querySelector('.card-sopy-way');
-
-        if (pinned && wave && cardOld && cardSopy) {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: benefitsSection,
-                    pin: pinned,
-                    scrub: 1.2,
-                    start: 'top top',
-                    end: '+=2500'
-                }
-            });
-
-            tl.to(wave, { xPercent: 100, transform: 'translateX(0%)', ease: 'none' })
-              .to(cardOld, { opacity: 0, scale: 0.9, ease: 'power1.in' }, '<0.2')
-              .to(cardSopy, { opacity: 1, ease: 'power2.out' }, '>-0.5')
-              .to({}, { duration: 0.2 });
-
-            console.log('[BENEFÍCIOS] Clean Slate timeline criada.');
-        } else {
-            console.warn('[BENEFÍCIOS] Estrutura Clean Slate incompleta.');
+        
+        const cleanSlateContainer = benefitsSection.querySelector('.clean-slate-container');
+        const pinnedComparison = benefitsSection.querySelector('.pinned-comparison');
+        const greenWave = benefitsSection.querySelector('.green-wave');
+        const oldCard = benefitsSection.querySelector('.card-old-way');
+        const sopyCard = benefitsSection.querySelector('.card-sopy-way');
+        
+        if (!cleanSlateContainer || !pinnedComparison || !greenWave || !oldCard || !sopyCard) {
+            console.warn('[BENEFÍCIOS] Elementos do Clean Slate não encontrados.');
+            return;
         }
+        
+        console.log('[BENEFÍCIOS] Seção Clean Slate encontrada. Inicializando animação...');
+        
+        // Cria a timeline principal que será controlada pelo scroll
+        const cleanSlateTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: cleanSlateContainer,
+                pin: pinnedComparison,
+                scrub: 1.2,
+                start: "top top",
+                end: "+=2500", // Espaço para o scroll suave
+                invalidateOnRefresh: true
+            }
+        });
+
+        cleanSlateTimeline
+            // 1. Wave verde varre da esquerda para direita
+            .to(greenWave, { 
+                transform: "translateX(0%)", 
+                ease: "none"
+            })
+            // 2. Card antigo desaparece com escala menor
+            .to(oldCard, {
+                opacity: 0,
+                scale: 0.9,
+                ease: "power1.in"
+            }, "<0.2")
+            // 3. Card Sopy aparece suavemente
+            .to(sopyCard, {
+                opacity: 1,
+                ease: "power2.out"
+            }, ">-0.5")
+            // 4. Pausa/respiro no final
+            .to({}, { duration: 0.2 });
+
+        console.log('[BENEFÍCIOS] Clean Slate Timeline configurada com sucesso!');
     }
 
 
