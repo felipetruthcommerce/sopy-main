@@ -389,6 +389,29 @@ body.theme-aqua .green-wave {
     margin-bottom: 2rem;
 }
 
+/* Comparative lists inside cards */
+.card .card-features {
+  margin: 0;
+  padding: 0 0 0 1.25rem;
+}
+.card .card-features li {
+  margin: 0.4rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.card-old-way .card-features li { color: #444; }
+.card-sopy-way .card-features { list-style: none; padding-left: 0; }
+.card-sopy-way .card-features li::before {
+  content: "✔";
+  color: #9FF2C2;
+  margin-right: 0.6rem;
+}
+.card-old-way .card-features li::before {
+  content: "✖";
+  color: #CC4B4B;
+  margin-right: 0.6rem;
+}
+
 /* theme overrides for icon color to ensure contrast across themes */
 body.theme-citrus #beneficios .sopy-benefits-card { --icon: var(--brand-dark); }
 body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
