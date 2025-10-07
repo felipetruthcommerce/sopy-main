@@ -296,16 +296,11 @@ p[class*="split"], .sopy-section-header[class*="split"] {
 }
 
 #clean-slate-section { 
-    height: 220vh; /* EXATAMENTE igual ao teste.html */
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
     background-color: var(--cor-fundo-inicial); 
-    position: relative; 
-}
-
-/* Mobile: altura menor para evitar overlapping */
-@media (max-width: 768px) {
-    #clean-slate-section {
-        height: 150vh;
-    }
 }
 
 /* Cores de fundo baseadas no tema */

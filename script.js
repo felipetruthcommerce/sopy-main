@@ -784,20 +784,13 @@ if (heroVideo && heroPoster) {
         
         console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation (com pin controlado)...');
         
-        // Configurações específicas para mobile vs desktop
-        const isMobile = window.innerWidth <= 768;
-        const endValue = isMobile ? "+=1000" : "+=1500";
-        
         const cleanSlateTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: "#clean-slate-section",
-                pin: ".pinned-container",
+                pin: true,
                 scrub: 1.2,
                 start: "top top",
-                end: endValue,
-                pinSpacing: true, // Mantém espaçamento natural
-                anticipatePin: 1, // Melhora a performance no mobile
-                refreshPriority: isMobile ? 1 : 0 // Prioridade de refresh no mobile
+                end: "+=1200"
             }
         });
 
