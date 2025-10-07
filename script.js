@@ -776,21 +776,22 @@ if (heroVideo && heroPoster) {
     });
 
     // ===================================
-    //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION (SEM PIN)
+    //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION (COM PIN CONTROLADO)
     // ===================================
     function initBenefitsAnimations(){
         // Verificação de dependências
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
         
-        console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation (sem pin)...');
+        console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation (com pin controlado)...');
         
         const cleanSlateTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: "#clean-slate-section",
-                start: "top 80%",
-                end: "bottom 20%",
+                pin: ".pinned-container",
+                start: "top top",
+                end: "+=150vh", // Pin por tempo suficiente para ver a animação completa
                 scrub: 1.2,
-                // Sem pin - a seção rola normalmente
+                invalidateOnRefresh: true
             }
         });
 
@@ -807,9 +808,11 @@ if (heroVideo && heroPoster) {
             .to(".card-sopy-way", {
                 opacity: 1,
                 ease: "power2.out"
-            }, ">-0.5");
+            }, ">-0.5")
+            // Pausa para apreciar o resultado final
+            .to({}, { duration: 0.3 });
 
-        console.log('[BENEFÍCIOS] Clean Slate Timeline (sem pin) configurada com sucesso!');
+        console.log('[BENEFÍCIOS] Clean Slate Timeline (com pin controlado) configurada com sucesso!');
     }
 
 

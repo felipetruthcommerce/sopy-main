@@ -305,7 +305,7 @@ p[class*="split"], .sopy-section-header[class*="split"] {
 }
 
 #clean-slate-section { 
-    height: 100vh; /* Altura normal da seção */
+    height: 150vh; /* Espaço suficiente para a animação com pin */
     background-color: var(--cor-fundo-inicial); 
     position: relative; 
 }
