@@ -563,9 +563,8 @@ function bootAnimations() {
     // 2. Registrar plugins e eases do GSAP
     setupGsapPlugins(); // ✅ CHAMANDO A FUNÇÃO
 
-    // 3. Ativar as animações e interatividades individuais
+    // 3. Ativar interatividades de UI imediatas (animações de texto serão iniciadas após seções pinned)
     setupButtonRipples(); // ✅ CHAMANDO A FUNÇÃO
-    initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
     
     // 4. Configurar toggle de tema (SEMPRE EXECUTA)
     const productToggle = document.getElementById('product-toggle');
@@ -776,23 +775,14 @@ if (heroVideo && heroPoster) {
         }
     });
 
-
     // ===================================
-    //  BLOCO DOS BENEFÍCIOS - COMPARAÇÃO INTERATIVA
+    //  BLOCO DOS BENEFÍCIOS - COMPARAÇÃO INTERATIVA (adiado até após seções pinned)
     // ===================================
-    
-    // Verificação de dependências
-    if (typeof gsap === 'undefined') {
-        console.error('[BENEFÍCIOS] GSAP não está carregado!');
-        return;
-    }
-    if (typeof ScrollTrigger === 'undefined') {
-        console.error('[BENEFÍCIOS] ScrollTrigger não está carregado!');
-        return;
-    }
-    
-    const benefitsSection = document.getElementById('beneficios');
-    if (benefitsSection) {
+    function initBenefitsAnimations(){
+        // Verificação de dependências
+        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+        const benefitsSection = document.getElementById('beneficios');
+        if (!benefitsSection) return;
         console.log('[BENEFÍCIOS] Seção encontrada. Inicializando comparação interativa...');
 
         const leftPoints = gsap.utils.toArray('.column-old-way .comparison-point');
@@ -804,7 +794,7 @@ if (heroVideo && heroPoster) {
         console.log('[BENEFÍCIOS] Debug - Comparison module:', comparisonModule);
 
         if (leftPoints.length && rightPoints.length && comparisonModule) {
-            // Animação por elemento: dispara ao entrar na viewport (robusto com diferentes alturas)
+            // Animação por elemento: dispara ao entrar na viewport
             const makePointAnim = (el, opts = {}) => {
                 gsap.from(el, {
                     opacity: 0,
@@ -825,15 +815,10 @@ if (heroVideo && heroPoster) {
 
             leftPoints.forEach(p => makePointAnim(p, { y: 30 }));
             rightPoints.forEach(p => makePointAnim(p, { y: 30 }));
-
             console.log('[BENEFÍCIOS] Animações individuais configuradas com sucesso!');
         } else {
             console.warn('[BENEFÍCIOS] Elementos da comparação não encontrados.');
-            console.warn('Left points:', leftPoints.length, 'Right points:', rightPoints.length, 'Module:', !!comparisonModule);
         }
-
-    } else {
-        console.log('[BENEFÍCIOS] Seção #beneficios não encontrada.');
     }
 
 
@@ -1358,13 +1343,18 @@ if (heroVideo && heroPoster) {
         console.log('[COMO USAR] Seção horizontal não encontrada.');
     }
 
-    // 4. Refresh final de segurança
+    // 4. Após montar seções com pin, iniciamos reveals e benefícios, depois refresh geral
+    try {
+        initBenefitsAnimations();
+        initTextAnimations();
+    } catch(e) { console.error('[BOOT] Erro ao iniciar reveals:', e); }
+
     setTimeout(() => {
         if (window.ScrollTrigger) {
             console.log('✅ Forçando refresh final do ScrollTrigger.');
             ScrollTrigger.refresh();
         }
-    }, 500);
+    }, 200);
 
     
     
