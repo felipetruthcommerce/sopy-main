@@ -941,11 +941,14 @@ body.theme-aqua .capsule-3d-cta {
 .benefit-title h2 {
   font-size: clamp(2.5rem, 8vw, 6rem);
   font-weight: 700;
-  line-height: 1.1;
+  line-height: 1.3; /* Aumentado para não cortar caracteres */
   color: #ffffff;
   text-align: center;
   margin: 0;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  white-space: nowrap; /* Força uma linha só */
+  overflow: visible; /* Garante que não seja cortado */
+  padding: 0.2em 0; /* Espaço extra para caracteres com acentos */
 }
 
 /* Positioning for each title - with increased spacing */
@@ -987,7 +990,9 @@ body.theme-citrus .benefit-title h2 {
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .benefit-title h2 {
-    font-size: clamp(2.2rem, 8vw, 4rem); /* increased from 1.8rem-3rem to 2.2rem-4rem */
+    font-size: clamp(1.8rem, 6vw, 3.5rem); /* Reduzido para caber em uma linha no mobile */
+    white-space: nowrap; /* Força uma linha só no mobile também */
+    overflow: visible;
   }
   
   .benefit-1 {
