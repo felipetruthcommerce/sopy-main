@@ -785,39 +785,31 @@ if (heroVideo && heroPoster) {
         if (!benefitsSection) return;
         console.log('[BENEFÍCIOS] Seção encontrada. Inicializando comparação interativa...');
 
-        const leftPoints = gsap.utils.toArray('.column-old-way .comparison-point');
-        const rightPoints = gsap.utils.toArray('.column-sopy-way .comparison-point');
-        const comparisonModule = document.querySelector('#comparison-module');
+        // Clean Slate pinned timeline
+        const pinned = benefitsSection.querySelector('.pinned-container');
+        const wave = benefitsSection.querySelector('.green-wave');
+        const cardOld = benefitsSection.querySelector('.card-old-way');
+        const cardSopy = benefitsSection.querySelector('.card-sopy-way');
 
-        console.log('[BENEFÍCIOS] Debug - Left points:', leftPoints.length);
-        console.log('[BENEFÍCIOS] Debug - Right points:', rightPoints.length);
-        console.log('[BENEFÍCIOS] Debug - Comparison module:', comparisonModule);
+        if (pinned && wave && cardOld && cardSopy) {
+            const tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: benefitsSection,
+                    pin: pinned,
+                    scrub: 1.2,
+                    start: 'top top',
+                    end: '+=2500'
+                }
+            });
 
-        if (leftPoints.length && rightPoints.length && comparisonModule) {
-            // Animação por elemento: dispara ao entrar na viewport
-            const makePointAnim = (el, opts = {}) => {
-                gsap.from(el, {
-                    opacity: 0,
-                    y: opts.y ?? 30,
-                    x: opts.x ?? 0,
-                    duration: 0.6,
-                    ease: 'power2.out',
-                    immediateRender: false,
-                    scrollTrigger: {
-                        trigger: el,
-                        start: 'top 85%',
-                        end: 'top 60%',
-                        toggleActions: 'play none none reverse',
-                        markers: false
-                    }
-                });
-            };
+            tl.to(wave, { xPercent: 100, transform: 'translateX(0%)', ease: 'none' })
+              .to(cardOld, { opacity: 0, scale: 0.9, ease: 'power1.in' }, '<0.2')
+              .to(cardSopy, { opacity: 1, ease: 'power2.out' }, '>-0.5')
+              .to({}, { duration: 0.2 });
 
-            leftPoints.forEach(p => makePointAnim(p, { y: 30 }));
-            rightPoints.forEach(p => makePointAnim(p, { y: 30 }));
-            console.log('[BENEFÍCIOS] Animações individuais configuradas com sucesso!');
+            console.log('[BENEFÍCIOS] Clean Slate timeline criada.');
         } else {
-            console.warn('[BENEFÍCIOS] Elementos da comparação não encontrados.');
+            console.warn('[BENEFÍCIOS] Estrutura Clean Slate incompleta.');
         }
     }
 

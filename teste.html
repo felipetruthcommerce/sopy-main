@@ -1,599 +1,164 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <main>
-      <section id="hero" class="sopy-hero sopy-section--full">
-        <!-- Vídeo que será revelado pelo circle-reveal -->
-        <div class="sopy-hero-media">
-          <video id="heroVideo" class="sopy-hero-video" autoplay muted playsinline preload="auto">
-            <!-- Quando tiver uma versão WebM otimizada, adicione como primeira source -->
-            <!-- <source src="assets/videos/hero.webm" type="video/webm" ../> -->
-            <source src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/hero.mp4" type="video/mp4" />
-          </video><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protótipo de Botões CTA - Sopy</title>
+    <title>Sopy - Clean Slate (Versão Final com Respiro)</title>
+
     <style>
-        /* --- ESTILOS GERAIS E SETUP --- */
         :root {
-            --cor-principal: #00A86B; /* Verde Sopy */
-            --cor-texto: #FFFFFF;
-            --cor-fundo-hero: #1a1a1a;
-            --cor-fundo-next: #f0f0f0;
+            --cor-fundo-inicial: #f0f2f5;
+            --cor-fundo-sopy: #1A4731;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            /* ESSA LINHA É A MÁGICA PARA A ROLAGEM SUAVE DO BOTÃO GUIA */
-            scroll-behavior: smooth;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #e9e9e9;
-        }
-
-        /* --- SEÇÃO HERO (VÍDEO) --- */
-        #hero {
-            height: 100vh; /* Ocupa 100% da altura da tela */
-            background-color: var(--cor-fundo-hero);
-            color: var(--cor-texto);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            position: relative; /* Necessário para posicionar o botão guia dentro dele */
-        }
-
-        /* --- BOTÃO GUIA (PARA ROLAR A PÁGINA) --- */
-        .scroll-prompt {
-            position: absolute;
-            bottom: 40px; /* Distância da parte de baixo */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-        }
-
-        .scroll-prompt a {
-            color: var(--cor-texto);
-            border: 2px solid var(--cor-texto);
-            padding: 12px 24px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .scroll-prompt a:hover {
-            background-color: var(--cor-texto);
-            color: var(--cor-fundo-hero);
-        }
-
-        /* --- SEÇÃO SEGUINTE (PARA ONDE O BOTÃO GUIA LEVA) --- */
-        #next-section {
-            height: 100vh;
-            background-color: var(--cor-fundo-next);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--cor-fundo-sopy); 
+            margin: 0; 
             color: #333;
         }
-        
-        /* --- CONTEÚDO EXTRA PARA PERMITIR ROLAGEM LONGA --- */
-        main {
-            padding: 50px;
-            line-height: 1.6;
-            color: #333;
+        .placeholder { 
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center;
+            background-color: var(--cor-fundo-inicial);
         }
-
-        /* --- BOTÃO FLUTUANTE (STICKY CTA) --- */
-        .sticky-cta {
-            position: fixed; /* A MÁGICA PARA ELE FICAR FIXO NA TELA */
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            
-            /* Animação e estado inicial (invisível) */
-            opacity: 0;
-            transform: translateY(20px); /* Começa um pouco para baixo */
-            visibility: hidden;
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s;
+        #clean-slate-section { 
+            height: 250vh; /* Aumentamos um pouco a "pista" para dar mais tempo de respiro */
+            background-color: var(--cor-fundo-inicial); 
+            position: relative; 
         }
-
-        /* Estado VISÍVEL do botão flutuante */
-        .sticky-cta.visible {
-            opacity: 1;
-            transform: translateY(0);
-            visibility: visible;
+        .pinned-container { 
+            width: 100%; 
+            height: 100vh; 
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
         }
-
-        .sticky-cta a {
-            display: block;
-            background-color: var(--cor-principal);
-            color: var(--cor-texto);
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1rem;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
+        .green-wave { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: var(--cor-fundo-sopy); 
+            transform: translateX(-100%); 
+            z-index: 1; 
         }
-
-        .sticky-cta a:hover {
-            transform: scale(1.05); /* Efeito de crescimento sutil */
+        .card { 
+            width: 90%; 
+            max-width: 550px;
+            padding: 3rem;
+            border-radius: 32px;
+            position: absolute; 
+            z-index: 5; 
+            transform: translate(-50%, -50%); 
+            left: 50%; 
+            top: 50%;
         }
-        
-        /* --- ESTILOS PARA CELULAR (RESPONSIVO) --- */
-        @media (max-width: 768px) {
-            .sticky-cta {
-                /* Transforma em uma barra no rodapé */
-                left: 0;
-                right: 0;
-                bottom: 0;
-                width: 100%;
-            }
-
-            .sticky-cta a {
-                border-radius: 0; /* Remove o arredondamento para a barra */
-                text-align: center;
-                padding: 20px;
-                box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
-            }
-            .sticky-cta a:hover {
-                transform: scale(1); /* Desativa o hover no mobile */
-            }
+        .card-old-way { 
+            background-color: #fff; 
+            border: 1px solid #ddd; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
-
+        .card-sopy-way { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            color: #FFF; 
+            opacity: 0; 
+        }
+        .card h3 { 
+            font-size: 2.2rem;
+            margin-top: 0;
+            margin-bottom: 2rem;
+        }
+        .card p { 
+            font-size: 1.1rem;
+            line-height: 1.6; 
+            color: #555;
+        }
+        .card-sopy-way p, .card-sopy-way h3 {
+            color: #FFF;
+        }
+        .card img { 
+            width: 100%; 
+            border-radius: 16px; 
+            margin-bottom: 2rem;
+        }
     </style>
 </head>
 <body>
 
-    <header id="hero">
-        <h1>[ Seu Vídeo Principal Aqui ]</h1>
+    <div class="placeholder"><h1>Role para baixo</h1></div>
 
-        <div class="scroll-prompt">
-            <a href="#next-section">Veja como funciona ↓</a>
+    <section id="clean-slate-section">
+        <div class="pinned-container">
+            <div class="green-wave"></div>
+            <div class="card card-old-way">
+                <img src="https://placehold.co/600x400/e0e0e0/444444?text=Antes" alt="Método antigo">
+                <h3>Sabão em Pó & Líquido</h3>
+                <p>O método tradicional que suja, exige medição, desperdiça produto e ocupa um espaço precioso na sua lavanderia com embalagens grandes e pesadas.</p>
+            </div>
+            <div class="card card-sopy-way">
+                <img src="https://placehold.co/600x400/1A4731/FFFFFF?text=Depois" alt="Método Sopy">
+                <h3>Cápsulas Sopy</h3>
+                <p>A revolução da lavagem. Uma cápsula com a dose perfeita de detergente superconcentrado que dissolve 100%, limpa profundamente e protege as cores. Sem sujeira, sem desperdício e com 70% menos plástico.</p>
+            </div>
         </div>
-    </header>
-
-    <section id="next-section">
-        <h2>Próxima Seção (Queda da Cápsula)</h2>
     </section>
-    
-    <main>
-        <h2>Mais Conteúdo do Site</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-        <p>Curabitur pretium tincidunt lacus. Nulla gravida orci a odio. Nullam varius, turpis et commodo pharetra, est eros bibendum elit, nec luctus magna felis sollicitudin mauris. Integer in mauris eu nibh euismod gravida. Duis ac tellus et risus vulputate vehicula. Donec lobortis risus a elit. Etiam tempor. Ut ullamcorper, ligula eu tempor congue, eros est euismod turpis, id tincidunt sapien risus a quam. Maecenas fermentum consequat mi. Donec fermentum. Pellentesque malesuada nulla a mi. Duis sapien sem, aliquet nec, commodo eget, consequat quis, neque. Aliquam faucibus, elit ut dictum aliquet, felis nisl adipiscing sapien, sed malesuada diam lacus eget erat. Cras mollis scelerisque nunc. Nullam arcu. Aliquam consequat.</p>
-        <p>Vivamus consequat, felis ut suscipit laoreet, purus libero egestas enim, et euismod sem purus ac dolor. Proin enim felis, ultrices eget, laoreet ut, laoreet et, elit. Curabitur sed enim. Nam quis nulla. Integer malesuada. In in enim a arcu imperdiet malesuada. Sed vel lectus. Donec odio urna, tempus molestie, porttitor ut, iaculis quis, sem. Phasellus rhoncus. Aenean id metus id velit ullamcorper pulvinar. Vestibulum fermentum tortor id mi. Pellentesque ipsum. Nulla ac enim. In tempor. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In scelerisque scelerisque arcu. Sed sit amet elit. In id felis. Aliquam erat volutpat.</p>
-    </main>
 
-    <div class="sticky-cta" id="sticky-cta-button">
-        <a href="#pagina-de-compra">COMPRE AGORA</a>
-    </div>
+    <div class="placeholder" style="background-color: var(--cor-fundo-sopy); color: #fff;"><h1>Fim da Animação</h1></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
 
     <script>
-        // --- JAVASCRIPT PARA CONTROLAR A VISIBILIDADE DO BOTÃO FLUTUANTE ---
+        gsap.registerPlugin(ScrollTrigger);
 
-        // Seleciona os elementos que vamos observar
-        const heroSection = document.getElementById('hero');
-        const stickyButton = document.getElementById('sticky-cta-button');
+        const lenis = new Lenis();
+        lenis.on('scroll', ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+        
+        const cleanSlateTimeline = gsap.timeline({
+            scrollTrigger: {
+                trigger: "#clean-slate-section",
+                pin: ".pinned-container",
+                scrub: 1.2,
+                start: "top top",
+                end: "+=2500" // Aumentamos a "pista" para o respiro ser mais longo
+            }
+        });
 
-        // Configurações do "Observador". Ele vai observar a seção Hero.
-        // O threshold: 0 significa que a função será chamada assim que 
-        // a Hero Section começar a sair da tela.
-        const observerOptions = {
-            root: null, // Observa em relação à viewport
-            threshold: 0,
-            rootMargin: "-100px" // Adiciona uma margem para o botão aparecer um pouco depois que a rolagem começa
-        };
+        cleanSlateTimeline
+            .to(".green-wave", { 
+                transform: "translateX(0%)", 
+                ease: "none"
+            })
+            .to(".card-old-way", {
+                opacity: 0,
+                scale: 0.9,
+                ease: "power1.in"
+            }, "<0.2")
+            .to(".card-sopy-way", {
+                opacity: 1,
+                ease: "power2.out"
+            }, ">-0.5")
 
-        // Cria o observador
-        const heroObserver = new IntersectionObserver(function(entries, observer) {
-            entries.forEach(entry => {
-                // Se a 'entry' (a hero section) NÃO estiver mais visível na tela...
-                if (!entry.isIntersecting) {
-                    // ...adiciona a classe 'visible' ao botão para fazê-lo aparecer.
-                    stickyButton.classList.add('visible');
-                } else {
-                    // ...caso contrário (se a hero voltar a ser visível), remove a classe.
-                    stickyButton.classList.remove('visible');
-                }
-            });
-        }, observerOptions);
-
-        // Inicia a observação da seção Hero
-        heroObserver.observe(heroSection);
+            // --- A SOLUÇÃO ESTÁ AQUI ---
+            // Adicionamos uma "pausa" ou "respiro" no final da timeline.
+            // A duração aqui é relativa. Um valor de 1 significa que ele vai ocupar
+            // uma porção significativa do tempo total da timeline sem fazer nada.
+            .to({}, { duration: 0.2 });
 
     </script>
 </body>
 </html>
-          <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader -->
-          <img class="sopy-hero-poster" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg" alt="" aria-hidden="true" />
-        </div>
-
-        <div class="sopy-hero-content">
-          <h1>
-            LIMPEZA PODEROSA. <br>ZERO ESFORÇO.
-          </h1>
-
-        </div>
-
-        <!-- CTA no estilo pedido, centralizado no rodapé da hero -->
-        <div class="hero-cta-prompt">
-          <a href="/comprar.html" class="sopy-btn sopy-hero-cta" aria-label="Comprar agora">
-            COMPRE AGORA
-          </a>
-        </div>
-
-      </section>
-
-      <!-- ===================== SEÇÃO 3D (PIN) ===================== -->
-      <section id="capsula-3d" class="sopy-capsule3d sopy-section--full" aria-label="Cápsula 3D interativa">
-        <!-- Canvas Three.js será injetado aqui -->
-        <div id="three-container"></div>
-
-        <!-- Título posicionado sobre o objeto 3D -->
-        <div class="sopy-capsule3d-title-over">
-          <h2>Tecnologia que dissolve 100%</h2>
-        </div>
-
-        <!-- Bloco de produto que aparece/alinhará ao final da seção 3D -->
-        <div class="capsule-3d-cta" aria-hidden="true">
-          <div class="capsule-3d-cta-inner">
-            <h3 class="product-title" data-aqua="AQUA BLU" data-citrus="CITRUS LUSH">CITRUS LUSH</h3>
-            <p class="product-price" data-aqua="R$ 120,00" data-citrus="R$ 120,00">R$ 120,00</p>
-            <p class="product-copy" data-aqua="Cápsulas ultra concentradas com enzimas que dissolvem 100% e protegem as fibras. Para todas as máquinas." data-citrus="Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
-            <button class="sopy-btn sopy-product-cta" data-aqua="EXPLORE AQUA BLU" data-citrus="EXPLORE CITRUS LUSH">EXPLORE CITRUS LUSH</button>
-          </div>
-        </div>
-        <!-- decorative bubbles container: created by JS -->
-        <div class="sopy-capsule-bubbles" aria-hidden="true"></div>
-      </section>
-
-      <!-- ===================== SUSTENTABILIDADE (Parallax - estrutura do template) ===================== -->
-      <div id="sustentabilidade" class="scroll-container sustainability-parallax">
-        <section class="fullscreen-panel intro-panel">
-          <div>
-            <h1>SUSTENTABILIDADE</h1>
-            <p>Nossa tecnologia ecológica para um futuro mais limpo</p>
-          </div>
-        </section>
-
-        <section class="fullscreen-panel" data-layout="left-image">
-          <div class="panel-content">
-            <div class="image-column">
-              <div class="image-wrapper">
-                <video src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/video-praia.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-              </div>
-            </div>
-            <div class="text-column">
-              <h2>Menos Plástico</h2>
-              <p>Nossas embalagens usam 70% menos plástico que produtos comuns, reduzindo significativamente o impacto ambiental e a poluição dos oceanos.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="fullscreen-panel" data-layout="right-image">
-          <div class="panel-content">
-            <div class="image-column">
-              <div class="image-wrapper">
-                <video src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/video-riacho.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-
-              </div>
-            </div>
-            <div class="text-column">
-              <h2>100% Biodegradável</h2>
-              <p>Desenvolvemos uma fórmula completamente biodegradável que não deixa resíduos químicos prejudiciais após o uso, protegendo nossos ecossistemas.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="fullscreen-panel" data-layout="left-image">
-          <div class="panel-content">
-            <div class="image-column">
-              <div class="image-wrapper">
-                <video src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/video-coelho.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
-
-              </div>
-            </div>
-            <div class="text-column">
-              <h2>Vegan & Cruelty Free</h2>
-              <p>Produtos 100% veganos e livres de testes em animais, certificados internacionalmente e desenvolvidos com ingredientes de origem ética.</p>
-            </div>
-          </div>
-        </section>
-          
-        <section class="fullscreen-panel" data-layout="right-image">
-          <div class="panel-content">
-            <div class="image-column">
-              <div class="image-wrapper">
-                <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/casa.jpg" alt="Família usando produtos seguros">
-              </div>
-            </div>
-            <div class="text-column">
-              <h2>Segurança Familiar</h2>
-              <p>Segurança garantida para toda a família, incluindo crianças e bebês. Fórmula hipoalergênica e testada dermatologicamente para os mais sensíveis.</p>
-            </div>
-          </div>
-        </section>
-      </div>
-
-
-      <!-- ===================== COMO USAR ===================== -->
-        <section class="sopy-how-section">
-        <h2 class="sopy-how-title" aria-hidden="false">TRES PASSOS. SÓ POR NA MAQUINA</h2>
-        
-        <!-- Mobile Stack Slider -->
-        <div class="sopy-how-stack">
-          <div class="sopy-how-mobile-card">
-            <div class="sopy-how-card">
-              <div class="sopy-how-step-number">01</div>
-              <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
-            </div>
-          </div>
-          <div class="sopy-how-mobile-card">
-            <div class="sopy-how-card">
-              <div class="sopy-how-step-number">02</div>
-              <p>Coloque direto no tambor, antes das roupas.</p>
-            </div>
-          </div>
-          <div class="sopy-how-mobile-card">
-            <div class="sopy-how-card">
-              <div class="sopy-how-step-number">03</div>
-              <p>Inicie o ciclo — a cápsula dissolve 100%</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="sopy-how-track">
-          <div class="sopy-how-background-text">TRES PASSOS. SÓ POR NA MAQUINA</div>
-
-          <div class="sopy-how-panel">
-            <div class="sopy-how-card">
-              <div class="sopy-how-step-number">01</div>
-              <p>Pegue 1 cápsula (2 para cargas grandes/alta sujeira).</p>
-            </div>
-          </div>
-          <div class="sopy-how-panel">
-            <div class="sopy-how-card">
-              <div class="sopy-how-step-number">02</div>
-              <p>Coloque direto no tambor, antes das roupas.</p>
-            </div>
-          </div>
-          <div class="sopy-how-panel">
-            <div class="sopy-how-card">
-              <div class="sopy-how-step-number">03</div>
-              <p>Inicie o ciclo — a cápsula dissolve 100%</p>
-            </div>
-          </div>
-        </div>
-        <div class="sopy-how-progress">
-          <div class="sopy-how-progress-dot"></div>
-          <div class="sopy-how-progress-dot"></div>
-          <div class="sopy-how-progress-dot"></div>
-        </div>
-        </section>
-
-
-  <!-- ===================== BENEFÍCIOS ===================== -->
-    <section id="beneficios" class="sopy-benefits-section sopy-section">
-    <header class="sopy-section-header">
-        <h2>Resultados que você vê e sente</h2>
-        <p>A tecnologia Sopy em cada cápsula.</p>
-    </header>
-  <div class="sopy-benefits-grid">
-    <div class="sopy-benefits-col">
-      <div class="sopy-benefits-card">
-        <div class="sopy-benefits-card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
-                        <path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"/><path d="M20 2v4"/><path d="M22 4h-4"/><circle cx="4" cy="20" r="2"/>
-                    </svg>
-          <h3 class="sopy-benefits-card-title">Remove Manchas Profundas</h3>
-          <p class="sopy-benefits-card-label">PODER DAS ENZIMAS</p>
-                </div>
-        <div class="sopy-benefits-card-blob"></div>
-            </div>
-      <div class="sopy-benefits-card">
-        <div class="sopy-benefits-card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
-                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
-                    </svg>
-          <h3 class="sopy-benefits-card-title">Cores Vibrantes por Mais Tempo</h3>
-          <p class="sopy-benefits-card-label">PROTEÇÃO DAS FIBRAS</p>
-                </div>
-        <div class="sopy-benefits-card-blob"></div>
-            </div>
-        </div>
-    <div class="sopy-benefits-col">
-      <div class="sopy-benefits-card">
-        <div class="sopy-benefits-card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
-                        <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/>
-                    </svg>
-          <h3 class="sopy-benefits-card-title">Tudo em Uma Cápsula</h3>
-          <p class="sopy-benefits-card-label">PRATICIDADE</p>
-                </div>
-        <div class="sopy-benefits-card-blob"></div>
-            </div>
-      <div class="sopy-benefits-card">
-        <div class="sopy-benefits-card-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="sopy-benefits-card-icon">
-                        <path d="m10 20-1.25-2.5L6 18"/><path d="M10 4 8.75 6.5 6 6"/><path d="m14 20 1.25-2.5L18 18"/><path d="m14 4 1.25 2.5L18 6"/><path d="m17 21-3-6h-4"/><path d="m17 3-3 6 1.5 3"/><path d="M2 12h6.5L10 9"/><path d="m20 10-1.5 2 1.5 2"/><path d="M22 12h-6.5L14 15"/><path d="m4 10 1.5 2L4 14"/><path d="m7 21 3-6-1.5-3"/><path d="m7 3 3 6h4"/>
-                    </svg>
-          <h3 class="sopy-benefits-card-title">Para Todas as Máquinas</h3>
-          <p class="sopy-benefits-card-label">ÁGUA FRIA E QUENTE</p>
-                </div>
-        <div class="sopy-benefits-card-blob"></div>
-            </div>
-        </div>
-    </div>
-</section>
-    
-      
-      <!-- ===================== DEPOIMENTOS (tc-testimonials) ===================== -->
-      <section id="testemunhos" class="tc-testimonials" aria-label="Depoimentos de clientes">
-    <div class="tc-wrap">
-        <div class="tc-left">
-            <h2 class="tc-title">Clientes que amam a Sopy</h2>
-            <p class="tc-sub">Veja o que a galera diz sobre praticidade, perfume e resultado. Depoimentos reais de quem já usa no dia a dia.</p>
-            <div class="tc-cta">
-                <a href="/comprar.html" class="sopy-tc-btn sopy-tc-btn--primary">Comprar agora</a>
-                <a href="#beneficios" class="sopy-tc-btn sopy-tc-btn--ghost">Ver benefícios</a>
-            </div>
-        </div>
-
-        <div class="tc-right">
-            <div class="tc-testimonials-track">
-
-                <div class="tc-testimonial-card">
-                    <article class="tc-card" aria-live="polite">
-                        <div class="tc-quoteMark" aria-hidden="true">“</div>
-                        <p class="tc-quote">Simplificou minha vida. Jogo a cápsula e pronto! O cheiro que fica na roupa é maravilhoso.</p>
-                        <footer class="tc-cardFoot">
-                            <div class="tc-author">
-                                <img class="tc-avatar" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/avatar1.jpg" alt="Marina A." />
-                                <div>
-                                    <span class="tc-name">Marina A.</span>
-                                    <span class="tc-role">São Paulo, SP</span>
-                                </div>
-                            </div>
-                        </footer>
-                    </article>
-                </div>
-
-                <div class="tc-testimonial-card">
-                    <article class="tc-card" aria-live="polite">
-                        <div class="tc-quoteMark" aria-hidden="true">“</div>
-                        <p class="tc-quote">Muito prático! Acabou a bagunça de sabão em pó pela lavanderia. Recomendo demais!</p>
-                        <footer class="tc-cardFoot">
-                            <div class="tc-author">
-                                <img class="tc-avatar" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/avatar2.jpg" alt="Rafael P." />
-                                <div>
-                                    <span class="tc-name">Rafael P.</span>
-                                    <span class="tc-role">Curitiba, PR</span>
-                                </div>
-                            </div>
-                        </footer>
-                    </article>
-                </div>
-
-                <div class="tc-testimonial-card">
-                    <article class="tc-card" aria-live="polite">
-                        <div class="tc-quoteMark" aria-hidden="true">“</div>
-                        <p class="tc-quote">Perfume ótimo e a roupa fica super limpa, mesmo no ciclo rápido da máquina. Vale muito a pena!</p>
-                        <footer class="tc-cardFoot">
-                            <div class="tc-author">
-                                <img class="tc-avatar" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/avatar3.jpg" alt="Bia L." />
-                                <div>
-                                    <span class="tc-name">Bia L.</span>
-                                    <span class="tc-role">Brasília, DF</span>
-                                </div>
-                            </div>
-                        </footer>
-                    </article>
-                </div>
-
-            </div> <div class="tc-testimonials-dots" role="tablist" aria-label="Páginas de depoimentos">
-                <button class="tc-dot" type="button" aria-label="Depoimento 1"></button>
-                <button class="tc-dot" type="button" aria-label="Depoimento 2"></button>
-                <button class="tc-dot" type="button" aria-label="Depoimento 3"></button>
-            </div>
-        </div>
-    </div>
-</section>
-
-      <!-- ===================== FAQ ===================== -->
-      <section id="faq" class="sopy-faq sopy-section"  aria-label="Perguntas frequentes">
-        <header class="sopy-section-header">
-          <h2>Perguntas frequentes</h2>
-        </header>
-
-        <section class="sopy-faq-accordion" id="faq-q1">
-          <h3 class="sopy-title"><a href="#faq-q1">Funciona em água fria?</a></h3>
-          <div class="sopy-content">
-            <div class="sopy-wrapper">
-              <p>Sim. A fórmula foi pensada para atuar em todas as temperaturas.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="sopy-faq-accordion" id="faq-q2">
-          <h3 class="sopy-title"><a href="#faq-q2">Posso usar com roupas de bebê?</a></h3>
-          <div class="sopy-content">
-            <div class="sopy-wrapper">
-              <p>Sim. Siga o ciclo indicado pelo fabricante da máquina e da roupa.</p>
-            </div>
-          </div>
-        </section>
-
-        <section class="sopy-faq-accordion" id="faq-q3">
-          <h3 class="sopy-title"><a href="#faq-q3">Dissolve no ciclo rápido?</a></h3>
-          <div class="sopy-content">
-            <div class="sopy-wrapper">
-              <p>Sim, a película é hidrossolúvel e dissolve completamente.</p>
-            </div>
-          </div>
-        </section>
-      </section>
-
-    <div class="product-toggle-container">
-      <input type="checkbox" id="product-toggle" class="pod-toggle-checkbox">
-      <label for="product-toggle" class="pod-toggle-label">
-        <div class="pod-toggle-handle">
-          <div class="pod-image-wrapper">
-            <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-verde.png" alt="Produto Verde" class="pod-image green">
-            <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-azul.png" alt="Produto Azul" class="pod-image blue">
-          </div>
-        </div>
-      </label>
-    </div>
-
-
-    <!-- ========== LIBS: GSAP + PLUGINS ========== -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
-    <!-- SplitText - versão mais confiável -->
-    <script src="https://unpkg.com/split-type"></script>
-
-    <!-- ========== LENIS (scroll suave) ========== -->
-    <script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
-
-    <!-- ========== THREE.JS + GLTFLoader (para a cápsula 3D) ========== -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-    <!-- Loader para HDRI (necessário para as bolhas 3D) -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
-
-    <script src="script.js"></script>
-
-    </main>
-
-
-
-
-
-
-
-
-    
-</body>
-</html>
-
-
