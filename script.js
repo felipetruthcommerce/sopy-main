@@ -803,29 +803,12 @@ if (heroVideo && heroPoster) {
                     y: 40,
                     stagger: 0.2 // Aparecem um após o outro
                 })
-                // Animação 2: Efeito de brilho/limpeza no card Sopy
-                .fromTo(sopyCard, 
-                    { 
-                        '--shine-x': '-150%'
-                    },
-                    { 
-                        '--shine-x': '150%',
-                        ease: 'power1.inOut',
-                        onUpdate: function() {
-                            // Anima o pseudo-elemento via transform
-                            const progress = this.progress();
-                            const translateX = -150 + (progress * 300); // -150% to 150%
-                            sopyCard.style.setProperty('--shine-transform', `skewX(-25deg) translateX(${translateX}%)`);
-                        }
-                    },
-                    "<" // Inicia ao mesmo tempo que a animação anterior
-                )
-                // Animação 3: Pontos da direita (aparecem com um efeito mais dinâmico)
+                // Animação 2: Pontos da direita (aparecem com um efeito mais dinâmico)
                 .from(rightPoints, {
                     opacity: 0,
                     x: -40, // Vêm da esquerda para a direita
                     stagger: 0.2
-                }, "<0.1"); // Inicia um pouco depois (0.1s) do início das outras animações
+                }, "<0.1"); // Inicia um pouco depois (0.1s) do início da animação anterior
 
             console.log('[BENEFÍCIOS] Animação de comparação configurada com sucesso!');
         } else {

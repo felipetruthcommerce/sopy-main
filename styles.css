@@ -296,23 +296,9 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     overflow: hidden;
 }
 
-/* Gradiente temático de fundo */
-#beneficios::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(135deg, var(--brand, #5FD97E) 0%, var(--brand-2, #91D9A3) 100%);
-    z-index: 0;
-}
-
 #beneficios .section-title {
     text-align: center;
     padding: 6rem 1rem 4rem 1rem;
-    position: relative;
-    z-index: 1;
 }
 
 #beneficios .section-title h2 {
@@ -320,8 +306,8 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     text-transform: uppercase;
     font-weight: 800;
     margin: 0;
-    color: #ffffff;
-    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
+    color: #000000;
+    text-shadow: none;
 }
 
 #beneficios #comparison-module {
@@ -331,8 +317,6 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     gap: 3rem;
     max-width: 1440px;
     margin: 0 auto;
-    position: relative;
-    z-index: 1;
 }
 
 #beneficios .comparison-column {
