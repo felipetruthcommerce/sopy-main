@@ -776,21 +776,21 @@ if (heroVideo && heroPoster) {
     });
 
     // ===================================
-    //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION
+    //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION (SEM PIN)
     // ===================================
     function initBenefitsAnimations(){
         // Verificação de dependências
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
         
-        console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation...');
+        console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation (sem pin)...');
         
         const cleanSlateTimeline = gsap.timeline({
             scrollTrigger: {
                 trigger: "#clean-slate-section",
-                pin: ".pinned-container",
+                start: "top 80%",
+                end: "bottom 20%",
                 scrub: 1.2,
-                start: "top top",
-                end: "+=2500" // Aumentamos a "pista" para o respiro ser mais longo
+                // Sem pin - a seção rola normalmente
             }
         });
 
@@ -807,15 +807,9 @@ if (heroVideo && heroPoster) {
             .to(".card-sopy-way", {
                 opacity: 1,
                 ease: "power2.out"
-            }, ">-0.5")
+            }, ">-0.5");
 
-            // --- A SOLUÇÃO ESTÁ AQUI ---
-            // Adicionamos uma "pausa" ou "respiro" no final da timeline.
-            // A duração aqui é relativa. Um valor de 1 significa que ele vai ocupar
-            // uma porção significativa do tempo total da timeline sem fazer nada.
-            .to({}, { duration: 0.2 });
-
-        console.log('[BENEFÍCIOS] Clean Slate Timeline configurada com sucesso!');
+        console.log('[BENEFÍCIOS] Clean Slate Timeline (sem pin) configurada com sucesso!');
     }
 
 
