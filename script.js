@@ -547,6 +547,13 @@ new THREE.RGBELoader()
 function bootAnimations() {
     console.log('Iniciando reconstrução das animações...');
 
+    // One-time guard to prevent double initialization
+    if (window.__sopyBooted) {
+        console.warn('[BOOT] bootAnimations já executado. Abortando nova inicialização.');
+        return;
+    }
+    window.__sopyBooted = true;
+
         console.log('[TEMA] Aplicando tema inicial (apenas se não houver tema)');
     if (!document.body.classList.contains('theme-aqua') && !document.body.classList.contains('theme-citrus')) {
         document.body.classList.add("theme-citrus");
@@ -1382,3 +1389,24 @@ if (heroVideo && heroPoster) {
     
     
 } // Fim da função bootAnimations
+
+// Auto-bootstrap: garante que as animações iniciem assim que o DOM estiver pronto
+(() => {
+    const start = () => {
+        try {
+            bootAnimations();
+        } catch (e) {
+            console.error('[BOOT] Erro ao iniciar animações:', e);
+        }
+    };
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        // Pequeno delay para garantir que libs de CDN e estilos estejam aplicados
+        setTimeout(start, 0);
+    } else {
+        document.addEventListener('DOMContentLoaded', start, { once: true });
+    }
+    // fallback: se algo atrasar os CDNs, tenta também no load
+    window.addEventListener('load', () => {
+        if (!window.__sopyBooted) start();
+    });
+})();
