@@ -807,46 +807,29 @@ if (heroVideo && heroPoster) {
         console.log('[BENEFÍCIOS] Debug - Comparison module:', comparisonModule);
 
         if (leftPoints.length && rightPoints.length && comparisonModule) {
-            // Define estado inicial dos elementos (invisíveis)
-            gsap.set([...leftPoints, ...rightPoints], {
-                opacity: 0,
-                y: 30
-            });
-
-            // Cria a timeline principal que será controlada pelo scroll
-            const comparisonScrubTl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: comparisonModule,
-                    start: "top 70%",
-                    end: "bottom 20%",
-                    scrub: 0.5,
-                    markers: false, // Mude para true para ver os marcadores de debug
-                    onUpdate: (self) => {
-                        console.log('[BENEFÍCIOS] ScrollTrigger progress:', self.progress);
+            // Animação por elemento: dispara ao entrar na viewport (robusto com diferentes alturas)
+            const makePointAnim = (el, opts = {}) => {
+                gsap.from(el, {
+                    opacity: 0,
+                    y: opts.y ?? 30,
+                    x: opts.x ?? 0,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    immediateRender: false,
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        end: 'top 60%',
+                        toggleActions: 'play none none reverse',
+                        markers: false
                     }
-                }
-            });
+                });
+            };
 
-            // Adiciona as animações à timeline
-            comparisonScrubTl
-                // Animação 1: Pontos da esquerda
-                .to(leftPoints, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    stagger: 0.1,
-                    ease: "power2.out"
-                })
-                // Animação 2: Pontos da direita
-                .to(rightPoints, {
-                    opacity: 1,
-                    y: 0,
-                    duration: 1,
-                    stagger: 0.1,
-                    ease: "power2.out"
-                }, "-=0.5"); // Overlap com a animação anterior
+            leftPoints.forEach(p => makePointAnim(p, { y: 30 }));
+            rightPoints.forEach(p => makePointAnim(p, { y: 30 }));
 
-            console.log('[BENEFÍCIOS] Animação de comparação configurada com sucesso!');
+            console.log('[BENEFÍCIOS] Animações individuais configuradas com sucesso!');
         } else {
             console.warn('[BENEFÍCIOS] Elementos da comparação não encontrados.');
             console.warn('Left points:', leftPoints.length, 'Right points:', rightPoints.length, 'Module:', !!comparisonModule);
