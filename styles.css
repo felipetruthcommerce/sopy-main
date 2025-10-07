@@ -290,9 +290,29 @@ p[class*="split"], .sopy-section-header[class*="split"] {
 }
 
 /* ===================== NOVA SEÇÃO DE COMPARAÇÃO INTERATIVA ===================== */
+#beneficios {
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gradiente temático de fundo */
+#beneficios::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(135deg, var(--brand, #5FD97E) 0%, var(--brand-2, #91D9A3) 100%);
+    z-index: 0;
+}
+
 #beneficios .section-title {
     text-align: center;
     padding: 6rem 1rem 4rem 1rem;
+    position: relative;
+    z-index: 1;
 }
 
 #beneficios .section-title h2 {
@@ -300,7 +320,8 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     text-transform: uppercase;
     font-weight: 800;
     margin: 0;
-    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 #beneficios #comparison-module {
@@ -310,22 +331,39 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     gap: 3rem;
     max-width: 1440px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
 #beneficios .comparison-column {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    background: #ffffff;
+    border: 3px solid #f0f0f0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     padding: 2.5rem 3rem 3rem 3rem;
     border-radius: 32px;
     display: flex;
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    transition: all 0.3s ease;
 }
 
-/* --- EFEITO DE BRILHO/LIMPEZA --- */
+/* Borda colorida temática para o card Sopy */
+#beneficios .column-sopy-way {
+    border-color: var(--brand, #5FD97E);
+    box-shadow: 0 8px 32px rgba(95, 217, 126, 0.2);
+}
+
+#beneficios .comparison-column:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+#beneficios .column-sopy-way:hover {
+    box-shadow: 0 16px 48px rgba(95, 217, 126, 0.3);
+}
+
+/* --- EFEITO DE BRILHO/LIMPEZA TEMÁTICO --- */
 #beneficios .column-sopy-way {
     --shine-transform: skewX(-25deg) translateX(-150%);
 }
@@ -340,9 +378,12 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     background: linear-gradient(
         to right,
         transparent 0%,
-        rgba(255, 255, 255, 0.2) 50%,
+        var(--brand, #5FD97E) 20%,
+        var(--brand-2, #91D9A3) 50%,
+        var(--brand, #5FD97E) 80%,
         transparent 100%
     );
+    opacity: 0.15;
     transform: var(--shine-transform);
     z-index: 1;
 }
@@ -372,7 +413,12 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     font-weight: 700;
     margin-top: 0;
     margin-bottom: 2.5rem;
-    color: var(--cor-texto-principal, #FFFFFF);
+    color: #1a1a1a;
+}
+
+/* Título do card Sopy com cor temática */
+#beneficios .column-sopy-way h3 {
+    color: var(--brand-dark, #2d5a3d);
 }
 
 #beneficios .comparison-point {
@@ -381,7 +427,7 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     padding-left: 3rem;
     position: relative;
     line-height: 1.6;
-    color: var(--cor-texto-secundario, rgba(255, 255, 255, 0.85));
+    color: #4a4a4a;
 }
 
 #beneficios .comparison-point::before {
@@ -398,18 +444,38 @@ p[class*="split"], .sopy-section-header[class*="split"] {
 }
 
 #beneficios .column-old-way .comparison-point::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23e74c3c' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+    background-color: #fee;
+    border-radius: 50%;
 }
 
 #beneficios .column-sopy-way .comparison-point::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2333FF99' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-color: var(--brand, #5FD97E);
+    border-radius: 50%;
+}
+
+/* Elemento decorativo temático no canto */
+#beneficios .column-sopy-way::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--brand, #5FD97E), var(--brand-2, #91D9A3));
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: 0;
 }
 
 @media (max-width: 768px) {
     #beneficios .section-title h2 { font-size: 2.8rem; }
     #beneficios #comparison-module { grid-template-columns: 1fr; padding: 1rem; gap: 2rem; }
+    #beneficios .comparison-column { padding: 2rem; }
     #beneficios .comparison-column h3 { font-size: 1.8rem; }
     #beneficios .comparison-point { font-size: 1.1rem; }
+    #beneficios .column-sopy-way::after { width: 60px; height: 60px; top: -15px; right: -15px; }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
