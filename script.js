@@ -154,8 +154,12 @@ const COLORS = {
 };
 
 function swapModel(theme) {
-    console.log(`[3D] Trocando para o modelo: ${theme}`);
-    if (!THREE_READY || !capsuleGroup) return;
+    console.log(`[3D] Tentando trocar para o modelo: ${theme}`);
+    if (!THREE_READY || !capsuleGroup) {
+        console.log(`[3D] 3D ainda não inicializado. Armazenando tema ${theme} para aplicar depois.`);
+        window.__pendingTheme = theme;
+        return;
+    }
 
     const url = MODELS[theme];
     const loader = new THREE.GLTFLoader();
@@ -522,6 +526,15 @@ new THREE.RGBELoader()
         renderer.render(scene, camera);
     }
     animate();
+
+    // Aplica o tema pendente se houver, ou detecta o tema atual
+    const currentTheme = window.__pendingTheme || 
+                        (document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
+    console.log(`[3D] Aplicando tema inicial no 3D: ${currentTheme}`);
+    swapModel(currentTheme);
+    
+    // Limpa o tema pendente
+    window.__pendingTheme = null;
 }
 
 
