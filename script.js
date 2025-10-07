@@ -790,14 +790,14 @@ if (heroVideo && heroPoster) {
                 pin: ".pinned-container",
                 scrub: 1.2,
                 start: "top top",
-                end: "+=2500", // EXATAMENTE igual ao teste.html
+                end: "+=1200", // EXATAMENTE igual ao teste.html
                 pinSpacing: false // Evita que a próxima seção suba por cima
             }
         });
 
         cleanSlateTimeline
             .to(".green-wave", { 
-                transform: "translateX(0%)", 
+                transform: "translate(-50%, -50%) translateX(0%)", 
                 ease: "none"
             })
             .to(".card-old-way", {
@@ -810,7 +810,7 @@ if (heroVideo && heroPoster) {
                 ease: "power2.out"
             }, ">-0.5")
             // EXATAMENTE igual ao teste.html
-            .to({}, { duration: 0.2 });
+            .to({}, { duration: 1 });
 
         console.log('[BENEFÍCIOS] Clean Slate Timeline (com pin controlado) configurada com sucesso!');
     }

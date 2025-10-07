@@ -3,116 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sopy - Clean Slate (Versão Final com Respiro)</title>
+    <title>Sopy - Animação Final Corrigida</title>
 
     <style>
         :root {
             --cor-fundo-inicial: #f0f2f5;
             --cor-fundo-sopy: #1A4731;
+            --cor-texto-principal: #FFFFFF;
+            --cor-texto-escuro: #333;
         }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            /* O fundo geral pode ser o da marca, já que as seções definem suas próprias cores */
             background-color: var(--cor-fundo-sopy); 
             margin: 0; 
-            color: #333;
+            color: var(--cor-texto-principal);
         }
         .placeholder { 
-            height: 100vh; 
+            height: 50vh; 
             display: flex; 
             align-items: center; 
             justify-content: center; 
             text-align: center;
             background-color: var(--cor-fundo-inicial);
+            color: var(--cor-texto-escuro);
         }
-        #clean-slate-section { 
-            height: 250vh; /* Aumentamos um pouco a "pista" para dar mais tempo de respiro */
-            background-color: var(--cor-fundo-inicial); 
-            position: relative; 
+
+        #comparison-animation {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--cor-fundo-inicial);
         }
-        .pinned-container { 
-            width: 100%; 
-            height: 100vh; 
-            position: relative; 
-            overflow: hidden; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+
+        .green-wave, .card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
+        
         .green-wave { 
-            position: absolute; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            height: 100%; 
+            width: 100%; height: 100%; 
             background-color: var(--cor-fundo-sopy); 
-            transform: translateX(-100%); 
+            transform: translate(-50%, -50%) translateX(-100%);
             z-index: 1; 
         }
         .card { 
-            width: 90%; 
-            max-width: 550px;
-            padding: 3rem;
-            border-radius: 32px;
-            position: absolute; 
+            width: 90%; max-width: 550px; padding: 3rem; border-radius: 32px;
             z-index: 5; 
-            transform: translate(-50%, -50%); 
-            left: 50%; 
-            top: 50%;
         }
         .card-old-way { 
-            background-color: #fff; 
-            border: 1px solid #ddd; 
+            background-color: #fff; border: 1px solid #ddd; 
             box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            color: var(--cor-texto-escuro);
         }
         .card-sopy-way { 
             background: rgba(255, 255, 255, 0.05); 
             border: 1px solid rgba(255, 255, 255, 0.2); 
-            backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px); 
-            color: #FFF; 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); 
+            color: var(--cor-texto-principal); 
             opacity: 0; 
         }
-        .card h3 { 
-            font-size: 2.2rem;
-            margin-top: 0;
-            margin-bottom: 2rem;
+        .card h3 { font-size: 2.2rem; margin-top: 0; margin-bottom: 2rem; }
+        .card p { font-size: 1.1rem; line-height: 1.6; }
+        .card-old-way p { color: #555; }
+        .card img { width: 100%; border-radius: 16px; margin-bottom: 2rem; }
+
+        /* --- SEÇÃO DE DEPOIMENTOS COM ESTILO CORRIGIDO --- */
+        #testimonials-section {
+    background-color: var(--cor-fundo-inicial);
+    color: var(--cor-texto-escuro);
+    /* AJUSTADO AQUI: Padding vertical reduzido de 8rem para 5rem */
+    padding: 5rem 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 4rem;
+}
+        .testimonial-intro h2 {
+            font-size: 3.5rem; font-weight: 800; text-transform: uppercase;
+            margin-top: 0; margin-bottom: 1.5rem;
         }
-        .card p { 
-            font-size: 1.1rem;
-            line-height: 1.6; 
-            color: #555;
+        .testimonial-intro p {
+            font-size: 1.1rem; line-height: 1.7; color: #555;
+            max-width: 500px; margin-bottom: 2.5rem;
         }
-        .card-sopy-way p, .card-sopy-way h3 {
-            color: #FFF;
+        .testimonial-buttons a {
+            display: inline-block; padding: 14px 28px; border-radius: 50px;
+            text-decoration: none; font-weight: bold; transition: all 0.3s;
+            margin-right: 1rem;
         }
-        .card img { 
-            width: 100%; 
-            border-radius: 16px; 
-            margin-bottom: 2rem;
+        .btn-primary {
+            background-color: var(--cor-fundo-sopy); /* Botão principal com cor da marca */
+            color: #fff;
+        }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #ccc;
+            color: var(--cor-texto-escuro);
+        }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-secondary:hover { background: #e9e9e9; }
+        
+        .testimonial-card {
+            background-color: #fff; /* Card agora é branco sólido */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08); /* Sombra para destaque */
+            border: 1px solid #e9e9e9;
+            padding: 3rem;
+            border-radius: 32px;
+        }
+        .testimonial-card p.quote { font-size: 1.5rem; font-style: italic; line-height: 1.6; margin-top: 0; margin-bottom: 2rem; }
+        .author { font-weight: bold; color: var(--cor-fundo-sopy); }
+
+        @media (max-width: 900px) {
+            #testimonials-section { grid-template-columns: 1fr; text-align: center; }
+            .testimonial-intro p { margin-left: auto; margin-right: auto; }
         }
     </style>
 </head>
 <body>
 
-    <div class="placeholder"><h1>Role para baixo</h1></div>
+    <div class="placeholder"><h1>Conteúdo do topo da página...<br>Role para baixo</h1></div>
 
-    <section id="clean-slate-section">
-        <div class="pinned-container">
-            <div class="green-wave"></div>
-            <div class="card card-old-way">
-                <img src="https://placehold.co/600x400/e0e0e0/444444?text=Antes" alt="Método antigo">
-                <h3>Sabão em Pó & Líquido</h3>
-                <p>O método tradicional que suja, exige medição, desperdiça produto e ocupa um espaço precioso na sua lavanderia com embalagens grandes e pesadas.</p>
-            </div>
-            <div class="card card-sopy-way">
-                <img src="https://placehold.co/600x400/1A4731/FFFFFF?text=Depois" alt="Método Sopy">
-                <h3>Cápsulas Sopy</h3>
-                <p>A revolução da lavagem. Uma cápsula com a dose perfeita de detergente superconcentrado que dissolve 100%, limpa profundamente e protege as cores. Sem sujeira, sem desperdício e com 70% menos plástico.</p>
-            </div>
+    <section id="comparison-animation">
+        <div class="green-wave"></div>
+        <div class="card card-old-way">
+            <img src="https://placehold.co/600x400/e0e0e0/444444?text=Antes" alt="Método antigo">
+            <h3>Sabão em Pó & Líquido</h3>
+            <p>O método tradicional que suja, exige medição, desperdiça produto e ocupa um espaço precioso na sua lavanderia.</p>
+        </div>
+        <div class="card card-sopy-way">
+            <img src="https://placehold.co/600x400/1A4731/FFFFFF?text=Depois" alt="Método Sopy">
+            <h3>Cápsulas Sopy</h3>
+            <p>A revolução da lavagem. Uma cápsula com a dose perfeita, sem sujeira, sem desperdício e com 70% menos plástico.</p>
         </div>
     </section>
 
-    <div class="placeholder" style="background-color: var(--cor-fundo-sopy); color: #fff;"><h1>Fim da Animação</h1></div>
+    <section id="testimonials-section">
+        <div class="testimonial-intro">
+            <h2>Clientes que amam a Sopy</h2>
+            <p>Veja o que a galera diz sobre praticidade, perfume e resultado.</p>
+        </div>
+        <div class="testimonial-card">
+            <p class="quote">"Muito prático! Recomendo demais!"</p>
+            <p class="author">- Rafael P., Curitiba, PR</p>
+        </div>
+    </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -120,45 +158,26 @@
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
-
         const lenis = new Lenis();
         lenis.on('scroll', ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
-        });
+        gsap.ticker.add((time) => { lenis.raf(time * 1000) });
         gsap.ticker.lagSmoothing(0);
         
         const cleanSlateTimeline = gsap.timeline({
             scrollTrigger: {
-                trigger: "#clean-slate-section",
-                pin: ".pinned-container",
+                trigger: "#comparison-animation",
+                pin: true, 
                 scrub: 1.2,
                 start: "top top",
-                end: "+=2500" // Aumentamos a "pista" para o respiro ser mais longo
+                end: "+=1200"
             }
         });
 
         cleanSlateTimeline
-            .to(".green-wave", { 
-                transform: "translateX(0%)", 
-                ease: "none"
-            })
-            .to(".card-old-way", {
-                opacity: 0,
-                scale: 0.9,
-                ease: "power1.in"
-            }, "<0.2")
-            .to(".card-sopy-way", {
-                opacity: 1,
-                ease: "power2.out"
-            }, ">-0.5")
-
-            // --- A SOLUÇÃO ESTÁ AQUI ---
-            // Adicionamos uma "pausa" ou "respiro" no final da timeline.
-            // A duração aqui é relativa. Um valor de 1 significa que ele vai ocupar
-            // uma porção significativa do tempo total da timeline sem fazer nada.
-            .to({}, { duration: 0.2 });
-
+            .to(".green-wave", { transform: "translate(-50%, -50%) translateX(0%)", ease: "none" })
+            .to(".card-old-way", { opacity: 0, scale: 0.9, ease: "power1.in" }, "<0.2")
+            .to(".card-sopy-way", { opacity: 1, ease: "power2.out" }, ">-0.5")
+            .to({}, { duration: 1 });
     </script>
 </body>
 </html>
