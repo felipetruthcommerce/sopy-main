@@ -301,6 +301,13 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     position: relative; 
 }
 
+/* Mobile: altura menor para evitar overlapping */
+@media (max-width: 768px) {
+    #clean-slate-section {
+        height: 150vh;
+    }
+}
+
 /* Cores de fundo baseadas no tema */
 body.theme-citrus #clean-slate-section {
     background-color: var(--cor-fundo-inicial);
