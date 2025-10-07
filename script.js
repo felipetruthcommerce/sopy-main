@@ -522,17 +522,6 @@ new THREE.RGBELoader()
         renderer.render(scene, camera);
     }
     animate();
-
-    const productToggle = document.getElementById('product-toggle');
-    if (productToggle) {
-        productToggle.addEventListener('change', () => {
-            const newTheme = productToggle.checked ? 'aqua' : 'citrus';
-            console.log('[TEMA] Toggle change →', { checked: productToggle.checked, newTheme });
-            setTheme(newTheme);
-        });
-    }
-    
-    setTheme(document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
 }
 
 
@@ -561,6 +550,24 @@ function bootAnimations() {
     setupButtonRipples(); // ✅ CHAMANDO A FUNÇÃO
     initTextAnimations(); // ✅ CHAMANDO A FUNÇÃO
     
+    // 4. Configurar toggle de tema (SEMPRE EXECUTA)
+    const productToggle = document.getElementById('product-toggle');
+    if (productToggle) {
+        console.log('[TEMA] Toggle encontrado, estado inicial checked =', productToggle.checked);
+        productToggle.addEventListener('change', () => {
+            const newTheme = productToggle.checked ? 'aqua' : 'citrus';
+            console.log('[TEMA] Toggle change →', { checked: productToggle.checked, newTheme });
+            setTheme(newTheme);
+        });
+        // Aplica o tema inicial baseado no estado do toggle ou body
+        const initialTheme = document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus';
+        setTheme(initialTheme);
+    } else {
+        console.warn('[TEMA] Toggle #product-toggle não encontrado!');
+        // Aplica tema padrão se não houver toggle
+        const initialTheme = document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus';
+        setTheme(initialTheme);
+    }
 
 
 
