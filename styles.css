@@ -289,86 +289,127 @@ p[class*="split"], .sopy-section-header[class*="split"] {
   border: 6px solid rgba(0,0,0,0.95); /* thicker outline to mimic sketch */
 }
 
-/* Replacement card styles from the user's sample (scoped under #beneficios) */
-#beneficios .sopy-benefits-grid {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 30px;
-  padding: 60px 20px;
-  width: 90%;
-  max-width: 1700px;
-  margin: 0 auto;
+/* ===================== NOVA SEÇÃO DE COMPARAÇÃO INTERATIVA ===================== */
+#beneficios .section-title {
+    text-align: center;
+    padding: 6rem 1rem 4rem 1rem;
 }
 
-#beneficios .sopy-benefits-col {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  flex: 1;
+#beneficios .section-title h2 {
+    font-size: 4.5rem;
+    text-transform: uppercase;
+    font-weight: 800;
+    margin: 0;
+    text-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-#beneficios .sopy-benefits-col:nth-child(2) { margin-top: 120px; }
-
-#beneficios .sopy-benefits-card {
-  background-color: rgba(255,255,255,0.04);
-  border-radius: 20px;
-  padding: 50px;
-  height: 360px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
+#beneficios #comparison-module {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
-#beneficios .sopy-benefits-card-content { position: relative; z-index: 2; display:flex; flex-direction: column; justify-content: space-between; height:100%; }
-
-#beneficios .sopy-card-number { font-size: 5rem; font-weight: 500; color: var(--muted); }
-
-#beneficios .sopy-benefits-card-label { font-size: 1rem; font-weight: 500; color: #d1d1d1; align-self: flex-end; text-transform: uppercase; }
-
-#beneficios .sopy-benefits-card-blob {
-  background-color: white;
-  height: 400px;
-  width: 400px;
-  border-radius: 50%;
-  position: absolute;
-  z-index: 1;
-  filter: blur(120px);
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  pointer-events: none;
+#beneficios .comparison-column {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 2.5rem 3rem 3rem 3rem;
+    border-radius: 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
 }
 
-#beneficios .sopy-benefits-card:hover .sopy-benefits-card-blob { opacity: 0.7; }
+/* --- EFEITO DE BRILHO/LIMPEZA --- */
+#beneficios .column-sopy-way {
+    --shine-transform: skewX(-25deg) translateX(-150%);
+}
 
-#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card:nth-child(1) .sopy-benefits-card-blob { background-color: #e84a4a; }
-#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card:nth-child(2) .sopy-benefits-card-blob { background-color: #4a86e8; }
-#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card:nth-child(1) .sopy-benefits-card-blob { background-color: #4ae8a4; }
-#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card:nth-child(2) .sopy-benefits-card-blob { background-color: #e8c54a; }
+#beneficios .column-sopy-way::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+    );
+    transform: var(--shine-transform);
+    z-index: 1;
+}
+
+#beneficios .column-image-wrapper {
+    width: 100%;
+    margin-bottom: 2.5rem;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+#beneficios .column-image-wrapper img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+#beneficios .comparison-column h3, 
+#beneficios .comparison-point {
+    position: relative;
+    z-index: 2;
+}
+
+#beneficios .comparison-column h3 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+    color: var(--cor-texto-principal, #FFFFFF);
+}
+
+#beneficios .comparison-point {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    padding-left: 3rem;
+    position: relative;
+    line-height: 1.6;
+    color: var(--cor-texto-secundario, rgba(255, 255, 255, 0.85));
+}
+
+#beneficios .comparison-point::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 2;
+}
+
+#beneficios .column-old-way .comparison-point::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.6)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+}
+
+#beneficios .column-sopy-way .comparison-point::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2333FF99' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+}
 
 @media (max-width: 768px) {
-  #beneficios .sopy-benefits-grid { flex-direction: column; align-items: center; width: 90%; }
-  #beneficios .sopy-benefits-col:nth-child(2) { margin-top: 0; }
-  #beneficios .sopy-benefits-col { width: 100%; }
-}
-
-/* ===================== New SVG sizing & theme-aware color for beneficios cards ===================== */
-#beneficios .sopy-benefits-card-icon {
-  width: clamp(64px, 8vw, 140px); /* larger icons that scale with viewport */
-  height: auto; /* preserve svg aspect */
-  display: block;
-  margin-bottom: 18px;
-  stroke: currentColor; /* inherit from color property */
-  fill: none; /* keep stroke style unless explicit fill needed */
-}
-
-/* allow customizing icon color via a CSS variable so themes can override easily */
-#beneficios .sopy-benefits-card {
-  --icon: var(--brand);
-  color: var(--icon); /* SVG stroke uses currentColor */
+    #beneficios .section-title h2 { font-size: 2.8rem; }
+    #beneficios #comparison-module { grid-template-columns: 1fr; padding: 1rem; gap: 2rem; }
+    #beneficios .comparison-column h3 { font-size: 1.8rem; }
+    #beneficios .comparison-point { font-size: 1.1rem; }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */

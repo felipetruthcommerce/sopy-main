@@ -774,86 +774,62 @@ if (heroVideo && heroPoster) {
 
 
     // ===================================
-    //  BLOCO DOS BENEFÍCIOS 
+    //  BLOCO DOS BENEFÍCIOS - COMPARAÇÃO INTERATIVA
     // ===================================
     const benefitsSection = document.getElementById('beneficios');
     if (benefitsSection) {
-        console.log('[BENEFÍCIOS] Seção encontrada. Inicializando animações...');
+        console.log('[BENEFÍCIOS] Seção encontrada. Inicializando comparação interativa...');
 
-        // Hover blob follow
-        const cards = benefitsSection.querySelectorAll('.sopy-benefits-card');
-        cards.forEach(card => {
-            const blob = card.querySelector('.sopy-benefits-card-blob');
-            if (blob) {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    gsap.to(blob, { 
-                        x: x - (blob.clientWidth / 2), 
-                        y: y - (blob.clientHeight / 2),
-                        duration: 0.3,
-                        ease: 'power2.out' 
-                    });
-                });
-            }
-        });
+        const leftPoints = gsap.utils.toArray('.column-old-way .comparison-point');
+        const rightPoints = gsap.utils.toArray('.column-sopy-way .comparison-point');
+        const sopyCard = document.querySelector('.column-sopy-way');
 
-        // GSAP entrance animations - funciona em desktop e mobile
-        if (window.matchMedia('(min-width: 1024px)').matches) {
-            // Desktop: animações com ScrollTrigger scrub
-            gsap.from("#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card", {
+        if (leftPoints.length && rightPoints.length && sopyCard) {
+            // Cria a timeline principal que será controlada pelo scroll
+            const comparisonScrubTl = gsap.timeline({
                 scrollTrigger: {
-                    trigger: "#beneficios .sopy-benefits-grid",
-                    start: "top 80%",
-                    end: "center 50%",
-                    scrub: 0.3,
-                },
-                y: 50,
-                x: -250,
-                rotation: -20,
-                opacity: 0,
-                stagger: 0.2
+                    trigger: "#comparison-module",
+                    start: "top 40%",  // Começa a animação quando o topo da seção estiver a 40% da tela
+                    end: "bottom 80%", // Termina a animação quando o fundo da seção estiver a 80%
+                    scrub: 1 // Conecta a animação à barra de rolagem com 1s de suavização
+                }
             });
 
-            gsap.from("#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card", {
-                scrollTrigger: {
-                    trigger: "#beneficios .sopy-benefits-grid",
-                    start: "top 80%",
-                    end: "center 50%",
-                    scrub: 0.3,
-                },
-                y: 50,
-                x: 250,
-                rotation: 20,
-                opacity: 0,
-                stagger: 0.2
-            });
+            // Adiciona as animações à timeline
+            comparisonScrubTl
+                // Animação 1: Pontos da esquerda (simples fade-in)
+                .from(leftPoints, {
+                    opacity: 0,
+                    y: 40,
+                    stagger: 0.2 // Aparecem um após o outro
+                })
+                // Animação 2: Efeito de brilho/limpeza no card Sopy
+                .fromTo(sopyCard, 
+                    { 
+                        '--shine-x': '-150%'
+                    },
+                    { 
+                        '--shine-x': '150%',
+                        ease: 'power1.inOut',
+                        onUpdate: function() {
+                            // Anima o pseudo-elemento via transform
+                            const progress = this.progress();
+                            const translateX = -150 + (progress * 300); // -150% to 150%
+                            sopyCard.style.setProperty('--shine-transform', `skewX(-25deg) translateX(${translateX}%)`);
+                        }
+                    },
+                    "<" // Inicia ao mesmo tempo que a animação anterior
+                )
+                // Animação 3: Pontos da direita (aparecem com um efeito mais dinâmico)
+                .from(rightPoints, {
+                    opacity: 0,
+                    x: -40, // Vêm da esquerda para a direita
+                    stagger: 0.2
+                }, "<0.1"); // Inicia um pouco depois (0.1s) do início das outras animações
+
+            console.log('[BENEFÍCIOS] Animação de comparação configurada com sucesso!');
         } else {
-            // Mobile: animações simples sem scrub
-            gsap.from("#beneficios .sopy-benefits-col:nth-child(1) .sopy-benefits-card", {
-                scrollTrigger: {
-                    trigger: "#beneficios .sopy-benefits-grid",
-                    start: "top 90%",
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
-
-            gsap.from("#beneficios .sopy-benefits-col:nth-child(2) .sopy-benefits-card", {
-                scrollTrigger: {
-                    trigger: "#beneficios .sopy-benefits-grid",
-                    start: "top 90%",
-                },
-                y: 30,
-                opacity: 0,
-                duration: 0.6,
-                stagger: 0.1,
-                ease: 'power2.out'
-            });
+            console.warn('[BENEFÍCIOS] Elementos da comparação não encontrados.');
         }
 
     } else {
