@@ -790,7 +790,7 @@ if (heroVideo && heroPoster) {
                 pin: ".pinned-container",
                 scrub: 1.2,
                 start: "top top",
-                end: "+=1200", // EXATAMENTE igual ao teste.html
+                end: "+=1500", // EXATAMENTE igual ao teste.html
                 pinSpacing: false // Evita que a próxima seção suba por cima
             }
         });
