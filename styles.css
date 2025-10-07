@@ -348,45 +348,30 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     transition: all 0.3s ease;
 }
 
-/* Borda colorida temática para o card Sopy */
+/* Bordas coloridas temáticas para ambos os cards */
 #beneficios .column-sopy-way {
     border-color: var(--brand, #5FD97E);
     box-shadow: 0 8px 32px rgba(95, 217, 126, 0.2);
 }
 
+#beneficios .column-old-way {
+    border-color: #e74c3c;
+    box-shadow: 0 8px 32px rgba(231, 76, 60, 0.2);
+}
+
 #beneficios .comparison-column:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
 }
 
 #beneficios .column-sopy-way:hover {
     box-shadow: 0 16px 48px rgba(95, 217, 126, 0.3);
 }
 
-/* --- EFEITO DE BRILHO/LIMPEZA TEMÁTICO --- */
-#beneficios .column-sopy-way {
-    --shine-transform: skewX(-25deg) translateX(-150%);
+#beneficios .column-old-way:hover {
+    box-shadow: 0 16px 48px rgba(231, 76, 60, 0.3);
 }
 
-#beneficios .column-sopy-way::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to right,
-        transparent 0%,
-        var(--brand, #5FD97E) 20%,
-        var(--brand-2, #91D9A3) 50%,
-        var(--brand, #5FD97E) 80%,
-        transparent 100%
-    );
-    opacity: 0.15;
-    transform: var(--shine-transform);
-    z-index: 1;
-}
+
 
 #beneficios .column-image-wrapper {
     width: 100%;
@@ -416,9 +401,13 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     color: #1a1a1a;
 }
 
-/* Título do card Sopy com cor temática */
+/* Títulos com cores temáticas */
 #beneficios .column-sopy-way h3 {
     color: var(--brand-dark, #2d5a3d);
+}
+
+#beneficios .column-old-way h3 {
+    color: #c0392b;
 }
 
 #beneficios .comparison-point {
@@ -455,7 +444,7 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     border-radius: 50%;
 }
 
-/* Elemento decorativo temático no canto */
+/* Elementos decorativos temáticos nos cantos */
 #beneficios .column-sopy-way::after {
     content: '';
     position: absolute;
@@ -469,13 +458,32 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     z-index: 0;
 }
 
+#beneficios .column-old-way::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: 0;
+}
+
 @media (max-width: 768px) {
     #beneficios .section-title h2 { font-size: 2.8rem; }
     #beneficios #comparison-module { grid-template-columns: 1fr; padding: 1rem; gap: 2rem; }
     #beneficios .comparison-column { padding: 2rem; }
     #beneficios .comparison-column h3 { font-size: 1.8rem; }
     #beneficios .comparison-point { font-size: 1.1rem; }
-    #beneficios .column-sopy-way::after { width: 60px; height: 60px; top: -15px; right: -15px; }
+    #beneficios .column-sopy-way::after,
+    #beneficios .column-old-way::after { 
+        width: 60px; 
+        height: 60px; 
+        top: -15px; 
+        right: -15px; 
+    }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
@@ -1951,9 +1959,9 @@ body.theme-citrus #faq .sopy-faq-accordion {
 
 /* ========== SEÇÕES COM FUNDO TEMÁTICO (CORES FORTES) ========== */
 /* AQUA â€” blocos fortes e contrastantes */
-body.theme-aqua #beneficios {
-  background: #0D1B2A !important; /* brand */
-}
+/* body.theme-aqua #beneficios {
+  background: #0D1B2A !important; 
+} */
 
 body.theme-aqua #como-usar {
   background: #083DA6 !important; /* como usar: #083DA6 */
@@ -1977,9 +1985,9 @@ body.theme-aqua #capsula-3d {
 }
 
 /* CITRUS â€” verdes fortes com neutros escuros para variação */
-body.theme-citrus #beneficios {
-  background: #1B4332 !important; /* brand */
-}
+/* body.theme-citrus #beneficios {
+  background: #1B4332 !important; 
+} */
 
 body.theme-citrus #como-usar {
   background: #167312 !important; /* dark */
