@@ -295,19 +295,19 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     --cor-fundo-sopy: #1A4731;
 }
 
-.placeholder { 
-    height: 100vh; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    text-align: center;
+#clean-slate-section { 
+    height: 300vh; /* Altura maior para animação mais longa */
+    background-color: var(--cor-fundo-inicial); 
+    position: relative; 
+}
+
+/* Cores de fundo baseadas no tema */
+body.theme-citrus #clean-slate-section {
     background-color: var(--cor-fundo-inicial);
 }
 
-#clean-slate-section { 
-    height: 150vh; /* Espaço suficiente para a animação com pin */
-    background-color: var(--cor-fundo-inicial); 
-    position: relative; 
+body.theme-aqua #clean-slate-section {
+    background-color: #e8f4f8; /* Azul claro para tema aqua */
 }
 
 .pinned-container { 
@@ -329,6 +329,15 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     background-color: var(--cor-fundo-sopy); 
     transform: translateX(-100%); 
     z-index: 1; 
+}
+
+/* Wave com cores baseadas no tema */
+body.theme-citrus .green-wave {
+    background-color: #1A4731; /* Verde para tema citrus */
+}
+
+body.theme-aqua .green-wave {
+    background-color: #007BFF; /* Azul para tema aqua */
 }
 
 .card { 

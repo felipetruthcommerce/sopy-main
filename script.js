@@ -789,8 +789,8 @@ if (heroVideo && heroPoster) {
                 trigger: "#clean-slate-section",
                 pin: ".pinned-container",
                 start: "top top",
-                end: "+=150vh", // Pin por tempo suficiente para ver a animação completa
-                scrub: 1.2,
+                end: "+=300vh", // Duração mais longa para animação mais contemplativa
+                scrub: 0.5, // Scrub mais lento para animação mais suave
                 invalidateOnRefresh: true
             }
         });
@@ -798,19 +798,22 @@ if (heroVideo && heroPoster) {
         cleanSlateTimeline
             .to(".green-wave", { 
                 transform: "translateX(0%)", 
-                ease: "none"
+                ease: "none",
+                duration: 1 // Mais tempo para a wave
             })
             .to(".card-old-way", {
                 opacity: 0,
                 scale: 0.9,
-                ease: "power1.in"
-            }, "<0.2")
+                ease: "power1.in",
+                duration: 0.8
+            }, "<0.3") // Começa um pouco depois da wave
             .to(".card-sopy-way", {
                 opacity: 1,
-                ease: "power2.out"
-            }, ">-0.5")
-            // Pausa para apreciar o resultado final
-            .to({}, { duration: 0.3 });
+                ease: "power2.out",
+                duration: 0.8
+            }, ">-0.3") // Overlap menor para transição mais suave
+            // Pausa longa para apreciar o resultado final
+            .to({}, { duration: 1 });
 
         console.log('[BENEFÍCIOS] Clean Slate Timeline (com pin controlado) configurada com sucesso!');
     }
