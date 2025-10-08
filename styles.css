@@ -1476,13 +1476,14 @@ body.theme-aqua .sopy-how-card {
   position: relative; 
   height: 100vh; 
   overflow: hidden;
-  background: transparent; /* Transparente para mobile mostrar imagens */
+  background: #000; /* Fundo neutro sólido para evitar flashes de cor */
 }
 .how-fullscreen .how-slides-track { 
   position: absolute; 
   inset: 0; 
   will-change: transform;
   overflow: hidden; /* Extra overflow protection */
+  background-color: #000; /* fallback sólido por trás dos slides */
 }
 .how-fullscreen .how-slide { 
   position: absolute; 
@@ -1493,6 +1494,7 @@ body.theme-aqua .sopy-how-card {
   background-size: cover; 
   background-position: center; 
   will-change: transform, opacity;
+  background-color: #000; /* fallback para evitar fundo verde quando imagem não renderiza */
   opacity: 1;
   /* Garantir que não haja gaps durante animações */
   transform: translateZ(0); /* Force hardware acceleration */
@@ -2046,7 +2048,7 @@ body.theme-citrus #faq .sopy-faq-accordion {
 } */
 
 body.theme-aqua #como-usar {
-  background: transparent !important; /* Transparente para mostrar as imagens */
+  background: #000 !important; /* Preto para evitar vazamentos durante transições (mobile/desktop) */
 }
 
 
@@ -2072,7 +2074,7 @@ body.theme-aqua #capsula-3d {
 } */
 
 body.theme-citrus #como-usar {
-  background: transparent !important; /* Transparente para mostrar as imagens */
+  background: #000 !important; /* Preto para evitar vazamentos durante transições (mobile/desktop) */
 }
 
 body.theme-citrus #fragrancias {

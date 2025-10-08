@@ -879,7 +879,7 @@ if (heroVideo && heroPoster) {
         const textEl = howSection.querySelector('#how-text');
         const navEl = howSection.querySelector('#how-nav');
     const nextBtn = howSection.querySelector('#how-next');
-        if (!track || !slides.length || !navEl || !textEl) return;
+    if (!track || !slides.length || !navEl || !textEl || !slides) return;
 
         // Dados dos slides com títulos e textos de apoio
         const slideData = [
@@ -1001,11 +1001,21 @@ if (heroVideo && heroPoster) {
                 console.log(`[SLIDE TO] Current slide:`, currentSlide.getAttribute('data-slide'));
                 console.log(`[SLIDE TO] Next slide:`, nextSlide.getAttribute('data-slide'));
 
-                // Primeiro, posicionar o próximo slide
-                gsap.set(nextSlide, { x: direction * 100 + '%', opacity: 1, zIndex: 2 });
+                // Sanitizar: garantir que todos os outros slides estejam fora da tela à direita
+                slides.forEach((s, i) => {
+                    if (i !== currentIndex && i !== targetIndex) {
+                        gsap.set(s, { x: '100%', zIndex: 0, opacity: 1 });
+                    }
+                });
+
+                // Zerar x (px) para evitar conflito com xPercent
+                gsap.set([currentSlide, nextSlide], { x: 0 });
+
+                // Primeiro, posicionar o próximo slide em xPercent e z-index correto
+                gsap.set(nextSlide, { xPercent: direction * 100, opacity: 1, zIndex: 2, visibility: 'visible' });
                 gsap.set(currentSlide, { zIndex: 1 });
 
-                gsap.timeline({
+                const tl = gsap.timeline({
                     defaults: { duration: 0.5, ease: 'power2.inOut' },
                     onComplete: () => {
                         currentIndex = targetIndex;
@@ -1013,12 +1023,15 @@ if (heroVideo && heroPoster) {
                         applyActive(currentIndex);
                         console.log(`[SLIDE TO] Animação completa, currentIndex agora é: ${currentIndex}`);
                     }
-                })
-                .to([currentSlide, nextSlide], { 
-                    x: direction * -100 + '%', 
-                    duration: 0.5, 
-                    ease: 'power2.inOut' 
-                }, 0);
+                });
+
+                // Importante: mover o slide atual para fora e trazer o próximo para 0%
+                                                tl.to(currentSlide, { xPercent: direction * -100 }, 0)
+                                                    .to(nextSlide, { xPercent: 0 }, 0)
+                                      .add(() => {
+                                            // Após a animação: garantir que somente o slide atual esteja por cima
+                                          slides.forEach((s, i) => gsap.set(s, { zIndex: i === targetIndex ? 2 : 0, x: 0, xPercent: i === targetIndex ? 0 : 100, visibility: i === targetIndex ? 'visible' : 'hidden' }));
+                                    });
             };
 
             const handleStart = (e) => {
@@ -1063,9 +1076,9 @@ if (heroVideo && heroPoster) {
             // Setup inicial dos slides para MOBILE (horizontal swipe)
             slides.forEach((slide, index) => {
                 if (index === 0) {
-                    gsap.set(slide, { x: '0%', opacity: 1, zIndex: 2 });
+                    gsap.set(slide, { xPercent: 0, x: 0, opacity: 1, zIndex: 2, visibility: 'visible' });
                 } else {
-                    gsap.set(slide, { x: '100%', opacity: 1, zIndex: 1 });
+                    gsap.set(slide, { xPercent: 100, x: 0, opacity: 1, zIndex: 1, visibility: 'hidden' });
                 }
                 
                 // Debug visual para mobile
@@ -1078,7 +1091,7 @@ if (heroVideo && heroPoster) {
                 debugEl.textContent = `MOBILE - Slide ${index + 1}`;
                 slide.appendChild(debugEl);
                 
-                console.log(`[MOBILE SETUP SLIDE ${index}] x=${index === 0 ? '0%' : '100%'}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
+                console.log(`[MOBILE SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
             });
 
             // Initial
