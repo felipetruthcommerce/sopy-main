@@ -1099,12 +1099,19 @@ if (heroVideo && heroPoster) {
         } else {
             // Desktop: ScrollTrigger pin + scrub timeline
             const tl = gsap.timeline({ paused: true });
+            // Evitar gap/preto durante o scrub: leve overlap e slide entrando por cima
             slides.forEach((slide, i) => {
                 if (i === 0) return;
                 const prev = slides[i - 1];
                 tl.addLabel(`slide${i}`)
-                  .to(prev, { xPercent: -100, opacity: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`)
-                  .fromTo(slide, { xPercent: 100, opacity: 1, scale: 1.015 }, { xPercent: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`);
+                  // Garante que o próximo slide fique por cima durante a transição
+                  .set(slide, { zIndex: 3 }, `slide${i}`)
+                  // Leve overlap para evitar linha/preto por arredondamento durante drag
+                  .to(prev, { xPercent: -100.2, duration: 1, ease: 'none' }, `slide${i}`)
+                  .fromTo(slide, { xPercent: 100 }, { xPercent: -0.2, duration: 1, ease: 'none' }, `slide${i}`)
+                  // Normaliza posição ao final do trecho para manter layout consistente
+                  .set(slide, { xPercent: 0 }, ">")
+                  .set(prev, { zIndex: 1 }, ">");
             });
 
             const totalDur = slides.length - 1;
@@ -1115,7 +1122,8 @@ if (heroVideo && heroPoster) {
                 start: 'top top',
                 end: () => `+=${window.innerHeight * totalDur}`,
                 pin: true,
-                scrub: 1.1,
+                // Scrub direto (sem smoothing) para manter os dois tweens sincronizados no drag
+                scrub: true,
                 invalidateOnRefresh: true,
                 onEnter: () => applyActive(0),
                 onEnterBack: (self) => {
