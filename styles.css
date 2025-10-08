@@ -328,7 +328,7 @@ body.theme-aqua #clean-slate-section {
     left: 50%; 
     width: 100%; 
     height: 100%; 
-    background-color: var(--cor-fundo-sopy); 
+    background-color: #019c51; 
     transform: translate(-50%, -50%) translateX(-100%); 
     z-index: 1; 
 }
@@ -395,6 +395,13 @@ body.theme-aqua .green-wave {
     border-radius: 16px; 
     margin-bottom: 2rem;
     flex-shrink: 0; /* Não permite que a imagem encolha */
+}
+
+/* Controle específico para a imagem do card da Sopy */
+.sopy-card-image {
+    background-color: #f8f9fa; /* Fundo neutro durante carregamento */
+    transition: opacity 0.3s ease; /* Transição suave na troca */
+    object-position: center; /* Centraliza a imagem */
 }
 
 /* Comparative lists inside cards */

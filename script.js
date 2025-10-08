@@ -252,9 +252,19 @@ function setTheme(theme) {
                 ? sopyCardImage.getAttribute('data-citrus')
                 : sopyCardImage.getAttribute('data-aqua');
             
-            if (newSrc && sopyCardImage.src !== newSrc) {
+            if (newSrc && !sopyCardImage.src.includes(newSrc.split('/').pop())) {
                 console.log(`[TEMA] Trocando imagem do card para ${theme}:`, newSrc);
-                sopyCardImage.src = newSrc;
+                
+                // Preload da imagem para evitar flicker
+                const img = new Image();
+                img.onload = () => {
+                    sopyCardImage.src = newSrc;
+                    console.log(`[TEMA] Imagem ${theme} carregada com sucesso`);
+                };
+                img.onerror = () => {
+                    console.warn(`[TEMA] Erro ao carregar imagem ${theme}:`, newSrc);
+                };
+                img.src = newSrc;
             }
         }
     } catch (e) {
@@ -793,6 +803,28 @@ if (heroVideo && heroPoster) {
     });
 
     // ===================================
+    //  INICIALIZAÇÃO DA IMAGEM DO CARD
+    // ===================================
+    function initCardImage() {
+        try {
+            const sopyCardImage = document.querySelector('.sopy-card-image');
+            if (sopyCardImage) {
+                const currentTheme = document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus';
+                const correctSrc = currentTheme === 'citrus' 
+                    ? sopyCardImage.getAttribute('data-citrus')
+                    : sopyCardImage.getAttribute('data-aqua');
+                
+                if (correctSrc && !sopyCardImage.src.includes(correctSrc.split('/').pop())) {
+                    console.log(`[BENEFÍCIOS] Definindo imagem inicial para tema ${currentTheme}:`, correctSrc);
+                    sopyCardImage.src = correctSrc;
+                }
+            }
+        } catch (e) {
+            console.warn('[BENEFÍCIOS] Erro ao inicializar imagem do card:', e);
+        }
+    }
+
+    // ===================================
     //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION (COM PIN CONTROLADO)
     // ===================================
     function initBenefitsAnimations(){
@@ -800,6 +832,9 @@ if (heroVideo && heroPoster) {
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
         
         console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation (com pin controlado)...');
+        
+        // Inicializa a imagem correta baseada no tema atual
+        initCardImage();
         
         const cleanSlateTimeline = gsap.timeline({
             scrollTrigger: {
