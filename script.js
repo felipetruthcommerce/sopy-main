@@ -901,7 +901,7 @@ if (heroVideo && heroPoster) {
             {
                 label: '04 Resultado',
                 title: '04. RESULTADO IMPECÁVEL',
-                support: 'Enquanto outros produtos podem deixar resíduos e desbotar tecidos, a Sopy entrega uma limpeza profunda que remove manchas, protege as fibras e realça as cores. Sinta a diferença em cada lavagem.'
+                support: 'Sinta a maciez que abraça cada fibra, respire o perfume duradouro que permanece por dias, e desfrute da confiança de roupas impecavelmente limpas. Sopy oferece muito mais que limpeza: é puro conforto.'
             }
         ];
 

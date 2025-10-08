@@ -1531,6 +1531,15 @@ body.theme-aqua .sopy-how-card {
   .how-fullscreen.mobile-swipe .how-button { top: 12px; right: 12px; font-size: 24px; }
 }
 
+/* Garantir que o quarto slide (último) tenha opacidade total e sem overlay */
+.how-fullscreen .how-slide:nth-child(4) {
+  opacity: 1 !important;
+}
+
+.how-fullscreen .how-slide:nth-child(4)::before,
+.how-fullscreen .how-slide:nth-child(4)::after {
+  display: none;
+}
 
 /* Painel em tela cheia com posição sticky */
 .sustainability-parallax .fullscreen-panel {
