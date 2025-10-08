@@ -1113,16 +1113,6 @@ if (heroVideo && heroPoster) {
                     gsap.set(slide, { xPercent: 100, x: 0, opacity: 1, zIndex: 1, visibility: 'hidden' });
                 }
                 
-                // Debug visual para mobile
-                const debugEl = document.createElement('div');
-                debugEl.style.cssText = `
-                    position: absolute; top: 10px; left: 10px; z-index: 100;
-                    background: rgba(0,255,0,0.8); color: white; padding: 5px;
-                    font-size: 12px; pointer-events: none;
-                `;
-                debugEl.textContent = `MOBILE - Slide ${index + 1}`;
-                slide.appendChild(debugEl);
-                
                 console.log(`[MOBILE SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
             });
 
@@ -1198,16 +1188,6 @@ if (heroVideo && heroPoster) {
                 } else {
                     gsap.set(slide, { xPercent: 100, opacity: 1, zIndex: 1 });
                 }
-                
-                // Debug visual para desktop
-                const debugEl = document.createElement('div');
-                debugEl.style.cssText = `
-                    position: absolute; top: 10px; right: 10px; z-index: 100;
-                    background: rgba(0,0,255,0.8); color: white; padding: 5px;
-                    font-size: 12px; pointer-events: none;
-                `;
-                debugEl.textContent = `DESKTOP - Slide ${index + 1}`;
-                slide.appendChild(debugEl);
                 
                 console.log(`[DESKTOP SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
             });
