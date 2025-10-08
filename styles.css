@@ -18,87 +18,6 @@ html, body {
   min-height: 100%;
   scroll-behavior: auto; /* Lenis cuida do smooth */
 }
-
-/* ========== BORDAS ONDULADAS ========== */
-.wavy-border-top {
-  position: relative;
-}
-
-.wavy-border-top::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  background: inherit;
-  clip-path: polygon(
-    0% 0%, 
-    5% 100%, 
-    10% 80%, 
-    15% 100%, 
-    20% 60%, 
-    25% 100%, 
-    30% 70%, 
-    35% 100%, 
-    40% 50%, 
-    45% 100%, 
-    50% 80%, 
-    55% 100%, 
-    60% 60%, 
-    65% 100%, 
-    70% 70%, 
-    75% 100%, 
-    80% 50%, 
-    85% 100%, 
-    90% 80%, 
-    95% 100%, 
-    100% 0%
-  );
-  z-index: 1;
-}
-
-/* Variação com ondas mais suaves */
-.wavy-border-smooth::before {
-  clip-path: polygon(
-    0% 0%, 
-    10% 90%, 
-    20% 70%, 
-    30% 90%, 
-    40% 60%, 
-    50% 85%, 
-    60% 55%, 
-    70% 80%, 
-    80% 65%, 
-    90% 85%, 
-    100% 0%
-  );
-}
-
-/* Cores específicas para cada seção */
-.sopy-capsule3d.wavy-border-top::before {
-  background: linear-gradient(135deg, var(--cor-fundo-sopy), var(--cor-accent));
-}
-
-.sustainability-parallax.wavy-border-top::before {
-  background: #ffffff;
-}
-
-#clean-slate-section.wavy-border-top::before {
-  background: var(--cor-fundo-inicial);
-}
-
-.tc-testimonials.wavy-border-top::before {
-  background: var(--cor-fundo-inicial);
-}
-
-/* Mobile: ondas menores */
-@media (max-width: 768px) {
-  .wavy-border-top::before {
-    height: 25px;
-  }
-}
-
 /* Local fonts handled via @font-face below (Avant Garde) */
 
 /* Local Avant Garde fonts (placed in assets/fonts/) */
@@ -425,9 +344,9 @@ body.theme-aqua .green-wave {
 
 .card { 
     width: 90%; 
-    max-width: 550px;
-    min-height: 600px; /* Altura mínima fixa */
-    padding: 3rem;
+    max-width: 700px; /* Aumentado de 550px para 700px */
+    min-height: 650px; /* Aumentado de 600px para 650px */
+    padding: 4rem; /* Aumentado de 3rem para 4rem */
     border-radius: 32px;
     position: absolute; 
     z-index: 5; 
@@ -500,6 +419,20 @@ body.theme-aqua .green-wave {
   content: "✖";
   color: #CC4B4B;
   margin-right: 0.6rem;
+}
+
+/* Responsivo para cards no mobile */
+@media (max-width: 768px) {
+  .card {
+    width: 95%;
+    max-width: 500px; /* Menor no mobile mas ainda generoso */
+    min-height: 550px;
+    padding: 2.5rem; /* Padding menor no mobile */
+  }
+  
+  .card h3 {
+    font-size: 1.8rem; /* Título um pouco menor no mobile */
+  }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
