@@ -1046,7 +1046,33 @@ if (heroVideo && heroPoster) {
                 if (e.cancelable) e.preventDefault(); // impede scroll vertical durante o swipe
                 const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = currentX - startX;
-                gsap.set(slides[currentIndex], { x: deltaX });
+                
+                // Efeito "divisão" como no desktop: mostrar próximo slide durante o drag
+                const currentSlide = slides[currentIndex];
+                let nextSlide;
+                
+                if (deltaX > 0) {
+                    // Arrastando para direita (slide anterior)
+                    const prevIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
+                    nextSlide = slides[prevIndex];
+                    // Posicionar slide anterior à esquerda e tornar visível
+                    gsap.set(nextSlide, { xPercent: -100, visibility: 'visible', zIndex: 1 });
+                    // Mover ambos para direita
+                    gsap.set(currentSlide, { x: deltaX, zIndex: 2 });
+                    gsap.set(nextSlide, { x: deltaX });
+                } else if (deltaX < 0) {
+                    // Arrastando para esquerda (próximo slide)
+                    const nextIndex = currentIndex === slides.length - 1 ? 0 : currentIndex + 1;
+                    nextSlide = slides[nextIndex];
+                    // Posicionar próximo slide à direita e tornar visível
+                    gsap.set(nextSlide, { xPercent: 100, visibility: 'visible', zIndex: 1 });
+                    // Mover ambos para esquerda
+                    gsap.set(currentSlide, { x: deltaX, zIndex: 2 });
+                    gsap.set(nextSlide, { x: deltaX });
+                } else {
+                    // deltaX = 0, apenas mover o slide atual
+                    gsap.set(currentSlide, { x: deltaX });
+                }
             };
             const handleEnd = () => {
                 if (!isDragging) return;
@@ -1057,7 +1083,13 @@ if (heroVideo && heroPoster) {
                     const direction = deltaX > 0 ? -1 : 1;
                     slideTo(currentIndex + direction);
                 } else {
+                    // Voltar ao estado original - esconder slides que ficaram visíveis durante drag
                     gsap.to(slides[currentIndex], { x: 0, duration: 0.3 });
+                    slides.forEach((slide, i) => {
+                        if (i !== currentIndex) {
+                            gsap.set(slide, { visibility: 'hidden', x: 0 });
+                        }
+                    });
                 }
             };
 
