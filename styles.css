@@ -979,7 +979,7 @@ body.theme-aqua .capsule-3d-cta {
   right: 18px;
   bottom: 30px; /* moved slightly lower */
   z-index: 80;
-  padding: 8px;
+  padding: 0px 8px 8px 8px;
 }
 
 /* Seção 3D estendida para acomodar animações */
