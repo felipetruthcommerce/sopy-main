@@ -1610,9 +1610,11 @@ body.theme-aqua .sopy-how-card {
 /* Estilos de texto */
 .sustainability-parallax .text-column h2 {
   font-size: clamp(2.8rem, 6.5vw, 5rem);
-  line-height: 1.02;
+  line-height: 1.3; /* Aumentado para não cortar caracteres com acentos */
   margin-bottom: 1rem;
   color: #333333; /* Preto para títulos */
+  padding: 0.1em 0; /* Espaço extra para caracteres com cedilha */
+  overflow: visible; /* Garante que caracteres não sejam cortados */
 }
 
 .sustainability-parallax .text-column p {
@@ -1654,7 +1656,11 @@ body.theme-aqua .sopy-how-card {
     max-width: 100%;
   }
 
-  .sustainability-parallax .text-column h2 { font-size: clamp(2rem, 8vw, 3rem); }
+  .sustainability-parallax .text-column h2 { 
+    font-size: clamp(2rem, 8vw, 3rem); 
+    line-height: 1.3; /* Garante que não corte no mobile também */
+    padding: 0.1em 0;
+  }
   .sustainability-parallax .text-column p  { margin: 0 auto; }
 
   .sustainability-parallax .image-wrapper {
