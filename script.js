@@ -919,10 +919,18 @@ if (heroVideo && heroPoster) {
         // Initial z-order and positions for a horizontal slide feel
         slides.forEach((s, i) => {
             s.style.position = 'absolute';
-            s.style.inset = '0';
+            s.style.top = '0';
+            s.style.left = '0';
+            s.style.width = '100%';
+            s.style.height = '100vh';
             s.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
             s.style.zIndex = i === 0 ? '2' : '1';
             s.style.opacity = '1';
+            
+            // Debug: verificar qual imagem está sendo aplicada
+            const bgImage = getComputedStyle(s).backgroundImage;
+            const slideNum = s.getAttribute('data-slide');
+            console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] Transform: ${s.style.transform}, Z-Index: ${s.style.zIndex}, BgImage: ${bgImage}`);
         });
     navItems[0]?.classList.add('active');
     textEl.textContent = slideData[0].title;
@@ -1041,6 +1049,16 @@ if (heroVideo && heroPoster) {
             navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
             nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
 
+            // Setup inicial dos slides para mobile
+            slides.forEach((slide, index) => {
+                if (index === 0) {
+                    gsap.set(slide, { x: '0%', opacity: 1, zIndex: 2 });
+                } else {
+                    gsap.set(slide, { x: '100%', opacity: 1, zIndex: 1 });
+                }
+                console.log(`[MOBILE SLIDE ${index}] Configurado: x=${index === 0 ? '0%' : '100%'}, opacity=1`);
+            });
+
             // Initial
             applyActive(0);
         } else {
@@ -1096,6 +1114,16 @@ if (heroVideo && heroPoster) {
                 const cur = Math.round(tl.progress() * (slides.length - 1));
                 const next = Math.min(slides.length - 1, cur + 1);
                 scrollToSlide(next);
+            });
+
+            // Setup inicial dos slides para desktop
+            slides.forEach((slide, index) => {
+                if (index === 0) {
+                    gsap.set(slide, { xPercent: 0, opacity: 1, zIndex: 2 });
+                } else {
+                    gsap.set(slide, { xPercent: 100, opacity: 1, zIndex: 1 });
+                }
+                console.log(`[DESKTOP SLIDE ${index}] Configurado: xPercent=${index === 0 ? 0 : 100}, opacity=1`);
             });
 
             applyActive(0);

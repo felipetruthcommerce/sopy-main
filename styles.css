@@ -1476,7 +1476,8 @@ body.theme-aqua .sopy-how-card {
 .how-fullscreen .how-slides-track { position: absolute; inset: 0; will-change: transform; }
 .how-fullscreen .how-slide { 
   position: absolute; 
-  inset: 0;
+  top: 0;
+  left: 0;
   width: 100%; 
   height: 100vh; 
   background-size: cover; 
@@ -1559,44 +1560,21 @@ body.theme-aqua .sopy-how-card {
 
 /* Garantir que todos os slides tenham configuração adequada */
 .how-fullscreen .how-slide {
-  opacity: 1 !important;
-  z-index: 1;
-  background-color: transparent;
   background-repeat: no-repeat;
-  background-attachment: fixed;
 }
 
-/* Slide específicos para melhor contraste */
-.how-fullscreen .how-slide:nth-child(1)::before {
+/* Overlay para melhor contraste - aplicado a todos os slides */
+.how-fullscreen .how-slide::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.3);
   z-index: 1;
 }
 
+/* Slide 2 (verde) precisa de mais contraste */
 .how-fullscreen .how-slide:nth-child(2)::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
-}
-
-.how-fullscreen .how-slide:nth-child(3)::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.2);
-  z-index: 1;
-}
-
-.how-fullscreen .how-slide:nth-child(4)::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  background: rgba(0, 0, 0, 0.5);
 }
 
 .how-fullscreen .how-slide:nth-child(4) {
