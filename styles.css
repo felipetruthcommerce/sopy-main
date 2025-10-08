@@ -344,9 +344,9 @@ body.theme-aqua .green-wave {
 
 .card { 
     width: 90%; 
-    max-width: 700px; /* Aumentado de 550px para 700px */
-    min-height: 650px; /* Aumentado de 600px para 650px */
-    padding: 4rem; /* Aumentado de 3rem para 4rem */
+    max-width: 550px;
+    min-height: 600px; /* Altura mínima fixa */
+    padding: 3rem;
     border-radius: 32px;
     position: absolute; 
     z-index: 5; 
@@ -400,8 +400,9 @@ body.theme-aqua .green-wave {
 /* Comparative lists inside cards */
 .card .card-features {
   margin: 0;
-  padding: 0 0 0 1.25rem;
+  padding: 0;
   flex-grow: 1; /* Ocupa o espaço restante do card */
+  list-style: none; /* Remove dots de ambos os cards */
 }
 .card .card-features li {
   margin: 0.4rem 0;
@@ -421,18 +422,29 @@ body.theme-aqua .green-wave {
   margin-right: 0.6rem;
 }
 
-/* Responsivo para cards no mobile */
-@media (max-width: 768px) {
-  .card {
-    width: 95%;
-    max-width: 500px; /* Menor no mobile mas ainda generoso */
-    min-height: 550px;
-    padding: 2.5rem; /* Padding menor no mobile */
-  }
-  
-  .card h3 {
-    font-size: 1.8rem; /* Título um pouco menor no mobile */
-  }
+/* Título da seção de comparação */
+#comparison-section {
+  background-color: var(--cor-fundo-inicial);
+  color: var(--cor-texto-escuro);
+  padding: 5rem 5%;
+  text-align: center;
+}
+
+.comparison-intro h2 {
+  font-size: 3.5rem; 
+  font-weight: 800; 
+  text-transform: uppercase;
+  margin-top: 0; 
+  margin-bottom: 1.5rem;
+  color: #333333;
+}
+
+.comparison-intro p {
+  font-size: 1.1rem; 
+  line-height: 1.7; 
+  color: #555;
+  max-width: 500px; 
+  margin: 0 auto;
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
@@ -1981,36 +1993,9 @@ body.theme-citrus .sustainability-parallax .panel-content { background: #ffffff 
 body.theme-aqua #sustentabilidade .panel-content,
 body.theme-aqua .sustainability-parallax .panel-content { background: #ffffff !important; }
 
-.tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; flex-direction: column; align-items:center; justify-content: center; }
-
-/* Título centralizado no estilo do teste.html */
-.testimonials-intro {
-    text-align: center;
-    margin-bottom: 4rem;
-}
-
-.testimonials-intro h2 {
-    font-size: 3.5rem; 
-    font-weight: 800; 
-    text-transform: uppercase;
-    margin-top: 0; 
-    margin-bottom: 1.5rem;
-    color: #ffffff;
-}
-
-.testimonials-intro p {
-    font-size: 1.1rem; 
-    line-height: 1.7; 
-    color: rgba(255, 255, 255, 0.85);
-    max-width: 500px; 
-    margin: 0 auto;
-}
-.tc-wrap{ max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; align-items: center; }
-@media (max-width: 900px) {
-    .testimonials-intro h2 { 
-        font-size: 2.5rem; 
-    }
-}
+.tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
+.tc-wrap{ max-width: 1200px; margin: 0 auto; display: grid; gap: clamp(20px, 4vw, 40px); grid-template-columns: 1fr }
+@media (min-width: 960px){ .tc-wrap{ grid-template-columns: 1fr 1.4fr } }
 
 /* cores por tema (section background) */
 body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007BFF !important; color:#e9e9ee }
