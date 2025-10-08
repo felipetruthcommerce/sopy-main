@@ -1001,8 +1001,12 @@ if (heroVideo && heroPoster) {
                 console.log(`[SLIDE TO] Current slide:`, currentSlide.getAttribute('data-slide'));
                 console.log(`[SLIDE TO] Next slide:`, nextSlide.getAttribute('data-slide'));
 
+                // Primeiro, posicionar o próximo slide
+                gsap.set(nextSlide, { x: direction * 100 + '%', opacity: 1, zIndex: 2 });
+                gsap.set(currentSlide, { zIndex: 1 });
+
                 gsap.timeline({
-                    defaults: { duration: 0.6, ease: 'power3.inOut' },
+                    defaults: { duration: 0.5, ease: 'power2.inOut' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
@@ -1010,8 +1014,11 @@ if (heroVideo && heroPoster) {
                         console.log(`[SLIDE TO] Animação completa, currentIndex agora é: ${currentIndex}`);
                     }
                 })
-                .to(currentSlide, { x: direction * -100 + '%', opacity: 1, zIndex: 1 }, 0)
-                .fromTo(nextSlide, { x: direction * 100 + '%', opacity: 1, scale: 1.01, zIndex: 2 }, { x: '0%', opacity: 1, scale: 1, zIndex: 2 }, 0.05);
+                .to([currentSlide, nextSlide], { 
+                    x: direction * -100 + '%', 
+                    duration: 0.5, 
+                    ease: 'power2.inOut' 
+                }, 0);
             };
 
             const handleStart = (e) => {
