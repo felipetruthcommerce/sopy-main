@@ -916,21 +916,18 @@ if (heroVideo && heroPoster) {
         });
         const navItems = Array.from(navEl.querySelectorAll('.how-nav-item'));
 
-        // Initial z-order and positions for a horizontal slide feel
+        // Setup inicial - apenas configurações básicas de CSS aqui
         slides.forEach((s, i) => {
             s.style.position = 'absolute';
             s.style.top = '0';
             s.style.left = '0';
             s.style.width = '100%';
             s.style.height = '100vh';
-            s.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
-            s.style.zIndex = i === 0 ? '2' : '1';
-            s.style.opacity = '1';
             
             // Debug: verificar qual imagem está sendo aplicada
             const bgImage = getComputedStyle(s).backgroundImage;
             const slideNum = s.getAttribute('data-slide');
-            console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] Transform: ${s.style.transform}, Z-Index: ${s.style.zIndex}, BgImage: ${bgImage}`);
+            console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] BgImage: ${bgImage}`);
         });
     navItems[0]?.classList.add('active');
     textEl.textContent = slideData[0].title;
@@ -993,10 +990,16 @@ if (heroVideo && heroPoster) {
                 if (targetIndex >= slides.length) targetIndex = 0;
                 if (targetIndex < 0) targetIndex = slides.length - 1;
                 if (targetIndex === currentIndex) return;
+                
+                console.log(`[SLIDE TO] De ${currentIndex} para ${targetIndex}`);
+                
                 isAnimating = true;
                 const direction = targetIndex > currentIndex || (currentIndex === slides.length - 1 && targetIndex === 0) ? 1 : -1;
                 const currentSlide = slides[currentIndex];
                 const nextSlide = slides[targetIndex];
+
+                console.log(`[SLIDE TO] Current slide:`, currentSlide.getAttribute('data-slide'));
+                console.log(`[SLIDE TO] Next slide:`, nextSlide.getAttribute('data-slide'));
 
                 gsap.timeline({
                     defaults: { duration: 0.6, ease: 'power3.inOut' },
@@ -1004,10 +1007,11 @@ if (heroVideo && heroPoster) {
                         currentIndex = targetIndex;
                         isAnimating = false;
                         applyActive(currentIndex);
+                        console.log(`[SLIDE TO] Animação completa, currentIndex agora é: ${currentIndex}`);
                     }
                 })
-                .to(currentSlide, { x: direction * -100 + '%', opacity: 1 }, 0)
-                .fromTo(nextSlide, { x: direction * 100 + '%', opacity: 1, scale: 1.01 }, { x: '0%', opacity: 1, scale: 1 }, 0.05);
+                .to(currentSlide, { x: direction * -100 + '%', opacity: 1, zIndex: 1 }, 0)
+                .fromTo(nextSlide, { x: direction * 100 + '%', opacity: 1, scale: 1.01, zIndex: 2 }, { x: '0%', opacity: 1, scale: 1, zIndex: 2 }, 0.05);
             };
 
             const handleStart = (e) => {
@@ -1049,14 +1053,25 @@ if (heroVideo && heroPoster) {
             navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
             nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
 
-            // Setup inicial dos slides para mobile
+            // Setup inicial dos slides para MOBILE (horizontal swipe)
             slides.forEach((slide, index) => {
                 if (index === 0) {
                     gsap.set(slide, { x: '0%', opacity: 1, zIndex: 2 });
                 } else {
                     gsap.set(slide, { x: '100%', opacity: 1, zIndex: 1 });
                 }
-                console.log(`[MOBILE SLIDE ${index}] Configurado: x=${index === 0 ? '0%' : '100%'}, opacity=1`);
+                
+                // Debug visual para mobile
+                const debugEl = document.createElement('div');
+                debugEl.style.cssText = `
+                    position: absolute; top: 10px; left: 10px; z-index: 100;
+                    background: rgba(0,255,0,0.8); color: white; padding: 5px;
+                    font-size: 12px; pointer-events: none;
+                `;
+                debugEl.textContent = `MOBILE - Slide ${index + 1}`;
+                slide.appendChild(debugEl);
+                
+                console.log(`[MOBILE SETUP SLIDE ${index}] x=${index === 0 ? '0%' : '100%'}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
             });
 
             // Initial
@@ -1116,14 +1131,25 @@ if (heroVideo && heroPoster) {
                 scrollToSlide(next);
             });
 
-            // Setup inicial dos slides para desktop
+            // Setup inicial dos slides para DESKTOP (ScrollTrigger scrub)
             slides.forEach((slide, index) => {
                 if (index === 0) {
                     gsap.set(slide, { xPercent: 0, opacity: 1, zIndex: 2 });
                 } else {
                     gsap.set(slide, { xPercent: 100, opacity: 1, zIndex: 1 });
                 }
-                console.log(`[DESKTOP SLIDE ${index}] Configurado: xPercent=${index === 0 ? 0 : 100}, opacity=1`);
+                
+                // Debug visual para desktop
+                const debugEl = document.createElement('div');
+                debugEl.style.cssText = `
+                    position: absolute; top: 10px; right: 10px; z-index: 100;
+                    background: rgba(0,0,255,0.8); color: white; padding: 5px;
+                    font-size: 12px; pointer-events: none;
+                `;
+                debugEl.textContent = `DESKTOP - Slide ${index + 1}`;
+                slide.appendChild(debugEl);
+                
+                console.log(`[DESKTOP SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
             });
 
             applyActive(0);
