@@ -1474,44 +1474,70 @@ body.theme-aqua .sopy-how-card {
 /* ========== COMO USAR (Fullscreen vertical slides) ========== */
 .how-fullscreen { position: relative; height: 100vh; overflow: hidden; }
 .how-fullscreen .how-slides-track { position: absolute; inset: 0; will-change: transform; }
-.how-fullscreen .how-slide { position: relative; width: 100%; height: 100vh; background-size: cover; background-position: center; will-change: transform, opacity; }
+.how-fullscreen .how-slide { 
+  position: absolute; 
+  inset: 0;
+  width: 100%; 
+  height: 100vh; 
+  background-size: cover; 
+  background-position: center; 
+  will-change: transform, opacity;
+  opacity: 1;
+}
 
 /* Overlay text content container */
 .how-fullscreen .how-text-content {
   position: absolute; top: 120px; left: clamp(16px, 7vw, 120px);
-  z-index: 10; pointer-events: none; max-width: 600px;
+  z-index: 20; pointer-events: none; max-width: 600px;
 }
 
 .how-fullscreen .how-text {
   color: #fff; font-size: clamp(28px, 6vw, 48px); 
   font-weight: 800; line-height: 1.2;
   margin: 0 0 1rem 0;
-  opacity: 1; transform: translateY(-50px); 
+  opacity: 1; transform: translateY(-50px);
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0px 0px 12px rgba(0, 0, 0, 0.6);
 }
 
 .how-fullscreen .how-text-support {
-  color: rgba(255, 255, 255, 0.9); 
+  color: #fff; 
   font-size: clamp(16px, 3vw, 20px);
   line-height: 1.5;
   margin: 0;
   opacity: 1; transform: translateY(-50px);
+  text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8), 0px 0px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* Labeled nav with loading bars */
 .how-fullscreen .how-nav {
   position: absolute; bottom: clamp(24px, 6vh, 80px); left: clamp(12px, 6vw, 100px);
-  display: flex; flex-direction: row; gap: 24px; z-index: 10;
+  display: flex; flex-direction: row; gap: 24px; z-index: 20;
 }
 .how-fullscreen .how-nav-item { display: flex; flex-direction: column; align-items: start; cursor: pointer; }
-.how-fullscreen .how-nav-item span { color: #fff; opacity: .5; transition: opacity .5s ease; font-size: 14px; }
+.how-fullscreen .how-nav-item span { 
+  color: #fff; opacity: .7; transition: opacity .5s ease; font-size: 14px; font-weight: 600;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
+}
 .how-fullscreen .how-nav-item.active span { opacity: 1; }
-.how-fullscreen .how-nav-bar { width: 260px; max-width: 32vw; height: 5px; background: rgba(255,255,255,.5); position: relative; overflow: hidden; opacity: .5; transition: opacity .5s ease, width .5s ease; margin-top: 12px; }
-.how-fullscreen .how-nav-bar::before { content:""; position: absolute; inset: 0; background:#fff; transform: translateX(-100%); opacity: 1; transition: transform .8s ease, opacity .5s ease; }
+.how-fullscreen .how-nav-bar { 
+  width: 260px; max-width: 32vw; height: 6px; 
+  background: rgba(0, 0, 0, 0.4); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative; overflow: hidden; opacity: .8; 
+  transition: opacity .5s ease, width .5s ease; margin-top: 12px; 
+  border-radius: 3px;
+}
+.how-fullscreen .how-nav-bar::before { 
+  content:""; position: absolute; inset: 0; background: #fff; 
+  transform: translateX(-100%); opacity: 1; 
+  transition: transform .8s ease, opacity .5s ease; 
+  border-radius: 2px;
+}
 .how-fullscreen .how-nav-item.active .how-nav-bar { opacity: 1; }
 .how-fullscreen .how-nav-item.active .how-nav-bar::before { transform: translateX(0); }
 
 /* Next button top-right (desktop and mobile) */
-.how-fullscreen .how-button { position: absolute; top: clamp(16px, 4vh, 32px); right: clamp(12px, 6vw, 40px); background: transparent; border: none; cursor: pointer; z-index: 10; padding: 6px 8px; color: #fff; font-weight: 800; font-size: clamp(18px, 2.6vw, 28px); line-height: 1; }
+.how-fullscreen .how-button { position: absolute; top: clamp(16px, 4vh, 32px); right: clamp(12px, 6vw, 40px); background: transparent; border: none; cursor: pointer; z-index: 20; padding: 6px 8px; color: #fff; font-weight: 800; font-size: clamp(18px, 2.6vw, 28px); line-height: 1; }
 .how-fullscreen .how-button span { pointer-events: none; display:inline-block; transform: translateY(-1px); }
 
 /* Mobile: allow natural scroll with scroll-snap as graceful fallback when no JS */
@@ -1531,15 +1557,55 @@ body.theme-aqua .sopy-how-card {
   .how-fullscreen.mobile-swipe .how-button { top: 12px; right: 12px; font-size: 24px; }
 }
 
-/* Garantir que o quarto slide (último) tenha opacidade total e sem overlay */
-.how-fullscreen .how-slide:nth-child(4) {
+/* Garantir que todos os slides tenham configuração adequada */
+.how-fullscreen .how-slide {
   opacity: 1 !important;
+  z-index: 1;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-.how-fullscreen .how-slide:nth-child(4)::before,
-.how-fullscreen .how-slide:nth-child(4)::after {
-  display: none;
+/* Slide específicos para melhor contraste */
+.how-fullscreen .how-slide:nth-child(1)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
 }
+
+.how-fullscreen .how-slide:nth-child(2)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.how-fullscreen .how-slide:nth-child(3)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.how-fullscreen .how-slide:nth-child(4)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.how-fullscreen .how-slide:nth-child(4) {
+  opacity: 1 !important;
+  z-index: 2 !important;
+  background-color: transparent !important;
+}
+
+/* Overlays permitidos para melhor contraste */
 
 /* Painel em tela cheia com posição sticky */
 .sustainability-parallax .fullscreen-panel {

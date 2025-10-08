@@ -922,6 +922,7 @@ if (heroVideo && heroPoster) {
             s.style.inset = '0';
             s.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
             s.style.zIndex = i === 0 ? '2' : '1';
+            s.style.opacity = '1';
         });
     navItems[0]?.classList.add('active');
     textEl.textContent = slideData[0].title;
@@ -997,8 +998,8 @@ if (heroVideo && heroPoster) {
                         applyActive(currentIndex);
                     }
                 })
-                .to(currentSlide, { x: direction * -100 + '%', opacity: 0.9 }, 0)
-                .fromTo(nextSlide, { x: direction * 100 + '%', opacity: 0.9, scale: 1.01 }, { x: '0%', opacity: 1, scale: 1 }, 0.05);
+                .to(currentSlide, { x: direction * -100 + '%', opacity: 1 }, 0)
+                .fromTo(nextSlide, { x: direction * 100 + '%', opacity: 1, scale: 1.01 }, { x: '0%', opacity: 1, scale: 1 }, 0.05);
             };
 
             const handleStart = (e) => {
@@ -1049,8 +1050,8 @@ if (heroVideo && heroPoster) {
                 if (i === 0) return;
                 const prev = slides[i - 1];
                 tl.addLabel(`slide${i}`)
-                  .to(prev, { xPercent: -100, opacity: 0.9, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`)
-                  .fromTo(slide, { xPercent: 100, opacity: 0.9, scale: 1.015 }, { xPercent: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`);
+                  .to(prev, { xPercent: -100, opacity: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`)
+                  .fromTo(slide, { xPercent: 100, opacity: 1, scale: 1.015 }, { xPercent: 0, opacity: 1, scale: 1, duration: 1.15, ease: 'power3.inOut' }, `slide${i}`);
             });
 
             const totalDur = slides.length - 1;
