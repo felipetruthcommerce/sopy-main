@@ -335,11 +335,11 @@ body.theme-aqua #clean-slate-section {
 
 /* Wave com cores baseadas no tema */
 body.theme-citrus .green-wave {
-    background-color: #1A4731; /* Verde para tema citrus */
+    background-color: #019c51; /* Verde para tema citrus */
 }
 
 body.theme-aqua .green-wave {
-    background-color: #007BFF; /* Azul para tema aqua */
+    background-color: #48acf8; /* Azul para tema aqua */
 }
 
 .card { 
