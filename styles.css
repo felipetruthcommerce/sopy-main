@@ -939,35 +939,35 @@ body.theme-aqua .capsule-3d-cta {
 }
 
 .benefit-title h2 {
-  font-size: clamp(2.5rem, 8vw, 6rem);
+  font-size: clamp(2rem, 6vw, 5rem); /* Reduzido para garantir que caiba */
   font-weight: 700;
-  line-height: 1.3; /* Aumentado para não cortar caracteres */
+  line-height: 1.3;
   color: #ffffff;
   text-align: center;
   margin: 0;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
-  white-space: nowrap; /* Força uma linha só */
-  overflow: visible; /* Garante que não seja cortado */
-  padding: 0.2em 0; /* Espaço extra para caracteres com acentos */
+  white-space: nowrap;
+  overflow: visible;
+  padding: 0.2em 0;
 }
 
 /* Positioning for each title - with increased spacing */
 .benefit-1 {
   top: 8%;
-  left: 10%;
-  right: 10%;
+  left: 5%;
+  right: 5%;
 }
 
 .benefit-2 {
   top: 35%;
-  left: 15%;
-  right: 15%;
+  left: 5%;
+  right: 5%;
 }
 
 .benefit-3 {
   top: 62%;
-  left: 10%;
-  right: 10%;
+  left: 5%;
+  right: 5%;
 }
 
 /* Revealed state - will be handled by GSAP */
@@ -990,8 +990,8 @@ body.theme-citrus .benefit-title h2 {
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .benefit-title h2 {
-    font-size: clamp(1.8rem, 6vw, 3.5rem); /* Reduzido para caber em uma linha no mobile */
-    white-space: nowrap; /* Força uma linha só no mobile também */
+    font-size: clamp(1.4rem, 5vw, 2.8rem); /* Ainda menor para garantir que caiba no mobile */
+    white-space: nowrap;
     overflow: visible;
   }
   
