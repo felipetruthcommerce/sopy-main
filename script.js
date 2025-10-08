@@ -243,6 +243,23 @@ function setTheme(theme) {
         toCol(gelB, pal.b);
         toCol(gelC, pal.c);
     }
+
+    // Atualiza a imagem do card da Sopy dependendo do tema
+    try {
+        const sopyCardImage = document.querySelector('.sopy-card-image');
+        if (sopyCardImage) {
+            const newSrc = theme === 'citrus' 
+                ? sopyCardImage.getAttribute('data-citrus')
+                : sopyCardImage.getAttribute('data-aqua');
+            
+            if (newSrc && sopyCardImage.src !== newSrc) {
+                console.log(`[TEMA] Trocando imagem do card para ${theme}:`, newSrc);
+                sopyCardImage.src = newSrc;
+            }
+        }
+    } catch (e) {
+        console.warn('[TEMA] Falha ao trocar imagem do card:', e);
+    }
     
     // ... (seu código para atualizar textos do card de produto) ...
 
