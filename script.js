@@ -881,14 +881,37 @@ if (heroVideo && heroPoster) {
     const nextBtn = howSection.querySelector('#how-next');
         if (!track || !slides.length || !navEl || !textEl) return;
 
-        // Nav items with labels 01..04 Slide
-        const labels = ['01 Slide', '02 Slide', '03 Slide', '04 Slide'];
+        // Dados dos slides com títulos e textos de apoio
+        const slideData = [
+            {
+                label: '01 Passo',
+                title: '01. DOSE ÚNICA, SEM MEDIÇÃO',
+                support: 'Sem medir, sem sujar. Apenas pegue uma cápsula Sopy para cargas normais, ou duas para lavagens extra grandes e muito sujas. Simples assim.'
+            },
+            {
+                label: '02 Passo', 
+                title: '02. DIRETO NO TAMBOR, ANTES DAS ROUPAS',
+                support: 'Nada de gavetas ou medidores. Jogue a cápsula diretamente no fundo do tambor da sua máquina de lavar, antes de adicionar as roupas. Praticidade total.'
+            },
+            {
+                label: '03 Passo',
+                title: '03. APENAS APERTE O START', 
+                support: 'Agora é só colocar suas roupas e iniciar seu ciclo de lavagem preferido. Água fria, quente, ciclo rápido... a película 100% solúvel e a fórmula inteligente da Sopy cuidam de tudo.'
+            },
+            {
+                label: '04 Resultado',
+                title: '04. RESULTADO IMPECÁVEL',
+                support: 'Enquanto outros produtos podem deixar resíduos e desbotar tecidos, a Sopy entrega uma limpeza profunda que remove manchas, protege as fibras e realça as cores. Sinta a diferença em cada lavagem.'
+            }
+        ];
+
+        // Nav items com labels personalizados
         navEl.innerHTML = '';
-        labels.slice(0, slides.length).forEach((label, i) => {
+        slideData.slice(0, slides.length).forEach((data, i) => {
             const item = document.createElement('div');
             item.className = 'how-nav-item';
             item.setAttribute('data-index', i);
-            item.innerHTML = `<span>${label}</span><div class="how-nav-bar"></div>`;
+            item.innerHTML = `<span>${data.label}</span><div class="how-nav-bar"></div>`;
             navEl.appendChild(item);
         });
         const navItems = Array.from(navEl.querySelectorAll('.how-nav-item'));
@@ -901,26 +924,43 @@ if (heroVideo && heroPoster) {
             s.style.zIndex = i === 0 ? '2' : '1';
         });
     navItems[0]?.classList.add('active');
-    textEl.textContent = '01 Slide 1 Title';
+    textEl.textContent = slideData[0].title;
     if (nextBtn) { nextBtn.setAttribute('aria-label', 'Próximo slide'); nextBtn.innerHTML = '<span>➜</span>'; }
 
-        const titles = slides.map((_, i) => `${String(i+1).padStart(2,'0')} Slide ${i+1} Title`);
+        // Referência ao elemento de texto de apoio
+        const supportTextEl = howSection.querySelector('#how-text-support');
         let lastIdx = -1;
         const applyActive = (idx) => {
             if (idx === lastIdx) return;
             lastIdx = idx;
             navItems.forEach((n, i) => n.classList.toggle('active', i === idx));
+            
+            const currentSlide = slideData[idx] || slideData[0];
+            
             if (textEl) {
                 textEl.style.transition = 'opacity .45s, transform .45s';
                 textEl.style.opacity = '0';
                 setTimeout(() => {
-                    textEl.textContent = titles[idx] || titles[0];
+                    textEl.textContent = currentSlide.title;
                     textEl.style.transform = 'translateY(50px)';
                     requestAnimationFrame(() => {
                         textEl.style.opacity = '1';
                         textEl.style.transform = 'translateY(0)';
                     });
                 }, 150);
+            }
+            
+            if (supportTextEl) {
+                supportTextEl.style.transition = 'opacity .45s, transform .45s';
+                supportTextEl.style.opacity = '0';
+                setTimeout(() => {
+                    supportTextEl.textContent = currentSlide.support;
+                    supportTextEl.style.transform = 'translateY(50px)';
+                    requestAnimationFrame(() => {
+                        supportTextEl.style.opacity = '1';
+                        supportTextEl.style.transform = 'translateY(0)';
+                    });
+                }, 200); // Ligeiramente atrasado para efeito escalonado
             }
         };
 

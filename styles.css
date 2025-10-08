@@ -1476,11 +1476,25 @@ body.theme-aqua .sopy-how-card {
 .how-fullscreen .how-slides-track { position: absolute; inset: 0; will-change: transform; }
 .how-fullscreen .how-slide { position: relative; width: 100%; height: 100vh; background-size: cover; background-position: center; will-change: transform, opacity; }
 
-/* Overlay text top-left */
-.how-fullscreen .how-text {
+/* Overlay text content container */
+.how-fullscreen .how-text-content {
   position: absolute; top: 120px; left: clamp(16px, 7vw, 120px);
-  color: #fff; font-size: clamp(28px, 6vw, 60px); z-index: 10;
-  opacity: 1; transform: translateY(-50px); pointer-events: none;
+  z-index: 10; pointer-events: none; max-width: 600px;
+}
+
+.how-fullscreen .how-text {
+  color: #fff; font-size: clamp(28px, 6vw, 48px); 
+  font-weight: 800; line-height: 1.2;
+  margin: 0 0 1rem 0;
+  opacity: 1; transform: translateY(-50px); 
+}
+
+.how-fullscreen .how-text-support {
+  color: rgba(255, 255, 255, 0.9); 
+  font-size: clamp(16px, 3vw, 20px);
+  line-height: 1.5;
+  margin: 0;
+  opacity: 1; transform: translateY(-50px);
 }
 
 /* Labeled nav with loading bars */
@@ -1508,7 +1522,9 @@ body.theme-aqua .sopy-how-card {
   .how-fullscreen.mobile-swipe { scroll-snap-type: none; overflow: hidden; }
   .how-fullscreen.mobile-swipe .how-slides-track { cursor: grab; touch-action: pan-x; }
   .how-fullscreen.mobile-swipe .how-slides-track.is-grabbing { cursor: grabbing; }
-  .how-fullscreen.mobile-swipe .how-text { top: 86px; left: 16px; font-size: clamp(22px, 7vw, 36px); }
+  .how-fullscreen.mobile-swipe .how-text-content { top: 86px; left: 16px; max-width: calc(100vw - 32px); }
+  .how-fullscreen.mobile-swipe .how-text { font-size: clamp(22px, 7vw, 36px); margin-bottom: 0.8rem; }
+  .how-fullscreen.mobile-swipe .how-text-support { font-size: clamp(14px, 4vw, 18px); }
   .how-fullscreen.mobile-swipe .how-nav { left: 16px; right: 16px; bottom: 16px; gap: 10px; align-items: flex-end; }
   .how-fullscreen.mobile-swipe .how-nav-item span { font-size: 12px; }
   .how-fullscreen.mobile-swipe .how-nav-bar { width: 64px; height: 3px; max-width: none; }
