@@ -2212,7 +2212,33 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 @keyframes tcFade{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
 .tc-cardFoot { background: transparent !important; border-radius: 0 0 18px 18px; border-top: 1px solid rgba(255,255,255,0.08); }
 .tc-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     background: transparent !important;
+}
+
+.tc-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.tc-name {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 2px;
+}
+
+.tc-role {
+    display: block;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 400;
 }
 .tc-rating{ display:flex; align-items:center; gap:8px }
 .tc-stars{ display:flex; gap:4px }
