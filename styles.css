@@ -1460,7 +1460,7 @@ body.theme-aqua .sopy-how-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Remove transparent background to allow solid theme colors */
+  background-color: #ffffff; /* Fundo branco */
 }
 
 /* Container flexível para o conteúdo do painel */
@@ -1545,13 +1545,13 @@ body.theme-aqua .sopy-how-card {
   font-size: clamp(2.8rem, 6.5vw, 5rem);
   line-height: 1.02;
   margin-bottom: 1rem;
-  color: #f0f0f0;
+  color: #333333; /* Preto para títulos */
 }
 
 .sustainability-parallax .text-column p {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: #ffffff; /* changed from gray to white */
+  color: #444444; /* Cinza escuro para textos */
   max-width: 55ch;
 }
 
@@ -1564,13 +1564,13 @@ body.theme-aqua .sopy-how-card {
 
 .sustainability-parallax .intro-panel h1 {
   font-size: 3rem;
-  color: #f0f0f0;
+  color: #333333; /* Preto para título principal */
   margin-bottom: 0.5rem;
 }
 
 .sustainability-parallax .intro-panel p {
   font-size: 1.2rem;
-  color: #ffffff; /* changed from gray to white */
+  color: #444444; /* Cinza escuro para subtítulo */
 }
 
 /* Responsividade */
