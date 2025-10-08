@@ -424,7 +424,7 @@ body.theme-aqua .green-wave {
 
 /* Título da seção de comparação */
 #comparison-section {
-  background-color: var(--cor-fundo-inicial);
+  background-color: #E8F4FD; /* Azul claro diferente */
   color: var(--cor-texto-escuro);
   padding: 5rem 5%;
   text-align: center;
@@ -445,6 +445,40 @@ body.theme-aqua .green-wave {
   color: #555;
   max-width: 500px; 
   margin: 0 auto;
+}
+
+/* Mobile: título da seção menor */
+@media (max-width: 768px) {
+  #comparison-section {
+    padding: 3rem 3%;
+  }
+  
+  .comparison-intro h2 {
+    font-size: 2.5rem;
+  }
+  
+  /* Cards menores no mobile */
+  .card {
+    width: 95%;
+    max-width: 420px; /* Menor que antes (era 500px) */
+    min-height: 480px; /* Menor que antes (era 550px) */
+    padding: 2rem; /* Menor que antes (era 2.5rem) */
+  }
+  
+  .card h3 {
+    font-size: 1.6rem; /* Menor que antes (era 1.8rem) */
+    margin-bottom: 1.5rem;
+  }
+  
+  .card img {
+    height: 160px; /* Menor que antes (era 200px) */
+    margin-bottom: 1.5rem;
+  }
+  
+  .card .card-features li {
+    font-size: 0.9rem; /* Menor para caber melhor */
+    margin: 0.3rem 0;
+  }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
