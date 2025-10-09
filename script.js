@@ -1383,26 +1383,11 @@ if (heroVideo && heroPoster) {
             updateDots();
             startAutoPlay();
             
-            // Mostrar dots quando a seção estiver visível
+            // Dots sempre visíveis 100% do tempo
             tcProgressWrap.classList.add('visible');
-
-            // ScrollTrigger para controle de visibilidade
-            try {
-                if (typeof ScrollTrigger !== 'undefined') {
-                    ScrollTrigger.create({
-                        trigger: testimonialsSection,
-                        start: 'top 90%',
-                        end: 'bottom 10%',
-                        onEnter: () => tcProgressWrap.classList.add('visible'),
-                        onEnterBack: () => tcProgressWrap.classList.add('visible'),
-                        onLeave: () => tcProgressWrap.classList.remove('visible'),
-                        onLeaveBack: () => tcProgressWrap.classList.remove('visible')
-                    });
-                }
-            } catch (e) { 
-                // Fallback: manter sempre visível
-                tcProgressWrap.classList.add('visible');
-            }
+            // Força estilo inline para garantir que nunca suma
+            tcProgressWrap.style.opacity = '1';
+            tcProgressWrap.style.pointerEvents = 'auto';
 
         } else {
             console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
