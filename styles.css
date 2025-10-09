@@ -1514,10 +1514,9 @@ body.theme-aqua .sopy-how-card {
   text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8), 0px 0px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Labeled nav with loading bars */
+/* Labeled nav with loading bars - REMOVIDA, agora usamos dots */
 .how-fullscreen .how-nav {
-  position: absolute; bottom: clamp(24px, 6vh, 80px); left: clamp(12px, 6vw, 100px);
-  display: flex; flex-direction: row; gap: 24px; z-index: 20;
+  display: none; /* Escondida para usar os novos dots */
 }
 .how-fullscreen .how-nav-item { display: flex; flex-direction: column; align-items: start; cursor: pointer; }
 .how-fullscreen .how-nav-item span { 

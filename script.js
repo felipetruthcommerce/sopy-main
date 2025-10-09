@@ -938,7 +938,7 @@ if (heroVideo && heroPoster) {
             howProgressWrap.style.cssText = `
                 position: absolute;
                 left: 50%;
-                bottom: 80px;
+                bottom: 40px;
                 transform: translateX(-50%);
                 display: flex;
                 align-items: center;
