@@ -1245,14 +1245,19 @@ if (heroVideo && heroPoster) {
 
         // Limpa e cria dots dinâmicos dentro do wrap da seção
         tcProgressWrap.innerHTML = '';
+        console.log('[DEPOIMENTOS] Criando', cards.length, 'dots no container:', tcProgressWrap);
+        
         cards.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.className = 'tc-progress-dot';
             dot.setAttribute('data-index', i);
+            dot.style.cssText = 'background: red !important; width: 20px !important; height: 20px !important;'; // Debug visual
             tcProgressWrap.appendChild(dot);
+            console.log('[DEPOIMENTOS] Dot', i, 'criado:', dot);
         });
 
         const dots = tcProgressWrap.querySelectorAll('.tc-progress-dot');
+        console.log('[DEPOIMENTOS] Dots encontrados após criação:', dots.length);
 
         // Populate avatar images (if placeholders exist) with public images
         try {
@@ -1383,39 +1388,12 @@ if (heroVideo && heroPoster) {
             updateDots();
             startAutoPlay();
             
-            // Mostrar dots sempre quando a seção existir e tiver cards
+            // Forçar visibilidade imediata dos dots para debug
             tcProgressWrap.classList.add('visible');
-
-            // ScrollTrigger para controle mais preciso (se disponível)
-            try {
-                if (typeof ScrollTrigger !== 'undefined') {
-                    ScrollTrigger.create({
-                        trigger: testimonialsSection,
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        onEnter: () => tcProgressWrap.classList.add('visible'),
-                        onEnterBack: () => tcProgressWrap.classList.add('visible'),
-                        onLeave: () => tcProgressWrap.classList.remove('visible'),
-                        onLeaveBack: () => tcProgressWrap.classList.remove('visible')
-                    });
-                } else {
-                    // Fallback: IntersectionObserver com threshold menor
-                    const observer = new IntersectionObserver((entries) => {
-                        entries.forEach(entry => {
-                            if (entry.isIntersecting) {
-                                tcProgressWrap.classList.add('visible');
-                            } else {
-                                tcProgressWrap.classList.remove('visible');
-                            }
-                        });
-                    }, { threshold: 0.1 });
-
-                    observer.observe(testimonialsSection);
-                }
-            } catch (e) { 
-                // Se falhar tudo, deixa sempre visível
-                tcProgressWrap.classList.add('visible');
-            }
+            tcProgressWrap.style.opacity = '1';
+            tcProgressWrap.style.pointerEvents = 'auto';
+            
+            console.log('[DEPOIMENTOS] Dots criados e forçados para visíveis:', dots.length, 'dots');
 
         } else {
             console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
