@@ -1123,7 +1123,7 @@ body.theme-citrus .benefit-title h2 {
   right: 18px;
   bottom: 18px;
   z-index: 80;
-  padding: 8px;
+  padding: 0px 8px 8px 8px;
 }
 .pod-toggle-checkbox {
     display: none;
@@ -2560,5 +2560,124 @@ body.theme-aqua {
 
 /* Ensure testimonials section is a positioned container for absolute dots */
 #testemunhos { position: relative; }
+
+/* ===================== SEÇÃO CTA INTERMEDIÁRIA ===================== */
+.cta-section {
+  background: linear-gradient(135deg, #1A4731 0%, #2D6A4F 100%);
+  padding: clamp(3rem, 8vh, 6rem) 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efeito de fundo decorativo */
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
+  pointer-events: none;
+}
+
+.cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.btn-comprar-agora {
+  display: inline-block;
+  padding: clamp(16px, 2.5vh, 24px) clamp(32px, 6vw, 60px);
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #1A4731;
+  border-radius: 50px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
+              0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  
+  /* Animação de pulso para chamar atenção */
+  animation: ctaPulse 3s infinite ease-in-out;
+}
+
+/* Efeito shimmer no botão */
+.btn-comprar-agora::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s ease;
+}
+
+.btn-comprar-agora:hover::before {
+  left: 100%;
+}
+
+@keyframes ctaPulse {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  50% { 
+    transform: scale(1.05); 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2),
+                0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.btn-comprar-agora:hover {
+  animation-play-state: paused;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
+              0 8px 20px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+}
+
+.btn-comprar-agora:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Adaptações para temas */
+body.theme-aqua .cta-section {
+  background: linear-gradient(135deg, #083DA6 0%, #007BFF 100%);
+}
+
+body.theme-citrus .cta-section {
+  background: linear-gradient(135deg, #1A4731 0%, #2D6A4F 100%);
+}
+
+/* Responsividade mobile */
+@media (max-width: 768px) {
+  .cta-section {
+    padding: clamp(2rem, 6vh, 4rem) 1rem;
+  }
+  
+  .btn-comprar-agora {
+    font-size: 1.1rem;
+    padding: 18px 40px;
+    letter-spacing: 1px;
+  }
+}
 
 
