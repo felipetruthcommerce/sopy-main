@@ -929,6 +929,38 @@ if (heroVideo && heroPoster) {
             const slideNum = s.getAttribute('data-slide');
             console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] BgImage: ${bgImage}`);
         });
+
+        // Criar dots de progresso (igual aos depoimentos)
+        let howProgressWrap = howSection.querySelector('.sopy-how-progress');
+        if (!howProgressWrap) {
+            howProgressWrap = document.createElement('div');
+            howProgressWrap.className = 'sopy-how-progress visible';
+            howProgressWrap.style.cssText = `
+                position: absolute;
+                left: 50%;
+                bottom: 80px;
+                transform: translateX(-50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 14px;
+                z-index: 50;
+                opacity: 1;
+                pointer-events: auto;
+            `;
+            howSection.appendChild(howProgressWrap);
+        }
+
+        // Criar dots dinâmicos
+        howProgressWrap.innerHTML = '';
+        slides.forEach((_, i) => {
+            const dot = document.createElement('div');
+            dot.className = 'sopy-how-progress-dot';
+            dot.setAttribute('data-index', i);
+            howProgressWrap.appendChild(dot);
+        });
+
+        const howDots = howProgressWrap.querySelectorAll('.sopy-how-progress-dot');
     navItems[0]?.classList.add('active');
     textEl.textContent = slideData[0].title;
     if (nextBtn) { nextBtn.setAttribute('aria-label', 'Próximo slide'); nextBtn.innerHTML = '<span>➜</span>'; }
@@ -940,6 +972,8 @@ if (heroVideo && heroPoster) {
             if (idx === lastIdx) return;
             lastIdx = idx;
             navItems.forEach((n, i) => n.classList.toggle('active', i === idx));
+            // Atualizar dots também
+            howDots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
             
             const currentSlide = slideData[idx] || slideData[0];
             
@@ -1104,6 +1138,9 @@ if (heroVideo && heroPoster) {
             // Nav clicks
             navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
             nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
+            
+            // Dots clicks
+            howDots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
 
             // Setup inicial dos slides para MOBILE (horizontal swipe)
             slides.forEach((slide, index) => {
@@ -1180,6 +1217,9 @@ if (heroVideo && heroPoster) {
                 const next = Math.min(slides.length - 1, cur + 1);
                 scrollToSlide(next);
             });
+            
+            // Dots clicks
+            howDots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSlide(i)));
 
             // Setup inicial dos slides para DESKTOP (ScrollTrigger scrub)
             slides.forEach((slide, index) => {
