@@ -2261,7 +2261,7 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   width: auto;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.34s cubic-bezier(.22,1,.36,1);
+  transition: opacity 0.2s ease-out;
 }
 
 .tc-progress-wrap.visible {

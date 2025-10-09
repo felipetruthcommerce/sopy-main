@@ -1383,33 +1383,39 @@ if (heroVideo && heroPoster) {
             updateDots();
             startAutoPlay();
             
-            // Mostrar progress quando entrar na seção
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        tcProgressWrap.classList.add('visible');
-                    } else {
-                        tcProgressWrap.classList.remove('visible');
-                    }
-                });
-            }, { threshold: 0.3 });
+            // Mostrar dots sempre quando a seção existir e tiver cards
+            tcProgressWrap.classList.add('visible');
 
-            observer.observe(testimonialsSection);
-
-            // If GSAP ScrollTrigger is available, prefer it for more accurate enter/leave visibility
+            // ScrollTrigger para controle mais preciso (se disponível)
             try {
                 if (typeof ScrollTrigger !== 'undefined') {
                     ScrollTrigger.create({
                         trigger: testimonialsSection,
-                        start: 'top 40%',
-                        end: 'bottom 40%',
+                        start: 'top 80%',
+                        end: 'bottom 20%',
                         onEnter: () => tcProgressWrap.classList.add('visible'),
                         onEnterBack: () => tcProgressWrap.classList.add('visible'),
                         onLeave: () => tcProgressWrap.classList.remove('visible'),
                         onLeaveBack: () => tcProgressWrap.classList.remove('visible')
                     });
+                } else {
+                    // Fallback: IntersectionObserver com threshold menor
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                tcProgressWrap.classList.add('visible');
+                            } else {
+                                tcProgressWrap.classList.remove('visible');
+                            }
+                        });
+                    }, { threshold: 0.1 });
+
+                    observer.observe(testimonialsSection);
                 }
-            } catch (e) { /* ignore if ScrollTrigger isn't present */ }
+            } catch (e) { 
+                // Se falhar tudo, deixa sempre visível
+                tcProgressWrap.classList.add('visible');
+            }
 
         } else {
             console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
