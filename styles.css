@@ -1614,7 +1614,7 @@ body.theme-citrus .sopy-how-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #2D6A4F;
+  background-color: #167312;
   transform: translateY(-1px);
 }
 
@@ -1622,7 +1622,7 @@ body.theme-aqua .sopy-how-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #007BFF;
+  background-color: #083DA6;
   transform: translateY(-1px);
 }
 
@@ -2358,19 +2358,38 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .sopy-tc-btn--ghost{ background: rgba(255,255,255,0.2); color: #ffffff; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); border-radius: 50px; }
 .sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.5); }
 
-/* Botão ghost específico nos testemunhos mantém animação hover original */
+/* Botão ghost específico nos testemunhos com glassmorphism original */
 .tc-testimonials .sopy-tc-btn--ghost {
   background: rgba(255,255,255,0.2);
   color: #ffffff;
   border: 2px solid rgba(255,255,255,0.3);
-  backdrop-filter: blur(10px);
   border-radius: 50px;
+  backdrop-filter: blur(5px);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   box-shadow: none;
   transform: none;
+  position: relative;
+  overflow: hidden;
 }
+
+.tc-testimonials .sopy-tc-btn--ghost * { position: relative; z-index: 1; }
+
+.tc-testimonials .sopy-tc-btn--ghost::before {
+  content: "";
+  position: absolute;
+  left: var(--xPos, 50%);
+  top: var(--yPos, 50%);
+  transform: translate(-50%, -50%);
+  width: 0; height: 0;
+  background-color: rgba(255,255,255,0.15);
+  border-radius: 50%;
+  transition: width 1.5s ease, height 1.5s ease;
+  z-index: 0;
+}
+
+.tc-testimonials .sopy-tc-btn--ghost:hover::before { width: 400px; height: 400px; }
 
 .tc-testimonials .sopy-tc-btn--ghost:hover {
   background: rgba(255,255,255,0.3);
@@ -2379,19 +2398,19 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   transform: none;
 }
 
-/* Testimonials CTA com estilo limpo */
+/* Testimonials CTA com glassmorphism original */
 .tc-testimonials .sopy-tc-btn{
-  background: rgba(255,255,255,0.95);
-  color: #333333;
-  border: 2px solid rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
+  border: 2px solid rgba(255,255,255,0.3);
   border-radius: 50px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(5px);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
   /* interaction/animation */
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: none;
   transform: none;
 }
 .tc-testimonials .sopy-tc-btn::before{
@@ -2408,16 +2427,16 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 .tc-testimonials .sopy-tc-btn:hover::before{ width: 400px; height: 400px; }
 .tc-testimonials .sopy-tc-btn:hover{
-  background: #ffffff;
-  border-color: #ffffff;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  transform: translateY(-2px);
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: none;
+  transform: none;
 }
 .tc-testimonials .sopy-tc-btn:active{
-  background: rgba(255,255,255,0.9);
-  border-color: rgba(255,255,255,0.9);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transform: translateY(0);
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.4);
+  box-shadow: none;
+  transform: none;
 }
 /* Keep ripple enabled so it can start from mouse position (set via --xPos/--yPos) */
 
@@ -2808,7 +2827,7 @@ body.theme-aqua .js-head-main,
 body.theme-aqua .head-logo-row,
 body.theme-aqua .js-menu-and-banners-row,
 body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
-  background-color: #132F4C !important;
+  background-color: #083DA6 !important;
   transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
 
@@ -2818,7 +2837,7 @@ body.theme-citrus .js-head-main,
 body.theme-citrus .head-logo-row,
 body.theme-citrus .js-menu-and-banners-row,
 body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
-  background-color: #2D6A4F !important;
+  background-color: #167312 !important;
   transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
 
