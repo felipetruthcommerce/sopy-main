@@ -1476,36 +1476,30 @@ body.theme-aqua .sopy-how-progress-dot.active {
   display: none;
 }
 
-/* Botão "Next" na seção Como Usar com seta customizada */
-/* Esconde o texto "Next" */
+/* Botão "Next" na seção Como Usar com SVG customizado */
+/* Substitui o texto por SVG usando background-image */
 .how-fullscreen .how-button span {
   display: none;
 }
 
-/* Cria seta customizada usando pseudo-elemento */
-.how-fullscreen .how-button::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 16px;
-  height: 16px;
-  transform: translate(-50%, -50%) rotate(45deg);
-  border: 3px solid;
-  border-color: #2D6A4F; /* Verde padrão (citrus) */
-  border-left: none;
-  border-bottom: none;
-  transition: border-color 0.3s ease;
+.how-fullscreen .how-button {
+  width: 40px;
+  height: 40px;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="%232D6A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 24px 24px;
+  transition: background-image 0.3s ease;
 }
 
 /* Cores por tema - Aqua (azul) */
-body.theme-aqua .how-fullscreen .how-button::after {
-  border-color: #007BFF;
+body.theme-aqua .how-fullscreen .how-button {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="%23007BFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
 }
 
 /* Cores por tema - Citrus (verde) */
-body.theme-citrus .how-fullscreen .how-button::after {
-  border-color: #2D6A4F;
+body.theme-citrus .how-fullscreen .how-button {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="%232D6A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
 }
 
 /* ========== COMO USAR (Fullscreen vertical slides) ========== */
