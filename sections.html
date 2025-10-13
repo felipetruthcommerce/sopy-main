@@ -191,6 +191,12 @@
       <!-- ===================== DEPOIMENTOS (tc-testimonials) ===================== -->
       <section id="testemunhos" class="tc-testimonials" aria-label="Depoimentos de clientes">
     <div class="tc-wrap">
+        <!-- Setas de navegação dos depoimentos -->
+        <div class="testimonials-nav-arrows">
+            <button class="testimonial-arrow prev" onclick="navigateTestimonials(-1)" aria-label="Depoimento anterior"></button>
+            <button class="testimonial-arrow next" onclick="navigateTestimonials(1)" aria-label="Próximo depoimento"></button>
+        </div>
+        
         <div class="tc-left">
             <h2 class="tc-title">Clientes que amam a Sopy</h2>
             <p class="tc-sub">Veja o que a galera diz sobre praticidade, perfume e resultado. Depoimentos reais de quem já usa no dia a dia.</p>
@@ -263,10 +269,6 @@
         </header>
 
         <section class="sopy-faq-accordion" id="faq-q1">
-          <div class="faq-nav-arrows">
-            <button class="faq-arrow prev" onclick="navigateFAQ(-1)" aria-label="Pergunta anterior"></button>
-            <button class="faq-arrow next" onclick="navigateFAQ(1)" aria-label="Próxima pergunta"></button>
-          </div>
           <h3 class="sopy-title"><a href="#faq-q1">Funciona em água fria?</a></h3>
           <div class="sopy-content">
             <div class="sopy-wrapper">
@@ -276,10 +278,6 @@
         </section>
 
         <section class="sopy-faq-accordion" id="faq-q2">
-          <div class="faq-nav-arrows">
-            <button class="faq-arrow prev" onclick="navigateFAQ(-1)" aria-label="Pergunta anterior"></button>
-            <button class="faq-arrow next" onclick="navigateFAQ(1)" aria-label="Próxima pergunta"></button>
-          </div>
           <h3 class="sopy-title"><a href="#faq-q2">Posso usar com roupas de bebê?</a></h3>
           <div class="sopy-content">
             <div class="sopy-wrapper">
@@ -289,10 +287,6 @@
         </section>
 
         <section class="sopy-faq-accordion" id="faq-q3">
-          <div class="faq-nav-arrows">
-            <button class="faq-arrow prev" onclick="navigateFAQ(-1)" aria-label="Pergunta anterior"></button>
-            <button class="faq-arrow next" onclick="navigateFAQ(1)" aria-label="Próxima pergunta"></button>
-          </div>
           <h3 class="sopy-title"><a href="#faq-q3">Dissolve no ciclo rápido?</a></h3>
           <div class="sopy-content">
             <div class="sopy-wrapper">

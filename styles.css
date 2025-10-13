@@ -2043,52 +2043,54 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
 
 #faq h2 { color: black; }
 
-/* Setas de navegação nos cards FAQ */
-.faq-nav-arrows {
+/* Setas de navegação nos depoimentos */
+.testimonials-nav-arrows {
   position: absolute;
   top: 1rem;
   right: 1rem;
   display: flex;
   gap: 0.5rem;
   z-index: 10;
-  opacity: 0;
+  opacity: 0.8;
   transition: opacity 0.3s ease;
 }
 
-#faq .sopy-faq-accordion:hover .faq-nav-arrows {
+.tc-testimonials:hover .testimonials-nav-arrows {
   opacity: 1;
 }
 
-.faq-arrow {
-  width: 32px;
-  height: 32px;
+.testimonial-arrow {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.faq-arrow:hover {
+.testimonial-arrow:hover {
   background: rgba(255, 255, 255, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: scale(1.1);
+  border-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) scale(1.05);
 }
 
-.faq-arrow.prev {
+.testimonial-arrow.prev {
   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M19 12H5M5 12L11 18M5 12L11 6" stroke="%23333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
-  background-size: 16px 16px;
+  background-size: 18px 18px;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-.faq-arrow.next {
+.testimonial-arrow.next {
   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="%23333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
-  background-size: 16px 16px;
+  background-size: 18px 18px;
   background-repeat: no-repeat;
   background-position: center;
 }

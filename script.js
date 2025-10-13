@@ -1558,41 +1558,47 @@ if (heroVideo && heroPoster) {
     
 } // Fim da função bootAnimations
 
-// Função de navegação entre cards FAQ
-function navigateFAQ(direction) {
-    const faqCards = document.querySelectorAll('.sopy-faq-accordion');
-    const openCard = document.querySelector('.sopy-faq-accordion.open');
+// Função de navegação entre depoimentos
+function navigateTestimonials(direction) {
+    const track = document.querySelector('.tc-testimonials-track');
+    const cards = document.querySelectorAll('.tc-testimonial-card');
     
-    if (!openCard) {
-        // Se nenhum card está aberto, abre o primeiro
-        if (faqCards[0]) {
-            faqCards[0].querySelector('.sopy-title a').click();
-        }
-        return;
+    if (!track || cards.length === 0) return;
+    
+    // Verifica se existe função de scroll/drag já implementada
+    if (window.testimonialsCurrentIndex === undefined) {
+        window.testimonialsCurrentIndex = 0;
     }
     
-    // Encontra o índice do card atual
-    const currentIndex = Array.from(faqCards).indexOf(openCard);
-    let nextIndex = currentIndex + direction;
+    // Calcula próximo índice
+    let nextIndex = window.testimonialsCurrentIndex + direction;
     
     // Navegação circular
     if (nextIndex < 0) {
-        nextIndex = faqCards.length - 1;
-    } else if (nextIndex >= faqCards.length) {
+        nextIndex = cards.length - 1;
+    } else if (nextIndex >= cards.length) {
         nextIndex = 0;
     }
     
-    // Fecha o card atual e abre o próximo
-    const nextCard = faqCards[nextIndex];
-    if (nextCard) {
-        // Fecha o card atual
-        openCard.classList.remove('open');
-        
-        // Pequeno delay para a animação e depois abre o próximo
-        setTimeout(() => {
-            nextCard.querySelector('.sopy-title a').click();
-        }, 150);
-    }
+    // Atualiza índice atual
+    window.testimonialsCurrentIndex = nextIndex;
+    
+    // Calcula posição de scroll (assumindo que cada card tem largura similar)
+    const cardWidth = cards[0].offsetWidth;
+    const scrollPosition = nextIndex * (cardWidth + 20); // 20px de gap entre cards
+    
+    // Anima para a nova posição
+    gsap.to(track, {
+        x: -scrollPosition,
+        duration: 0.6,
+        ease: "power2.out"
+    });
+    
+    // Atualiza dots se existirem
+    const dots = document.querySelectorAll('.tc-progress-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === nextIndex);
+    });
 }
 
 // Observação: a inicialização automática foi removida para permitir que o host controle
