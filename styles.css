@@ -1997,7 +1997,7 @@ body.theme-citrus .how-fullscreen .how-button {
   box-shadow: 0 16px 40px 0 rgba(0,0,0,.28), 0 2px 12px 0 rgba(255,255,255,0.16) inset;
   background: linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.13) 100%);
 }
-body.theme-citrus .t-card, body.theme-aqua .t-card { color: #0e0f12; background: rgba(255,255,255,0.8); border-color: rgba(0,0,0,0.06); }
+body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background: rgba(255,255,255,0.95); border-color: rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
 .t-card__meta { font-size: .9rem; opacity: .7; margin-bottom: .6rem; }
 .t-card__text { font-size: clamp(0.98rem, 1.2vw, 1.06rem); line-height: 1.6; margin: 0; }
 .t-card__author { margin-top: .9rem; font-weight: 600; opacity: .8; }
@@ -2320,11 +2320,11 @@ body.theme-aqua .sustainability-parallax .panel-content { background: #ffffff !i
 @media (min-width: 960px){ .tc-wrap{ grid-template-columns: 1fr 1.4fr } }
 
 /* cores por tema (section background) */
-body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007BFF !important; color:#e9e9ee }
-body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(95,217,126,.06), transparent 55%), #2D6A4F !important; color:#e9e9ee }
+body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007FFF !important; color: #ffffff }
+body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(95,217,126,.06), transparent 55%), #00BF63 !important; color: #ffffff }
 
-.tc-left .tc-title{ font-size: clamp(28px, 4vw, 44px); line-height:1.12; letter-spacing:.2px; margin:0 0 16px; font-weight:800 }
-.tc-sub{ color:#cfd6d8; max-width:44ch; margin:0 0 24px }
+.tc-left .tc-title{ font-size: clamp(28px, 4vw, 44px); line-height:1.12; letter-spacing:.2px; margin:0 0 16px; font-weight:800; color: #ffffff }
+.tc-sub{ color: rgba(255,255,255,0.9); max-width:44ch; margin:0 0 24px }
 .tc-cta{ display:flex; gap:14px; flex-wrap:wrap }
 /* Match header CTA (sopy-btn) spacing/behavior */
 .sopy-tc-btn{
@@ -2355,22 +2355,22 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 /* Keep the visual variant similar but on top of header-like base */
 .sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
 .sopy-tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
-.sopy-tc-btn--ghost{ background: transparent; color:#e9e9ee; border:1px solid rgba(255,255,255,0.06) }
-.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.02) }
+.sopy-tc-btn--ghost{ background: transparent; color: #ffffff; border: 2px solid rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
+.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.1); border-color: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
-/* Testimonials CTA must match 3D card button animation exactly */
+/* Testimonials CTA com estilo limpo */
 .tc-testimonials .sopy-tc-btn{
-  /* visuals equivalent to .capsule-3d-cta .sopy-product-cta */
-  background: rgba(255,255,255,0.2);
-  color: #ffffff;
-  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.95);
+  color: #333333;
+  border: 2px solid rgba(255,255,255,0.8);
   border-radius: 50px;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(10px);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-weight: 600;
   /* interaction/animation */
   transition: all 0.3s ease;
-  box-shadow: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   transform: none;
 }
 .tc-testimonials .sopy-tc-btn::before{
@@ -2387,16 +2387,16 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 .tc-testimonials .sopy-tc-btn:hover::before{ width: 400px; height: 400px; }
 .tc-testimonials .sopy-tc-btn:hover{
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
-  box-shadow: none;
-  transform: none;
+  background: #ffffff;
+  border-color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
 }
 .tc-testimonials .sopy-tc-btn:active{
-  background: rgba(255,255,255,0.25);
-  border-color: rgba(255,255,255,0.4);
-  box-shadow: none;
-  transform: none;
+  background: rgba(255,255,255,0.9);
+  border-color: rgba(255,255,255,0.9);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transform: translateY(0);
 }
 /* Keep ripple enabled so it can start from mouse position (set via --xPos/--yPos) */
 
