@@ -2709,8 +2709,15 @@ body.theme-citrus .cta-section {
 
 /* ===================== HEADER THEME ADAPTATIONS ===================== */
 /* Por padrão o header é verde (tema citrus), quando muda para aqua fica azul */
-body.theme-aqua .head-main, .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
+body.theme-aqua .head-main, 
+body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #007BFF !important;
+}
+
+/* Tema padrão (citrus) - verde */
+body.theme-citrus .head-main,
+body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
+  background-color: #2D6A4F !important;
 }
 
 
