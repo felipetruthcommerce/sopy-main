@@ -97,37 +97,37 @@ img, video { display: block; max-width: 100%; }
   --line: #e5e7eb;
   --shadow: 0 10px 25px rgba(0,0,0,.12);
 
-    /* Citrus Lush (default) — palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
-    --brand: #5FD97E;       /* primary */
-    --brand-2: #91D9A3;     /* secondary */
-    --accent: #D7D9D2;      /* accent/neutral */
-    --brand-dark: #167312;  /* dark */
-    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
-                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
+    /* Verde Vibrante (default) — palette: #00BF63, #00E66F, #008A47, #FFFFFF */
+    --brand: #00BF63;       /* primary */
+    --brand-2: #00E66F;     /* secondary */
+    --accent: #FFFFFF;      /* accent/neutral */
+    --brand-dark: #008A47;  /* dark */
+    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(0,191,99,.18), transparent),
+                radial-gradient(800px 400px at 20% 80%, rgba(0,230,111,.18), transparent);
   /* Water seam controls */
   --mask-start: 52%;   /* onde começa a desvanecer o vídeo (45â€“60%) */
   --seam-height: 22vh; /* altura da zona de mistura (15â€“30vh) */
 }
 
 body.theme-citrus {
-  /* Citrus Lush â€” palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
-    --brand: #5FD97E;       /* primary */
-    --brand-2: #91D9A3;     /* secondary */
-    --accent: #D7D9D2;      /* accent/neutral */
-    --brand-dark: #167312;  /* dark */
-    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
-                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
+  /* Citrus Lush â€” palette: #00BF63, #00E66F, #008A47, #FFFFFF */
+    --brand: #00BF63;       /* primary */
+    --brand-2: #00E66F;     /* secondary */
+    --accent: #FFFFFF;      /* accent/neutral */
+    --brand-dark: #008A47;  /* dark */
+    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(0,191,99,.18), transparent),
+                radial-gradient(800px 400px at 20% 80%, rgba(0,230,111,.18), transparent);
 }
 
 /* Aqua theme token overrides: ensure all var(--brand*) switch on theme */
 body.theme-aqua {
-  /* Aqua Blues — align with 3D palette and section colors */
-  --brand: #076DF2;       /* primary */
-  --brand-2: #0C87F2;     /* secondary */
-  --accent: #1DDDF2;      /* accent/neutral */
-  --brand-dark: #083DA6;  /* dark (used by hero title and Como Usar bg) */
-  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(12,135,242,.18), transparent),
-              radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
+  /* Azul Vibrante — palette: #007FFF, #3399FF, #FFFFFF, #0056CC */
+  --brand: #007FFF;       /* primary - Azul Vibrante */
+  --brand-2: #3399FF;     /* secondary - Azul mais claro */
+  --accent: #FFFFFF;      /* accent/neutral - Branco */
+  --brand-dark: #0056CC;  /* dark - Azul mais escuro */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(0,127,255,.18), transparent),
+              radial-gradient(800px 400px at 20% 80%, rgba(51,153,255,.18), transparent);
 }
 
 /* Tipos */
