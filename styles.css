@@ -2038,10 +2038,10 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
 /* ========== FAQ (accordeão animado) ========== */
 #faq { 
   scroll-margin-top: 96px;
-  background-color: #FFFFFF !important; /* FORÇA FUNDO BRANCO DA SEÇÃO */
+  background-color: #48ACF8 !important; /* Azul claro conforme solicitado */
 }
 
-#faq h2 { color: black; }
+#faq h2 { color: #ffffff; /* Texto branco para contraste com fundo azul */ }
 
 #faq .sopy-faq-accordion {
   --d: 0deg;
