@@ -431,10 +431,14 @@ body.theme-aqua .green-wave {
 
 /* Título da seção de comparação */
 #comparison-section {
-  background-color: #E8F4FD; /* Azul claro diferente */
+  background-color: #F0F2F5; /* Cor solicitada */
   color: var(--cor-texto-escuro);
   padding: 5rem 5%;
   text-align: center;
+  min-height: 100vh; /* Altura de 100vh */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .comparison-intro h2 {
@@ -1470,6 +1474,19 @@ body.theme-aqua .sopy-how-progress-dot.active {
 
 .flickity-button:disabled {
   display: none;
+}
+
+/* Setas do Flickity na seção de comparação com cores do tema */
+#comparison-section .flickity-button-icon {
+  fill: var(--brand); /* Usa a cor do tema ativo */
+}
+
+body.theme-aqua #comparison-section .flickity-button-icon {
+  fill: #007BFF; /* Azul para tema aqua */
+}
+
+body.theme-citrus #comparison-section .flickity-button-icon {
+  fill: #2D6A4F; /* Verde para tema citrus */
 }
 
 /* ========== COMO USAR (Fullscreen vertical slides) ========== */
