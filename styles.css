@@ -303,13 +303,13 @@ p[class*="split"], .sopy-section-header[class*="split"] {
     background-color: var(--cor-fundo-inicial); 
 }
 
-/* Cores de fundo baseadas no tema */
+/* Cores de fundo baseadas no tema - ambos com a mesma cor */
 body.theme-citrus #clean-slate-section {
-    background-color: var(--cor-fundo-inicial);
+    background-color: #F0F2F5; /* Cor padrão */
 }
 
 body.theme-aqua #clean-slate-section {
-    background-color: #e8f4f8; /* Azul claro para tema aqua */
+    background-color: #F0F2F5; /* Mesma cor para tema aqua */
 }
 
 .pinned-container { 
@@ -431,10 +431,14 @@ body.theme-aqua .green-wave {
 
 /* Título da seção de comparação */
 #comparison-section {
-  background-color: #E8F4FD; /* Azul claro diferente */
+  background-color: #F0F2F5; /* Cor fixa independente do tema */
   color: var(--cor-texto-escuro);
   padding: 5rem 5%;
   text-align: center;
+  height: 100vh; /* Altura total da viewport */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .comparison-intro h2 {
@@ -458,6 +462,8 @@ body.theme-aqua .green-wave {
 @media (max-width: 768px) {
   #comparison-section {
     padding: 3rem 3%;
+    height: auto; /* No mobile, altura automática */
+    min-height: 80vh; /* Altura mínima no mobile */
   }
   
   .comparison-intro h2 {
