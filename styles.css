@@ -97,37 +97,37 @@ img, video { display: block; max-width: 100%; }
   --line: #e5e7eb;
   --shadow: 0 10px 25px rgba(0,0,0,.12);
 
-    /* Verde Vibrante (default) — palette: #00BF63, #00E66F, #008A47, #FFFFFF */
-    --brand: #00BF63;       /* primary */
-    --brand-2: #00E66F;     /* secondary */
-    --accent: #FFFFFF;      /* accent/neutral */
-    --brand-dark: #008A47;  /* dark */
-    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(0,191,99,.18), transparent),
-                radial-gradient(800px 400px at 20% 80%, rgba(0,230,111,.18), transparent);
+    /* Citrus Lush (default) — palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
+    --brand: #5FD97E;       /* primary */
+    --brand-2: #91D9A3;     /* secondary */
+    --accent: #D7D9D2;      /* accent/neutral */
+    --brand-dark: #167312;  /* dark */
+    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
+                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
   /* Water seam controls */
   --mask-start: 52%;   /* onde começa a desvanecer o vídeo (45â€“60%) */
   --seam-height: 22vh; /* altura da zona de mistura (15â€“30vh) */
 }
 
 body.theme-citrus {
-  /* Citrus Lush â€” palette: #00BF63, #00E66F, #008A47, #FFFFFF */
-    --brand: #00BF63;       /* primary */
-    --brand-2: #00E66F;     /* secondary */
-    --accent: #FFFFFF;      /* accent/neutral */
-    --brand-dark: #008A47;  /* dark */
-    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(0,191,99,.18), transparent),
-                radial-gradient(800px 400px at 20% 80%, rgba(0,230,111,.18), transparent);
+  /* Citrus Lush â€” palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
+    --brand: #5FD97E;       /* primary */
+    --brand-2: #91D9A3;     /* secondary */
+    --accent: #D7D9D2;      /* accent/neutral */
+    --brand-dark: #167312;  /* dark */
+    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
+                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
 }
 
 /* Aqua theme token overrides: ensure all var(--brand*) switch on theme */
 body.theme-aqua {
-  /* Azul Vibrante — palette: #007FFF, #3399FF, #FFFFFF, #0056CC */
-  --brand: #007FFF;       /* primary - Azul Vibrante */
-  --brand-2: #3399FF;     /* secondary - Azul mais claro */
-  --accent: #FFFFFF;      /* accent/neutral - Branco */
-  --brand-dark: #0056CC;  /* dark - Azul mais escuro */
-  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(0,127,255,.18), transparent),
-              radial-gradient(800px 400px at 20% 80%, rgba(51,153,255,.18), transparent);
+  /* Aqua Blues — align with 3D palette and section colors */
+  --brand: #076DF2;       /* primary */
+  --brand-2: #0C87F2;     /* secondary */
+  --accent: #1DDDF2;      /* accent/neutral */
+  --brand-dark: #083DA6;  /* dark (used by hero title and Como Usar bg) */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(12,135,242,.18), transparent),
+              radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
 }
 
 /* Tipos */
@@ -309,7 +309,7 @@ body.theme-citrus #clean-slate-section {
 }
 
 body.theme-aqua #clean-slate-section {
-    background-color: #F0F2F5; /* Cinza claro uniforme para ambos os temas */
+    background-color: #e8f4f8; /* Azul claro para tema aqua */
 }
 
 .pinned-container { 
@@ -431,14 +431,10 @@ body.theme-aqua .green-wave {
 
 /* Título da seção de comparação */
 #comparison-section {
-  background-color: #F0F2F5; /* Cor solicitada */
+  background-color: #E8F4FD; /* Azul claro diferente */
   color: var(--cor-texto-escuro);
   padding: 5rem 5%;
   text-align: center;
-  min-height: 100vh; /* Altura de 100vh */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .comparison-intro h2 {
@@ -640,6 +636,167 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 .sopy-hero section, .sopy-hero { color: #fff; }
 .sopy-hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
 .sopy-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Hero Product CTA - movido da seção CTA intermediária para dentro da hero */
+.hero-product-cta {
+  position: absolute;
+  bottom: 8vh;
+  right: 5vw;
+  max-width: 340px;
+  opacity: 0.95;
+  z-index: 10;
+}
+
+.hero-cta-inner {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-product-cta .product-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--brand);
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.hero-product-cta .product-price {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--brand-dark);
+  margin: 0 0 12px;
+}
+
+.hero-product-cta .product-copy {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+  margin: 0 0 18px;
+}
+
+.hero-product-cta .sopy-product-cta {
+  display: inline-block;
+  width: 100%;
+  background: var(--brand);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-product-cta .sopy-product-cta:hover {
+  background: var(--brand-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive para mobile */
+@media (max-width: 768px) {
+  .hero-product-cta {
+    position: static;
+    max-width: none;
+    margin: 32px auto 0;
+    width: min(100%, 320px);
+  }
+  
+  .hero-cta-inner {
+    padding: 20px;
+  }
+  
+  .hero-product-cta .product-copy {
+    font-size: 0.9rem;
+  }
+}
+
+/* Hero Product CTA - movido da seção 3D para dentro da hero */
+.hero-product-cta {
+  position: absolute;
+  bottom: 8vh;
+  right: 5vw;
+  max-width: 340px;
+  opacity: 0.95;
+  z-index: 10;
+}
+
+.hero-cta-inner {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-product-cta .product-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--brand);
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.hero-product-cta .product-price {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--brand-dark);
+  margin: 0 0 12px;
+}
+
+.hero-product-cta .product-copy {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+  margin: 0 0 18px;
+}
+
+.hero-product-cta .sopy-product-cta {
+  width: 100%;
+  background: var(--brand);
+  color: white;
+  border: none;
+  padding: 14px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.hero-product-cta .sopy-product-cta:hover {
+  background: var(--brand-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive para mobile */
+@media (max-width: 768px) {
+  .hero-product-cta {
+    position: static;
+    max-width: none;
+    margin: 32px auto 0;
+    width: min(100%, 320px);
+  }
+  
+  .hero-cta-inner {
+    padding: 20px;
+  }
+}
 
 /* Espuma/seam sutil entre hero e seção seguinte */
 #hero::after {
@@ -2145,12 +2302,12 @@ body.theme-aqua .sustainability-parallax .panel-content { background: #ffffff !i
 .tc-wrap{ max-width: 1200px; margin: 0 auto; display: grid; gap: clamp(20px, 4vw, 40px); grid-template-columns: 1fr }
 @media (min-width: 960px){ .tc-wrap{ grid-template-columns: 1fr 1.4fr } }
 
-/* cores por tema (section background) - cores vibrantes */
-body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(0,127,255,.08), transparent 55%), #007FFF !important; color:#FFFFFF }
-body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(0,191,99,.08), transparent 55%), #00BF63 !important; color:#FFFFFF }
+/* cores por tema (section background) */
+body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007BFF !important; color:#e9e9ee }
+body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(95,217,126,.06), transparent 55%), #2D6A4F !important; color:#e9e9ee }
 
 .tc-left .tc-title{ font-size: clamp(28px, 4vw, 44px); line-height:1.12; letter-spacing:.2px; margin:0 0 16px; font-weight:800 }
-.tc-sub{ color:rgba(255,255,255,0.8); max-width:44ch; margin:0 0 24px }
+.tc-sub{ color:#cfd6d8; max-width:44ch; margin:0 0 24px }
 .tc-cta{ display:flex; gap:14px; flex-wrap:wrap }
 /* Match header CTA (sopy-btn) spacing/behavior */
 .sopy-tc-btn{
@@ -2179,10 +2336,10 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .sopy-tc-btn:hover::before{ width:400px; height:400px; }
 .sopy-tc-btn:focus-visible{ outline:2px solid #fff2; outline-offset:2px }
 /* Keep the visual variant similar but on top of header-like base */
-.sopy-tc-btn--primary{ background: #FFFFFF; color: var(--brand); border:none; box-shadow: 0 10px 30px rgba(0,0,0,.15), inset 0 0 0 1px rgba(255,255,255,.08) }
+.sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
 .sopy-tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
-.sopy-tc-btn--ghost{ background: transparent; color:#FFFFFF; border:1px solid rgba(255,255,255,0.3) }
-.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.1) }
+.sopy-tc-btn--ghost{ background: transparent; color:#e9e9ee; border:1px solid rgba(255,255,255,0.06) }
+.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.02) }
 
 /* Testimonials CTA must match 3D card button animation exactly */
 .tc-testimonials .sopy-tc-btn{
@@ -2229,22 +2386,11 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-right{ position:relative; min-width:0 }
 .tc-topActions{ display:none !important }
 /* Track container para cards sobrepostos */
-.tc-testimonials-track{ position:relative; overflow:visible; min-width:0; touch-action: pan-x; cursor:grab; min-height:320px; border-radius:16px }
+.tc-testimonials-track{ position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; min-height:320px; border-radius:16px }
 .tc-testimonials-track.tc-grabbing{ cursor:grabbing }
-/* Cards sobrepostos com position absolute - melhorado para arrasto suave */
-.tc-testimonial-card{ 
-  position:absolute; 
-  inset:0; 
-  opacity:0; 
-  transform:translateX(100%); 
-  transition: none; /* Remove transição durante arrasto */
-  will-change: transform, opacity;
-}
+/* Cards sobrepostos com position absolute */
+.tc-testimonial-card{ position:absolute; inset:0; opacity:0; transform:translateX(100%); transition: opacity 0.3s ease, transform 0.6s ease }
 .tc-testimonial-card.active{ opacity:1; transform:translateX(0) }
-/* Card seguinte visível durante arrasto */
-.tc-testimonial-card.next{ opacity:0.7; transform:translateX(100%) }
-/* Card anterior visível durante arrasto */
-.tc-testimonial-card.prev{ opacity:0.7; transform:translateX(-100%) }
 /* Glassmorphism cards: translucent surface, blur backdrop, soft border and subtle shadow */
 .tc-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding: clamp(20px, 3.2vw, 34px); box-shadow: 0 8px 30px rgba(6,10,12,0.22); min-height:280px; display:grid; gap:18px; overflow:hidden; color: inherit; width: 100%; height: 100% }
 .tc-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); pointer-events:none }
@@ -2318,7 +2464,7 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background-color: rgba(255,255,255,0.3); /* branco transparente por padrão */
+  background-color: #b9b9b9; /* cinza por padrão */
   transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               background-color .25s ease, transform .2s ease;
@@ -2328,7 +2474,7 @@ body.theme-citrus .tc-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #FFFFFF;
+  background-color: #007BFF;
   transform: translateY(-1px);
 }
 
@@ -2336,7 +2482,7 @@ body.theme-aqua .tc-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #FFFFFF;
+  background-color: #2D6A4F;
   transform: translateY(-1px);
 }
 
@@ -2622,125 +2768,6 @@ body.theme-aqua {
 
 /* Ensure testimonials section is a positioned container for absolute dots */
 #testemunhos { position: relative; }
-
-/* ===================== SEÇÃO CTA INTERMEDIÁRIA ===================== */
-.cta-section {
-  background: linear-gradient(135deg, #4A9B8E 0%, #6BB6A8 50%, #5DAEA2 100%);
-  padding: clamp(3rem, 8vh, 6rem) 2rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Efeito de fundo decorativo */
-.cta-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-              radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
-  pointer-events: none;
-}
-
-.cta-content {
-  position: relative;
-  z-index: 2;
-}
-
-.btn-comprar-agora {
-  display: inline-block;
-  padding: clamp(16px, 2.5vh, 24px) clamp(32px, 6vw, 60px);
-  font-size: clamp(1rem, 2.2vw, 1.3rem);
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  color: #2C5F5F;
-  border-radius: 50px;
-  text-transform: uppercase;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
-              0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: relative;
-  overflow: hidden;
-  
-  /* Animação de pulso para chamar atenção */
-  animation: ctaPulse 3s infinite ease-in-out;
-}
-
-/* Efeito shimmer no botão */
-.btn-comprar-agora::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transition: left 0.6s ease;
-}
-
-.btn-comprar-agora:hover::before {
-  left: 100%;
-}
-
-@keyframes ctaPulse {
-  0%, 100% { 
-    transform: scale(1); 
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
-                0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  50% { 
-    transform: scale(1.05); 
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2),
-                0 6px 16px rgba(0, 0, 0, 0.15);
-  }
-}
-
-.btn-comprar-agora:hover {
-  animation-play-state: paused;
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
-              0 8px 20px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-}
-
-.btn-comprar-agora:active {
-  transform: translateY(-1px) scale(0.98);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* Adaptações para temas */
-body.theme-aqua .cta-section {
-  background: linear-gradient(135deg, #5BA8C4 0%, #7BC4E0 50%, #68B5D1 100%);
-}
-
-body.theme-citrus .cta-section {
-  background: linear-gradient(135deg, #4A9B8E 0%, #6BB6A8 50%, #5DAEA2 100%);
-}
-
-/* Responsividade mobile */
-@media (max-width: 768px) {
-  .cta-section {
-    padding: clamp(2rem, 6vh, 4rem) 1rem;
-  }
-  
-  .btn-comprar-agora {
-    font-size: 1.1rem;
-    padding: 18px 40px;
-    letter-spacing: 1px;
-  }
-}
 
 /* ===================== HEADER THEME ADAPTATIONS ===================== */
 /* Por padrão o header é verde (tema citrus), quando muda para aqua fica azul */

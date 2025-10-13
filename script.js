@@ -1381,31 +1381,7 @@ if (heroVideo && heroPoster) {
                 if (!isDragging) return;
                 const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
                 deltaX = currentX - startX;
-                
-                // Move o card atual
                 gsap.set(cards[currentIndex], { x: deltaX });
-                
-                // Mostra cards adjacentes durante o arrasto
-                const nextIndex = (currentIndex + 1) % cards.length;
-                const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
-                
-                if (deltaX < -50) { // Arrastando para a esquerda (próximo card)
-                    gsap.set(cards[nextIndex], { 
-                        x: track.offsetWidth + deltaX, 
-                        opacity: Math.min(0.8, Math.abs(deltaX) / 200) 
-                    });
-                    gsap.set(cards[prevIndex], { opacity: 0 });
-                } else if (deltaX > 50) { // Arrastando para a direita (card anterior)
-                    gsap.set(cards[prevIndex], { 
-                        x: -track.offsetWidth + deltaX, 
-                        opacity: Math.min(0.8, Math.abs(deltaX) / 200) 
-                    });
-                    gsap.set(cards[nextIndex], { opacity: 0 });
-                } else {
-                    // Esconde cards adjacentes quando não está arrastando muito
-                    gsap.set(cards[nextIndex], { opacity: 0 });
-                    gsap.set(cards[prevIndex], { opacity: 0 });
-                }
             };
 
             const handleEnd = () => {
@@ -1418,13 +1394,7 @@ if (heroVideo && heroPoster) {
                     const direction = deltaX > 0 ? -1 : 1;
                     slideTo(currentIndex + direction);
                 } else {
-                    // Volta ao estado normal se não passou do threshold
                     gsap.to(cards[currentIndex], { x: 0, duration: 0.3 });
-                    // Esconde cards adjacentes
-                    const nextIndex = (currentIndex + 1) % cards.length;
-                    const prevIndex = (currentIndex - 1 + cards.length) % cards.length;
-                    gsap.to(cards[nextIndex], { x: '100%', opacity: 0, duration: 0.3 });
-                    gsap.to(cards[prevIndex], { x: '-100%', opacity: 0, duration: 0.3 });
                     startAutoPlay();
                 }
             };
