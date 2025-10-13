@@ -1483,12 +1483,12 @@ body.theme-aqua .sopy-how-progress-dot.active {
 }
 
 .how-fullscreen .how-button {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="%232D6A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 24px 24px;
+  background-size: 36px 36px;
   transition: background-image 0.3s ease;
 }
 
@@ -2229,11 +2229,22 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-right{ position:relative; min-width:0 }
 .tc-topActions{ display:none !important }
 /* Track container para cards sobrepostos */
-.tc-testimonials-track{ position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; min-height:320px; border-radius:16px }
+.tc-testimonials-track{ position:relative; overflow:visible; min-width:0; touch-action: pan-x; cursor:grab; min-height:320px; border-radius:16px }
 .tc-testimonials-track.tc-grabbing{ cursor:grabbing }
-/* Cards sobrepostos com position absolute */
-.tc-testimonial-card{ position:absolute; inset:0; opacity:0; transform:translateX(100%); transition: opacity 0.3s ease, transform 0.6s ease }
+/* Cards sobrepostos com position absolute - melhorado para arrasto suave */
+.tc-testimonial-card{ 
+  position:absolute; 
+  inset:0; 
+  opacity:0; 
+  transform:translateX(100%); 
+  transition: none; /* Remove transição durante arrasto */
+  will-change: transform, opacity;
+}
 .tc-testimonial-card.active{ opacity:1; transform:translateX(0) }
+/* Card seguinte visível durante arrasto */
+.tc-testimonial-card.next{ opacity:0.7; transform:translateX(100%) }
+/* Card anterior visível durante arrasto */
+.tc-testimonial-card.prev{ opacity:0.7; transform:translateX(-100%) }
 /* Glassmorphism cards: translucent surface, blur backdrop, soft border and subtle shadow */
 .tc-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding: clamp(20px, 3.2vw, 34px); box-shadow: 0 8px 30px rgba(6,10,12,0.22); min-height:280px; display:grid; gap:18px; overflow:hidden; color: inherit; width: 100%; height: 100% }
 .tc-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); pointer-events:none }
@@ -2739,7 +2750,7 @@ body.theme-aqua .js-head-main,
 body.theme-aqua .head-logo-row,
 body.theme-aqua .js-menu-and-banners-row,
 body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
-  background-color: #007BFF !important;
+  background-color: #132F4C !important;
   transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
 
