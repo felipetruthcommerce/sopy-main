@@ -309,7 +309,7 @@ body.theme-citrus #clean-slate-section {
 }
 
 body.theme-aqua #clean-slate-section {
-    background-color: #e8f4f8; /* Azul claro para tema aqua */
+    background-color: #F0F2F5; /* Cinza claro uniforme para ambos os temas */
 }
 
 .pinned-container { 
@@ -1476,17 +1476,36 @@ body.theme-aqua .sopy-how-progress-dot.active {
   display: none;
 }
 
-/* Setas do Flickity na seção de comparação com cores do tema */
-#comparison-section .flickity-button-icon {
-  fill: var(--brand); /* Usa a cor do tema ativo */
+/* Botão "Next" na seção Como Usar com seta customizada */
+/* Esconde o texto "Next" */
+.how-fullscreen .how-button span {
+  display: none;
 }
 
-body.theme-aqua #comparison-section .flickity-button-icon {
-  fill: #007BFF; /* Azul para tema aqua */
+/* Cria seta customizada usando pseudo-elemento */
+.how-fullscreen .how-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border: 3px solid;
+  border-color: #2D6A4F; /* Verde padrão (citrus) */
+  border-left: none;
+  border-bottom: none;
+  transition: border-color 0.3s ease;
 }
 
-body.theme-citrus #comparison-section .flickity-button-icon {
-  fill: #2D6A4F; /* Verde para tema citrus */
+/* Cores por tema - Aqua (azul) */
+body.theme-aqua .how-fullscreen .how-button::after {
+  border-color: #007BFF;
+}
+
+/* Cores por tema - Citrus (verde) */
+body.theme-citrus .how-fullscreen .how-button::after {
+  border-color: #2D6A4F;
 }
 
 /* ========== COMO USAR (Fullscreen vertical slides) ========== */
