@@ -2043,49 +2043,6 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
 
 #faq h2 { color: black; }
 
-/* Setas de navegação dentro dos cards de depoimentos */
-.card-nav-arrows {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  gap: 0.5rem;
-  z-index: 10;
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.card-arrow {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0;
-  color: #333;
-}
-
-.card-arrow:hover {
-  background: rgba(255, 255, 255, 1);
-  border-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: scale(1.1);
-  color: #000;
-}
-
-.card-arrow svg {
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-}
-
 #faq .sopy-faq-accordion {
   --d: 0deg;
   --circle-x: 1.8rem;
@@ -2194,11 +2151,6 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   clip-path: circle(0% at var(--circle-x) var(--circle-y));
   border-radius: inherit;
   z-index: 1; /* Fica entre o fundo branco e o conteúdo */
-}
-
-/* Cor específica para tema azul */
-body.theme-aqua #faq .sopy-faq-accordion::before {
-  background-color: #48ACF8; /* Azul claro apenas para tema azul */
 }
 
 /* Expande o círculo quando o card está aberto */
@@ -2497,7 +2449,7 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-testimonial-card{ position:absolute; inset:0; opacity:0; transform:translateX(100%); transition: opacity 0.3s ease, transform 0.6s ease }
 .tc-testimonial-card.active{ opacity:1; transform:translateX(0) }
 /* Glassmorphism cards: translucent surface, blur backdrop, soft border and subtle shadow */
-.tc-card{ position: relative; background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding: clamp(20px, 3.2vw, 34px); box-shadow: 0 8px 30px rgba(6,10,12,0.22); min-height:280px; display:grid; gap:18px; overflow:hidden; color: inherit; width: 100%; height: 100% }
+.tc-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding: clamp(20px, 3.2vw, 34px); box-shadow: 0 8px 30px rgba(6,10,12,0.22); min-height:280px; display:grid; gap:18px; overflow:hidden; color: inherit; width: 100%; height: 100% }
 .tc-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); pointer-events:none }
 .tc-quoteMark{ font-size: clamp(32px, 6vw, 52px); line-height:1; opacity:.14; user-select:none }
 .tc-quote{ margin:0; font-size: clamp(16px, 1.8vw, 18px); color: rgba(255,255,255,0.95); max-width:60ch; animation: tcFade .45s ease }

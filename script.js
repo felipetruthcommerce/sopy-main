@@ -1314,7 +1314,6 @@ if (heroVideo && heroPoster) {
 
         if (track && cards.length > 0) {
             let currentIndex = 0;
-            window.testimonialsCurrentIndex = 0; // Inicializa variável global para as setas
             let isAnimating = false;
             let autoInterval;
 
@@ -1339,7 +1338,6 @@ if (heroVideo && heroPoster) {
                     defaults: { duration: 0.2, ease: 'power2.out' },
                     onComplete: () => {
                         currentIndex = targetIndex;
-                        window.testimonialsCurrentIndex = targetIndex; // Mantém índice global para as setas
                         isAnimating = false;
                         startAutoPlay();
                         updateDots();
@@ -1404,11 +1402,6 @@ if (heroVideo && heroPoster) {
             // Event listeners
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => slideTo(index));
-            });
-            
-            // Event listener para navegação das setas
-            testimonialsSection.addEventListener('testimonialsNavigate', (e) => {
-                slideTo(e.detail.targetIndex);
             });
             
             track.addEventListener('mousedown', handleStart);
@@ -1564,28 +1557,6 @@ if (heroVideo && heroPoster) {
     
     
 } // Fim da função bootAnimations
-
-// Função de navegação entre depoimentos - usa a mesma lógica dos dots
-function navigateTestimonialCard(direction) {
-    const testimonialsSection = document.getElementById('testemunhos');
-    if (!testimonialsSection) return;
-    
-    const currentIndex = window.testimonialsCurrentIndex || 0;
-    const cards = testimonialsSection.querySelectorAll('.tc-testimonial-card');
-    
-    if (cards.length === 0) return;
-    
-    // Calcula próximo índice com navegação circular
-    let nextIndex = currentIndex + direction;
-    if (nextIndex >= cards.length) nextIndex = 0;
-    if (nextIndex < 0) nextIndex = cards.length - 1;
-    
-    // Dispara evento personalizado para usar a função slideTo existente
-    const event = new CustomEvent('testimonialsNavigate', { 
-        detail: { targetIndex: nextIndex } 
-    });
-    testimonialsSection.dispatchEvent(event);
-}
 
 // Observação: a inicialização automática foi removida para permitir que o host controle
 // explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots.
