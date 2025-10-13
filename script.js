@@ -1338,6 +1338,7 @@ if (heroVideo && heroPoster) {
                     defaults: { duration: 0.2, ease: 'power2.out' },
                     onComplete: () => {
                         currentIndex = targetIndex;
+                        window.testimonialsCurrentIndex = targetIndex; // Mantém índice global para as setas
                         isAnimating = false;
                         startAutoPlay();
                         updateDots();
@@ -1402,6 +1403,11 @@ if (heroVideo && heroPoster) {
             // Event listeners
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => slideTo(index));
+            });
+            
+            // Event listener para navegação das setas
+            testimonialsSection.addEventListener('testimonialsNavigate', (e) => {
+                slideTo(e.detail.targetIndex);
             });
             
             track.addEventListener('mousedown', handleStart);
@@ -1558,47 +1564,26 @@ if (heroVideo && heroPoster) {
     
 } // Fim da função bootAnimations
 
-// Função de navegação entre depoimentos
-function navigateTestimonials(direction) {
-    const track = document.querySelector('.tc-testimonials-track');
-    const cards = document.querySelectorAll('.tc-testimonial-card');
+// Função de navegação entre depoimentos - usa a mesma lógica dos dots
+function navigateTestimonialCard(direction) {
+    const testimonialsSection = document.getElementById('testemunhos');
+    if (!testimonialsSection) return;
     
-    if (!track || cards.length === 0) return;
+    const currentIndex = window.testimonialsCurrentIndex || 0;
+    const cards = testimonialsSection.querySelectorAll('.tc-testimonial-card');
     
-    // Verifica se existe função de scroll/drag já implementada
-    if (window.testimonialsCurrentIndex === undefined) {
-        window.testimonialsCurrentIndex = 0;
-    }
+    if (cards.length === 0) return;
     
-    // Calcula próximo índice
-    let nextIndex = window.testimonialsCurrentIndex + direction;
+    // Calcula próximo índice com navegação circular
+    let nextIndex = currentIndex + direction;
+    if (nextIndex >= cards.length) nextIndex = 0;
+    if (nextIndex < 0) nextIndex = cards.length - 1;
     
-    // Navegação circular
-    if (nextIndex < 0) {
-        nextIndex = cards.length - 1;
-    } else if (nextIndex >= cards.length) {
-        nextIndex = 0;
-    }
-    
-    // Atualiza índice atual
-    window.testimonialsCurrentIndex = nextIndex;
-    
-    // Calcula posição de scroll (assumindo que cada card tem largura similar)
-    const cardWidth = cards[0].offsetWidth;
-    const scrollPosition = nextIndex * (cardWidth + 20); // 20px de gap entre cards
-    
-    // Anima para a nova posição
-    gsap.to(track, {
-        x: -scrollPosition,
-        duration: 0.6,
-        ease: "power2.out"
+    // Dispara evento personalizado para usar a função slideTo existente
+    const event = new CustomEvent('testimonialsNavigate', { 
+        detail: { targetIndex: nextIndex } 
     });
-    
-    // Atualiza dots se existirem
-    const dots = document.querySelectorAll('.tc-progress-dot');
-    dots.forEach((dot, index) => {
-        dot.classList.toggle('active', index === nextIndex);
-    });
+    testimonialsSection.dispatchEvent(event);
 }
 
 // Observação: a inicialização automática foi removida para permitir que o host controle
