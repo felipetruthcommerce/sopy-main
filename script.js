@@ -1314,6 +1314,7 @@ if (heroVideo && heroPoster) {
 
         if (track && cards.length > 0) {
             let currentIndex = 0;
+            window.testimonialsCurrentIndex = 0; // Inicializa variável global para as setas
             let isAnimating = false;
             let autoInterval;
 

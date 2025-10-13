@@ -335,7 +335,7 @@ body.theme-aqua #clean-slate-section {
 
 /* Wave com cores baseadas no tema */
 body.theme-citrus .green-wave {
-    background-color: #019c51; /* Verde para tema citrus */
+    background-color: #77DD77; /* Verde para tema citrus */
 }
 
 body.theme-aqua .green-wave {
@@ -2051,7 +2051,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   display: flex;
   gap: 0.25rem;
   z-index: 10;
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.3s ease;
 }
 
