@@ -1418,10 +1418,11 @@ body.theme-aqua .sopy-how-card {
   pointer-events: auto;
 }
 
+
+/* COMO USAR: cor do tema */
 .sopy-how-progress-dot {
   width: 10px;
   height: 10px;
-  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -1429,14 +1430,27 @@ body.theme-aqua .sopy-how-card {
               height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               background-color .25s ease, transform .2s ease;
 }
-
-.sopy-how-progress-dot.active {
+body.theme-citrus .sopy-how-progress-dot {
+  background-color: #2D6A4F;
+}
+body.theme-citrus .sopy-how-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #F8C537;
+  background-color: #2D6A4F;
   transform: translateY(-1px);
 }
+body.theme-aqua .sopy-how-progress-dot {
+  background-color: #007BFF;
+}
+body.theme-aqua .sopy-how-progress-dot.active {
+  width: 56px;
+  height: 12px;
+  border-radius: 999px;
+  background-color: #007BFF;
+  transform: translateY(-1px);
+}
+
 
 /* Estilo dos botões de navegação Flickity */
 .flickity-button {
@@ -2258,10 +2272,11 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   pointer-events: auto;
 }
 
+
+/* DEPOIMENTOS: cor oposta ao tema */
 .tc-progress-dot {
   width: 10px;
   height: 10px;
-  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -2269,12 +2284,24 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
               height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               background-color .25s ease, transform .2s ease;
 }
-
-.tc-progress-dot.active {
+body.theme-citrus .tc-progress-dot {
+  background-color: #007BFF;
+}
+body.theme-citrus .tc-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #F8C537;
+  background-color: #007BFF;
+  transform: translateY(-1px);
+}
+body.theme-aqua .tc-progress-dot {
+  background-color: #2D6A4F;
+}
+body.theme-aqua .tc-progress-dot.active {
+  width: 56px;
+  height: 12px;
+  border-radius: 999px;
+  background-color: #2D6A4F;
   transform: translateY(-1px);
 }
 
@@ -2682,7 +2709,7 @@ body.theme-citrus .cta-section {
 
 /* ===================== HEADER THEME ADAPTATIONS ===================== */
 /* Por padrão o header é verde (tema citrus), quando muda para aqua fica azul */
-body.theme-aqua .head-main {
+body.theme-aqua .head-main, .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #007BFF !important;
 }
 
