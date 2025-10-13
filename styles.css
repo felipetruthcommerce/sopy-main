@@ -2563,7 +2563,7 @@ body.theme-aqua {
 
 /* ===================== SEÇÃO CTA INTERMEDIÁRIA ===================== */
 .cta-section {
-  background: linear-gradient(135deg, #1A4731 0%, #2D6A4F 100%);
+  background: linear-gradient(135deg, #4A9B8E 0%, #6BB6A8 50%, #5DAEA2 100%);
   padding: clamp(3rem, 8vh, 6rem) 2rem;
   text-align: center;
   position: relative;
@@ -2595,7 +2595,7 @@ body.theme-aqua {
   font-weight: 700;
   letter-spacing: 1.5px;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  color: #1A4731;
+  color: #2C5F5F;
   border-radius: 50px;
   text-transform: uppercase;
   text-decoration: none;
@@ -2660,11 +2660,11 @@ body.theme-aqua {
 
 /* Adaptações para temas */
 body.theme-aqua .cta-section {
-  background: linear-gradient(135deg, #083DA6 0%, #007BFF 100%);
+  background: linear-gradient(135deg, #5BA8C4 0%, #7BC4E0 50%, #68B5D1 100%);
 }
 
 body.theme-citrus .cta-section {
-  background: linear-gradient(135deg, #1A4731 0%, #2D6A4F 100%);
+  background: linear-gradient(135deg, #4A9B8E 0%, #6BB6A8 50%, #5DAEA2 100%);
 }
 
 /* Responsividade mobile */
@@ -2678,6 +2678,12 @@ body.theme-citrus .cta-section {
     padding: 18px 40px;
     letter-spacing: 1px;
   }
+}
+
+/* ===================== HEADER THEME ADAPTATIONS ===================== */
+/* Por padrão o header é verde (tema citrus), quando muda para aqua fica azul */
+body.theme-aqua .head-main {
+  background-color: #007BFF !important;
 }
 
 
