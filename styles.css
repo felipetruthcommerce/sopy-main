@@ -2355,8 +2355,29 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 /* Keep the visual variant similar but on top of header-like base */
 .sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
 .sopy-tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
-.sopy-tc-btn--ghost{ background: transparent; color: #ffffff; border: 2px solid rgba(255,255,255,0.8); backdrop-filter: blur(10px); }
-.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.1); border-color: #ffffff; transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.sopy-tc-btn--ghost{ background: rgba(255,255,255,0.2); color: #ffffff; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); border-radius: 50px; }
+.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.5); }
+
+/* Botão ghost específico nos testemunhos mantém animação hover original */
+.tc-testimonials .sopy-tc-btn--ghost {
+  background: rgba(255,255,255,0.2);
+  color: #ffffff;
+  border: 2px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: none;
+  transform: none;
+}
+
+.tc-testimonials .sopy-tc-btn--ghost:hover {
+  background: rgba(255,255,255,0.3);
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: none;
+  transform: none;
+}
 
 /* Testimonials CTA com estilo limpo */
 .tc-testimonials .sopy-tc-btn{
@@ -2474,32 +2495,25 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 
 
-/* DEPOIMENTOS: dots cinzas por padrão, cor oposta ao tema quando ativo */
+/* DEPOIMENTOS: dots brancos por padrão e quando ativo */
 .tc-progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background-color: #b9b9b9; /* cinza por padrão */
+  background-color: rgba(255,255,255,0.6); /* branco semi-transparente por padrão */
   transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               background-color .25s ease, transform .2s ease;
 }
 
-body.theme-citrus .tc-progress-dot.active {
-  width: 56px;
-  height: 12px;
-  border-radius: 999px;
-  background-color: #007BFF;
-  transform: translateY(-1px);
-}
-
+body.theme-citrus .tc-progress-dot.active,
 body.theme-aqua .tc-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #2D6A4F;
+  background-color: #ffffff; /* branco sólido quando ativo */
   transform: translateY(-1px);
 }
 
