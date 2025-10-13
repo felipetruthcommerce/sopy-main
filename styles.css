@@ -1419,20 +1419,19 @@ body.theme-aqua .sopy-how-card {
 }
 
 
-/* COMO USAR: cor do tema */
+/* COMO USAR: dots cinzas por padrão, cor do tema quando ativo */
 .sopy-how-progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
+  background-color: #b9b9b9; /* cinza por padrão */
   transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               background-color .25s ease, transform .2s ease;
 }
-body.theme-citrus .sopy-how-progress-dot {
-  background-color: #2D6A4F;
-}
+
 body.theme-citrus .sopy-how-progress-dot.active {
   width: 56px;
   height: 12px;
@@ -1440,9 +1439,7 @@ body.theme-citrus .sopy-how-progress-dot.active {
   background-color: #2D6A4F;
   transform: translateY(-1px);
 }
-body.theme-aqua .sopy-how-progress-dot {
-  background-color: #007BFF;
-}
+
 body.theme-aqua .sopy-how-progress-dot.active {
   width: 56px;
   height: 12px;
@@ -2273,20 +2270,19 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 
 
-/* DEPOIMENTOS: cor oposta ao tema */
+/* DEPOIMENTOS: dots cinzas por padrão, cor oposta ao tema quando ativo */
 .tc-progress-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
+  background-color: #b9b9b9; /* cinza por padrão */
   transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               background-color .25s ease, transform .2s ease;
 }
-body.theme-citrus .tc-progress-dot {
-  background-color: #007BFF;
-}
+
 body.theme-citrus .tc-progress-dot.active {
   width: 56px;
   height: 12px;
@@ -2294,9 +2290,7 @@ body.theme-citrus .tc-progress-dot.active {
   background-color: #007BFF;
   transform: translateY(-1px);
 }
-body.theme-aqua .tc-progress-dot {
-  background-color: #2D6A4F;
-}
+
 body.theme-aqua .tc-progress-dot.active {
   width: 56px;
   height: 12px;
@@ -2709,15 +2703,24 @@ body.theme-citrus .cta-section {
 
 /* ===================== HEADER THEME ADAPTATIONS ===================== */
 /* Por padrão o header é verde (tema citrus), quando muda para aqua fica azul */
+/* Forçar mudança simultânea de cor em todo o header e suas partes */
 body.theme-aqua .head-main, 
+body.theme-aqua .js-head-main,
+body.theme-aqua .head-logo-row,
+body.theme-aqua .js-menu-and-banners-row,
 body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #007BFF !important;
+  transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
 
 /* Tema padrão (citrus) - verde */
 body.theme-citrus .head-main,
+body.theme-citrus .js-head-main,
+body.theme-citrus .head-logo-row,
+body.theme-citrus .js-menu-and-banners-row,
 body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #2D6A4F !important;
+  transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
 
 
