@@ -637,87 +637,98 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 .sopy-hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
 .sopy-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* Hero Product CTA - movido da seção CTA intermediária para dentro da hero */
-.hero-product-cta {
+/* CTA movido da seção intermediária para o final da seção hero */
+.sopy-hero .cta-content {
   position: absolute;
-  bottom: 8vh;
-  right: 5vw;
-  max-width: 340px;
-  opacity: 0.95;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
 }
 
-.hero-cta-inner {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.hero-product-cta .product-title {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--brand);
-  margin: 0 0 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-}
-
-.hero-product-cta .product-price {
-  font-size: 1.8rem;
-  font-weight: 900;
-  color: var(--brand-dark);
-  margin: 0 0 12px;
-}
-
-.hero-product-cta .product-copy {
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #333;
-  margin: 0 0 18px;
-}
-
-.hero-product-cta .sopy-product-cta {
+.sopy-hero .btn-comprar-agora {
   display: inline-block;
-  width: 100%;
-  background: var(--brand);
-  color: white;
-  border: none;
-  padding: 14px 24px;
-  border-radius: 8px;
+  padding: clamp(16px, 2.5vh, 24px) clamp(32px, 6vw, 60px);
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
   font-weight: 700;
-  font-size: 0.95rem;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #2C5F5F;
+  border-radius: 50px;
   text-transform: uppercase;
-  letter-spacing: 0.02em;
   text-decoration: none;
-  text-align: center;
+  border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
+              0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  
+  /* Animação de pulso para chamar atenção */
+  animation: ctaPulse 3s infinite ease-in-out;
 }
 
-.hero-product-cta .sopy-product-cta:hover {
-  background: var(--brand-dark);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+/* Efeito shimmer no botão */
+.sopy-hero .btn-comprar-agora::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: left 0.6s ease;
 }
 
-/* Responsive para mobile */
+.sopy-hero .btn-comprar-agora:hover::before {
+  left: 100%;
+}
+
+@keyframes ctaPulse {
+  0%, 100% { 
+    transform: scale(1); 
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
+                0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  50% { 
+    transform: scale(1.05); 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2),
+                0 6px 16px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.sopy-hero .btn-comprar-agora:hover {
+  animation-play-state: paused;
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
+              0 8px 20px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+}
+
+.sopy-hero .btn-comprar-agora:active {
+  transform: translateY(-1px) scale(0.98);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsividade mobile */
 @media (max-width: 768px) {
-  .hero-product-cta {
+  .sopy-hero .cta-content {
     position: static;
-    max-width: none;
-    margin: 32px auto 0;
-    width: min(100%, 320px);
+    transform: none;
+    margin-top: 2rem;
+    text-align: center;
   }
   
-  .hero-cta-inner {
-    padding: 20px;
-  }
-  
-  .hero-product-cta .product-copy {
-    font-size: 0.9rem;
+  .sopy-hero .btn-comprar-agora {
+    font-size: 1.1rem;
+    padding: 18px 40px;
+    letter-spacing: 1px;
   }
 }
 
