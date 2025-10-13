@@ -1558,5 +1558,42 @@ if (heroVideo && heroPoster) {
     
 } // Fim da função bootAnimations
 
+// Função de navegação entre cards FAQ
+function navigateFAQ(direction) {
+    const faqCards = document.querySelectorAll('.sopy-faq-accordion');
+    const openCard = document.querySelector('.sopy-faq-accordion.open');
+    
+    if (!openCard) {
+        // Se nenhum card está aberto, abre o primeiro
+        if (faqCards[0]) {
+            faqCards[0].querySelector('.sopy-title a').click();
+        }
+        return;
+    }
+    
+    // Encontra o índice do card atual
+    const currentIndex = Array.from(faqCards).indexOf(openCard);
+    let nextIndex = currentIndex + direction;
+    
+    // Navegação circular
+    if (nextIndex < 0) {
+        nextIndex = faqCards.length - 1;
+    } else if (nextIndex >= faqCards.length) {
+        nextIndex = 0;
+    }
+    
+    // Fecha o card atual e abre o próximo
+    const nextCard = faqCards[nextIndex];
+    if (nextCard) {
+        // Fecha o card atual
+        openCard.classList.remove('open');
+        
+        // Pequeno delay para a animação e depois abre o próximo
+        setTimeout(() => {
+            nextCard.querySelector('.sopy-title a').click();
+        }, 150);
+    }
+}
+
 // Observação: a inicialização automática foi removida para permitir que o host controle
 // explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots.

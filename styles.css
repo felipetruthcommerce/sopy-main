@@ -2043,6 +2043,56 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
 
 #faq h2 { color: black; }
 
+/* Setas de navegação nos cards FAQ */
+.faq-nav-arrows {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+#faq .sopy-faq-accordion:hover .faq-nav-arrows {
+  opacity: 1;
+}
+
+.faq-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.faq-arrow:hover {
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
+}
+
+.faq-arrow.prev {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M19 12H5M5 12L11 18M5 12L11 6" stroke="%23333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.faq-arrow.next {
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g stroke-width="0"></g><g stroke-linecap="round" stroke-linejoin="round"></g><g> <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="%23333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>');
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 #faq .sopy-faq-accordion {
   --d: 0deg;
   --circle-x: 1.8rem;
@@ -2151,6 +2201,11 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   clip-path: circle(0% at var(--circle-x) var(--circle-y));
   border-radius: inherit;
   z-index: 1; /* Fica entre o fundo branco e o conteúdo */
+}
+
+/* Cor específica para tema azul */
+body.theme-aqua #faq .sopy-faq-accordion::before {
+  background-color: #48ACF8; /* Azul claro apenas para tema azul */
 }
 
 /* Expande o círculo quando o card está aberto */
