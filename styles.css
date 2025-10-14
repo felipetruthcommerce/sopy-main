@@ -2845,7 +2845,7 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 300vh; /* Reduzido de 400vh para 300vh - mais fácil de sair */
+  height: 250vh; /* Reduzido para facilitar muito a saída após último slide */
   background: #000;
 }
 
