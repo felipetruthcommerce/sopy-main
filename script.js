@@ -1664,8 +1664,14 @@ if (heroVideo && heroPoster) {
       return;
     }
     
-    // Calcula o progresso (0 a 1) baseado em quanto da seção já foi scrollada
-    const progress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
+    // Total "scrollable" enquanto a seção fica pinada = sectionHeight - viewport
+    const totalScrollable = Math.max(sectionHeight - viewportHeight, 1);
+    
+    // Progresso normalizado (0..1)
+    // quando rect.top == 0 -> início (progress 0)
+    // quando rect.top == -totalScrollable -> fim (progress 1)
+    const scrolled = -Math.min(Math.max(sectionTop, -totalScrollable), 0);
+    const progress = scrolled / totalScrollable;
     
     // LOGS DETALHADOS
     console.log('📊 SLIDER DEBUG:', {
@@ -1674,23 +1680,26 @@ if (heroVideo && heroPoster) {
       sectionTop: sectionTop.toFixed(0) + 'px',
       sectionHeight: sectionHeight + 'px',
       viewportHeight: viewportHeight + 'px',
-      scrollableHeight: (sectionHeight - viewportHeight) + 'px'
+      totalScrollable: totalScrollable + 'px',
+      scrolled: scrolled.toFixed(0) + 'px'
     });
     
-    // Intervalos ajustados: cada slide precisa de MUITO mais progresso
-    // Slide 1: 0-40% (precisa scrollar 40% da seção inteira)
-    // Slide 2: 40-65% (precisa scrollar mais 25%)
-    // Slide 3: 65-88% (precisa scrollar mais 23%)
-    // Slide 4: 88-100% (apenas 12% para sair RÁPIDO)
-    let targetIndex;
-    if (progress < 0.40) {
-      targetIndex = 0; // Dose Única - precisa scrollar ATÉ 40%
-    } else if (progress < 0.65) {
-      targetIndex = 1; // Direto no Tambor - de 40% até 65%
-    } else if (progress < 0.88) {
-      targetIndex = 2; // Inicie o Ciclo - de 65% até 88%
-    } else {
-      targetIndex = 3; // Resultado Impecável - de 88% até 100% (sai rápido!)
+    // Pesos por slide (soma = 1.0)
+    // Ajuste esses valores para controlar quanto cada slide ocupa
+    const slideWeights = [0.32, 0.28, 0.25, 0.15]; // 32%, 28%, 25%, 15%
+    
+    // Calcula o índice baseado nos pesos
+    let targetIndex = 0;
+    let accumulated = 0;
+    for (let i = 0; i < slideWeights.length; i++) {
+      accumulated += slideWeights[i];
+      if (progress < accumulated) {
+        targetIndex = i;
+        break;
+      }
+      if (i === slideWeights.length - 1) {
+        targetIndex = i;
+      }
     }
     
     console.log('🎯 Target Index:', targetIndex, '| Last Known:', lastKnownIndex);
