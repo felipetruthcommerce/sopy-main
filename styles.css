@@ -2435,6 +2435,50 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 /* Keep ripple enabled so it can start from mouse position (set via --xPos/--yPos) */
 
+/* Botões de navegação dos depoimentos */
+.tc-nav-buttons {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tc-nav-buttons button {
+  width: 44px;
+  height: 40px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+  backdrop-filter: blur(6px);
+  pointer-events: auto;
+  font-size: 16px;
+}
+
+.tc-nav-buttons button:hover {
+  transform: scale(1.06);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.tc-nav-buttons button:active {
+  transform: scale(1.02);
+}
+
+.tc-nav-next {
+  padding-left: 3px;
+}
+
+.tc-nav-prev {
+  padding-right: 3px;
+}
+
 .tc-right{ position:relative; min-width:0 }
 .tc-topActions{ display:none !important }
 /* Track container para cards sobrepostos */
@@ -2533,6 +2577,33 @@ body.theme-aqua .tc-progress-dot.active {
 
 /* Remove dots antigos */
 .tc-testimonials-dots { display: none; }
+
+/* Responsividade dos botões de navegação dos depoimentos */
+@media (max-width: 768px) {
+  .tc-nav-buttons {
+    top: 10px;
+    padding: 0 10px;
+  }
+
+  .tc-nav-buttons button {
+    width: 40px;
+    height: 36px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tc-nav-buttons {
+    top: 8px;
+    padding: 0 8px;
+  }
+
+  .tc-nav-buttons button {
+    width: 36px;
+    height: 32px;
+    font-size: 13px;
+  }
+}
 
 /* removed duplicate .capsule3d-title-over rule to keep the one above as source of truth */
 

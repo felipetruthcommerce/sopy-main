@@ -1317,6 +1317,10 @@ if (heroVideo && heroPoster) {
             let isAnimating = false;
             let autoInterval;
 
+            // Selecionar botões de navegação
+            const btnNext = testimonialsSection.querySelector('.tc-nav-next');
+            const btnPrev = testimonialsSection.querySelector('.tc-nav-prev');
+
             const slideTo = (targetIndex) => {
                 if (isAnimating) return;
                 
@@ -1403,6 +1407,18 @@ if (heroVideo && heroPoster) {
             dots.forEach((dot, index) => {
                 dot.addEventListener('click', () => slideTo(index));
             });
+
+            // Event listeners para os botões de navegação
+            if (btnNext) {
+                btnNext.addEventListener('click', () => {
+                    slideTo(currentIndex + 1);
+                });
+            }
+            if (btnPrev) {
+                btnPrev.addEventListener('click', () => {
+                    slideTo(currentIndex - 1);
+                });
+            }
             
             track.addEventListener('mousedown', handleStart);
             document.addEventListener('mousemove', handleMove);
