@@ -1568,21 +1568,46 @@ if (heroVideo && heroPoster) {
   const track = document.querySelector(".slider-slide");
   const btnNext = document.querySelector(".slider-next");
   const btnPrev = document.querySelector(".slider-prev");
+  const section = document.querySelector(".slider-fullscreen-section");
 
-  if (!track || !btnNext || !btnPrev) {
+  if (!track || !btnNext || !btnPrev || !section) {
     console.warn('[SLIDER] Elementos não encontrados');
     return;
   }
 
+  let currentIndex = 0;
+  const totalSlides = track.querySelectorAll(".slider-item").length;
+
   /* ações */
   function toNext() {
     const items = track.querySelectorAll(".slider-item");
-    if (items.length) track.appendChild(items[0]);
+    if (items.length) {
+      track.appendChild(items[0]);
+      currentIndex = Math.min(currentIndex + 1, totalSlides - 1);
+    }
   }
   
   function toPrev() {
     const items = track.querySelectorAll(".slider-item");
-    if (items.length) track.prepend(items[items.length - 1]);
+    if (items.length) {
+      track.prepend(items[items.length - 1]);
+      currentIndex = Math.max(currentIndex - 1, 0);
+    }
+  }
+
+  function goToSlide(index) {
+    if (index === currentIndex) return;
+    
+    const diff = index - currentIndex;
+    if (diff > 0) {
+      for (let i = 0; i < diff; i++) {
+        toNext();
+      }
+    } else {
+      for (let i = 0; i < Math.abs(diff); i++) {
+        toPrev();
+      }
+    }
   }
 
   /* lock (opcional, mantém transição suave) */
@@ -1600,64 +1625,84 @@ if (heroVideo && heroPoster) {
   btnNext.addEventListener("click", () => withLock(toNext));
   btnPrev.addEventListener("click", () => withLock(toPrev));
 
-  /* ===== SCROLL ACUMULADO =====
-     Ajuste SCROLL_STEP para exigir mais/menos rolagem por avanço.
-     Valores usuais: 250–600 (trackpad = menor, mouse = maior). */
-  let scrollAccum = 0;
-  const SCROLL_STEP = 200;    // valor reduzido para facilitar navegação
-  const MIN_MICRO = 5;        // ignora ruído muito pequeno
-
-  function onWheel(e) {
-    const sliderSection = document.querySelector('.slider-fullscreen-section');
-    if (!sliderSection) return;
+  /* SCROLL PROGRESS - detecta progresso do scroll na seção */
+  let lastScrollProgress = 0;
+  
+  function updateSlideByScroll() {
+    const rect = section.getBoundingClientRect();
+    const sectionTop = rect.top;
+    const sectionHeight = section.offsetHeight;
+    const viewportHeight = window.innerHeight;
     
-    const rect = sliderSection.getBoundingClientRect();
-    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+    // Calcula o progresso do scroll (0 a 1)
+    const scrollProgress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
+    
+    // Determina qual slide deve estar visível baseado no progresso
+    const targetIndex = Math.floor(scrollProgress * totalSlides);
+    const clampedIndex = Math.max(0, Math.min(totalSlides - 1, targetIndex));
+    
+    // Só muda se o índice alvo mudou e se não estiver muito próximo dos limites
+    if (clampedIndex !== currentIndex && Math.abs(scrollProgress - lastScrollProgress) > 0.05) {
+      goToSlide(clampedIndex);
+      lastScrollProgress = scrollProgress;
+    }
+  }
+  
+  // Atualiza com throttle para performance
+  let scrollTimeout;
+  window.addEventListener("scroll", () => {
+    if (scrollTimeout) return;
+    scrollTimeout = setTimeout(() => {
+      updateSlideByScroll();
+      scrollTimeout = null;
+    }, 50);
+  }, { passive: true });
+
+  /* WHEEL - navegação por scroll do mouse */
+  let wheelAccum = 0;
+  const WHEEL_THRESHOLD = 100;
+  
+  function onWheel(e) {
+    const rect = section.getBoundingClientRect();
+    const isInView = rect.top <= 0 && rect.bottom > window.innerHeight * 0.5;
     
     if (!isInView) return;
     
-    // usa o eixo dominante (vertical vs horizontal)
-    const dominant = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-    if (Math.abs(dominant) < MIN_MICRO) return;
-
-    scrollAccum += dominant;
-
-    // avança/volta várias vezes se a rolagem for bem grande
-    if (scrollAccum >= SCROLL_STEP) {
+    const delta = e.deltaY;
+    wheelAccum += delta;
+    
+    if (wheelAccum > WHEEL_THRESHOLD) {
       withLock(toNext);
-      scrollAccum = 0;
-    } else if (scrollAccum <= -SCROLL_STEP) {
+      wheelAccum = 0;
+    } else if (wheelAccum < -WHEEL_THRESHOLD) {
       withLock(toPrev);
-      scrollAccum = 0;
+      wheelAccum = 0;
     }
   }
   
   window.addEventListener("wheel", onWheel, { passive: true });
 
-  /* TECLADO (mantido) */
+  /* TECLADO */
   window.addEventListener("keydown", (e) => {
-    const sliderSection = document.querySelector('.slider-fullscreen-section');
-    if (!sliderSection) return;
-    
-    const rect = sliderSection.getBoundingClientRect();
+    const rect = section.getBoundingClientRect();
     const isInView = rect.top < window.innerHeight && rect.bottom > 0;
     
     if (!isInView) return;
     
     const k = e.key;
-    if (k === "ArrowRight" || k === "PageDown") {
+    if (k === "ArrowRight" || k === "ArrowDown" || k === "PageDown") {
       e.preventDefault();
       withLock(toNext);
     }
-    if (k === "ArrowLeft" || k === "PageUp") {
+    if (k === "ArrowLeft" || k === "ArrowUp" || k === "PageUp") {
       e.preventDefault();
       withLock(toPrev);
     }
   });
 
-  /* TOUCH (opcional: aumente THRESH para "exigir" mais swipe) */
+  /* TOUCH */
   let touchStartX = 0, touchStartY = 0, touchActive = false;
-  let THRESH = 42;            // <<< pode subir p/ 80~120 para "mais swipe"
+  let THRESH = 50;
   
   window.addEventListener("touchstart", (e) => {
     if (e.touches.length !== 1) return;
@@ -1666,22 +1711,17 @@ if (heroVideo && heroPoster) {
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
 
-  window.addEventListener("touchmove", (e) => {
-    const sliderSection = document.querySelector('.slider-fullscreen-section');
-    if (!sliderSection) return;
-    
-    const rect = sliderSection.getBoundingClientRect();
-    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
-    
-    if (touchActive && isInView) e.preventDefault();
-  }, { passive: false });
-
   window.addEventListener("touchend", (e) => {
     if (!touchActive) return;
     const t = e.changedTouches[0];
     const dx = t.clientX - touchStartX;
     const dy = t.clientY - touchStartY;
     touchActive = false;
+
+    const rect = section.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (!isInView) return;
 
     if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > THRESH) {
       if (dx < 0) withLock(toNext); else withLock(toPrev);
