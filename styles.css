@@ -2627,11 +2627,11 @@ body.theme-aqua .tc-progress-dot.active {
 
 /* Ensure theme body backgrounds match the FAQ section colors so the area behind the footer aligns */
 body.theme-citrus {
-  background: #1B4332; /* same as citrus FAQ section */
+  background: #ffffff; /* same as citrus FAQ section */
 }
 
 body.theme-aqua {
-  background: #0D1B2A; /* same as aqua FAQ section */
+  background: #ffffff; /* same as aqua FAQ section */
 }
 
 @media (prefers-reduced-motion: reduce) {
