@@ -1661,20 +1661,20 @@ if (heroVideo && heroPoster) {
       scrollableHeight: (sectionHeight - viewportHeight) + 'px'
     });
     
-    // Ajusta os intervalos: primeiros slides MUITO mais lentos, último MUITO rápido
-    // Slide 1: 0-32% (1.6 telas de scroll)
-    // Slide 2: 32-60% (1.4 telas de scroll)
-    // Slide 3: 60-85% (1.25 telas de scroll)
-    // Slide 4: 85-100% (APENAS 0.75 telas para sair!)
+    // Intervalos ajustados: cada slide precisa de MUITO mais progresso
+    // Slide 1: 0-40% (precisa scrollar 40% da seção inteira)
+    // Slide 2: 40-65% (precisa scrollar mais 25%)
+    // Slide 3: 65-88% (precisa scrollar mais 23%)
+    // Slide 4: 88-100% (apenas 12% para sair RÁPIDO)
     let targetIndex;
-    if (progress < 0.32) {
-      targetIndex = 0; // Dose Única
-    } else if (progress < 0.60) {
-      targetIndex = 1; // Direto no Tambor
-    } else if (progress < 0.85) {
-      targetIndex = 2; // Inicie o Ciclo
+    if (progress < 0.40) {
+      targetIndex = 0; // Dose Única - precisa scrollar ATÉ 40%
+    } else if (progress < 0.65) {
+      targetIndex = 1; // Direto no Tambor - de 40% até 65%
+    } else if (progress < 0.88) {
+      targetIndex = 2; // Inicie o Ciclo - de 65% até 88%
     } else {
-      targetIndex = 3; // Resultado Impecável (sai MUITO rápido)
+      targetIndex = 3; // Resultado Impecável - de 88% até 100% (sai rápido!)
     }
     
     console.log('🎯 Target Index:', targetIndex, '| Last Known:', lastKnownIndex);
