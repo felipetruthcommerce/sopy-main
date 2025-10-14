@@ -1604,19 +1604,17 @@ if (heroVideo && heroPoster) {
      Ajuste SCROLL_STEP para exigir mais/menos rolagem por avanço.
      Valores usuais: 250–600 (trackpad = menor, mouse = maior). */
   let scrollAccum = 0;
-  const SCROLL_STEP = 420;    // <<< aumente para exigir MAIS scroll
-  const MIN_MICRO = 8;        // ignora ruído muito pequeno
+  const SCROLL_STEP = 200;    // valor reduzido para facilitar navegação
+  const MIN_MICRO = 5;        // ignora ruído muito pequeno
 
   function onWheel(e) {
     const sliderSection = document.querySelector('.slider-fullscreen-section');
     if (!sliderSection) return;
     
     const rect = sliderSection.getBoundingClientRect();
-    const isInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
     
     if (!isInView) return;
-    
-    e.preventDefault();
     
     // usa o eixo dominante (vertical vs horizontal)
     const dominant = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
@@ -1625,22 +1623,29 @@ if (heroVideo && heroPoster) {
     scrollAccum += dominant;
 
     // avança/volta várias vezes se a rolagem for bem grande
-    while (scrollAccum >= SCROLL_STEP) {
+    if (scrollAccum >= SCROLL_STEP) {
       withLock(toNext);
-      scrollAccum -= SCROLL_STEP;
-    }
-    while (scrollAccum <= -SCROLL_STEP) {
+      scrollAccum = 0;
+    } else if (scrollAccum <= -SCROLL_STEP) {
       withLock(toPrev);
-      scrollAccum += SCROLL_STEP;
+      scrollAccum = 0;
     }
   }
   
-  window.addEventListener("wheel", onWheel, { passive: false });
+  window.addEventListener("wheel", onWheel, { passive: true });
 
   /* TECLADO (mantido) */
   window.addEventListener("keydown", (e) => {
+    const sliderSection = document.querySelector('.slider-fullscreen-section');
+    if (!sliderSection) return;
+    
+    const rect = sliderSection.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (!isInView) return;
+    
     const k = e.key;
-    if (k === "ArrowRight" || k === "PageDown" || k === " ") {
+    if (k === "ArrowRight" || k === "PageDown") {
       e.preventDefault();
       withLock(toNext);
     }
@@ -1662,7 +1667,13 @@ if (heroVideo && heroPoster) {
   }, { passive: true });
 
   window.addEventListener("touchmove", (e) => {
-    if (touchActive) e.preventDefault();
+    const sliderSection = document.querySelector('.slider-fullscreen-section');
+    if (!sliderSection) return;
+    
+    const rect = sliderSection.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+    
+    if (touchActive && isInView) e.preventDefault();
   }, { passive: false });
 
   window.addEventListener("touchend", (e) => {
@@ -1676,19 +1687,6 @@ if (heroVideo && heroPoster) {
       if (dx < 0) withLock(toNext); else withLock(toPrev);
     } else if (Math.abs(dy) > THRESH) {
       if (dy < 0) withLock(toNext); else withLock(toPrev);
-    }
-  }, { passive: true });
-
-  /* trava o scroll da página quando estiver na seção do slider */
-  window.addEventListener("scroll", () => {
-    const sliderSection = document.querySelector('.slider-fullscreen-section');
-    if (!sliderSection) return;
-    
-    const rect = sliderSection.getBoundingClientRect();
-    const isInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
-    
-    if (isInView) {
-      window.scrollTo(0, sliderSection.offsetTop);
     }
   }, { passive: true });
 
