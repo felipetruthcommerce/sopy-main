@@ -2467,11 +2467,11 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
 /* Botões de navegação dos depoimentos - Design melhorado */
 .tc-nav-buttons {
   position: absolute;
-  top: 50%;
+  bottom: 24px; /* Posicionado na parte inferior do card */
   left: 50%;
   width: 100%;
   max-width: 100%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   display: flex;
   justify-content: space-between;
   padding: 0 clamp(8px, 2vw, 20px);
@@ -2505,14 +2505,6 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
 
 .tc-nav-buttons button:active {
   transform: scale(0.95);
-}
-
-.tc-nav-prev {
-  transform: translateX(-50%);
-}
-
-.tc-nav-next {
-  transform: translateX(50%);
 }
 
 .tc-right{ position:relative; min-width:0 }
@@ -2642,7 +2634,8 @@ body.theme-aqua .tc-progress-dot.active {
 /* Responsividade dos botões de navegação dos depoimentos */
 @media (max-width: 768px) {
   .tc-nav-buttons {
-    padding: 0 clamp(4px, 1.5vw, 12px);
+    bottom: 20px; /* Mais próximo do fundo no tablet */
+    padding: 0 clamp(6px, 1.5vw, 14px);
   }
 
   .tc-nav-buttons button {
@@ -2650,19 +2643,12 @@ body.theme-aqua .tc-progress-dot.active {
     height: 44px;
     font-size: 16px;
   }
-
-  .tc-nav-prev {
-    transform: translateX(-30%);
-  }
-
-  .tc-nav-next {
-    transform: translateX(30%);
-  }
 }
 
 @media (max-width: 480px) {
   .tc-nav-buttons {
-    padding: 0 clamp(2px, 1vw, 8px);
+    bottom: 16px; /* Ainda mais próximo no mobile */
+    padding: 0 clamp(4px, 1vw, 10px);
   }
 
   .tc-nav-buttons button {
@@ -2670,14 +2656,6 @@ body.theme-aqua .tc-progress-dot.active {
     height: 40px;
     font-size: 15px;
     background: rgba(255, 255, 255, 0.2);
-  }
-
-  .tc-nav-prev {
-    transform: translateX(-20%);
-  }
-
-  .tc-nav-next {
-    transform: translateX(20%);
   }
 }
 
