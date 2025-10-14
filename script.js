@@ -1651,14 +1651,17 @@ if (heroVideo && heroPoster) {
     // Calcula o progresso (0 a 1) baseado em quanto da seção já foi scrollada
     const progress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
     
-    // Ajusta os intervalos: os primeiros 3 slides ocupam 70%, o último apenas 30%
-    // Isso facilita muito sair após o último slide
+    // Ajusta os intervalos: slides iniciais mais lentos, último mais rápido para sair
+    // Slide 1: 0-30% (mais tempo)
+    // Slide 2: 30-55% (mais tempo)
+    // Slide 3: 55-75% (mais tempo)
+    // Slide 4: 75-100% (menos tempo para sair)
     let targetIndex;
-    if (progress < 0.23) {
+    if (progress < 0.30) {
       targetIndex = 0; // Dose Única
-    } else if (progress < 0.46) {
+    } else if (progress < 0.55) {
       targetIndex = 1; // Direto no Tambor
-    } else if (progress < 0.69) {
+    } else if (progress < 0.75) {
       targetIndex = 2; // Inicie o Ciclo
     } else {
       targetIndex = 3; // Resultado Impecável (mais fácil de sair)

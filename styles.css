@@ -43,14 +43,6 @@ html, body {
   font-display: swap;
 }
 
-/* Local display font: Dirtyline (placed in assets/fonts/) */
-@font-face {
-  font-family: 'Dirtyline';
-  src: url('assets/fonts/Dirtyline 36daysoftype 2022.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
 
 body {
   margin: 0;
@@ -133,6 +125,8 @@ body.theme-aqua {
 /* Tipos */
 /* Headings use Inter Tight for a tighter display; fallback to Avant Garde Demi */
 h1, h2, h3, h4, h5, h6 { font-family: 'Inter Tight', 'Avant Garde Demi BT', sans-serif; font-weight: 600; letter-spacing: 0; }
+/* Paragraphs use Inter for better readability */
+p { font-family: 'Inter', 'Avant Garde Book BT', sans-serif; }
 /* Stronger display for H2 specifically */
 h2 {
   text-transform: uppercase;
@@ -2845,7 +2839,7 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 250vh; /* Reduzido para facilitar muito a saída após último slide */
+  height: 350vh; /* Aumentado para exigir mais scroll nos slides iniciais */
   background: #000;
 }
 
@@ -2890,26 +2884,26 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
   box-shadow: none;
 }
 
-/* Mostra apenas 1 preview ao lado (3rd child) */
+/* Mostra 2 previews ao lado */
 .slider-item:nth-child(3) { 
   left: 58%; 
   opacity: 1;
 }
 
-/* Esconde o 4º item (seria a segunda preview) */
 .slider-item:nth-child(4) { 
-  opacity: 0;
-  pointer-events: none;
+  left: calc(58% + 240px);
+  opacity: 1;
 }
 
-/* Esconde todos os demais */
+/* Esconde os demais */
 .slider-item:nth-child(n+5) { 
   opacity: 0;
   pointer-events: none;
 }
 
-/* Quando estiver no último slide, esconde o preview */
-.slider-slide.last-slide .slider-item:nth-child(3) {
+/* Quando estiver no último slide, esconde os previews */
+.slider-slide.last-slide .slider-item:nth-child(3),
+.slider-slide.last-slide .slider-item:nth-child(4) {
   opacity: 0;
   pointer-events: none;
 }
