@@ -1559,4 +1559,139 @@ if (heroVideo && heroPoster) {
 } // Fim da função bootAnimations
 
 // Observação: a inicialização automática foi removida para permitir que o host controle
+
+// ========== SLIDER FULLSCREEN ==========
+(function() {
+  "use strict";
+
+  /* refs */
+  const track = document.querySelector(".slider-slide");
+  const btnNext = document.querySelector(".slider-next");
+  const btnPrev = document.querySelector(".slider-prev");
+
+  if (!track || !btnNext || !btnPrev) {
+    console.warn('[SLIDER] Elementos não encontrados');
+    return;
+  }
+
+  /* ações */
+  function toNext() {
+    const items = track.querySelectorAll(".slider-item");
+    if (items.length) track.appendChild(items[0]);
+  }
+  
+  function toPrev() {
+    const items = track.querySelectorAll(".slider-item");
+    if (items.length) track.prepend(items[items.length - 1]);
+  }
+
+  /* lock (opcional, mantém transição suave) */
+  let locked = false;
+  const baseCooldown = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 650 : 420;
+  
+  function withLock(fn) {
+    if (locked) return;
+    locked = true;
+    fn();
+    setTimeout(() => locked = false, baseCooldown);
+  }
+
+  /* BOTÕES */
+  btnNext.addEventListener("click", () => withLock(toNext));
+  btnPrev.addEventListener("click", () => withLock(toPrev));
+
+  /* ===== SCROLL ACUMULADO =====
+     Ajuste SCROLL_STEP para exigir mais/menos rolagem por avanço.
+     Valores usuais: 250–600 (trackpad = menor, mouse = maior). */
+  let scrollAccum = 0;
+  const SCROLL_STEP = 420;    // <<< aumente para exigir MAIS scroll
+  const MIN_MICRO = 8;        // ignora ruído muito pequeno
+
+  function onWheel(e) {
+    const sliderSection = document.querySelector('.slider-fullscreen-section');
+    if (!sliderSection) return;
+    
+    const rect = sliderSection.getBoundingClientRect();
+    const isInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
+    
+    if (!isInView) return;
+    
+    e.preventDefault();
+    
+    // usa o eixo dominante (vertical vs horizontal)
+    const dominant = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (Math.abs(dominant) < MIN_MICRO) return;
+
+    scrollAccum += dominant;
+
+    // avança/volta várias vezes se a rolagem for bem grande
+    while (scrollAccum >= SCROLL_STEP) {
+      withLock(toNext);
+      scrollAccum -= SCROLL_STEP;
+    }
+    while (scrollAccum <= -SCROLL_STEP) {
+      withLock(toPrev);
+      scrollAccum += SCROLL_STEP;
+    }
+  }
+  
+  window.addEventListener("wheel", onWheel, { passive: false });
+
+  /* TECLADO (mantido) */
+  window.addEventListener("keydown", (e) => {
+    const k = e.key;
+    if (k === "ArrowRight" || k === "PageDown" || k === " ") {
+      e.preventDefault();
+      withLock(toNext);
+    }
+    if (k === "ArrowLeft" || k === "PageUp") {
+      e.preventDefault();
+      withLock(toPrev);
+    }
+  });
+
+  /* TOUCH (opcional: aumente THRESH para "exigir" mais swipe) */
+  let touchStartX = 0, touchStartY = 0, touchActive = false;
+  let THRESH = 42;            // <<< pode subir p/ 80~120 para "mais swipe"
+  
+  window.addEventListener("touchstart", (e) => {
+    if (e.touches.length !== 1) return;
+    touchActive = true;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (touchActive) e.preventDefault();
+  }, { passive: false });
+
+  window.addEventListener("touchend", (e) => {
+    if (!touchActive) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchStartX;
+    const dy = t.clientY - touchStartY;
+    touchActive = false;
+
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > THRESH) {
+      if (dx < 0) withLock(toNext); else withLock(toPrev);
+    } else if (Math.abs(dy) > THRESH) {
+      if (dy < 0) withLock(toNext); else withLock(toPrev);
+    }
+  }, { passive: true });
+
+  /* trava o scroll da página quando estiver na seção do slider */
+  window.addEventListener("scroll", () => {
+    const sliderSection = document.querySelector('.slider-fullscreen-section');
+    if (!sliderSection) return;
+    
+    const rect = sliderSection.getBoundingClientRect();
+    const isInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
+    
+    if (isInView) {
+      window.scrollTo(0, sliderSection.offsetTop);
+    }
+  }, { passive: true });
+
+})();
+
 // explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots.

@@ -725,10 +725,10 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 /* Responsividade mobile */
 @media (max-width: 768px) {
   .sopy-hero .cta-content {
-    bottom: 8vh; /* Mantém a posição absoluta mais embaixo, como no desktop */
-    width: 90%;
-    max-width: 400px;
-    text-align: center; /* Centraliza o botão */
+    position: static;
+    transform: none;
+    margin-top: 2rem;
+    text-align: center;
   }
   
   .sopy-hero .btn-comprar-agora {
@@ -1344,9 +1344,8 @@ body.theme-citrus .benefit-title h2 {
   }
   
   .pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
-    /* Posição ajustada para manter espaçamento visual igual dos dois lados */
-    /* 90px (largura) - 36px (handle) - 8px (espaço direita) - 4px (left inicial) = 42px */
-    transform: translate(42px, -50%) !important;
+    /* precise end position for 90x45 label, 36px handle, 3px border, 4px left gap */
+    transform: translate(40px, -50%) !important;
   }
   
   .toggle-hint {
@@ -2841,5 +2840,179 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
   background-color: #167312 !important;
   transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
+
+/* ========== SLIDER FULLSCREEN ========== */
+.slider-fullscreen-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  overflow: hidden;
+}
+
+.slider-container {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+
+.slider-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.slider-item {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  width: min(22vw, 420px);
+  height: min(55vh, 680px);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.5);
+  transition: all 0.5s ease;
+  display: inline-block;
+}
+
+.slider-item:nth-child(1),
+.slider-item:nth-child(2) {
+  top: 0;
+  left: 0;
+  transform: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.slider-item:nth-child(3) { left: 58%; }
+.slider-item:nth-child(4) { left: calc(58% + 240px); }
+.slider-item:nth-child(5) { left: calc(58% + 480px); }
+.slider-item:nth-child(n+6) { left: calc(58% + 720px); opacity: 0; }
+
+.slider-content {
+  position: absolute;
+  top: 50%;
+  left: clamp(24px, 6vw, 120px);
+  width: min(700px, 70vw);
+  transform: translate(0, -50%);
+  color: #fff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 2;
+}
+
+.slider-item:nth-child(2) .slider-content {
+  display: block;
+}
+
+.slider-name {
+  font-size: clamp(28px, 6vw, 64px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  animation: sliderFadeUp 1s ease-in-out forwards;
+}
+
+.slider-des {
+  margin-top: 12px;
+  margin-bottom: 24px;
+  max-width: 70ch;
+  line-height: 1.35;
+  font-size: clamp(14px, 2.2vw, 18px);
+  opacity: 0;
+  animation: sliderFadeUp 1s 0.25s ease-in-out forwards;
+}
+
+.slider-seeMore button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  font-weight: 600;
+  opacity: 0;
+  transition: 0.3s;
+  animation: sliderFadeUp 1s 0.5s ease-in-out forwards;
+}
+
+.slider-seeMore button:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.slider-item:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.25) 35%, rgba(0, 0, 0, 0) 65%);
+  z-index: 1;
+}
+
+@keyframes sliderFadeUp {
+  from {
+    opacity: 0;
+    transform: translate(0, 32px);
+    filter: blur(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+    filter: blur(0);
+  }
+}
+
+.slider-button {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 16px;
+  z-index: 5;
+  pointer-events: auto;
+}
+
+.slider-button button {
+  width: 44px;
+  height: 40px;
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+  backdrop-filter: blur(6px);
+}
+
+.slider-button button:hover {
+  transform: scale(1.06);
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.slider-button button:active {
+  transform: scale(1.02);
+}
+
+.slider-next {
+  padding-left: 3px;
+}
+
+.slider-prev {
+  padding-right: 3px;
+}
+
+@media (max-width: 768px) {
+  .slider-item:nth-child(3) { left: 62%; }
+  .slider-item:nth-child(4) { left: calc(62% + 180px); }
+  .slider-item:nth-child(5) { left: calc(62% + 360px); }
+  .slider-item:nth-child(n+6) { left: calc(62% + 540px); }
+}
+
 
 
