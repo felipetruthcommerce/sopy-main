@@ -2051,8 +2051,8 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   --slide-delay: calc(450ms * 100 / var(--animation-speed));
   --circle-duration: calc(900ms * 100 / var(--animation-speed));
 
-  /* Cores padrão (fundo branco, texto preto) */
-  background-color: #FFFFFF;
+  /* Cores padrão (SEM cor de fundo quando fechado) */
+  background-color: transparent;
   color: #000000;
 
   width: min(900px, 92%);
@@ -2066,9 +2066,15 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   
   /* Transições SEM mudança de cor do texto */
   transition: box-shadow 200ms ease, 
-              grid-template-rows var(--slide-duration) var(--slide-ease);
+              grid-template-rows var(--slide-duration) var(--slide-ease),
+              color var(--circle-duration) ease;
   box-shadow: none;
   scroll-margin-top: 88px;
+}
+
+/* Quando aberto, muda a cor do texto para branco */
+#faq .sopy-faq-accordion.open {
+  color: #FFFFFF;
 }
 
 /* Permitir bordas nos cards mas remover sombras conflitantes */
@@ -2160,17 +2166,22 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   background: rgba(0,0,0,0.03); 
 }
 
-/* Temas: mantém cartões claros sobre fundos fortes */
+/* Temas: sem fundo quando fechado */
 body.theme-aqua #faq .sopy-faq-accordion,
 body.theme-citrus #faq .sopy-faq-accordion { 
-  background: #fff; 
+  background: transparent; 
   border: 2px solid #000000 !important; /* borda preta bem visível */
   box-shadow: none;
 }
 
-/* Cor específica para o tema aqua no FAQ */
+/* Cor específica para o tema aqua no FAQ (azul quando aberto) */
 body.theme-aqua #faq .sopy-faq-accordion::before {
   background-color: #48ACF8 !important;
+}
+
+/* Cor específica para o tema citrus no FAQ (verde quando aberto) */
+body.theme-citrus #faq .sopy-faq-accordion::before {
+  background-color: #77DD77 !important;
 }
 
 /* ========== STATES PARA REVEALS (GSAP SplitText) ========== */
@@ -2435,48 +2446,56 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 /* Keep ripple enabled so it can start from mouse position (set via --xPos/--yPos) */
 
-/* Botões de navegação dos depoimentos */
+/* Botões de navegação dos depoimentos - Design melhorado */
 .tc-nav-buttons {
   position: absolute;
-  top: 20px;
+  top: 50%;
   left: 0;
   right: 0;
+  transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0;
   z-index: 10;
   pointer-events: none;
 }
 
 .tc-nav-buttons button {
-  width: 44px;
-  height: 40px;
-  border-radius: 10px;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  background: rgba(0, 0, 0, 0.35);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
   color: #fff;
   cursor: pointer;
-  transition: 0.25s;
-  backdrop-filter: blur(6px);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
   pointer-events: auto;
-  font-size: 16px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  transform: scale(0.9);
 }
 
 .tc-nav-buttons button:hover {
-  transform: scale(1.06);
-  background: rgba(0, 0, 0, 0.55);
+  opacity: 1;
+  transform: scale(1);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .tc-nav-buttons button:active {
-  transform: scale(1.02);
-}
-
-.tc-nav-next {
-  padding-left: 3px;
+  transform: scale(0.95);
 }
 
 .tc-nav-prev {
-  padding-right: 3px;
+  margin-left: -24px;
+}
+
+.tc-nav-next {
+  margin-right: -24px;
 }
 
 .tc-right{ position:relative; min-width:0 }
@@ -2580,28 +2599,35 @@ body.theme-aqua .tc-progress-dot.active {
 
 /* Responsividade dos botões de navegação dos depoimentos */
 @media (max-width: 768px) {
-  .tc-nav-buttons {
-    top: 10px;
-    padding: 0 10px;
+  .tc-nav-buttons button {
+    width: 42px;
+    height: 42px;
+    font-size: 16px;
   }
 
-  .tc-nav-buttons button {
-    width: 40px;
-    height: 36px;
-    font-size: 14px;
+  .tc-nav-prev {
+    margin-left: -10px;
+  }
+
+  .tc-nav-next {
+    margin-right: -10px;
   }
 }
 
 @media (max-width: 480px) {
-  .tc-nav-buttons {
-    top: 8px;
-    padding: 0 8px;
+  .tc-nav-buttons button {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.2);
   }
 
-  .tc-nav-buttons button {
-    width: 36px;
-    height: 32px;
-    font-size: 13px;
+  .tc-nav-prev {
+    margin-left: 0;
+  }
+
+  .tc-nav-next {
+    margin-right: 0;
   }
 }
 
