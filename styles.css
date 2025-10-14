@@ -358,12 +358,13 @@ body.theme-aqua .green-wave {
 }
 
 .card-sopy-way { 
-    background: rgba(255, 255, 255, 0.05); 
-    border: 1px solid rgba(255, 255, 255, 0.2); 
-    backdrop-filter: blur(15px); 
-    -webkit-backdrop-filter: blur(15px); 
+    background: rgba(255, 255, 255, 0.12); /* Aumentado de 0.05 para 0.12 - mais claro */
+    border: 1px solid rgba(255, 255, 255, 0.25); 
+    backdrop-filter: blur(20px); 
+    -webkit-backdrop-filter: blur(20px); 
     color: #FFF; 
-    opacity: 0; 
+    opacity: 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); /* Adiciona sombra para destacar */
 }
 
 .card h3 { 
