@@ -2166,14 +2166,6 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   background: rgba(0,0,0,0.03); 
 }
 
-/* Temas: sem fundo quando fechado */
-body.theme-aqua #faq .sopy-faq-accordion,
-body.theme-citrus #faq .sopy-faq-accordion { 
-  background: transparent; 
-  border: 2px solid #000000 !important; /* borda preta bem visível */
-  box-shadow: none;
-}
-
 /* Cor específica para o tema aqua no FAQ (azul quando aberto) */
 body.theme-aqua #faq .sopy-faq-accordion::before {
   background-color: #48ACF8 !important;
