@@ -2915,6 +2915,11 @@ body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-
   transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
 }
 
+/* Badge no tema aqua - verde */
+body.theme-aqua .head-main .badge {
+  background-color: #167312 !important;
+}
+
 /* Tema padrão (citrus) - verde */
 body.theme-citrus .head-main,
 body.theme-citrus .js-head-main,
@@ -2923,6 +2928,11 @@ body.theme-citrus .js-menu-and-banners-row,
 body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #167312 !important;
   transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
+}
+
+/* Badge no tema citrus - azul */
+body.theme-citrus .head-main .badge {
+  background-color: #083DA6 !important;
 }
 
 /* ========== SLIDER FULLSCREEN ========== */
