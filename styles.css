@@ -46,8 +46,8 @@ html, body {
 
 body {
   margin: 0;
-  /* Use Avant Garde Book (lighter) for body text */
-  font-family: 'Avant Garde Book BT';
+  /* Use Inter for body text */
+  font-family: 'Inter', 'Avant Garde Book BT', sans-serif;
   color: var(--text);
   background: #1B4332; /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
