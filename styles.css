@@ -2140,7 +2140,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: var(--brand); /* cor do tema (verde citrus / azul aqua) */
+  background-color: #076DF2; /* cor do tema (verde citrus / azul aqua) */
   transition: clip-path var(--circle-duration) ease;
   pointer-events: none;
   clip-path: circle(0% at var(--circle-x) var(--circle-y));
@@ -3025,10 +3025,13 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
 }
 
 @media (max-width: 768px) {
-  .slider-item:nth-child(3) { left: 62%; }
-  .slider-item:nth-child(4) { left: calc(62% + 180px); }
-  .slider-item:nth-child(5) { left: calc(62% + 360px); }
-  .slider-item:nth-child(n+6) { left: calc(62% + 540px); }
+  .slider-item:nth-child(3),
+  .slider-item:nth-child(4),
+  .slider-item:nth-child(5),
+  .slider-item:nth-child(n+6) {
+    opacity: 0 !important;
+    pointer-events: none;
+  }
 }
 
 
