@@ -3054,7 +3054,7 @@ body.theme-citrus .head-main .badge {
   box-shadow: none;
 }
 
-/* Mostra 2 previews ao lado */
+/* Mostra apenas 1 preview ao lado (esconde o 4º item por padrão) */
 .slider-item:nth-child(3) { 
   left: 58%; 
   opacity: 1;
@@ -3062,7 +3062,8 @@ body.theme-citrus .head-main .badge {
 
 .slider-item:nth-child(4) { 
   left: calc(58% + 240px);
-  opacity: 1;
+  opacity: 0; /* Escondido por padrão - só mostra no último slide */
+  pointer-events: none;
 }
 
 /* Esconde os demais */
@@ -3071,11 +3072,15 @@ body.theme-citrus .head-main .badge {
   pointer-events: none;
 }
 
-/* Quando estiver no último slide, esconde os previews */
-.slider-slide.last-slide .slider-item:nth-child(3),
+/* Quando estiver no último slide, mostra o 2º preview e esconde os outros */
+.slider-slide.last-slide .slider-item:nth-child(3) {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .slider-slide.last-slide .slider-item:nth-child(4) {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .slider-content {
@@ -3151,7 +3156,7 @@ body.theme-citrus .head-main .badge {
 }
 
 .slider-button {
-  position: fixed;
+  position: absolute; /* Mudado de fixed para absolute - fica dentro da seção */
   left: 50%;
   bottom: 28px;
   transform: translateX(-50%);
