@@ -2588,6 +2588,31 @@ body.theme-aqua .tc-progress-dot.active {
 /* Remove dots antigos */
 .tc-testimonials-dots { display: none; }
 
+/* Responsividade dos dots de progresso */
+@media (max-width: 768px) {
+  .tc-progress-wrap {
+    bottom: -40px; /* Mais alto no tablet */
+  }
+}
+
+@media (max-width: 480px) {
+  .tc-progress-wrap {
+    bottom: -32px; /* Ainda mais alto no mobile para não ser cortado */
+    gap: 10px; /* Gap menor para economizar espaço */
+  }
+
+  .tc-progress-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  body.theme-citrus .tc-progress-dot.active,
+  body.theme-aqua .tc-progress-dot.active {
+    width: 44px; /* Menor no mobile */
+    height: 10px;
+  }
+}
+
 /* Responsividade dos botões de navegação dos depoimentos */
 @media (max-width: 768px) {
   .tc-nav-buttons {
