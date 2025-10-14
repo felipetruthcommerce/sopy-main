@@ -719,10 +719,10 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 /* Responsividade mobile */
 @media (max-width: 768px) {
   .sopy-hero .cta-content {
-    position: static;
-    transform: none;
-    margin-top: 2rem;
-    text-align: center;
+    bottom: 8vh; /* Mantém posicionamento absoluto embaixo */
+    width: 90%;
+    max-width: 400px;
+    text-align: center; /* Centraliza o botão */
   }
   
   .sopy-hero .btn-comprar-agora {
@@ -2839,7 +2839,7 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 200vh; /* Drasticamente reduzido - só 2x a altura da tela */
+  height: 500vh; /* Aumentado drasticamente - 5x a altura da tela */
   background: #000;
 }
 

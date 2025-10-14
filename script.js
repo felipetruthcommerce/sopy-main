@@ -1661,20 +1661,20 @@ if (heroVideo && heroPoster) {
       scrollableHeight: (sectionHeight - viewportHeight) + 'px'
     });
     
-    // Ajusta os intervalos: distribuição mais equilibrada
-    // Slide 1: 0-35% 
-    // Slide 2: 35-60%
-    // Slide 3: 60-85%
-    // Slide 4: 85-100% (apenas 15% para sair rápido)
+    // Ajusta os intervalos: primeiros slides MUITO mais lentos, último MUITO rápido
+    // Slide 1: 0-32% (1.6 telas de scroll)
+    // Slide 2: 32-60% (1.4 telas de scroll)
+    // Slide 3: 60-85% (1.25 telas de scroll)
+    // Slide 4: 85-100% (APENAS 0.75 telas para sair!)
     let targetIndex;
-    if (progress < 0.35) {
+    if (progress < 0.32) {
       targetIndex = 0; // Dose Única
     } else if (progress < 0.60) {
       targetIndex = 1; // Direto no Tambor
     } else if (progress < 0.85) {
       targetIndex = 2; // Inicie o Ciclo
     } else {
-      targetIndex = 3; // Resultado Impecável (MUITO rápido para sair)
+      targetIndex = 3; // Resultado Impecável (sai MUITO rápido)
     }
     
     console.log('🎯 Target Index:', targetIndex, '| Last Known:', lastKnownIndex);
