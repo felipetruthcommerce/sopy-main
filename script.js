@@ -1596,12 +1596,21 @@ if (heroVideo && heroPoster) {
   const totalSlides = track.querySelectorAll(".slider-item").length;
   let isTransitioning = false;
 
-  /* Atualiza classe do último slide */
+  /* Atualiza classes do penúltimo e último slide */
   function updateLastSlideClass() {
-    if (currentIndex === totalSlides - 1) {
-      track.classList.add('last-slide');
-    } else {
+    // Penúltimo slide (index 2 = slide 3)
+    if (currentIndex === totalSlides - 2) {
+      track.classList.add('penultimate-slide');
       track.classList.remove('last-slide');
+    } 
+    // Último slide (index 3 = slide 4)
+    else if (currentIndex === totalSlides - 1) {
+      track.classList.add('last-slide');
+      track.classList.remove('penultimate-slide');
+    } 
+    // Slides 1-2
+    else {
+      track.classList.remove('last-slide', 'penultimate-slide');
     }
   }
 
