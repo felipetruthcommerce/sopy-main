@@ -2516,7 +2516,23 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
 .tc-testimonial-card{ position:absolute; inset:0; opacity:0; transform:translateX(100%); transition: opacity 0.3s ease, transform 0.6s ease }
 .tc-testimonial-card.active{ opacity:1; transform:translateX(0) }
 /* Glassmorphism cards: translucent surface, blur backdrop, soft border and subtle shadow */
-.tc-card{ background: rgba(255,255,255,0.06); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,0.12); border-radius:16px; padding: clamp(20px, 3.2vw, 34px); box-shadow: 0 8px 30px rgba(6,10,12,0.22); min-height:280px; display:grid; gap:18px; overflow:hidden; color: inherit; width: 100%; height: 100% }
+.tc-card{ 
+  background: rgba(255,255,255,0.06); 
+  -webkit-backdrop-filter: blur(8px); 
+  backdrop-filter: blur(8px); 
+  border:1px solid rgba(255,255,255,0.12); 
+  border-radius:16px; 
+  padding: clamp(20px, 3.2vw, 34px) clamp(20px, 3.2vw, 34px) clamp(80px, 8vw, 100px) clamp(20px, 3.2vw, 34px); /* padding-bottom maior para espaço das setas */
+  box-shadow: 0 8px 30px rgba(6,10,12,0.22); 
+  min-height:280px; 
+  display:grid; 
+  gap:18px; 
+  overflow:hidden; 
+  color: inherit; 
+  width: 100%; 
+  height: 100%;
+  align-content: start; /* Alinha conteúdo no topo */
+}
 .tc-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); pointer-events:none }
 .tc-quoteMark{ font-size: clamp(32px, 6vw, 52px); line-height:1; opacity:.14; user-select:none }
 .tc-quote{ margin:0; font-size: clamp(16px, 1.8vw, 18px); color: rgba(255,255,255,0.95); max-width:60ch; animation: tcFade .45s ease }
@@ -2605,6 +2621,19 @@ body.theme-aqua .tc-progress-dot.active {
 
 /* Remove dots antigos */
 .tc-testimonials-dots { display: none; }
+
+/* Responsividade dos cards de depoimentos */
+@media (max-width: 768px) {
+  .tc-card {
+    padding-bottom: clamp(70px, 7vw, 85px); /* Padding inferior menor no tablet */
+  }
+}
+
+@media (max-width: 480px) {
+  .tc-card {
+    padding-bottom: clamp(60px, 6vw, 70px); /* Padding inferior ainda menor no mobile */
+  }
+}
 
 /* Responsividade dos dots de progresso */
 @media (max-width: 768px) {
