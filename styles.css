@@ -2975,7 +2975,9 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
   display: flex;
   gap: 16px;
   z-index: 5;
-  pointer-events: auto;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .slider-button button {
@@ -2988,6 +2990,7 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
   cursor: pointer;
   transition: 0.25s;
   backdrop-filter: blur(6px);
+  pointer-events: auto;
 }
 
 .slider-button button:hover {

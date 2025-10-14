@@ -1568,65 +1568,62 @@ if (heroVideo && heroPoster) {
   const track = document.querySelector(".slider-slide");
   const btnNext = document.querySelector(".slider-next");
   const btnPrev = document.querySelector(".slider-prev");
+  const btnContainer = document.querySelector(".slider-button");
   const section = document.querySelector(".slider-fullscreen-section");
 
-  if (!track || !btnNext || !btnPrev || !section) {
+  if (!track || !btnNext || !btnPrev || !section || !btnContainer) {
     console.warn('[SLIDER] Elementos não encontrados');
     return;
   }
 
   let currentIndex = 0;
   const totalSlides = track.querySelectorAll(".slider-item").length;
+  let isTransitioning = false;
 
   /* ações */
   function toNext() {
+    if (isTransitioning) return;
     const items = track.querySelectorAll(".slider-item");
-    if (items.length) {
+    if (items.length && currentIndex < totalSlides - 1) {
+      isTransitioning = true;
       track.appendChild(items[0]);
-      currentIndex = Math.min(currentIndex + 1, totalSlides - 1);
+      currentIndex++;
+      setTimeout(() => isTransitioning = false, 500);
     }
   }
   
   function toPrev() {
+    if (isTransitioning) return;
     const items = track.querySelectorAll(".slider-item");
-    if (items.length) {
+    if (items.length && currentIndex > 0) {
+      isTransitioning = true;
       track.prepend(items[items.length - 1]);
-      currentIndex = Math.max(currentIndex - 1, 0);
+      currentIndex--;
+      setTimeout(() => isTransitioning = false, 500);
     }
-  }
-
-  function goToSlide(index) {
-    if (index === currentIndex) return;
-    
-    const diff = index - currentIndex;
-    if (diff > 0) {
-      for (let i = 0; i < diff; i++) {
-        toNext();
-      }
-    } else {
-      for (let i = 0; i < Math.abs(diff); i++) {
-        toPrev();
-      }
-    }
-  }
-
-  /* lock (opcional, mantém transição suave) */
-  let locked = false;
-  const baseCooldown = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 650 : 420;
-  
-  function withLock(fn) {
-    if (locked) return;
-    locked = true;
-    fn();
-    setTimeout(() => locked = false, baseCooldown);
   }
 
   /* BOTÕES */
-  btnNext.addEventListener("click", () => withLock(toNext));
-  btnPrev.addEventListener("click", () => withLock(toPrev));
+  btnNext.addEventListener("click", toNext);
+  btnPrev.addEventListener("click", toPrev);
 
-  /* SCROLL PROGRESS - detecta progresso do scroll na seção */
-  let lastScrollProgress = 0;
+  /* VISIBILIDADE DOS BOTÕES - apenas quando na seção */
+  function updateButtonsVisibility() {
+    const rect = section.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+    
+    if (isInView) {
+      btnContainer.style.opacity = '1';
+      btnContainer.style.pointerEvents = 'auto';
+    } else {
+      btnContainer.style.opacity = '0';
+      btnContainer.style.pointerEvents = 'none';
+    }
+  }
+
+  /* SCROLL PROGRESS - sistema melhorado */
+  let lastKnownIndex = 0;
+  let ticking = false;
   
   function updateSlideByScroll() {
     const rect = section.getBoundingClientRect();
@@ -1634,50 +1631,74 @@ if (heroVideo && heroPoster) {
     const sectionHeight = section.offsetHeight;
     const viewportHeight = window.innerHeight;
     
-    // Calcula o progresso do scroll (0 a 1)
-    const scrollProgress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
-    
-    // Determina qual slide deve estar visível baseado no progresso
-    const targetIndex = Math.floor(scrollProgress * totalSlides);
-    const clampedIndex = Math.max(0, Math.min(totalSlides - 1, targetIndex));
-    
-    // Só muda se o índice alvo mudou e se não estiver muito próximo dos limites
-    if (clampedIndex !== currentIndex && Math.abs(scrollProgress - lastScrollProgress) > 0.05) {
-      goToSlide(clampedIndex);
-      lastScrollProgress = scrollProgress;
+    // Só atua quando a seção está na viewport
+    if (sectionTop > viewportHeight || rect.bottom < 0) {
+      ticking = false;
+      return;
     }
+    
+    // Calcula o progresso (0 a 1) baseado em quanto da seção já foi scrollada
+    const progress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
+    
+    // Divide em intervalos iguais para cada slide
+    const slideProgress = progress * (totalSlides - 1);
+    const targetIndex = Math.round(slideProgress);
+    
+    // Só muda se passou do "threshold" de meio caminho para o próximo slide
+    if (targetIndex !== lastKnownIndex && !isTransitioning) {
+      const diff = targetIndex - lastKnownIndex;
+      
+      if (diff > 0) {
+        // Avançar
+        for (let i = 0; i < diff; i++) {
+          toNext();
+        }
+      } else if (diff < 0) {
+        // Voltar
+        for (let i = 0; i < Math.abs(diff); i++) {
+          toPrev();
+        }
+      }
+      
+      lastKnownIndex = targetIndex;
+    }
+    
+    ticking = false;
   }
   
-  // Atualiza com throttle para performance
-  let scrollTimeout;
+  // Usa requestAnimationFrame para melhor performance
   window.addEventListener("scroll", () => {
-    if (scrollTimeout) return;
-    scrollTimeout = setTimeout(() => {
-      updateSlideByScroll();
-      scrollTimeout = null;
-    }, 50);
+    updateButtonsVisibility();
+    
+    if (!ticking) {
+      window.requestAnimationFrame(updateSlideByScroll);
+      ticking = true;
+    }
   }, { passive: true });
 
-  /* WHEEL - navegação por scroll do mouse */
-  let wheelAccum = 0;
-  const WHEEL_THRESHOLD = 100;
+  /* WHEEL - navegação alternativa por wheel */
+  let wheelTimeout;
+  let wheelDelta = 0;
   
   function onWheel(e) {
     const rect = section.getBoundingClientRect();
-    const isInView = rect.top <= 0 && rect.bottom > window.innerHeight * 0.5;
+    const isInView = rect.top <= 50 && rect.bottom >= window.innerHeight - 50;
     
     if (!isInView) return;
     
-    const delta = e.deltaY;
-    wheelAccum += delta;
+    clearTimeout(wheelTimeout);
+    wheelDelta += e.deltaY;
     
-    if (wheelAccum > WHEEL_THRESHOLD) {
-      withLock(toNext);
-      wheelAccum = 0;
-    } else if (wheelAccum < -WHEEL_THRESHOLD) {
-      withLock(toPrev);
-      wheelAccum = 0;
-    }
+    wheelTimeout = setTimeout(() => {
+      if (Math.abs(wheelDelta) > 50) {
+        if (wheelDelta > 0 && currentIndex < totalSlides - 1) {
+          toNext();
+        } else if (wheelDelta < 0 && currentIndex > 0) {
+          toPrev();
+        }
+      }
+      wheelDelta = 0;
+    }, 100);
   }
   
   window.addEventListener("wheel", onWheel, { passive: true });
@@ -1692,19 +1713,23 @@ if (heroVideo && heroPoster) {
     const k = e.key;
     if (k === "ArrowRight" || k === "ArrowDown" || k === "PageDown") {
       e.preventDefault();
-      withLock(toNext);
+      toNext();
     }
     if (k === "ArrowLeft" || k === "ArrowUp" || k === "PageUp") {
       e.preventDefault();
-      withLock(toPrev);
+      toPrev();
     }
   });
 
   /* TOUCH */
   let touchStartX = 0, touchStartY = 0, touchActive = false;
-  let THRESH = 50;
+  const SWIPE_THRESHOLD = 50;
   
   window.addEventListener("touchstart", (e) => {
+    const rect = section.getBoundingClientRect();
+    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (!isInView) return;
+    
     if (e.touches.length !== 1) return;
     touchActive = true;
     touchStartX = e.touches[0].clientX;
@@ -1718,17 +1743,15 @@ if (heroVideo && heroPoster) {
     const dy = t.clientY - touchStartY;
     touchActive = false;
 
-    const rect = section.getBoundingClientRect();
-    const isInView = rect.top < window.innerHeight && rect.bottom > 0;
-    
-    if (!isInView) return;
-
-    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > THRESH) {
-      if (dx < 0) withLock(toNext); else withLock(toPrev);
-    } else if (Math.abs(dy) > THRESH) {
-      if (dy < 0) withLock(toNext); else withLock(toPrev);
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > SWIPE_THRESHOLD) {
+      if (dx < 0) toNext(); else toPrev();
+    } else if (Math.abs(dy) > SWIPE_THRESHOLD) {
+      if (dy < 0) toNext(); else toPrev();
     }
   }, { passive: true });
+
+  // Inicializa visibilidade dos botões
+  updateButtonsVisibility();
 
 })();
 
