@@ -2051,20 +2051,20 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   --slide-delay: calc(450ms * 100 / var(--animation-speed));
   --circle-duration: calc(900ms * 100 / var(--animation-speed));
 
-  /* Cores padrão (SEM cor de fundo quando fechado) */
-  background-color: transparent;
+  /* Cores padrão - fundo branco, borda preta */
+  background-color: #FFFFFF;
   color: #000000;
 
   width: min(900px, 92%);
   margin: 0 auto 1rem;
   border-radius: min(12px, 0.5rem);
-  border: 1px solid rgba(0, 0, 0, 0.1); /* borda sutil */
+  border: 2px solid #000000; /* borda preta bem visível */
   display: grid;
   grid-template-rows: auto 0fr; 
   overflow: hidden;
   position: relative;
   
-  /* Transições SEM mudança de cor do texto */
+  /* Transições para cor do texto e grid */
   transition: box-shadow 200ms ease, 
               grid-template-rows var(--slide-duration) var(--slide-ease),
               color var(--circle-duration) ease;
