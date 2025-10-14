@@ -2267,7 +2267,7 @@ body.theme-aqua #testemunhos {
 } */
 
 body.theme-aqua #capsula-3d {
-  background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(103, 167, 194, 1) 93%, rgba(64, 154, 192, 1) 100%);
+  background: linear-gradient(180deg, #FCFDFE 0%, rgba(103, 167, 194, 1) 93%, rgba(64, 154, 192, 1) 100%);
 }
 
 /* CITRUS â€” verdes fortes com neutros escuros para variação */
@@ -2296,8 +2296,7 @@ body.theme-citrus #testemunhos {
 } */
 
 body.theme-citrus #capsula-3d {
-    background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(183, 215, 212, 1) 50%, rgba(21, 135, 84, 1) 100%)
-
+  background: linear-gradient(180deg, #FCFDFE 0%, rgba(183, 215, 212, 1) 50%, rgba(21, 135, 84, 1) 100%);
 }
 
 /* Force solid backgrounds in sustainability section (no transparency) */
