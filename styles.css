@@ -2072,10 +2072,10 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   scroll-margin-top: 88px;
 }
 
-/* Quando aberto, muda a cor do texto para branco */
+/* Quando aberto, muda a cor do texto para branco
 #faq .sopy-faq-accordion.open {
   color: #FFFFFF;
-}
+} */
 
 /* Permitir bordas nos cards mas remover sombras conflitantes */
 #faq .sopy-faq-accordion::before,
