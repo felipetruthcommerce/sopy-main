@@ -2890,10 +2890,29 @@ body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.
   box-shadow: none;
 }
 
-.slider-item:nth-child(3) { left: 58%; }
-.slider-item:nth-child(4) { left: calc(58% + 240px); }
-.slider-item:nth-child(5) { left: calc(58% + 480px); }
-.slider-item:nth-child(n+6) { left: calc(58% + 720px); opacity: 0; }
+/* Mostra apenas 1 preview ao lado (3rd child) */
+.slider-item:nth-child(3) { 
+  left: 58%; 
+  opacity: 1;
+}
+
+/* Esconde o 4º item (seria a segunda preview) */
+.slider-item:nth-child(4) { 
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Esconde todos os demais */
+.slider-item:nth-child(n+5) { 
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Quando estiver no último slide, esconde o preview */
+.slider-slide.last-slide .slider-item:nth-child(3) {
+  opacity: 0;
+  pointer-events: none;
+}
 
 .slider-content {
   position: absolute;

@@ -1580,6 +1580,15 @@ if (heroVideo && heroPoster) {
   const totalSlides = track.querySelectorAll(".slider-item").length;
   let isTransitioning = false;
 
+  /* Atualiza classe do último slide */
+  function updateLastSlideClass() {
+    if (currentIndex === totalSlides - 1) {
+      track.classList.add('last-slide');
+    } else {
+      track.classList.remove('last-slide');
+    }
+  }
+
   /* ações */
   function toNext() {
     if (isTransitioning) return;
@@ -1588,6 +1597,7 @@ if (heroVideo && heroPoster) {
       isTransitioning = true;
       track.appendChild(items[0]);
       currentIndex++;
+      updateLastSlideClass();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
@@ -1599,6 +1609,7 @@ if (heroVideo && heroPoster) {
       isTransitioning = true;
       track.prepend(items[items.length - 1]);
       currentIndex--;
+      updateLastSlideClass();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
@@ -1761,6 +1772,9 @@ if (heroVideo && heroPoster) {
 
   // Inicializa visibilidade dos botões
   updateButtonsVisibility();
+  
+  // Inicializa classe do último slide
+  updateLastSlideClass();
 
 })();
 
