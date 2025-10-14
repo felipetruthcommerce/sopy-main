@@ -2442,12 +2442,13 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 .tc-nav-buttons {
   position: absolute;
   top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
+  left: 50%;
+  width: 100%;
+  max-width: 100%;
+  transform: translate(-50%, -50%);
   display: flex;
   justify-content: space-between;
-  padding: 0;
+  padding: 0 clamp(8px, 2vw, 20px);
   z-index: 10;
   pointer-events: none;
 }
@@ -2468,12 +2469,10 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   align-items: center;
   justify-content: center;
   opacity: 0.7;
-  transform: scale(0.9);
 }
 
 .tc-nav-buttons button:hover {
   opacity: 1;
-  transform: scale(1);
   background: rgba(255, 255, 255, 0.25);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -2483,11 +2482,11 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 }
 
 .tc-nav-prev {
-  margin-left: -24px;
+  transform: translateX(-50%);
 }
 
 .tc-nav-next {
-  margin-right: -24px;
+  transform: translateX(50%);
 }
 
 .tc-right{ position:relative; min-width:0 }
@@ -2591,35 +2590,43 @@ body.theme-aqua .tc-progress-dot.active {
 
 /* Responsividade dos botões de navegação dos depoimentos */
 @media (max-width: 768px) {
+  .tc-nav-buttons {
+    padding: 0 clamp(4px, 1.5vw, 12px);
+  }
+
   .tc-nav-buttons button {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     font-size: 16px;
   }
 
   .tc-nav-prev {
-    margin-left: -10px;
+    transform: translateX(-30%);
   }
 
   .tc-nav-next {
-    margin-right: -10px;
+    transform: translateX(30%);
   }
 }
 
 @media (max-width: 480px) {
+  .tc-nav-buttons {
+    padding: 0 clamp(2px, 1vw, 8px);
+  }
+
   .tc-nav-buttons button {
-    width: 38px;
-    height: 38px;
-    font-size: 14px;
+    width: 40px;
+    height: 40px;
+    font-size: 15px;
     background: rgba(255, 255, 255, 0.2);
   }
 
   .tc-nav-prev {
-    margin-left: 0;
+    transform: translateX(-20%);
   }
 
   .tc-nav-next {
-    margin-right: 0;
+    transform: translateX(20%);
   }
 }
 
