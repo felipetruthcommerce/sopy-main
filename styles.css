@@ -2149,7 +2149,7 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   background-color: #076DF2; /* cor do tema (verde citrus / azul aqua) */
   transition: clip-path var(--circle-duration) ease;
   pointer-events: none;
-  clip-path: circle(0% at var(--ci  rcle-x) var(--circle-y));
+  clip-path: circle(0% at var(--circle-x) var(--circle-y));
   border-radius: inherit;
   z-index: 1; /* Fica entre o fundo branco e o conteúdo */
 }
