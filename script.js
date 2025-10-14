@@ -1651,6 +1651,16 @@ if (heroVideo && heroPoster) {
     // Calcula o progresso (0 a 1) baseado em quanto da seção já foi scrollada
     const progress = Math.max(0, Math.min(1, -sectionTop / (sectionHeight - viewportHeight)));
     
+    // LOGS DETALHADOS
+    console.log('📊 SLIDER DEBUG:', {
+      progress: (progress * 100).toFixed(1) + '%',
+      currentIndex: currentIndex,
+      sectionTop: sectionTop.toFixed(0) + 'px',
+      sectionHeight: sectionHeight + 'px',
+      viewportHeight: viewportHeight + 'px',
+      scrollableHeight: (sectionHeight - viewportHeight) + 'px'
+    });
+    
     // Ajusta os intervalos: slides iniciais mais lentos, último MUITO mais rápido para sair
     // Slide 1: 0-30% (mais tempo)
     // Slide 2: 30-55% (mais tempo)
@@ -1667,9 +1677,13 @@ if (heroVideo && heroPoster) {
       targetIndex = 3; // Resultado Impecável (muito mais fácil de sair)
     }
     
+    console.log('🎯 Target Index:', targetIndex, '| Last Known:', lastKnownIndex);
+    
     // Só muda se passou para outro índice
     if (targetIndex !== lastKnownIndex && !isTransitioning) {
       const diff = targetIndex - lastKnownIndex;
+      
+      console.log('🔄 Mudando slide! Diff:', diff);
       
       if (diff > 0) {
         // Avançar
