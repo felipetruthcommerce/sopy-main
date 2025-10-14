@@ -1652,6 +1652,9 @@ if (heroVideo && heroPoster) {
   let lastKnownIndex = 0;
   let ticking = false;
   
+  // ✨ AUMENTA A ALTURA VIRTUAL DA SEÇÃO PARA TORNAR O SCROLL MAIS LENTO
+  const SCROLL_MULTIPLIER = 3; // Multiplica a altura por 3x (ajuste esse valor para mais/menos lento)
+  
   function updateSlideByScroll() {
     const rect = section.getBoundingClientRect();
     const sectionTop = rect.top;
@@ -1664,12 +1667,11 @@ if (heroVideo && heroPoster) {
       return;
     }
     
-    // Total "scrollable" enquanto a seção fica pinada = sectionHeight - viewport
-    const totalScrollable = Math.max(sectionHeight - viewportHeight, 1);
+    // Total "scrollable" MULTIPLICADO para tornar o scroll mais lento
+    const baseScrollable = Math.max(sectionHeight - viewportHeight, 1);
+    const totalScrollable = baseScrollable * SCROLL_MULTIPLIER;
     
-    // Progresso normalizado (0..1)
-    // quando rect.top == 0 -> início (progress 0)
-    // quando rect.top == -totalScrollable -> fim (progress 1)
+    // Progresso normalizado (0..1) mas agora com área de scroll ampliada
     const scrolled = -Math.min(Math.max(sectionTop, -totalScrollable), 0);
     const progress = scrolled / totalScrollable;
     
@@ -1680,29 +1682,17 @@ if (heroVideo && heroPoster) {
       sectionTop: sectionTop.toFixed(0) + 'px',
       sectionHeight: sectionHeight + 'px',
       viewportHeight: viewportHeight + 'px',
+      baseScrollable: baseScrollable + 'px',
       totalScrollable: totalScrollable + 'px',
-      scrolled: scrolled.toFixed(0) + 'px'
+      scrolled: scrolled.toFixed(0) + 'px',
+      multiplier: SCROLL_MULTIPLIER + 'x'
     });
     
-    // Pesos por slide (soma = 1.0)
-    // Ajuste esses valores para controlar quanto cada slide ocupa
-    const slideWeights = [0.32, 0.28, 0.25, 0.15]; // 32%, 28%, 25%, 15%
+    // Divisão LINEAR simples entre os slides (muito mais previsível)
+    const slideProgress = progress * (totalSlides - 1);
+    const targetIndex = Math.min(Math.floor(slideProgress), totalSlides - 1);
     
-    // Calcula o índice baseado nos pesos
-    let targetIndex = 0;
-    let accumulated = 0;
-    for (let i = 0; i < slideWeights.length; i++) {
-      accumulated += slideWeights[i];
-      if (progress < accumulated) {
-        targetIndex = i;
-        break;
-      }
-      if (i === slideWeights.length - 1) {
-        targetIndex = i;
-      }
-    }
-    
-    console.log('🎯 Target Index:', targetIndex, '| Last Known:', lastKnownIndex);
+    console.log('🎯 Target Index:', targetIndex, '| Slide Progress:', slideProgress.toFixed(2), '| Last Known:', lastKnownIndex);
     
     // Só muda se passou para outro índice
     if (targetIndex !== lastKnownIndex && !isTransitioning) {
