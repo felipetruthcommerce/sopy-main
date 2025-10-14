@@ -1653,7 +1653,7 @@ if (heroVideo && heroPoster) {
   let ticking = false;
   
   // ✨ AUMENTA A ALTURA VIRTUAL DA SEÇÃO PARA TORNAR O SCROLL MAIS LENTO
-  const SCROLL_MULTIPLIER = 3; // Multiplica a altura por 3x (ajuste esse valor para mais/menos lento)
+  const SCROLL_MULTIPLIER = 1.5; // Multiplicador moderado (ajuste esse valor para mais/menos lento)
   
   function updateSlideByScroll() {
     const rect = section.getBoundingClientRect();

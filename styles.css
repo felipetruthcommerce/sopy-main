@@ -3009,7 +3009,7 @@ body.theme-citrus .head-main .badge {
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 180vh; /* Reduzido para 180vh - menos scroll total */
+  height: 400vh; /* Aumentado para 400vh - muito mais scroll! */
   background: #000;
 }
 
