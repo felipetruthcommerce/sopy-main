@@ -2437,29 +2437,27 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   transform: none;
 }
 
-/* Botões com fundo branco e cor do tema */
-body.theme-aqua .tc-testimonials .sopy-tc-btn--primary,
-body.theme-aqua .tc-testimonials .sopy-tc-btn {
+/* Botão primário (Comprar) com fundo branco e cor do tema */
+body.theme-aqua .tc-testimonials .sopy-tc-btn--primary {
   background: #FFFFFF !important;
   color: #083DA6 !important; /* azul do tema aqua */
   border: 2px solid #FFFFFF !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-body.theme-aqua .tc-testimonials .sopy-tc-btn:hover {
+body.theme-aqua .tc-testimonials .sopy-tc-btn--primary:hover {
   background: #f0f0f0 !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
-body.theme-citrus .tc-testimonials .sopy-tc-btn--primary,
-body.theme-citrus .tc-testimonials .sopy-tc-btn {
+body.theme-citrus .tc-testimonials .sopy-tc-btn--primary {
   background: #FFFFFF !important;
   color: #167312 !important; /* verde do tema citrus */
   border: 2px solid #FFFFFF !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-body.theme-citrus .tc-testimonials .sopy-tc-btn:hover {
+body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
   background: #f0f0f0 !important;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
