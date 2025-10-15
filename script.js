@@ -1488,17 +1488,20 @@ if (heroVideo && heroPoster) {
             // Desktop: Sistema de wheel/scroll discreto (cada scroll = 1 slide)
             let currentIndex = 0;
             let isAnimating = false;
+            let isInSection = false;
 
             // Função para ir para próximo slide
             function toNext() {
-                const targetIndex = (currentIndex + 1) % slides.length;
-                slideTo(targetIndex);
+                if (currentIndex < slides.length - 1) {
+                    slideTo(currentIndex + 1);
+                }
             }
 
             // Função para ir para slide anterior
             function toPrev() {
-                const targetIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
-                slideTo(targetIndex);
+                if (currentIndex > 0) {
+                    slideTo(currentIndex - 1);
+                }
             }
 
             // Anima transição entre slides
@@ -1508,7 +1511,7 @@ if (heroVideo && heroPoster) {
                 console.log(`[DESKTOP SLIDE TO] De ${currentIndex} para ${targetIndex}`);
                 
                 isAnimating = true;
-                const direction = targetIndex > currentIndex || (currentIndex === slides.length - 1 && targetIndex === 0) ? 1 : -1;
+                const direction = targetIndex > currentIndex ? 1 : -1;
                 const currentSlide = slides[currentIndex];
                 const nextSlide = slides[targetIndex];
 
@@ -1533,7 +1536,7 @@ if (heroVideo && heroPoster) {
 
             // Anti-rajada: bloqueia múltiplas trocas rápidas
             let wheelLocked = false;
-            const wheelCooldown = 600; // ms
+            const wheelCooldown = 800; // ms - aumentado para evitar scroll múltiplo
             
             function withLock(fn) {
                 if (wheelLocked) return;
@@ -1542,38 +1545,58 @@ if (heroVideo && heroPoster) {
                 setTimeout(() => wheelLocked = false, wheelCooldown);
             }
 
-            // Wheel/scroll handler (dentro da seção)
-            function onWheel(e) {
-                // Só processar se o scroll for dentro da seção
+            // Detectar se estamos dentro da seção
+            function updateSectionState() {
                 const rect = howSection.getBoundingClientRect();
-                if (rect.top > 100 || rect.bottom < 100) return; // não está "fixo" na tela
+                // Considera que estamos "na seção" quando ela está próxima do topo
+                isInSection = rect.top <= 50 && rect.bottom >= window.innerHeight * 0.5;
+            }
+
+            // Wheel/scroll handler (NO WINDOW, não na seção!)
+            function onWheel(e) {
+                updateSectionState();
                 
+                // Só processar se estivermos dentro da seção
+                if (!isInSection) return;
+                
+                // BLOQUEIA O SCROLL DA PÁGINA
                 e.preventDefault();
+                e.stopPropagation();
                 
-                // Ignorar micro-movimentos
-                if (Math.abs(e.deltaY) < 18 && Math.abs(e.deltaX) < 18) return;
+                // Ignorar micro-movimentos (AUMENTADO o threshold)
+                if (Math.abs(e.deltaY) < 25 && Math.abs(e.deltaX) < 25) return;
                 
+                // Determinar direção baseado no deltaY principal
                 if (e.deltaY > 0 || e.deltaX > 40) {
+                    // Scroll para baixo = próximo slide
                     withLock(toNext);
                 } else if (e.deltaY < 0 || e.deltaX < -40) {
+                    // Scroll para cima = slide anterior
                     withLock(toPrev);
                 }
             }
 
-            // Adicionar listener de wheel na seção
-            howSection.addEventListener('wheel', onWheel, { passive: false });
+            // IMPORTANTE: Listener no WINDOW com passive: false
+            window.addEventListener('wheel', onWheel, { passive: false });
+
+            // Listener de scroll para atualizar estado
+            if (window.lenis) {
+                window.lenis.on('scroll', updateSectionState);
+            } else {
+                window.addEventListener('scroll', updateSectionState, { passive: true });
+            }
 
             // Teclado
             function onKeyDown(e) {
-                const rect = howSection.getBoundingClientRect();
-                if (rect.top > 100 || rect.bottom < 100) return;
+                updateSectionState();
+                if (!isInSection) return;
                 
                 const k = e.key;
-                if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') {
+                if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown') {
                     e.preventDefault();
                     withLock(toNext);
                 }
-                if (k === 'ArrowLeft' || k === 'PageUp') {
+                if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') {
                     e.preventDefault();
                     withLock(toPrev);
                 }
@@ -1597,6 +1620,7 @@ if (heroVideo && heroPoster) {
             });
 
             applyActive(0);
+            updateSectionState(); // Estado inicial
         }
     })();
 
