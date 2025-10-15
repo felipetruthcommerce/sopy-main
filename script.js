@@ -1478,7 +1478,11 @@ if (heroVideo && heroPoster) {
                 } else {
                     gsap.set(slide, { xPercent: 100, x: 0, opacity: 1, zIndex: 1, visibility: 'hidden' });
                 }
-                
+                // Se for o preview do 3º slide, force o background-image igual ao do último slide
+                if (index === 2 && slides.length > 3) {
+                    const lastBg = getComputedStyle(slides[slides.length - 1]).backgroundImage;
+                    slide.style.backgroundImage = lastBg;
+                }
                 console.log(`[MOBILE SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
             });
 
