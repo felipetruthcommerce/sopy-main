@@ -1488,7 +1488,8 @@ if (heroVideo && heroPoster) {
             // Desktop: ScrollTrigger pin + scrub timeline
             const tl = gsap.timeline({ paused: true });
             
-            // Cada slide ocupa exatamente 1 unidade de tempo na timeline
+            // NOVA LÓGICA: Cada slide ocupa EXATAMENTE 1 viewport de scroll
+            // Para 4 slides = 4 viewports totais
             slides.forEach((slide, i) => {
                 if (i === 0) {
                     // Slide inicial já está na posição
@@ -1498,17 +1499,19 @@ if (heroVideo && heroPoster) {
                 
                 const prev = slides[i - 1];
                 
-                // Cada transição começa em (i-1) e termina em i
-                // Isso cria divisões iguais: 0-1, 1-2, 2-3
+                // Cada transição acontece durante 1 unidade completa de tempo
+                // Slide 0→1: tempo 0 até 1
+                // Slide 1→2: tempo 1 até 2
+                // Slide 2→3: tempo 2 até 3
+                // Slide 3→4: tempo 3 até 4
                 tl.to(prev, { xPercent: -100, duration: 1, ease: 'none' }, i - 1)
                   .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 1, ease: 'none' }, i - 1)
                   .set(slide, { zIndex: 2 }, i - 0.5)
                   .set(prev, { zIndex: 1 }, i - 0.5);
             });
 
-            // Total = número de transições = slides.length - 1
-            // Mas vamos adicionar um "hold" no final para o último slide
-            const totalDur = slides.length - 1 + 0.5; // Meio viewport extra pro último slide
+            // Total duration = número de slides (cada um tem 1 viewport)
+            const totalDur = slides.length;
 
             const howTrigger = ScrollTrigger.create({
                 id: 'how-scroll',
@@ -1520,17 +1523,17 @@ if (heroVideo && heroPoster) {
                 invalidateOnRefresh: true,
                 onEnter: () => applyActive(0),
                 onEnterBack: (self) => {
-                    // Calcula o índice baseado no progresso real
-                    const idx = Math.round(self.progress * (slides.length - 1));
+                    // Progresso vai de 0 a 1, dividindo igualmente entre os slides
+                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
                     applyActive(idx);
                 },
                 onLeaveBack: () => applyActive(0),
                 onUpdate: (self) => {
-                    // Usa o progresso para avançar a timeline de forma linear
+                    // A timeline avança proporcionalmente ao scroll
                     tl.progress(self.progress);
                     
-                    // Calcula qual slide está ativo baseado no progresso
-                    const idx = Math.round(self.progress * (slides.length - 1));
+                    // Cada slide ocupa 1/slides.length do progresso total
+                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
                     applyActive(idx);
                 }
             });
@@ -1541,9 +1544,9 @@ if (heroVideo && heroPoster) {
                 const duration = 0.8;
                 if (!st) return;
                 const start = st.start;
-                // Com totalDur = slides.length - 1 + 0.5, cada slide ocupa (index / (slides.length - 1)) do progresso
-                const total = (slides.length - 1 + 0.5) * window.innerHeight;
-                const yTarget = Math.round(start + (total * (index / (slides.length - 1))));
+                // Cada slide ocupa exatamente 1 viewport
+                const total = slides.length * window.innerHeight;
+                const yTarget = Math.round(start + (total * (index / slides.length)));
                 if (window.lenis && typeof window.lenis.scrollTo === 'function') {
                     window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
                 } else {
@@ -1553,7 +1556,7 @@ if (heroVideo && heroPoster) {
             navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
             nextBtn?.addEventListener('click', () => {
                 // Calcula slide atual com base no progresso
-                const cur = Math.round(tl.progress() * (slides.length - 1));
+                const cur = Math.min(Math.floor(tl.progress() * slides.length), slides.length - 1);
                 const next = Math.min(slides.length - 1, cur + 1);
                 scrollToSlide(next);
             });
