@@ -1487,22 +1487,32 @@ if (heroVideo && heroPoster) {
         } else {
             // Desktop: ScrollTrigger pin + scrub timeline
             const tl = gsap.timeline({ paused: true });
-            // Evitar gap/preto durante o scrub: leve overlap e slide entrando por cima
+            
+            // ✅ CORREÇÃO: Cada slide tem EXATAMENTE a mesma duração (1 unidade)
+            // Isso garante que cada transição demore o mesmo tempo de scroll
             slides.forEach((slide, i) => {
-                if (i === 0) return;
-                const prev = slides[i - 1];
-                tl.addLabel(`slide${i}`)
-                  // Garante que o próximo slide fique por cima durante a transição
-                  .set(slide, { zIndex: 3 }, `slide${i}`)
-                  // Leve overlap para evitar linha/preto por arredondamento durante drag
-                  .to(prev, { xPercent: -100.2, duration: 1, ease: 'none' }, `slide${i}`)
-                  .fromTo(slide, { xPercent: 100 }, { xPercent: -0.2, duration: 1, ease: 'none' }, `slide${i}`)
-                  // Normaliza posição ao final do trecho para manter layout consistente
-                  .set(slide, { xPercent: 0 }, ">")
-                  .set(prev, { zIndex: 1 }, ">");
+                if (i === 0) {
+                    // Primeiro slide: apenas configura o estado inicial
+                    tl.set(slide, { xPercent: 0, zIndex: 2 }, 0);
+                } else {
+                    const prev = slides[i - 1];
+                    const slideStart = i; // Cada slide começa em sua posição de índice
+                    
+                    tl.addLabel(`slide${i}`, slideStart)
+                      // Garante que o próximo slide fique por cima durante a transição
+                      .set(slide, { zIndex: 3 }, slideStart)
+                      // Transição com duração exata de 1 unidade
+                      .to(prev, { xPercent: -100, duration: 1, ease: 'none' }, slideStart)
+                      .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 1, ease: 'none' }, slideStart)
+                      // Ao terminar, normaliza z-index
+                      .set(prev, { zIndex: 1 }, slideStart + 1)
+                      .set(slide, { zIndex: 2 }, slideStart + 1);
+                }
             });
 
-            const totalDur = slides.length - 1;
+            // ✅ CORREÇÃO: Total de duração é exatamente slides.length (não slides.length - 1)
+            // Isso dá espaço igual para cada slide aparecer na tela
+            const totalDur = slides.length;
 
             const howTrigger = ScrollTrigger.create({
                 id: 'how-scroll',
@@ -1510,18 +1520,22 @@ if (heroVideo && heroPoster) {
                 start: 'top top',
                 end: () => `+=${window.innerHeight * totalDur}`,
                 pin: true,
-                // Scrub direto (sem smoothing) para manter os dois tweens sincronizados no drag
                 scrub: true,
                 invalidateOnRefresh: true,
                 onEnter: () => applyActive(0),
                 onEnterBack: (self) => {
-                    const idx = Math.round(self.progress * (slides.length - 1));
+                    // ✅ CORREÇÃO: Calcula o índice baseado no progresso real
+                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
                     applyActive(idx);
                 },
                 onLeaveBack: () => applyActive(0),
                 onUpdate: (self) => {
+                    // ✅ CORREÇÃO: Usa o progresso para avançar a timeline de forma linear
                     tl.progress(self.progress);
-                    const idx = Math.round(self.progress * (slides.length - 1));
+                    
+                    // Calcula qual slide está ativo baseado no progresso
+                    // Com totalDur = slides.length, cada slide ocupa 1/slides.length do progresso
+                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
                     applyActive(idx);
                 }
             });
@@ -1532,8 +1546,10 @@ if (heroVideo && heroPoster) {
                 const duration = 0.8;
                 if (!st) return;
                 const start = st.start;
-                const total = (slides.length - 1) * window.innerHeight;
-                const yTarget = Math.round(start + (total * (index / (slides.length - 1))));
+                // ✅ CORREÇÃO: Usa slides.length (não slides.length - 1) para distribuição igual
+                const total = slides.length * window.innerHeight;
+                // Cada slide ocupa exatamente 1/slides.length do progresso total
+                const yTarget = Math.round(start + (total * (index / slides.length)));
                 if (window.lenis && typeof window.lenis.scrollTo === 'function') {
                     window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
                 } else {
@@ -1542,7 +1558,8 @@ if (heroVideo && heroPoster) {
             };
             navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
             nextBtn?.addEventListener('click', () => {
-                const cur = Math.round(tl.progress() * (slides.length - 1));
+                // ✅ CORREÇÃO: Calcula slide atual com base no novo sistema
+                const cur = Math.min(Math.floor(tl.progress() * slides.length), slides.length - 1);
                 const next = Math.min(slides.length - 1, cur + 1);
                 scrollToSlide(next);
             });
