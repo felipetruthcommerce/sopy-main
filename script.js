@@ -1488,31 +1488,27 @@ if (heroVideo && heroPoster) {
             // Desktop: ScrollTrigger pin + scrub timeline
             const tl = gsap.timeline({ paused: true });
             
-            // ✅ CORREÇÃO: Cada slide tem EXATAMENTE a mesma duração (1 unidade)
-            // Isso garante que cada transição demore o mesmo tempo de scroll
+            // Cada slide ocupa exatamente 1 unidade de tempo na timeline
             slides.forEach((slide, i) => {
                 if (i === 0) {
-                    // Primeiro slide: apenas configura o estado inicial
+                    // Slide inicial já está na posição
                     tl.set(slide, { xPercent: 0, zIndex: 2 }, 0);
-                } else {
-                    const prev = slides[i - 1];
-                    const slideStart = i; // Cada slide começa em sua posição de índice
-                    
-                    tl.addLabel(`slide${i}`, slideStart)
-                      // Garante que o próximo slide fique por cima durante a transição
-                      .set(slide, { zIndex: 3 }, slideStart)
-                      // Transição com duração exata de 1 unidade
-                      .to(prev, { xPercent: -100, duration: 1, ease: 'none' }, slideStart)
-                      .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 1, ease: 'none' }, slideStart)
-                      // Ao terminar, normaliza z-index
-                      .set(prev, { zIndex: 1 }, slideStart + 1)
-                      .set(slide, { zIndex: 2 }, slideStart + 1);
+                    return;
                 }
+                
+                const prev = slides[i - 1];
+                
+                // Cada transição começa em (i-1) e termina em i
+                // Isso cria divisões iguais: 0-1, 1-2, 2-3
+                tl.to(prev, { xPercent: -100, duration: 1, ease: 'none' }, i - 1)
+                  .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 1, ease: 'none' }, i - 1)
+                  .set(slide, { zIndex: 2 }, i - 0.5)
+                  .set(prev, { zIndex: 1 }, i - 0.5);
             });
 
-            // ✅ CORREÇÃO: Total de duração é exatamente slides.length (não slides.length - 1)
-            // Isso dá espaço igual para cada slide aparecer na tela
-            const totalDur = slides.length;
+            // Total = número de transições = slides.length - 1
+            // Mas vamos adicionar um "hold" no final para o último slide
+            const totalDur = slides.length - 1 + 0.5; // Meio viewport extra pro último slide
 
             const howTrigger = ScrollTrigger.create({
                 id: 'how-scroll',
@@ -1524,18 +1520,17 @@ if (heroVideo && heroPoster) {
                 invalidateOnRefresh: true,
                 onEnter: () => applyActive(0),
                 onEnterBack: (self) => {
-                    // ✅ CORREÇÃO: Calcula o índice baseado no progresso real
-                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
+                    // Calcula o índice baseado no progresso real
+                    const idx = Math.round(self.progress * (slides.length - 1));
                     applyActive(idx);
                 },
                 onLeaveBack: () => applyActive(0),
                 onUpdate: (self) => {
-                    // ✅ CORREÇÃO: Usa o progresso para avançar a timeline de forma linear
+                    // Usa o progresso para avançar a timeline de forma linear
                     tl.progress(self.progress);
                     
                     // Calcula qual slide está ativo baseado no progresso
-                    // Com totalDur = slides.length, cada slide ocupa 1/slides.length do progresso
-                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
+                    const idx = Math.round(self.progress * (slides.length - 1));
                     applyActive(idx);
                 }
             });
@@ -1546,10 +1541,9 @@ if (heroVideo && heroPoster) {
                 const duration = 0.8;
                 if (!st) return;
                 const start = st.start;
-                // ✅ CORREÇÃO: Usa slides.length (não slides.length - 1) para distribuição igual
-                const total = slides.length * window.innerHeight;
-                // Cada slide ocupa exatamente 1/slides.length do progresso total
-                const yTarget = Math.round(start + (total * (index / slides.length)));
+                // Com totalDur = slides.length - 1 + 0.5, cada slide ocupa (index / (slides.length - 1)) do progresso
+                const total = (slides.length - 1 + 0.5) * window.innerHeight;
+                const yTarget = Math.round(start + (total * (index / (slides.length - 1))));
                 if (window.lenis && typeof window.lenis.scrollTo === 'function') {
                     window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
                 } else {
@@ -1558,8 +1552,8 @@ if (heroVideo && heroPoster) {
             };
             navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
             nextBtn?.addEventListener('click', () => {
-                // ✅ CORREÇÃO: Calcula slide atual com base no novo sistema
-                const cur = Math.min(Math.floor(tl.progress() * slides.length), slides.length - 1);
+                // Calcula slide atual com base no progresso
+                const cur = Math.round(tl.progress() * (slides.length - 1));
                 const next = Math.min(slides.length - 1, cur + 1);
                 scrollToSlide(next);
             });
