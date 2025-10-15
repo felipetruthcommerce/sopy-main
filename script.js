@@ -1485,142 +1485,159 @@ if (heroVideo && heroPoster) {
             // Initial
             applyActive(0);
         } else {
-            // Desktop: Sistema de wheel/scroll discreto (cada scroll = 1 slide)
+            if (howSection.__desktopInited) {
+                applyActive(0);
+                return;
+            }
+            howSection.__desktopInited = true;
+
+            // Desktop: replica a lógica "one scroll = one slide" do exemplo de referência
             let currentIndex = 0;
             let isAnimating = false;
-            let isInSection = false;
+            let sectionActive = false;
 
-            // Função para ir para próximo slide
-            function toNext() {
-                if (currentIndex < slides.length - 1) {
-                    slideTo(currentIndex + 1);
+            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const wheelCooldown = prefersReduced ? 700 : 500;
+            let wheelLocked = false;
+
+            const stopLenis = () => {
+                if (window.lenis && typeof window.lenis.stop === 'function') {
+                    window.lenis.stop();
                 }
-            }
-
-            // Função para ir para slide anterior
-            function toPrev() {
-                if (currentIndex > 0) {
-                    slideTo(currentIndex - 1);
+            };
+            const startLenis = () => {
+                if (window.lenis && typeof window.lenis.start === 'function') {
+                    window.lenis.start();
                 }
-            }
+            };
 
-            // Anima transição entre slides
+            const activateSection = () => {
+                if (sectionActive) return;
+                sectionActive = true;
+                stopLenis();
+                console.log('[HOW] Entrou na seção desktop. Lenis pausado.');
+            };
+
+            const releaseSection = () => {
+                if (!sectionActive) return;
+                sectionActive = false;
+                wheelLocked = false;
+                startLenis();
+                console.log('[HOW] Liberando scroll geral.');
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.target !== howSection) return;
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.65) {
+                        activateSection();
+                    } else {
+                        releaseSection();
+                    }
+                });
+            }, { threshold: [0.35, 0.5, 0.65, 0.85, 1] });
+            observer.observe(howSection);
+
+            const withLock = (fn) => {
+                if (wheelLocked) return;
+                wheelLocked = true;
+                fn();
+                setTimeout(() => { wheelLocked = false; }, wheelCooldown);
+            };
+
             const slideTo = (targetIndex) => {
                 if (isAnimating || targetIndex === currentIndex) return;
-                
-                console.log(`[DESKTOP SLIDE TO] De ${currentIndex} para ${targetIndex}`);
-                
+
+                console.log(`[DESKTOP SLIDE] ${currentIndex} -> ${targetIndex}`);
                 isAnimating = true;
+
                 const direction = targetIndex > currentIndex ? 1 : -1;
                 const currentSlide = slides[currentIndex];
                 const nextSlide = slides[targetIndex];
 
-                // Posicionar próximo slide fora da tela
                 gsap.set(nextSlide, { xPercent: direction * 100, zIndex: 2 });
 
-                // Animar ambos os slides
-                const tl = gsap.timeline({
-                    defaults: { duration: 0.8, ease: 'power2.inOut' },
+                gsap.timeline({
+                    defaults: { duration: 0.75, ease: 'power2.inOut' },
                     onComplete: () => {
                         currentIndex = targetIndex;
                         isAnimating = false;
                         applyActive(currentIndex);
-                        console.log(`[DESKTOP] Agora no slide ${currentIndex}`);
                     }
-                });
-
-                tl.to(currentSlide, { xPercent: direction * -100 }, 0)
-                  .to(nextSlide, { xPercent: 0 }, 0)
-                  .set(currentSlide, { zIndex: 1 });
+                })
+                .to(currentSlide, { xPercent: direction * -100 }, 0)
+                .to(nextSlide, { xPercent: 0 }, 0)
+                .set(currentSlide, { zIndex: 1 });
             };
 
-            // Anti-rajada: bloqueia múltiplas trocas rápidas
-            let wheelLocked = false;
-            const wheelCooldown = 800; // ms - aumentado para evitar scroll múltiplo
-            
-            function withLock(fn) {
-                if (wheelLocked) return;
-                wheelLocked = true;
-                fn();
-                setTimeout(() => wheelLocked = false, wheelCooldown);
-            }
+            const toNext = () => {
+                if (currentIndex >= slides.length - 1) {
+                    releaseSection();
+                    return;
+                }
+                slideTo(currentIndex + 1);
+            };
 
-            // Detectar se estamos dentro da seção
-            function updateSectionState() {
-                const rect = howSection.getBoundingClientRect();
-                // Considera que estamos "na seção" quando ela está próxima do topo
-                isInSection = rect.top <= 50 && rect.bottom >= window.innerHeight * 0.5;
-            }
+            const toPrev = () => {
+                if (currentIndex <= 0) {
+                    releaseSection();
+                    return;
+                }
+                slideTo(currentIndex - 1);
+            };
 
-            // Wheel/scroll handler (NO WINDOW, não na seção!)
-            function onWheel(e) {
-                updateSectionState();
-                
-                // Só processar se estivermos dentro da seção
-                if (!isInSection) return;
-                
-                // BLOQUEIA O SCROLL DA PÁGINA
+            const relevantDelta = (e) => {
+                const absY = Math.abs(e.deltaY);
+                const absX = Math.abs(e.deltaX);
+                return absY >= absX ? e.deltaY : e.deltaX;
+            };
+
+            const wheelHandler = (e) => {
+                if (!sectionActive) return;
+
+                const delta = relevantDelta(e);
+                if (Math.abs(delta) < 18) return;
+
+                const canForward = delta > 0 && currentIndex < slides.length - 1;
+                const canBackward = delta < 0 && currentIndex > 0;
+
+                if (!canForward && !canBackward) {
+                    releaseSection();
+                    return;
+                }
+
                 e.preventDefault();
                 e.stopPropagation();
-                
-                // Ignorar micro-movimentos (AUMENTADO o threshold)
-                if (Math.abs(e.deltaY) < 25 && Math.abs(e.deltaX) < 25) return;
-                
-                // Determinar direção baseado no deltaY principal
-                if (e.deltaY > 0 || e.deltaX > 40) {
-                    // Scroll para baixo = próximo slide
-                    withLock(toNext);
-                } else if (e.deltaY < 0 || e.deltaX < -40) {
-                    // Scroll para cima = slide anterior
-                    withLock(toPrev);
-                }
-            }
 
-            // IMPORTANTE: Listener no WINDOW com passive: false
-            window.addEventListener('wheel', onWheel, { passive: false });
+                withLock(delta > 0 ? toNext : toPrev);
+            };
 
-            // Listener de scroll para atualizar estado
-            if (window.lenis) {
-                window.lenis.on('scroll', updateSectionState);
-            } else {
-                window.addEventListener('scroll', updateSectionState, { passive: true });
-            }
+            window.addEventListener('wheel', wheelHandler, { passive: false });
 
-            // Teclado
-            function onKeyDown(e) {
-                updateSectionState();
-                if (!isInSection) return;
-                
+            const keyHandler = (e) => {
+                if (!sectionActive) return;
                 const k = e.key;
-                if (k === 'ArrowRight' || k === 'ArrowDown' || k === 'PageDown') {
+                if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(k)) {
                     e.preventDefault();
                     withLock(toNext);
-                }
-                if (k === 'ArrowLeft' || k === 'ArrowUp' || k === 'PageUp') {
+                } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(k)) {
                     e.preventDefault();
                     withLock(toPrev);
                 }
-            }
-            window.addEventListener('keydown', onKeyDown);
+            };
+            window.addEventListener('keydown', keyHandler);
 
             // Nav e botões
             navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
             nextBtn?.addEventListener('click', () => toNext());
             howDots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
 
-            // Setup inicial dos slides para DESKTOP
+            // Setup inicial das posições
             slides.forEach((slide, index) => {
-                if (index === 0) {
-                    gsap.set(slide, { xPercent: 0, opacity: 1, zIndex: 2 });
-                } else {
-                    gsap.set(slide, { xPercent: 100, opacity: 1, zIndex: 1 });
-                }
-                
-                console.log(`[DESKTOP SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}`);
+                gsap.set(slide, { xPercent: index === 0 ? 0 : 100, opacity: 1, zIndex: index === 0 ? 2 : 1 });
             });
 
             applyActive(0);
-            updateSectionState(); // Estado inicial
         }
     })();
 
