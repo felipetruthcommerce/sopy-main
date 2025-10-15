@@ -1485,86 +1485,107 @@ if (heroVideo && heroPoster) {
             // Initial
             applyActive(0);
         } else {
-            // Desktop: ScrollTrigger pin + scrub timeline
-            const tl = gsap.timeline({ paused: true });
-            
-            // NOVA LÓGICA: Cada slide ocupa EXATAMENTE 1 viewport de scroll
-            // Para 4 slides = 4 viewports totais
-            slides.forEach((slide, i) => {
-                if (i === 0) {
-                    // Slide inicial já está na posição
-                    tl.set(slide, { xPercent: 0, zIndex: 2 }, 0);
-                    return;
-                }
+            // Desktop: Sistema de wheel/scroll discreto (cada scroll = 1 slide)
+            let currentIndex = 0;
+            let isAnimating = false;
+
+            // Função para ir para próximo slide
+            function toNext() {
+                const targetIndex = (currentIndex + 1) % slides.length;
+                slideTo(targetIndex);
+            }
+
+            // Função para ir para slide anterior
+            function toPrev() {
+                const targetIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
+                slideTo(targetIndex);
+            }
+
+            // Anima transição entre slides
+            const slideTo = (targetIndex) => {
+                if (isAnimating || targetIndex === currentIndex) return;
                 
-                const prev = slides[i - 1];
+                console.log(`[DESKTOP SLIDE TO] De ${currentIndex} para ${targetIndex}`);
                 
-                // Cada transição acontece durante 1 unidade completa de tempo
-                // Slide 0→1: tempo 0 até 1
-                // Slide 1→2: tempo 1 até 2
-                // Slide 2→3: tempo 2 até 3
-                // Slide 3→4: tempo 3 até 4
-                tl.to(prev, { xPercent: -100, duration: 1, ease: 'none' }, i - 1)
-                  .fromTo(slide, { xPercent: 100 }, { xPercent: 0, duration: 1, ease: 'none' }, i - 1)
-                  .set(slide, { zIndex: 2 }, i - 0.5)
-                  .set(prev, { zIndex: 1 }, i - 0.5);
-            });
+                isAnimating = true;
+                const direction = targetIndex > currentIndex || (currentIndex === slides.length - 1 && targetIndex === 0) ? 1 : -1;
+                const currentSlide = slides[currentIndex];
+                const nextSlide = slides[targetIndex];
 
-            // Total duration = número de slides (cada um tem 1 viewport)
-            const totalDur = slides.length;
+                // Posicionar próximo slide fora da tela
+                gsap.set(nextSlide, { xPercent: direction * 100, zIndex: 2 });
 
-            const howTrigger = ScrollTrigger.create({
-                id: 'how-scroll',
-                trigger: howSection,
-                start: 'top top',
-                end: () => `+=${window.innerHeight * totalDur}`,
-                pin: true,
-                scrub: true,
-                invalidateOnRefresh: true,
-                onEnter: () => applyActive(0),
-                onEnterBack: (self) => {
-                    // Progresso vai de 0 a 1, dividindo igualmente entre os slides
-                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
-                    applyActive(idx);
-                },
-                onLeaveBack: () => applyActive(0),
-                onUpdate: (self) => {
-                    // A timeline avança proporcionalmente ao scroll
-                    tl.progress(self.progress);
-                    
-                    // Cada slide ocupa 1/slides.length do progresso total
-                    const idx = Math.min(Math.floor(self.progress * slides.length), slides.length - 1);
-                    applyActive(idx);
-                }
-            });
+                // Animar ambos os slides
+                const tl = gsap.timeline({
+                    defaults: { duration: 0.8, ease: 'power2.inOut' },
+                    onComplete: () => {
+                        currentIndex = targetIndex;
+                        isAnimating = false;
+                        applyActive(currentIndex);
+                        console.log(`[DESKTOP] Agora no slide ${currentIndex}`);
+                    }
+                });
 
-            // Nav scroll to slide
-            const scrollToSlide = (index) => {
-                const st = ScrollTrigger.getById ? ScrollTrigger.getById('how-scroll') : null;
-                const duration = 0.8;
-                if (!st) return;
-                const start = st.start;
-                // Cada slide ocupa exatamente 1 viewport
-                const total = slides.length * window.innerHeight;
-                const yTarget = Math.round(start + (total * (index / slides.length)));
-                if (window.lenis && typeof window.lenis.scrollTo === 'function') {
-                    window.lenis.scrollTo(yTarget, { duration, easing: t => 1 - Math.pow(1 - t, 3) });
-                } else {
-                    window.scrollTo({ top: yTarget, behavior: 'smooth' });
-                }
+                tl.to(currentSlide, { xPercent: direction * -100 }, 0)
+                  .to(nextSlide, { xPercent: 0 }, 0)
+                  .set(currentSlide, { zIndex: 1 });
             };
-            navItems.forEach((item, i) => item.addEventListener('click', () => scrollToSlide(i)));
-            nextBtn?.addEventListener('click', () => {
-                // Calcula slide atual com base no progresso
-                const cur = Math.min(Math.floor(tl.progress() * slides.length), slides.length - 1);
-                const next = Math.min(slides.length - 1, cur + 1);
-                scrollToSlide(next);
-            });
-            
-            // Dots clicks
-            howDots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSlide(i)));
 
-            // Setup inicial dos slides para DESKTOP (ScrollTrigger scrub)
+            // Anti-rajada: bloqueia múltiplas trocas rápidas
+            let wheelLocked = false;
+            const wheelCooldown = 600; // ms
+            
+            function withLock(fn) {
+                if (wheelLocked) return;
+                wheelLocked = true;
+                fn();
+                setTimeout(() => wheelLocked = false, wheelCooldown);
+            }
+
+            // Wheel/scroll handler (dentro da seção)
+            function onWheel(e) {
+                // Só processar se o scroll for dentro da seção
+                const rect = howSection.getBoundingClientRect();
+                if (rect.top > 100 || rect.bottom < 100) return; // não está "fixo" na tela
+                
+                e.preventDefault();
+                
+                // Ignorar micro-movimentos
+                if (Math.abs(e.deltaY) < 18 && Math.abs(e.deltaX) < 18) return;
+                
+                if (e.deltaY > 0 || e.deltaX > 40) {
+                    withLock(toNext);
+                } else if (e.deltaY < 0 || e.deltaX < -40) {
+                    withLock(toPrev);
+                }
+            }
+
+            // Adicionar listener de wheel na seção
+            howSection.addEventListener('wheel', onWheel, { passive: false });
+
+            // Teclado
+            function onKeyDown(e) {
+                const rect = howSection.getBoundingClientRect();
+                if (rect.top > 100 || rect.bottom < 100) return;
+                
+                const k = e.key;
+                if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') {
+                    e.preventDefault();
+                    withLock(toNext);
+                }
+                if (k === 'ArrowLeft' || k === 'PageUp') {
+                    e.preventDefault();
+                    withLock(toPrev);
+                }
+            }
+            window.addEventListener('keydown', onKeyDown);
+
+            // Nav e botões
+            navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
+            nextBtn?.addEventListener('click', () => toNext());
+            howDots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
+
+            // Setup inicial dos slides para DESKTOP
             slides.forEach((slide, index) => {
                 if (index === 0) {
                     gsap.set(slide, { xPercent: 0, opacity: 1, zIndex: 2 });
@@ -1572,12 +1593,10 @@ if (heroVideo && heroPoster) {
                     gsap.set(slide, { xPercent: 100, opacity: 1, zIndex: 1 });
                 }
                 
-                console.log(`[DESKTOP SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
+                console.log(`[DESKTOP SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}`);
             });
 
             applyActive(0);
-
-            window.addEventListener('resize', () => { try { ScrollTrigger.refresh(); } catch(e){} });
         }
     })();
 
