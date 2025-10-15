@@ -1232,6 +1232,15 @@ body.theme-citrus .benefit-title h2 {
   text-shadow: 2px 2px 8px rgba(34, 139, 34, 0.8), 0 0 20px rgba(34, 139, 34, 0.5);
 }
 
+/* Footer theme colors */
+body.theme-aqua footer.js-footer {
+  background-color: #083DA6;
+}
+
+body.theme-citrus footer.js-footer {
+  background-color: #167312;
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .benefit-title h2 {
