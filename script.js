@@ -440,7 +440,7 @@ function initCapsuleBubbles() {
     bubble.position.y = THREE.MathUtils.randFloat(-25, -15);
     bubble.position.z = THREE.MathUtils.randFloatSpread(10);
 
-    const scale = THREE.MathUtils.randFloat(0.4, 2.0);
+    const scale = THREE.MathUtils.randFloat(0.3, 1.2); // Reduzido de 0.4-2.0 para bolhas menores
     bubble.scale.set(scale, scale, scale);
 
     bubble.userData = {
@@ -513,7 +513,7 @@ function initCapsuleBubbles() {
     const particleCount = 30;
     
     const particleMaterial = new THREE.PointsMaterial({
-      size: 0.3 * bubbleScale,
+      size: 0.15 * bubbleScale, // Reduzido de 0.3 para partículas menores
       map: particleTexture,
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -535,7 +535,7 @@ function initCapsuleBubbles() {
     for (let i = 0; i < particleCount; i++) {
       positions.push(position.x, position.y, position.z);
       
-      const speed = THREE.MathUtils.randFloat(0.3, 0.8) * bubbleScale;
+      const speed = THREE.MathUtils.randFloat(0.2, 0.5) * bubbleScale; // Reduzido de 0.3-0.8 para explosão mais contida
       velocities.push(
         (Math.random() - 0.5) * speed,
         (Math.random() - 0.5) * speed,
