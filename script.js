@@ -304,6 +304,16 @@ function setTheme(theme) {
         console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
     }
 
+    // Atualiza cor do rodapé conforme o tema
+    try {
+        const footer = document.querySelector('footer.js-footer.js-hide-footer-while-scrolling.footer-colors.display-when-content-ready.overflow-none');
+        if (footer) {
+            footer.style.backgroundColor = theme === 'aqua' ? '#083DA6' : '#167312';
+        }
+    } catch (e) {
+        console.warn('[TEMA] Falha ao trocar cor do rodapé:', e);
+    }
+
     // Update benefit titles colors based on theme (CSS handles this via body class)
     // Force a repaint to ensure theme colors are applied immediately
     const benefitTitles = document.querySelectorAll('.benefit-title');
