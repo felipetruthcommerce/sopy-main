@@ -181,3 +181,109 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="https://unpkg.com/split-type"></script>
+<script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+
+<script>
+(function () {
+  // ---- Detecta HOME de forma tolerante ----
+  const REQUIRED_ORIGIN = "https://sopy3.lojavirtualnuvem.com.br";
+  const isSameOrigin = location.origin === REQUIRED_ORIGIN;
+  const isRootPath  = (location.pathname === "/" || location.pathname === "");
+  const hasHomeMarker = !!document.querySelector(".section-welcome-home, [data-store='home-banner-promotional']");
+  const IS_HOME = (isSameOrigin && isRootPath) || hasHomeMarker;
+
+  if (!IS_HOME) {
+    console.info("[SOPY] abortado: não é HOME");
+    return;
+  }
+
+  // ---- Config ----
+  const ENDPOINT_ROOT = "https://felipetruthcommerce.github.io/sopy-main/";
+  const INSERT_AFTER  = ".section-welcome-home, [data-store='home-banner-promotional']";
+  const WRAP_CLASS    = "sopy-main";
+  const abs = (u,b)=> new URL(u,b).href;
+
+  // Evita duplicar
+  if (document.querySelector("." + WRAP_CLASS + "[data-sopy-loaded]")) {
+    console.info("[SOPY] já carregado");
+    return;
+  }
+
+  // Precisa existir âncora de HOME; se não houver, não cai para body
+  const anchor = document.querySelector(INSERT_AFTER);
+  if (!anchor) {
+    console.info("[SOPY] sem âncora de home; nada a fazer");
+    return;
+  }
+
+  // ---- Injeta container logo após a âncora ----
+  const container = document.createElement("section");
+  container.className = WRAP_CLASS;
+  container.setAttribute("data-sopy-loaded", "pending");
+  anchor.insertAdjacentElement("afterend", container);
+  container.innerHTML = '<div style="padding:24px;text-align:center;">Carregando…</div>';
+
+  // CSS remoto
+  const css = document.createElement("link");
+  css.rel = "stylesheet";
+  css.href = abs("styles.css", ENDPOINT_ROOT);
+  document.head.appendChild(css);
+
+  // Espera fonts/imagens e dispara animações
+  async function settleAndBoot(el){
+    try { if (document.fonts) await document.fonts.ready; } catch(e){}
+    const imgs = [...el.querySelectorAll("img")].filter(i=>!i.complete);
+    await Promise.all(imgs.map(i=>new Promise(r=>{ i.onload=i.onerror=r; })));
+    await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+
+    const anim = document.createElement("script");
+    anim.src = abs("script.js", ENDPOINT_ROOT);
+    anim.onload = () => {
+      if (typeof bootAnimations === "function") {
+        bootAnimations();
+        setTimeout(()=> window.ScrollTrigger?.refresh?.(), 400);
+      } else {
+        console.warn("[SOPY] bootAnimations() não encontrado");
+      }
+    };
+    document.body.appendChild(anim);
+  }
+
+  // HTML remoto
+  fetch(abs("sections.html", ENDPOINT_ROOT) + "?v=" + Date.now())
+    .then(r => { if(!r.ok) throw new Error("Falha ao buscar HTML"); return r.text(); })
+    .then(html => { container.innerHTML = html; return settleAndBoot(container); })
+    .catch(err => {
+      console.error("[SOPY]", err);
+      container.innerHTML = '<div style="padding:24px;color:red;">Erro ao carregar conteúdo.</div>';
+    });
+})();
+</script>

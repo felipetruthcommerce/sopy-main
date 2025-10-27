@@ -1331,6 +1331,17 @@ if (heroVideo && heroPoster) {
                     });
                 }, 200); // Ligeiramente atrasado para efeito escalonado
             }
+            // Atualiza a imagem de preview (terceiro preview) para mostrar o próximo
+            try {
+                if (slides && slides.length > 3) {
+                    const previewEl = slides[2]; // o terceiro item é o preview único
+                    const previewIndex = Math.min(idx + 1, slides.length - 1); // trava no último
+                    const bg = getComputedStyle(slides[previewIndex]).backgroundImage;
+                    if (bg) previewEl.style.backgroundImage = bg;
+                }
+            } catch (e) {
+                console.warn('[HOW] Falha ao atualizar preview do 3º slide:', e);
+            }
         };
 
         const isMobile = window.matchMedia('(max-width: 900px)').matches;
@@ -1639,6 +1650,15 @@ if (heroVideo && heroPoster) {
             // Setup inicial das posições
             slides.forEach((slide, index) => {
                 gsap.set(slide, { xPercent: index === 0 ? 0 : 100, opacity: 1, zIndex: index === 0 ? 2 : 1 });
+                // Se houver apenas 1 preview (o 3º item), fazer com que ele mostre a imagem do próximo/último
+                try {
+                    if (index === 2 && slides.length > 3) {
+                        const lastBg = getComputedStyle(slides[slides.length - 1]).backgroundImage;
+                        if (lastBg) slide.style.backgroundImage = lastBg;
+                    }
+                } catch (e) {
+                    console.warn('[HOW] Falha ao aplicar preview inicial do 3º slide:', e);
+                }
             });
 
             applyActive(0);
