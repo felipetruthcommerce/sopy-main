@@ -1331,13 +1331,14 @@ if (heroVideo && heroPoster) {
                     });
                 }, 200); // Ligeiramente atrasado para efeito escalonado
             }
-            // Atualiza a imagem de preview (terceiro preview) para mostrar o próximo
+            // Atualiza a imagem de preview (terceiro preview) para mostrar SEMPRE a foto do ÚLTIMO slide
             try {
                 if (slides && slides.length > 3) {
                     const previewEl = slides[2]; // o terceiro item é o preview único
-                    const previewIndex = Math.min(idx + 1, slides.length - 1); // trava no último
-                    const bg = getComputedStyle(slides[previewIndex]).backgroundImage;
-                    if (bg) previewEl.style.backgroundImage = bg;
+                    // Forçar sempre a imagem do último slide (não o próximo)
+                    const lastIndex = slides.length - 1;
+                    const lastBg = getComputedStyle(slides[lastIndex]).backgroundImage;
+                    if (lastBg) previewEl.style.backgroundImage = lastBg;
                 }
             } catch (e) {
                 console.warn('[HOW] Falha ao atualizar preview do 3º slide:', e);
@@ -2027,6 +2028,21 @@ if (heroVideo && heroPoster) {
   const totalSlides = track.querySelectorAll(".slider-item").length;
   let isTransitioning = false;
 
+    // Snapshot of original backgrounds (used to force the preview image to always show the actual "last" slide image)
+    const initialSlideBgs = Array.from(track.querySelectorAll('.slider-item')).map(el => getComputedStyle(el).backgroundImage);
+
+    const applyFullscreenPreview = () => {
+        try {
+            const previewEl = track.querySelector('.slider-item:nth-child(3)');
+            if (!previewEl || !initialSlideBgs.length) return;
+            // Force the preview to show the image from the original last slide
+            const lastBg = initialSlideBgs[initialSlideBgs.length - 1];
+            if (lastBg) previewEl.style.backgroundImage = lastBg;
+        } catch (e) {
+            console.warn('[SLIDER] Erro ao aplicar preview fullscreen:', e);
+        }
+    };
+
   /* Atualiza classes do penúltimo e último slide */
   function updateLastSlideClass() {
     // Penúltimo slide (index 2 = slide 3)
@@ -2054,6 +2070,8 @@ if (heroVideo && heroPoster) {
       track.appendChild(items[0]);
       currentIndex++;
       updateLastSlideClass();
+            // Re-apply preview image mapping after DOM rotation
+            applyFullscreenPreview();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
@@ -2066,6 +2084,8 @@ if (heroVideo && heroPoster) {
       track.prepend(items[items.length - 1]);
       currentIndex--;
       updateLastSlideClass();
+            // Re-apply preview image mapping after DOM rotation
+            applyFullscreenPreview();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
@@ -2247,6 +2267,8 @@ if (heroVideo && heroPoster) {
   
   // Inicializa classe do último slide
   updateLastSlideClass();
+    // Aplica preview inicial (garante que o 3º preview mostre a última imagem)
+    applyFullscreenPreview();
 
 })();
 
