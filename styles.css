@@ -1221,35 +1221,6 @@ body.theme-aqua .capsule-3d-cta {
   visibility: visible;
 }
 
-/* Preview slides */
-.preview-slide {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.4;
-  filter: brightness(0.6) blur(4px);
-  pointer-events: none;
-  transition: opacity 0.3s ease, filter 0.3s ease;
-}
-
-/* First preview */
-.preview-slide:nth-child(1) {
-  left: 58%;
-  transform: scale(0.7);
-}
-
-/* Second preview */
-.preview-slide:nth-child(2) {
-  left: calc(58% + 240px);
-  transform: scale(0.7);
-}
-
-/* Hide previews on last slide */
-.slider-slide.last-slide .preview-slide {
-  opacity: 0;
-}
-
 /* Theme variations - mantém branco mas com sombra temática */
 body.theme-aqua .benefit-title h2 {
   color: #ffffff;
@@ -3110,14 +3081,14 @@ body.theme-citrus .head-main .badge {
 }
 
 /* No penúltimo slide (quando currentIndex === 2): 
-   Esconde o 3º item e move o 4º para a posição do primeiro preview */
+   Esconde o 3º item e move o 4º para a posição mais à direita */
 .slider-slide.penultimate-slide .slider-item:nth-child(3) {
   opacity: 0;
   pointer-events: none;
 }
 
 .slider-slide.penultimate-slide .slider-item:nth-child(4) {
-  left: 58%; /* Move para a posição do 1º preview (mais à esquerda) */
+  left: calc(58% + 240px); /* Mantém na posição do 2º preview (mais à direita) */
   opacity: 1;
   pointer-events: auto;
 }
