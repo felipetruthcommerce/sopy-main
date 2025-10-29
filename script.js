@@ -1333,6 +1333,24 @@ if (heroVideo && heroPoster) {
                     });
                 }, 200); // Ligeiramente atrasado para efeito escalonado
             }
+            // Ajuste do PREVIEW: somente quando estivermos no PENÚLTIMO slide, trocar a foto do preview
+            try {
+                if (slides && slides.length > 3) {
+                    const previewEl = slides[2]; // terceiro item é o preview único
+                    const lastIndex = slides.length - 1;
+                    // Se o índice ativo for o penúltimo, force o preview para a imagem ORIGINAL do último slide
+                    if (idx === lastIndex - 1) {
+                        const lastBg = slides[lastIndex].dataset?.origBg || getComputedStyle(slides[lastIndex]).backgroundImage;
+                        if (lastBg) previewEl.style.backgroundImage = lastBg;
+                    } else {
+                        // Caso contrário, restaura o preview ao seu background original (se existir)
+                        const orig = previewEl.dataset?.origBg || getComputedStyle(previewEl).backgroundImage;
+                        if (orig) previewEl.style.backgroundImage = orig;
+                    }
+                }
+            } catch (e) {
+                console.warn('[HOW] Falha ao ajustar preview do penúltimo slide:', e);
+            }
         };
 
         const isMobile = window.matchMedia('(max-width: 900px)').matches;
