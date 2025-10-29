@@ -2027,21 +2027,36 @@ if (heroVideo && heroPoster) {
   }
 
   /* ações */
-  /* Atualiza classes que controlam os previews baseado no slide atual */
+  /* Atualiza classes e previews baseado no slide atual */
   function updateLastSlideClass() {
-    // Remove ambas as classes primeiro
+    // Remove ambas as classes e previews antigos primeiro
     track.classList.remove('penultimate-slide', 'last-slide');
+    const oldPreviews = track.querySelectorAll(".preview-slide");
+    oldPreviews.forEach(p => p.remove());
     
-    // Slide 3 (index 2): mostra apenas 1 preview
+    // Slide 3 (index 2): mostra 2 previews
     if (currentIndex === totalSlides - 2) {
       track.classList.add('penultimate-slide');
+      
+      // Cria os 2 previews
+      const nextIndex = (currentIndex + 1) % totalSlides; // Slide 4
+      const firstIndex = 0; // Primeiro slide
+      
+      const preview1 = items[nextIndex].cloneNode(true);
+      const preview2 = items[firstIndex].cloneNode(true);
+      
+      preview1.classList.add("preview-slide");
+      preview2.classList.add("preview-slide");
+      
+      track.appendChild(preview1);
+      track.appendChild(preview2);
     } 
     // Slide 4 (index 3): esconde todos os previews
     else if (currentIndex === totalSlides - 1) {
       track.classList.add('last-slide');
     }
     // Para os outros slides (1 e 2), nenhuma classe é adicionada
-    // então o CSS padrão mostrará os 2 previews
+    // e os previews foram removidos acima
   }
 
   function toNext() {
