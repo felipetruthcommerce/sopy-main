@@ -3063,34 +3063,30 @@ body.theme-citrus .head-main .badge {
   box-shadow: none;
 }
 
-/* Mostra 2 previews ao lado por padrão */
+/* Mostra apenas um preview à direita */
 .slider-item:nth-child(3) { 
-  left: 58%; 
+  left: calc(58% + 240px); /* Posição do segundo preview (mais à direita) */
   opacity: 1;
 }
 
-.slider-item:nth-child(4) { 
-  left: calc(58% + 240px);
-  opacity: 1;
-}
-
-/* Esconde os demais */
+/* Esconde o segundo preview e os demais slides */
+.slider-item:nth-child(4),
 .slider-item:nth-child(n+5) { 
   opacity: 0;
   pointer-events: none;
 }
 
-/* No penúltimo slide (quando currentIndex === 2): 
-   Esconde o 3º item e move o 4º para a posição mais à direita */
+/* No penúltimo slide, mantém a posição do preview à direita */
 .slider-slide.penultimate-slide .slider-item:nth-child(3) {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.slider-slide.penultimate-slide .slider-item:nth-child(4) {
-  left: calc(58% + 240px); /* Mantém na posição do 2º preview (mais à direita) */
+  left: calc(58% + 240px); /* Mantém na posição mais à direita */
   opacity: 1;
   pointer-events: auto;
+}
+
+/* Esconde o 4º item sempre */
+.slider-slide.penultimate-slide .slider-item:nth-child(4) {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Quando estiver no último slide, esconde todos os previews */
