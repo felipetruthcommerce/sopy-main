@@ -1255,6 +1255,8 @@ if (heroVideo && heroPoster) {
             
             // Debug: verificar qual imagem está sendo aplicada
             const bgImage = getComputedStyle(s).backgroundImage;
+            // Guardar background original para referência futura (protege contra reordenações DOM)
+            try { s.dataset.origBg = bgImage || ''; } catch(e) { /* silent */ }
             const slideNum = s.getAttribute('data-slide');
             console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] BgImage: ${bgImage}`);
         });
@@ -1330,6 +1332,24 @@ if (heroVideo && heroPoster) {
                         supportTextEl.style.transform = 'translateY(0)';
                     });
                 }, 200); // Ligeiramente atrasado para efeito escalonado
+            }
+            // Ajuste do PREVIEW: somente quando estivermos no PENÚLTIMO slide, trocar a foto do preview
+            try {
+                if (slides && slides.length > 3) {
+                    const previewEl = slides[2]; // terceiro item é o preview único
+                    const lastIndex = slides.length - 1;
+                    // Se o índice ativo for o penúltimo, force o preview para a imagem ORIGINAL do último slide
+                    if (idx === lastIndex - 1) {
+                        const lastBg = slides[lastIndex].dataset?.origBg || getComputedStyle(slides[lastIndex]).backgroundImage;
+                        if (lastBg) previewEl.style.backgroundImage = lastBg;
+                    } else {
+                        // Caso contrário, restaura o preview ao seu background original (se existir)
+                        const orig = previewEl.dataset?.origBg || getComputedStyle(previewEl).backgroundImage;
+                        if (orig) previewEl.style.backgroundImage = orig;
+                    }
+                }
+            } catch (e) {
+                console.warn('[HOW] Falha ao ajustar preview do penúltimo slide:', e);
             }
         };
 
@@ -1997,7 +2017,6 @@ if (heroVideo && heroPoster) {
   const btnPrev = document.querySelector(".slider-prev");
   const btnContainer = document.querySelector(".slider-button");
   const section = document.querySelector(".slider-fullscreen-section");
-  const items = track ? track.querySelectorAll(".slider-item") : [];
 
   if (!track || !btnNext || !btnPrev || !section || !btnContainer) {
     console.warn('[SLIDER] Elementos não encontrados');
@@ -2027,44 +2046,6 @@ if (heroVideo && heroPoster) {
   }
 
   /* ações */
-  function updateSlidePositions() {
-    const items = track.querySelectorAll(".slider-item");
-    items.forEach((item, i) => {
-      if (i === 0 || i === 1) {
-        // Main slides remain full screen
-        item.style.width = '100%';
-        item.style.height = '100%';
-        item.style.left = '0';
-        item.style.borderRadius = '0';
-        item.style.boxShadow = 'none';
-      } else if (i === 2) {
-        // First preview
-        item.style.width = 'min(22vw, 420px)';
-        item.style.height = 'min(55vh, 680px)';
-        item.style.left = '58%';
-        item.style.opacity = '1';
-        item.style.borderRadius = '20px';
-        item.style.boxShadow = '0 30px 50px rgba(0, 0, 0, 0.5)';
-      } else if (i === 3) {
-        // Second preview - ensure last slide shows here when on slide 3
-        const showLastSlide = currentIndex === totalSlides - 2;
-        if (showLastSlide) {
-          item.style.backgroundImage = items[totalSlides - 1].style.backgroundImage;
-        }
-        item.style.width = 'min(22vw, 420px)';
-        item.style.height = 'min(55vh, 680px)';
-        item.style.left = 'calc(58% + 240px)';
-        item.style.opacity = '1';
-        item.style.borderRadius = '20px';
-        item.style.boxShadow = '0 30px 50px rgba(0, 0, 0, 0.5)';
-      } else {
-        // Hide any additional slides
-        item.style.opacity = '0';
-        item.style.pointerEvents = 'none';
-      }
-    });
-  }
-
   function toNext() {
     if (isTransitioning) return;
     const items = track.querySelectorAll(".slider-item");
@@ -2073,7 +2054,6 @@ if (heroVideo && heroPoster) {
       track.appendChild(items[0]);
       currentIndex++;
       updateLastSlideClass();
-      updateSlidePositions();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
@@ -2086,7 +2066,6 @@ if (heroVideo && heroPoster) {
       track.prepend(items[items.length - 1]);
       currentIndex--;
       updateLastSlideClass();
-      updateSlidePositions();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
