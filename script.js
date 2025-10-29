@@ -2027,42 +2027,21 @@ if (heroVideo && heroPoster) {
   }
 
   /* ações */
-  function updateSlidePositions() {
-    const items = track.querySelectorAll(".slider-item");
-    items.forEach((item, i) => {
-      if (i === 0 || i === 1) {
-        // Main slides remain full screen
-        item.style.width = '100%';
-        item.style.height = '100%';
-        item.style.left = '0';
-        item.style.borderRadius = '0';
-        item.style.boxShadow = 'none';
-      } else if (i === 2) {
-        // First preview
-        item.style.width = 'min(22vw, 420px)';
-        item.style.height = 'min(55vh, 680px)';
-        item.style.left = '58%';
-        item.style.opacity = '1';
-        item.style.borderRadius = '20px';
-        item.style.boxShadow = '0 30px 50px rgba(0, 0, 0, 0.5)';
-      } else if (i === 3) {
-        // Second preview - ensure last slide shows here when on slide 3
-        const showLastSlide = currentIndex === totalSlides - 2;
-        if (showLastSlide) {
-          item.style.backgroundImage = items[totalSlides - 1].style.backgroundImage;
-        }
-        item.style.width = 'min(22vw, 420px)';
-        item.style.height = 'min(55vh, 680px)';
-        item.style.left = 'calc(58% + 240px)';
-        item.style.opacity = '1';
-        item.style.borderRadius = '20px';
-        item.style.boxShadow = '0 30px 50px rgba(0, 0, 0, 0.5)';
-      } else {
-        // Hide any additional slides
-        item.style.opacity = '0';
-        item.style.pointerEvents = 'none';
-      }
-    });
+  /* Atualiza classes que controlam os previews baseado no slide atual */
+  function updateLastSlideClass() {
+    // Remove ambas as classes primeiro
+    track.classList.remove('penultimate-slide', 'last-slide');
+    
+    // Slide 3 (index 2): mostra apenas 1 preview
+    if (currentIndex === totalSlides - 2) {
+      track.classList.add('penultimate-slide');
+    } 
+    // Slide 4 (index 3): esconde todos os previews
+    else if (currentIndex === totalSlides - 1) {
+      track.classList.add('last-slide');
+    }
+    // Para os outros slides (1 e 2), nenhuma classe é adicionada
+    // então o CSS padrão mostrará os 2 previews
   }
 
   function toNext() {
@@ -2073,7 +2052,6 @@ if (heroVideo && heroPoster) {
       track.appendChild(items[0]);
       currentIndex++;
       updateLastSlideClass();
-      updateSlidePositions();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
@@ -2086,7 +2064,6 @@ if (heroVideo && heroPoster) {
       track.prepend(items[items.length - 1]);
       currentIndex--;
       updateLastSlideClass();
-      updateSlidePositions();
       setTimeout(() => isTransitioning = false, 500);
     }
   }
