@@ -3064,13 +3064,13 @@ body.theme-citrus .head-main .badge {
 }
 
 /* Mostra 2 previews ao lado por padrão */
-.slider-item:nth-child(3) { 
-  left: 58%; 
+.slider-item:nth-child(3) {
+  left: calc(58% + 240px); /* Movido para a posição mais à direita */
   opacity: 1;
 }
 
 .slider-item:nth-child(4) { 
-  left: calc(58% + 240px);
+  left: 58%; /* Movido para a posição mais à esquerda */
   opacity: 1;
 }
 
@@ -3081,14 +3081,14 @@ body.theme-citrus .head-main .badge {
 }
 
 /* No penúltimo slide (quando currentIndex === 2): 
-   Esconde o 3º item e move o 4º para a posição mais à direita */
-.slider-slide.penultimate-slide .slider-item:nth-child(3) {
+   Esconde o 4º item e mantém o 3º na posição mais à direita */
+.slider-slide.penultimate-slide .slider-item:nth-child(4) {
   opacity: 0;
   pointer-events: none;
 }
 
-.slider-slide.penultimate-slide .slider-item:nth-child(4) {
-  left: calc(58% + 240px); /* Mantém na posição do 2º preview (mais à direita) */
+.slider-slide.penultimate-slide .slider-item:nth-child(3) {
+  left: calc(58% + 240px); /* Mantém na posição mais à direita */
   opacity: 1;
   pointer-events: auto;
 }
