@@ -1255,6 +1255,8 @@ if (heroVideo && heroPoster) {
             
             // Debug: verificar qual imagem está sendo aplicada
             const bgImage = getComputedStyle(s).backgroundImage;
+            // Guardar background original para referência futura (protege contra reordenações DOM)
+            try { s.dataset.origBg = bgImage || ''; } catch(e) { /* silent */ }
             const slideNum = s.getAttribute('data-slide');
             console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] BgImage: ${bgImage}`);
         });
