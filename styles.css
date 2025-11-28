@@ -2316,8 +2316,12 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
   left: auto !important;
   top: auto !important;
   box-sizing: border-box;
-  flex: 1 1 calc(50% - 28px);
-  min-height: 480px; /* garante altura consistente */
+  /* Não expandir para preencher a altura da linha; permitir quebrar para o conteúdo
+     Mas manter largura base de aproximadamente metade do container */
+  flex: 0 1 calc(50% - 28px);
+  height: auto;
+  min-height: 0;
+  max-width: 540px;
   padding: 3rem;
   display: flex;
   flex-direction: column;
