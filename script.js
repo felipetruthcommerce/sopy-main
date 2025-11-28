@@ -1157,6 +1157,12 @@ if (heroVideo && heroPoster) {
     //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION (COM PIN CONTROLADO)
     // ===================================
     function initBenefitsAnimations(){
+        // Animação desativada: função comentada para exibir ambos os cards lado a lado.
+        // Para reativar, remova o 'return' abaixo e restaure o corpo original (mantido em comentário).
+        console.log('[BENEFÍCIOS] Animação clean-slate DESATIVADA (comentada pelo dev).');
+        return;
+
+        /*
         // Verificação de dependências
         if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
         
@@ -1193,6 +1199,7 @@ if (heroVideo && heroPoster) {
             .to({}, { duration: 1 });
 
         console.log('[BENEFÍCIOS] Clean Slate Timeline (com pin controlado) configurada com sucesso!');
+        */
     }
 
 

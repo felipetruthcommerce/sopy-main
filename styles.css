@@ -316,6 +316,37 @@ body.theme-aqua #clean-slate-section {
     align-items: center; 
 }
 
+/* Quando a animação de "clean-slate" estiver desativada, exibir os dois cards lado-a-lado
+   Mantém as mesmas classes HTML; altera apenas o fluxo/posicionamento para layout responsivo.
+*/
+#clean-slate-section .pinned-container {
+  height: auto; /* permite que o conteúdo fique em fluxo normal */
+  min-height: 0;
+  padding: 4rem 5%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 48px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+#clean-slate-section .card {
+  position: relative !important;
+  transform: none !important;
+  left: auto !important;
+  top: auto !important;
+  width: min(520px, 46%);
+  max-width: 520px;
+  margin: 0;
+}
+
+/* Garante que o card Sopy esteja visível por padrão (CSS original o deixava com opacity:0) */
+#clean-slate-section .card-sopy-way { opacity: 1 !important; }
+
+@media (max-width: 900px) {
+  #clean-slate-section .card { width: 100%; max-width: 100%; }
+}
+
 .green-wave { 
     position: absolute; 
     top: 50%; 
