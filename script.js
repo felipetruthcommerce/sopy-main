@@ -651,18 +651,60 @@ function initThree() {
 
     console.log("[3D] Inicializando cena Three.js...");
 
+    // Verifica se o container já tem tamanho visível; se não, adia a inicialização
+    const rect = threeWrap.getBoundingClientRect();
+    if (rect.width < 10 || rect.height < 10) {
+        console.warn('[3D] Container muito pequeno (w/h):', rect.width, rect.height, 'Adiando inicialização do THREE.');
+        // Observador que tenta reiniciar quando o elemento ganhar tamanho
+        try {
+            const ro = new ResizeObserver((entries) => {
+                const r = threeWrap.getBoundingClientRect();
+                if (r.width >= 10 && r.height >= 10) {
+                    ro.disconnect();
+                    // chama novamente initThree com pequeno delay para estabilizar o layout
+                    setTimeout(() => initThree(), 60);
+                }
+            });
+            ro.observe(threeWrap);
+        } catch (e) {
+            // Se ResizeObserver não estiver disponível, fallback simples: retry após timeout
+            console.warn('[3D] ResizeObserver não disponível, tentando inicializar novamente em 250ms.');
+            setTimeout(() => initThree(), 250);
+        }
+        return;
+    }
+
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
+    camera = new THREE.PerspectiveCamera(45, Math.max(1, rect.width) / Math.max(1, rect.height), 0.1, 100);
     camera.position.set(0, 0, 3.2);
 
-// RENDERER
-renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.1; // um tiquinho mais claro que 1.0
-renderer.outputEncoding = THREE.SRGBColorSpace; // use sRGBEncoding se sua versão for antiga
-threeWrap.appendChild(renderer.domElement);
+    // RENDERER (envuelto em try/catch para evitar falha crítica se o contexto não puder ser criado)
+    try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch (e) {
+        console.error('[3D] Erro ao criar WebGLRenderer:', e);
+        // tenta novamente quando o container for redimensionado/visível
+        try {
+            const ro2 = new ResizeObserver((entries) => {
+                const r = threeWrap.getBoundingClientRect();
+                if (r.width >= 10 && r.height >= 10) {
+                    ro2.disconnect();
+                    setTimeout(() => initThree(), 120);
+                }
+            });
+            ro2.observe(threeWrap);
+        } catch (ee) {
+            setTimeout(() => initThree(), 500);
+        }
+        return;
+    }
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+    renderer.setSize(rect.width, Math.max(1, rect.height));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1; // um tiquinho mais claro que 1.0
+    try { renderer.outputEncoding = THREE.SRGBColorSpace; } catch(e) { /* ignora se não suportado */ }
+    threeWrap.appendChild(renderer.domElement);
 
 // LUZES (look “foto”: key forte, fill leve, rim suave)
 const amb  = new THREE.AmbientLight(0xffffff, 0.9);
