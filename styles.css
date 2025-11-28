@@ -346,6 +346,25 @@ body.theme-aqua #clean-slate-section {
 .pinned-container .card-sopy-way,
 #clean-slate-section .card-sopy-way { opacity: 1 !important; }
 
+/* Força fonte preta e fundo branco quando o layout está em fluxo (cards lado-a-lado) */
+.pinned-container .card,
+#clean-slate-section .card {
+  color: #000 !important;
+  background: #fff !important;
+}
+
+.pinned-container .card h3,
+.pinned-container .card p,
+.pinned-container .card .card-features li,
+#clean-slate-section .card h3,
+#clean-slate-section .card p,
+#clean-slate-section .card .card-features li {
+  color: #000 !important;
+}
+
+/* Espaçamento um pouco maior entre os cards para combinar com o design de referência */
+.pinned-container { gap: 56px; }
+
 @media (max-width: 900px) {
   #clean-slate-section .card { width: 100%; max-width: 100%; }
 }
