@@ -316,9 +316,10 @@ body.theme-aqua #clean-slate-section {
     align-items: center; 
 }
 
-/* Quando a animação de "clean-slate" estiver desativada, exibir os dois cards lado-a-lado
-   Mantém as mesmas classes HTML; altera apenas o fluxo/posicionamento para layout responsivo.
-*/
+# Quando a animação de "clean-slate" estiver desativada, exibir os dois cards lado-a-lado
+# Aplica tanto para o container com id quanto para o container solto `.pinned-container`.
+# Mantém as mesmas classes HTML; altera apenas o fluxo/posicionamento para layout responsivo.
+.pinned-container,
 #clean-slate-section .pinned-container {
   height: auto; /* permite que o conteúdo fique em fluxo normal */
   min-height: 0;
@@ -330,6 +331,7 @@ body.theme-aqua #clean-slate-section {
   align-items: flex-start;
 }
 
+.pinned-container .card,
 #clean-slate-section .card {
   position: relative !important;
   transform: none !important;
@@ -341,6 +343,7 @@ body.theme-aqua #clean-slate-section {
 }
 
 /* Garante que o card Sopy esteja visível por padrão (CSS original o deixava com opacity:0) */
+.pinned-container .card-sopy-way,
 #clean-slate-section .card-sopy-way { opacity: 1 !important; }
 
 @media (max-width: 900px) {
