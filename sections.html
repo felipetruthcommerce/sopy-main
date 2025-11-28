@@ -1,0 +1,338 @@
+<main>
+      <section id="hero" class="sopy-hero sopy-section--full">
+        <!-- Vídeo que será revelado pelo circle-reveal -->
+        <div class="sopy-hero-media">
+          <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="auto">
+            <!-- Quando tiver uma versão WebM otimizada, adicione como primeira source -->
+            <!-- <source src="assets/videos/hero.webm" type="video/webm" ../> -->
+            <source src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/hero.mp4" type="video/mp4" />
+          </video>
+          <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader -->
+          <img class="sopy-hero-poster" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg" alt="" aria-hidden="true" />
+        </div>
+
+        <div class="sopy-hero-content">
+          <h1>
+            LIMPEZA PODEROSA. <br>ZERO ESFORÇO.
+          </h1>
+
+        </div>
+
+        <!-- CTA movido da seção intermediária para o final da hero, centralizado -->
+        <div class="cta-content">
+          <a href="#comprar" class="btn-comprar-agora" role="button">Compre Agora</a>
+        </div>
+
+      </section>
+
+      <!-- ===================== SEÇÃO 3D (PIN) ===================== -->
+      <section id="capsula-3d" class="sopy-capsule3d sopy-section--full sopy-section--extended" aria-label="Cápsula 3D interativa">
+        <!-- Canvas Three.js será injetado aqui -->
+        <div id="three-container"></div>
+
+        <!-- Título posicionado sobre o objeto 3D
+        <div class="sopy-capsule3d-title-over">
+          <h2>Tecnologia que dissolve 100%</h2>
+        </div> -->
+
+        <!-- Títulos de benefícios revelados durante o scroll -->
+        <div class="capsule-benefits" aria-hidden="true">
+          <div class="benefit-title benefit-1" data-reveal="0.05">
+            <h2>Poder ultra concentrado</h2>
+          </div>
+          <div class="benefit-title benefit-2" data-reveal="0.2">
+            <h2>Proteção total das fibras</h2>
+          </div>
+          <div class="benefit-title benefit-3" data-reveal="0.35">
+            <h2>Compatibilidade universal</h2>
+          </div>
+        </div>
+
+        <!-- Bloco de produto que aparece/alinhará ao final da seção 3D -->
+        <div class="capsule-3d-cta" aria-hidden="true">
+          <div class="capsule-3d-cta-inner">
+            <h3 class="product-title" data-aqua="AQUA BLU" data-citrus="CITRUS LUSH">CITRUS LUSH</h3>
+            <p class="product-price" data-aqua="R$ 120,00" data-citrus="R$ 120,00">R$ 120,00</p>
+            <p class="product-copy" data-aqua="Cápsulas ultra concentradas com enzimas que dissolvem 100% e protegem as fibras. Para todas as máquinas." data-citrus="Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
+            <button class="sopy-btn sopy-product-cta" data-aqua="EXPLORE AQUA BLU" data-citrus="EXPLORE CITRUS LUSH">EXPLORE CITRUS LUSH</button>
+          </div>
+        </div>
+        <!-- decorative bubbles container: created by JS -->
+        <div class="sopy-capsule-bubbles" aria-hidden="true"></div>
+      </section>
+
+      <!-- ===================== SUSTENTABILIDADE (Parallax - estrutura do template) ===================== -->
+      <div id="sustentabilidade" class="scroll-container sustainability-parallax">
+        <section class="fullscreen-panel intro-panel">
+          <div>
+            <h1>SUSTENTABILIDADE</h1>
+            <p>Nossa tecnologia ecológica para um futuro mais limpo</p>
+          </div>
+        </section>
+
+        <section class="fullscreen-panel" data-layout="left-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <video src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/video-praia.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>Menos Plástico</h2>
+              <p>Nossas embalagens usam 70% menos plástico que produtos comuns, reduzindo significativamente o impacto ambiental e a poluição dos oceanos.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="fullscreen-panel" data-layout="right-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <video src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/video-riacho.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>100% Biodegradável</h2>
+              <p>Desenvolvemos uma fórmula completamente biodegradável que não deixa resíduos químicos prejudiciais após o uso, protegendo nossos ecossistemas.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="fullscreen-panel" data-layout="left-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <video src="https://felipetruthcommerce.github.io/sopy-main/assets/videos/video-coelho.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>Vegan & Cruelty Free</h2>
+              <p>Produtos 100% veganos e livres de testes em animais, certificados internacionalmente e desenvolvidos com ingredientes de origem ética.</p>
+            </div>
+          </div>
+        </section>
+          
+        <section class="fullscreen-panel" data-layout="right-image">
+          <div class="panel-content">
+            <div class="image-column">
+              <div class="image-wrapper">
+                <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/casa.jpg" alt="Família usando produtos seguros">
+              </div>
+            </div>
+            <div class="text-column">
+              <h2>Segurança Familiar</h2>
+              <p>Segurança garantida para toda a família, incluindo crianças e bebês. Fórmula hipoalergênica e testada dermatologicamente para os mais sensíveis.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      <!-- ===================== SLIDER FULLSCREEN ===================== -->
+      <section id="como-usar" class="slider-fullscreen-section" aria-label="Como usar">
+        <div class="slider-container" aria-live="polite">
+          <div class="slider-slide" role="list">
+            <!-- Ordem invertida: o primeiro visível será o slide4, depois mostra 3, 2, 1 ao lado -->
+            <div class="slider-item" role="listitem" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide4.jpeg')">
+              <div class="slider-content">
+                <div class="slider-name">Resultado Impecável</div>
+                <div class="slider-des">Roupas limpas, perfumadas e protegidas em cada lavagem.</div>
+                <a class="slider-seeMore" href="#produtos"><button>Ver Produtos</button></a>
+              </div>
+            </div>
+
+            <div class="slider-item" role="listitem" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide1.jpeg')">
+              <div class="slider-content">
+                <div class="slider-name">Dose Única</div>
+                <div class="slider-des">Sem medir, sem sujar. Apenas pegue uma cápsula para cargas normais.</div>
+                <a class="slider-seeMore" href="#produtos"><button>Ver Produtos</button></a>
+              </div>
+            </div>
+
+            <div class="slider-item" role="listitem" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide2.jpeg')">
+              <div class="slider-content">
+                <div class="slider-name">Direto no Tambor</div>
+                <div class="slider-des">Coloque antes das roupas. A película dissolve completamente.</div>
+                <a class="slider-seeMore" href="#produtos"><button>Ver Produtos</button></a>
+              </div>
+            </div>
+
+            <div class="slider-item" role="listitem" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide3.jpeg')">
+              <div class="slider-content">
+                <div class="slider-name">Inicie o Ciclo</div>
+                <div class="slider-des">Funciona em qualquer temperatura. Resultado perfeito sempre.</div>
+                <a class="slider-seeMore" href="#produtos"><button>Ver Produtos</button></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="slider-button">
+            <button class="slider-prev" aria-label="Slide anterior">◁</button>
+            <button class="slider-next" aria-label="Próximo slide">▷</button>
+          </div>
+        </div>
+      </section>
+
+
+  <!-- ===================== BENEFÍCIOS - CLEAN SLATE ===================== -->
+    <section id="comparison-section">
+        <div class="comparison-intro">
+            <h2>Por que a Sopy é diferente?</h2>
+            <p>Descubra como nossa tecnologia revoluciona a experiência de lavar roupas com praticidade, sustentabilidade e resultados superiores.</p>
+        </div>
+    </section>
+    
+    <section id="clean-slate-section">
+        <div class="pinned-container">
+            <div class="green-wave"></div>
+            <div class="card card-old-way">
+                <img src="https://felipetruthcommerce.github.io\sopy-main\assets\images\sabao-em-po-guia-ypedia.jpg" alt="Método antigo">
+                <h3>Sabão em Pó & Líquido</h3>
+        <ul class="card-features">
+          <li>Dosagem imprecisa e desperdício frequente</li>
+          <li>Faz sujeira e deixa resíduos na gaveta da máquina</li>
+          <li>Embalagens volumosas com muito plástico</li>
+          <li>Pode agredir fibras e desbotar cores</li>
+          <li>Resultados irregulares em ciclos curtos</li>
+        </ul>
+            </div>
+            <div class="card card-sopy-way">
+                <img class="sopy-card-image" 
+                     src="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy.jpg" 
+                     data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy.jpg"
+                     data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy-azul.png"
+                     alt="Método Sopy">
+                <h3>Cápsulas Sopy</h3>
+        <ul class="card-features">
+          <li>Dose perfeita em 1 cápsula (sem medir, sem erro)</li>
+          <li>Zero sujeira: película hidrossolúvel que dissolve 100%</li>
+          <li>Até 70% menos plástico e muito menos volume</li>
+          <li>Protege cores e fibras com limpeza profunda</li>
+          <li>Funciona até no ciclo rápido, com perfume duradouro</li>
+        </ul>
+            </div>
+        </div>
+    </section>
+    
+      
+      <!-- ===================== DEPOIMENTOS (tc-testimonials) ===================== -->
+      <section id="testemunhos" class="tc-testimonials" aria-label="Depoimentos de clientes">
+    <div class="tc-wrap">
+        <div class="tc-left">
+            <h2 class="tc-title">Clientes que amam a Sopy</h2>
+            <p class="tc-sub">Veja o que a galera diz sobre praticidade, perfume e resultado. Depoimentos reais de quem já usa no dia a dia.</p>
+            <div class="tc-cta">
+                <a href="/comprar.html" class="sopy-tc-btn sopy-tc-btn--primary">Comprar agora</a>
+                <a href="#comparison-section" class="sopy-tc-btn sopy-tc-btn--ghost">Ver benefícios</a>
+            </div>
+        </div>
+
+        <div class="tc-right">
+            <div class="tc-testimonials-track">
+                <div class="tc-testimonial-card">
+                    <article class="tc-card" aria-live="polite">
+                        <div class="tc-quoteMark" aria-hidden="true">“</div>
+                        <p class="tc-quote">Simplificou minha vida. Jogo a cápsula e pronto! O cheiro que fica na roupa é maravilhoso.</p>
+                        <footer class="tc-cardFoot">
+                            <div class="tc-author">
+                                <img class="tc-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Marina A." />
+                                <div>
+                                    <span class="tc-name">Marina A.</span>
+                                    <span class="tc-role">São Paulo, SP</span>
+                                </div>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+
+                <div class="tc-testimonial-card">
+                    <article class="tc-card" aria-live="polite">
+                        <div class="tc-quoteMark" aria-hidden="true">“</div>
+                        <p class="tc-quote">Muito prático! Acabou a bagunça de sabão em pó pela lavanderia. Recomendo demais!</p>
+                        <footer class="tc-cardFoot">
+                            <div class="tc-author">
+                                <img class="tc-avatar" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rafael P." />
+                                <div>
+                                    <span class="tc-name">Rafael P.</span>
+                                    <span class="tc-role">Curitiba, PR</span>
+                                </div>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+
+                <div class="tc-testimonial-card">
+                    <article class="tc-card" aria-live="polite">
+                        <div class="tc-quoteMark" aria-hidden="true">“</div>
+                        <p class="tc-quote">Perfume ótimo e a roupa fica super limpa, mesmo no ciclo rápido da máquina. Vale muito a pena!</p>
+                        <footer class="tc-cardFoot">
+                            <div class="tc-author">
+                                <img class="tc-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="Bia L." />
+                                <div>
+                                    <span class="tc-name">Bia L.</span>
+                                    <span class="tc-role">Brasília, DF</span>
+                                </div>
+                            </div>
+                        </footer>
+                    </article>
+                </div>
+
+            </div>
+
+            <!-- Botões de navegação -->
+            <div class="tc-nav-buttons">
+                <button class="tc-nav-prev" aria-label="Depoimento anterior">◁</button>
+                <button class="tc-nav-next" aria-label="Próximo depoimento">▷</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+      <!-- ===================== FAQ ===================== -->
+      <section id="faq" class="sopy-faq sopy-section"  aria-label="Perguntas frequentes">
+        <header class="sopy-section-header">
+          <h2>Perguntas frequentes</h2>
+        </header>
+
+        <section class="sopy-faq-accordion" id="faq-q1">
+          <h3 class="sopy-title"><a href="#faq-q1">Funciona em água fria?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
+              <p>Sim. A fórmula foi pensada para atuar em todas as temperaturas.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="sopy-faq-accordion" id="faq-q2">
+          <h3 class="sopy-title"><a href="#faq-q2">Posso usar com roupas de bebê?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
+              <p>Sim. Siga o ciclo indicado pelo fabricante da máquina e da roupa.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="sopy-faq-accordion" id="faq-q3">
+          <h3 class="sopy-title"><a href="#faq-q3">Dissolve no ciclo rápido?</a></h3>
+          <div class="sopy-content">
+            <div class="sopy-wrapper">
+              <p>Sim, a película é hidrossolúvel e dissolve completamente.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+    </main>
+
+    <div class="product-toggle-container">
+      <input type="checkbox" id="product-toggle" class="pod-toggle-checkbox">
+      <label for="product-toggle" class="pod-toggle-label">
+        <div class="pod-toggle-handle">
+          <div class="pod-image-wrapper">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-verde.png" alt="Produto Verde" class="pod-image green">
+            <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-azul.png" alt="Produto Azul" class="pod-image blue">
+          </div>
+        </div>
+      </label>
+    </div>
