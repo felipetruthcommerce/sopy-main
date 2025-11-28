@@ -2304,6 +2304,47 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
 .sopy-center { text-align: center; }
 .sopy-max-w { width: min(1100px, 94%); margin-inline: auto; }
 
+/* ======================================================
+   Fixes finais para a seção de benefícios (pinned-container)
+   - garante ambos os cards lado-a-lado, mesma altura, texto preto
+   - regras altamente específicas para vencer conflitos existentes
+   ====================================================== */
+.pinned-container { align-items: stretch; }
+.pinned-container > .card {
+  position: relative !important;
+  transform: none !important;
+  left: auto !important;
+  top: auto !important;
+  box-sizing: border-box;
+  flex: 1 1 calc(50% - 28px);
+  min-height: 480px; /* garante altura consistente */
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background: #fff !important;
+  color: #000 !important;
+  border: 1px solid rgba(0,0,0,0.04) !important;
+}
+
+.pinned-container > .card h3,
+.pinned-container > .card p,
+.pinned-container > .card .card-features,
+.pinned-container > .card .card-features li {
+  color: #000 !important;
+}
+
+.pinned-container > .card.card-sopy-way {
+  opacity: 1 !important;
+  background: #fff !important;
+  color: #000 !important;
+}
+
+.pinned-container > .card img { height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 2rem; }
+
+@media (max-width: 900px) {
+  .pinned-container > .card { flex-basis: 100%; width: 100%; min-height: 420px; }
+}
 /* -------------------------------------------------------
    Fim
 ------------------------------------------------------- */
