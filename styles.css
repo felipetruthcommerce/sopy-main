@@ -315,10 +315,10 @@ body.theme-aqua #clean-slate-section {
     justify-content: center; 
     align-items: center; 
 }
-
+/*
 # Quando a animação de "clean-slate" estiver desativada, exibir os dois cards lado-a-lado
 # Aplica tanto para o container com id quanto para o container solto `.pinned-container`.
-# Mantém as mesmas classes HTML; altera apenas o fluxo/posicionamento para layout responsivo.
+# Mantém as mesmas classes HTML; altera apenas o fluxo/posicionamento para layout responsivo.*/
 .pinned-container,
 #clean-slate-section .pinned-container {
   height: auto; /* permite que o conteúdo fique em fluxo normal */
