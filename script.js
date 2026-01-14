@@ -312,6 +312,13 @@ function setTheme(theme) {
         if (h2) h2.style.color = h2.style.color; // force repaint
     });
 
+    // Update fragrance image for the sustainability panels to match the theme
+    try {
+        if (typeof updateFragranceImage === 'function') updateFragranceImage(theme);
+    } catch (e) {
+        console.warn('[TEMA] Falha ao atualizar imagem de fragrância:', e);
+    }
+
     swapModel(theme);
 }
 
@@ -642,6 +649,64 @@ function initCapsuleBubbles() {
     renderer.setSize(r.width, Math.max(1, r.height));
   }
   window.addEventListener('resize', onWindowResize);
+}
+
+// ===================================================
+// Atualiza a imagem da seção "Fragrâncias da alta perfumaria" conforme o tema
+// Procura a seção pelo título e troca o `src` do elemento <video> ou <img>
+// ===================================================
+function updateFragranceImage(theme) {
+    try {
+        const FRAGRANCE_BASE = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/';
+        const FILES = {
+            citrus: 'perfume-citrus-01.png',
+            aqua: 'perfume-aqua-01.png'
+        };
+
+        // procura a seção que tem o título relacionado a "Fragrâncias"
+        const panels = document.querySelectorAll('.fullscreen-panel');
+        let target = null;
+        panels.forEach(p => {
+            const h2 = p.querySelector('h2');
+            if (h2 && /fragrâncias/i.test(h2.textContent)) {
+                target = p;
+            }
+        });
+        if (!target) return;
+
+        // seleciona tanto <video> quanto <img> dentro de .image-wrapper
+        const media = target.querySelector('.image-wrapper video, .image-wrapper img');
+        if (!media) return;
+
+        const file = theme === 'citrus' ? FILES.citrus : FILES.aqua;
+        const newSrc = FRAGRANCE_BASE + file;
+
+        // evita trocar se já for a mesma imagem
+        const currentName = (media.getAttribute('src') || media.src || '').split('/').pop();
+        if (currentName === file) return;
+
+        // preload para evitar flicker
+        const img = new Image();
+        img.onload = () => {
+            try {
+                media.src = newSrc;
+                // se for vídeo, recarrega e tenta tocar (autoplay settings podem impedir)
+                if (media.tagName && media.tagName.toLowerCase() === 'video') {
+                    media.load();
+                    if (media.autoplay) media.play && media.play().catch(() => {});
+                }
+                console.log('[TEMA] Imagem de fragrância atualizada para', theme, newSrc);
+            } catch (e) {
+                console.warn('[TEMA] Erro ao aplicar imagem de fragrância:', e);
+            }
+        };
+        img.onerror = () => {
+            console.warn('[TEMA] Erro ao carregar imagem de fragrância:', newSrc);
+        };
+        img.src = newSrc;
+    } catch (e) {
+        console.warn('[TEMA] updateFragranceImage falhou:', e);
+    }
 }
 
 function initThree() {
