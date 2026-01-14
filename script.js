@@ -144,11 +144,8 @@ let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
 const MODELS = {
-    // substitui os builds "compressed_*" pelos modelos finais presentes em assets/models
-    // Aqua → cápsula azul
-    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Azul-v024.glb",
-    // Citrus → cápsula verde
-    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Verde-v024.glb",
+    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
+    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
 };
 
 const COLORS = {
@@ -165,27 +162,10 @@ function swapModel(theme) {
     }
 
     const url = MODELS[theme];
-
-    // Defensive: ensure GLTFLoader exists (may be missing if examples scripts not included)
-    if (typeof THREE.GLTFLoader === 'undefined') {
-        console.error('[3D] GLTFLoader não disponível. Verifique se você incluiu examples/jsm/loaders/GLTFLoader.js');
-        return;
-    }
-
     const loader = new THREE.GLTFLoader();
-
-    // DRACO is optional — use it if available, otherwise proceed without it
-    try {
-        if (typeof THREE.DRACOLoader !== 'undefined') {
-            const dracoLoader = new THREE.DRACOLoader();
-            dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-            loader.setDRACOLoader(dracoLoader);
-        } else {
-            console.warn('[3D] DRACOLoader não encontrado — carregando GLB sem descompressão Draco.');
-        }
-    } catch (e) {
-        console.warn('[3D] Falha ao configurar DRACOLoader, prosseguindo sem ele:', e);
-    }
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+    loader.setDRACOLoader(dracoLoader);
 
     loader.load(url, 
         (gltf) => {
@@ -195,29 +175,6 @@ function swapModel(theme) {
             }
             const model = gltf.scene;
             capsuleGroup.add(model);
-
-            // Normalize model scale and center so different GLB authorship sizes render consistently
-            try {
-                const bbox = new THREE.Box3().setFromObject(model);
-                const size = new THREE.Vector3();
-                bbox.getSize(size);
-                const center = new THREE.Vector3();
-                bbox.getCenter(center);
-
-                // Desired maximum size in world units (approx). Tweak if needed.
-                const TARGET_MAX_DIM = 1.8;
-                const maxDim = Math.max(size.x, size.y, size.z) || 1;
-                const uniformScale = TARGET_MAX_DIM / maxDim;
-
-                model.scale.setScalar(uniformScale);
-
-                // Re-center the model so it's visually centered in the capsuleGroup
-                model.position.x -= center.x * uniformScale;
-                model.position.y -= center.y * uniformScale;
-                model.position.z -= center.z * uniformScale;
-            } catch (e) {
-                console.warn('[3D] Falha ao normalizar escala/centro do modelo:', e);
-            }
 
             // aumenta/refina o brilho do material PBR com o environment
 // Depois de: capsuleGroup.add(model);
