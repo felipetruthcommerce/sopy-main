@@ -165,10 +165,27 @@ function swapModel(theme) {
     }
 
     const url = MODELS[theme];
+
+    // Defensive: ensure GLTFLoader exists (may be missing if examples scripts not included)
+    if (typeof THREE.GLTFLoader === 'undefined') {
+        console.error('[3D] GLTFLoader não disponível. Verifique se você incluiu examples/jsm/loaders/GLTFLoader.js');
+        return;
+    }
+
     const loader = new THREE.GLTFLoader();
-    const dracoLoader = new THREE.DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-    loader.setDRACOLoader(dracoLoader);
+
+    // DRACO is optional — use it if available, otherwise proceed without it
+    try {
+        if (typeof THREE.DRACOLoader !== 'undefined') {
+            const dracoLoader = new THREE.DRACOLoader();
+            dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
+            loader.setDRACOLoader(dracoLoader);
+        } else {
+            console.warn('[3D] DRACOLoader não encontrado — carregando GLB sem descompressão Draco.');
+        }
+    } catch (e) {
+        console.warn('[3D] Falha ao configurar DRACOLoader, prosseguindo sem ele:', e);
+    }
 
     loader.load(url, 
         (gltf) => {
@@ -178,6 +195,29 @@ function swapModel(theme) {
             }
             const model = gltf.scene;
             capsuleGroup.add(model);
+
+            // Normalize model scale and center so different GLB authorship sizes render consistently
+            try {
+                const bbox = new THREE.Box3().setFromObject(model);
+                const size = new THREE.Vector3();
+                bbox.getSize(size);
+                const center = new THREE.Vector3();
+                bbox.getCenter(center);
+
+                // Desired maximum size in world units (approx). Tweak if needed.
+                const TARGET_MAX_DIM = 1.8;
+                const maxDim = Math.max(size.x, size.y, size.z) || 1;
+                const uniformScale = TARGET_MAX_DIM / maxDim;
+
+                model.scale.setScalar(uniformScale);
+
+                // Re-center the model so it's visually centered in the capsuleGroup
+                model.position.x -= center.x * uniformScale;
+                model.position.y -= center.y * uniformScale;
+                model.position.z -= center.z * uniformScale;
+            } catch (e) {
+                console.warn('[3D] Falha ao normalizar escala/centro do modelo:', e);
+            }
 
             // aumenta/refina o brilho do material PBR com o environment
 // Depois de: capsuleGroup.add(model);
