@@ -144,8 +144,11 @@ let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
 const MODELS = {
-    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
-    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
+    // substitui os builds "compressed_*" pelos modelos finais presentes em assets/models
+    // Aqua → cápsula azul
+    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Azul-v024.glb",
+    // Citrus → cápsula verde
+    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Verde-v024.glb",
 };
 
 const COLORS = {
