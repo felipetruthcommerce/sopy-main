@@ -179,6 +179,7 @@ function swapModel(theme) {
                 capsuleGroup.remove(capsuleGroup.children[0]);
             }
             const model = gltf.scene;
+            model.scale.set(2.5, 2.5, 2.5); // Aumenta o tamanho do objeto 3D
             capsuleGroup.add(model);
 
             // aumenta/refina o brilho do material PBR com o environment
