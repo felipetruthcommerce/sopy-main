@@ -738,6 +738,61 @@ function updateFragranceImage(theme) {
     }
 }
 
+// === ROTATING BANNER: simples alternador entre 2 imagens ===
+function initRotatingBanner() {
+    const section = document.getElementById('rotating-banner');
+    if (!section) return;
+
+    const slides = Array.from(section.querySelectorAll('.banner-slide'));
+    if (slides.length < 2) return;
+
+    let current = 0;
+    let timeoutId = null;
+    const interval = 5000; // 5s
+
+    function show(index) {
+        slides.forEach((s, i) => {
+            const isActive = i === index;
+            s.classList.toggle('active', isActive);
+            s.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+        });
+        current = index;
+    }
+
+    function next() { show((current + 1) % slides.length); }
+    function prev() { show((current - 1 + slides.length) % slides.length); }
+
+    const btnNext = section.querySelector('.rb-next');
+    const btnPrev = section.querySelector('.rb-prev');
+    if (btnNext) btnNext.addEventListener('click', () => { next(); restart(); });
+    if (btnPrev) btnPrev.addEventListener('click', () => { prev(); restart(); });
+
+    function restart() {
+        if (timeoutId) clearInterval(timeoutId);
+        timeoutId = setInterval(next, interval);
+    }
+
+    // iniciar
+    show(0);
+    restart();
+
+    // pausar a rotação quando a aba estiver oculta
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            if (timeoutId) clearInterval(timeoutId);
+        } else {
+            restart();
+        }
+    });
+}
+
+// inicializa quando o DOM estiver pronto
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRotatingBanner);
+} else {
+    initRotatingBanner();
+}
+
 function initThree() {
     const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
