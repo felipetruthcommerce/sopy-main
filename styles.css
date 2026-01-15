@@ -125,14 +125,14 @@ body.theme-aqua {
 }
 
 /* Tipos */
-/* Headings: use Nunito for titles; keep previous fallbacks as backup */
-h1, h2, h3, h4, h5, h6 { font-family: 'Nunito', 'Inter Tight', 'Avant Garde Demi BT', sans-serif; font-weight: 700; letter-spacing: 0; }
+/* Headings: use Nunito for titles (no fallbacks so the font shows directly) */
+h1, h2, h3, h4, h5, h6 { font-family: 'Nunito', sans-serif; font-weight: 700; letter-spacing: 0; }
 /* Paragraphs use Inter for better readability */
 p { font-family: 'Inter', 'Avant Garde Book BT', sans-serif; }
-/* Subtitles: Montserrat for subtitle/secondary lines */
+/* Subtitles: Montserrat for subtitle/secondary lines (no fallbacks) */
 .tc-sub,
 .slider-des,
-.sopy-section-header p { font-family: 'Montserrat', 'Inter', sans-serif; font-weight: 400; }
+.sopy-section-header p { font-family: 'Montserrat', sans-serif; font-weight: 400; }
 /* Stronger display for H2 specifically */
 h2 {
   text-transform: uppercase;
