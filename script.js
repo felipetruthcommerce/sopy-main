@@ -198,7 +198,7 @@ function swapModel(theme) {
             const maxDim = Math.max(size.x, size.y, size.z) || 1;
             // Responsivo: diminuir um pouco em telas móveis para evitar corte
             const isMobile = (typeof window !== 'undefined') && (window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : window.innerWidth <= 768);
-            const desiredSize = isMobile ? 1.15 : 1.8; // menor em mobile
+            const desiredSize = isMobile ? 1.15 : 1.65; // menor em mobile
             const scaleFactor = desiredSize / maxDim;
             pivot.scale.setScalar(scaleFactor);
 
