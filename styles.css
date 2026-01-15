@@ -3340,7 +3340,7 @@ body.theme-citrus .head-main .badge {
 }
 
 .slider-button {
-  position: absolute; /* Mudado de fixed para absolute - fica dentro da seção */
+  position: absolute; /* Mudado de fixed para absolute - fica dentro da seção .*/
   left: 50%;
   bottom: 28px;
   transform: translateX(-50%);
@@ -3391,5 +3391,4 @@ body.theme-citrus .head-main .badge {
     pointer-events: none;
   }
 }
-
 

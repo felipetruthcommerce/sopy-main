@@ -2322,4 +2322,4 @@ if (heroVideo && heroPoster) {
 
 })();
 
-// explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots.
+// explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots. a
