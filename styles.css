@@ -571,6 +571,25 @@ body.theme-aqua .green-wave {
   overflow: visible;
 }
 
+/* Allow SplitType/GSAP animated spans inside the comparison title
+   to overflow so diacritics (ç, ã, õ, etc.) are not clipped. */
+#comparison-section .split-line,
+#comparison-section .split-word,
+.comparison-intro .split-line,
+.comparison-intro .split-word {
+  overflow: visible !important;
+}
+
+#comparison-section .split-line > span,
+#comparison-section .split-word > span,
+.comparison-intro .split-line > span,
+.comparison-intro .split-word > span {
+  display: inline-block;
+  transform-origin: center;
+  -webkit-font-smoothing: antialiased;
+  backface-visibility: hidden;
+}
+
 .comparison-intro p {
   font-size: 1.1rem; 
   line-height: 1.7; 
