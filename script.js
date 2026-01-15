@@ -143,9 +143,14 @@ function initTextAnimations() {
 let THREE_READY = typeof THREE !== "undefined";
 let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 
+// const MODELS = {
+//     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
+//     citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
+// };
+
 const MODELS = {
-    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
-    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
+    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Azul-v024.glb",
+    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Verde-v024.glb",
 };
 
 const COLORS = {
