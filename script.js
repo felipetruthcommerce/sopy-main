@@ -723,7 +723,7 @@ function initThree() {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 1.0); // Aproximada a câmera para ver o objeto maior
+    camera.position.set(0, 0, 0.1); // Aproximada a câmera para ver o objeto maior
 
 // RENDERER
 renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
