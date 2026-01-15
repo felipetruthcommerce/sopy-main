@@ -196,7 +196,9 @@ function swapModel(theme) {
             // escala para um tamanho alvo (ajuste `desiredSize` se quiser maior/menor)
             const size = bbox.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z) || 1;
-            const desiredSize = 1.8; // tamanho alvo em unidades de cena
+            // Responsivo: diminuir um pouco em telas móveis para evitar corte
+            const isMobile = (typeof window !== 'undefined') && (window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : window.innerWidth <= 768);
+            const desiredSize = isMobile ? 1.15 : 1.8; // menor em mobile
             const scaleFactor = desiredSize / maxDim;
             pivot.scale.setScalar(scaleFactor);
 
