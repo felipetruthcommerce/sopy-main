@@ -3,8 +3,67 @@
   padding-left: 2.2em;
   padding-right: 2.2em;
 }
-/* Import Google Fonts: Nunito for titles, Montserrat for subtitles */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;800&display=swap');
+/* Use local Houschka Pro for titles (replaces Nunito). */
+
+/* Houschka Pro - local files in assets/fonts/houschkapro/ */
+@font-face {
+  font-family: 'Houschka Pro';
+  src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Houschka Pro';
+  src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Houschka Pro';
+  src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Houschka Pro';
+  src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Houschka Pro';
+  src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Extra_Bold.otf') format('opentype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Local Gotham font family (using files from assets/fonts/gotham/Gotham Fonts Family/) */
+@font-face {
+  font-family: 'Gotham';
+  src: url('assets/fonts/gotham/Gotham Fonts Family/Gotham-Book.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('assets/fonts/gotham/Gotham Fonts Family/GOTHAM-MEDIUM.TTF') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Gotham';
+  src: url('assets/fonts/gotham/Gotham Fonts Family/GOTHAM-BOLD.TTF') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 /* -------------------------------------------------------
    SOPY â€“ styles.css
    Reset + Tokens + Layout + States para animações GSAP
@@ -125,14 +184,14 @@ body.theme-aqua {
 }
 
 /* Tipos */
-/* Headings: use Nunito for titles (no fallbacks so the font shows directly) */
-h1, h2, h3, h4, h5, h6 { font-family: 'Nunito', sans-serif; font-weight: 700; letter-spacing: 0; }
+/* Headings: use Houschka Pro for titles (no fallbacks so the font shows directly) */
+h1, h2, h3, h4, h5, h6 { font-family: 'Houschka Pro', sans-serif; font-weight: 700; letter-spacing: 0; }
 /* Paragraphs use Inter for better readability */
 p { font-family: 'Inter', 'Avant Garde Book BT', sans-serif; }
-/* Subtitles: Montserrat for subtitle/secondary lines (no fallbacks) */
+/* Subtitles: use local Gotham */
 .tc-sub,
 .slider-des,
-.sopy-section-header p { font-family: 'Montserrat', sans-serif; font-weight: 400; }
+.sopy-section-header p { font-family: 'Gotham', sans-serif; font-weight: 400; }
 /* Stronger display for H2 specifically */
 h2 {
   text-transform: uppercase;
