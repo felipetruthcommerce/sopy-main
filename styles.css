@@ -3,6 +3,8 @@
   padding-left: 2.2em;
   padding-right: 2.2em;
 }
+/* Import Google Fonts: Nunito for titles, Montserrat for subtitles */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Nunito:wght@400;600;800&display=swap');
 /* -------------------------------------------------------
    SOPY â€“ styles.css
    Reset + Tokens + Layout + States para animações GSAP
@@ -123,10 +125,14 @@ body.theme-aqua {
 }
 
 /* Tipos */
-/* Headings use Inter Tight for a tighter display; fallback to Avant Garde Demi */
-h1, h2, h3, h4, h5, h6 { font-family: 'Inter Tight', 'Avant Garde Demi BT', sans-serif; font-weight: 600; letter-spacing: 0; }
+/* Headings: use Nunito for titles; keep previous fallbacks as backup */
+h1, h2, h3, h4, h5, h6 { font-family: 'Nunito', 'Inter Tight', 'Avant Garde Demi BT', sans-serif; font-weight: 700; letter-spacing: 0; }
 /* Paragraphs use Inter for better readability */
 p { font-family: 'Inter', 'Avant Garde Book BT', sans-serif; }
+/* Subtitles: Montserrat for subtitle/secondary lines */
+.tc-sub,
+.slider-des,
+.sopy-section-header p { font-family: 'Montserrat', 'Inter', sans-serif; font-weight: 400; }
 /* Stronger display for H2 specifically */
 h2 {
   text-transform: uppercase;
