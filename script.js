@@ -179,7 +179,29 @@ function swapModel(theme) {
                 capsuleGroup.remove(capsuleGroup.children[0]);
             }
             const model = gltf.scene;
-            capsuleGroup.add(model);
+
+            // --- Centraliza o modelo em um pivot e escala uniformemente ---
+            // Criamos um pivot para que a rotação aplicada ao `capsuleGroup`
+            // gire o modelo em torno do seu próprio centro (evita translação)
+            const pivot = new THREE.Group();
+            pivot.add(model);
+
+            // calcula caixa delimitadora do modelo e centraliza a malha
+            const bbox = new THREE.Box3().setFromObject(model);
+            const center = bbox.getCenter(new THREE.Vector3());
+            model.position.x -= center.x;
+            model.position.y -= center.y;
+            model.position.z -= center.z;
+
+            // escala para um tamanho alvo (ajuste `desiredSize` se quiser maior/menor)
+            const size = bbox.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z) || 1;
+            const desiredSize = 1.8; // tamanho alvo em unidades de cena
+            const scaleFactor = desiredSize / maxDim;
+            pivot.scale.setScalar(scaleFactor);
+
+            // adiciona o pivot (com o modelo centralizado) ao grupo principal
+            capsuleGroup.add(pivot);
 
             // aumenta/refina o brilho do material PBR com o environment
 // Depois de: capsuleGroup.add(model);
