@@ -179,7 +179,6 @@ function swapModel(theme) {
                 capsuleGroup.remove(capsuleGroup.children[0]);
             }
             const model = gltf.scene;
-            model.scale.set(2.5, 2.5, 2.5); // Aumenta o tamanho do objeto 3D
             capsuleGroup.add(model);
 
             // aumenta/refina o brilho do material PBR com o environment
@@ -724,7 +723,7 @@ function initThree() {
 
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 3.2);
+    camera.position.set(0, 0, 1.0); // Aproximada a câmera para ver o objeto maior
 
 // RENDERER
 renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
