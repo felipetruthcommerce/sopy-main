@@ -869,8 +869,8 @@ new THREE.RGBELoader()
             const img = document.createElement('img');
             img.className = 'capsule-2d-photo';
             // fontes padrão (existem em `assets/images/`)
-            img.setAttribute('data-aqua', 'assets/images/capsula-azul.png');
-            img.setAttribute('data-citrus', 'assets/images/capsula-verde.png');
+            img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png');
+            img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png');
             img.alt = 'Cápsula Sopy';
             // define src inicial baseado na classe do body
             img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
