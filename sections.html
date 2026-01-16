@@ -1,4 +1,20 @@
 <main>
+  <style>
+    /* Estilos da imagem 2D da cápsula (escopo: apenas nesta página/section) */
+    .capsule-2d-photo {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transform-origin: center center;
+      max-width: 18vw; /* tamanho reduzido conforme solicitado */
+      max-height: 36vh;
+      width: auto;
+      height: auto;
+      pointer-events: none;
+      z-index: 4;
+    }
+  </style>
       <section id="hero" class="sopy-hero sopy-section--full">
         <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="sopy-hero-media">
