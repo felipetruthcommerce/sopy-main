@@ -434,6 +434,14 @@ body.theme-aqua #clean-slate-section {
   #clean-slate-section .card { width: 100%; max-width: 100%; }
 }
 
+/* Mobile safe area: adiciona espaço extra no final da seção para evitar
+   que elementos fixos (ex: toggles/CTA) cortem os cards em telas pequenas */
+@media (max-width: 768px) {
+  #clean-slate-section { padding-bottom: 140px; }
+  .pinned-container { padding-bottom: 0; }
+  .pinned-container .card { width: 100%; max-width: 100%; }
+}
+
 .green-wave { 
     position: absolute; 
     top: 50%; 
