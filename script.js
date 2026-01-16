@@ -299,6 +299,16 @@ function setTheme(theme) {
     } catch (e) {
         console.warn('[TEMA] Falha ao trocar imagem do card:', e);
     }
+        // Atualiza a imagem 2D da cápsula (se estiver sendo usada)
+        try {
+            const capsulePhoto = document.querySelector('.capsule-2d-photo');
+            if (capsulePhoto) {
+                const newSrc = theme === 'citrus' ? capsulePhoto.getAttribute('data-citrus') : capsulePhoto.getAttribute('data-aqua');
+                if (newSrc) capsulePhoto.src = newSrc;
+            }
+        } catch (e) {
+            console.warn('[TEMA] Falha ao trocar imagem 2D da cápsula:', e);
+        }
     
     // ... (seu código para atualizar textos do card de produto) ...
 
@@ -793,67 +803,6 @@ if (document.readyState === 'loading') {
     initRotatingBanner();
 }
 
-// Atualiza a imagem da cápsula conforme o toggle de produto (verde/azul)
-function bindCapsuleImageToggle() {
-    const img = document.getElementById('capsule-image');
-    const toggle = document.getElementById('product-toggle');
-    if (!img || !toggle) return;
-
-    function updateImage() {
-        const isChecked = toggle.checked;
-        const blue = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png';
-        const green = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png';
-        img.src = isChecked ? blue : green;
-        img.alt = isChecked ? 'Cápsula Azul' : 'Cápsula Verde';
-        // reset any transform so rotation restarts from 0 when switching
-        img.style.transform = 'rotate(0deg)';
-    }
-
-    toggle.addEventListener('change', updateImage);
-    // inicial
-    updateImage();
-}
-
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindCapsuleImageToggle);
-} else {
-    bindCapsuleImageToggle();
-}
-
-// --- DOM-based floating bubbles (fallback / replacement for Three.js bubbles) ---
-function initFloatingBubbles() {
-    const container = document.querySelector('.sopy-capsule-bubbles');
-    if (!container) return;
-    // Avoid double init
-    if (container.__bubblesInited) return;
-    container.__bubblesInited = true;
-
-    const bubbleCount = 10;
-    for (let i = 0; i < bubbleCount; i++) {
-        const b = document.createElement('div');
-        b.className = 'sopy-bubble';
-        const size = Math.round(Math.random() * 40) + 18; // 18..58px
-        b.style.width = size + 'px';
-        b.style.height = size + 'px';
-
-        // color: subtle white/blue/green mix depending on theme
-        const isCitrus = document.body.classList.contains('theme-citrus');
-        const color = isCitrus ? 'rgba(180, 255, 200, 0.85)' : 'rgba(200, 240, 255, 0.9)';
-        b.style.background = `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), ${color} 60%, rgba(255,255,255,0.15))`;
-
-        // start positions (below the visible area) and random horizontal position
-        const left = Math.random() * 80 + 8; // 8%..88%
-        b.style.left = left + '%';
-        b.style.bottom = (-Math.random() * 30 - 10) + '%';
-
-        const duration = Math.random() * 6 + 6; // 6..12s
-        const delay = Math.random() * 3; // stagger
-        b.style.animation = `sopy-bubble-float ${duration}s cubic-bezier(.2,.9,.2,.9) ${delay}s infinite`;
-
-        container.appendChild(b);
-    }
-}
-
 function initThree() {
     const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
@@ -909,39 +858,70 @@ new THREE.RGBELoader()
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
 (function setupCapsuleSpinOnScroll(){
-    const spinSection = document.getElementById('capsula-3d');
-    const capsuleImg = document.getElementById('capsule-image');
-    if (!spinSection || !capsuleImg) return;
+  const spinSection = document.getElementById('capsula-3d');
+  if (!spinSection || !capsuleGroup) return;
 
-    let spinRaf = null;
-    let lastP = -1; // para debouncing
-
-    // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
-    // e termina quando o fundo da seção encosta no topo da viewport
-    function computeProgress(){
-        const rect = spinSection.getBoundingClientRect();
-        const vh   = window.innerHeight;
-        const total = rect.height + vh;     // faixa “vista” total
-        const seen  = vh - rect.top;        // quanto da faixa já passou
-        return Math.max(0, Math.min(1, seen / total));
+    // Se desejarmos usar a versão 2D (foto) ao invés do modelo 3D,
+    // injetamos uma imagem central dentro do `#three-container`.
+    try {
+        const threeContainer = document.getElementById('three-container');
+        if (threeContainer && !document.querySelector('.capsule-2d-photo')) {
+            const img = document.createElement('img');
+            img.className = 'capsule-2d-photo';
+            // fontes padrão (existem em `assets/images/`)
+            img.setAttribute('data-aqua', 'assets/images/capsula-azul.png');
+            img.setAttribute('data-citrus', 'assets/images/capsula-verde.png');
+            img.alt = 'Cápsula Sopy';
+            // define src inicial baseado na classe do body
+            img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
+            threeContainer.appendChild(img);
+        }
+    } catch (e) {
+        console.warn('[3D->2D] Falha ao injetar imagem 2D:', e);
     }
 
-    function applySpin(p){
-        // limites do trecho em que acontece o giro
-        const SPIN_START = 0.05;
-        const SPIN_END = 0.65;
+  const TWO_PI = Math.PI * 2;
+  let spinRaf = null;
+  let lastP = -1; // para debouncing
 
-        // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
-        let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
-        t = Math.max(0, Math.min(1, t)); // clamp 0..1
+  // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
+  // e termina quando o fundo da seção encosta no topo da viewport
+  function computeProgress(){
+    const rect = spinSection.getBoundingClientRect();
+    const vh   = window.innerHeight;
+    const total = rect.height + vh;     // faixa “vista” total
+    const seen  = vh - rect.top;        // quanto da faixa já passou
+    return Math.max(0, Math.min(1, seen / total));
+  }
 
-        // rotaciona a imagem proporcionalmente (0 -> 360deg)
-        const deg = t * 360;
-        capsuleImg.style.transform = `rotate(${deg}deg)`;
+  function applySpin(p){
+     // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
+  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
+  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
 
-        // Revelar títulos de benefícios baseado no progresso do scroll
-        revealBenefitTitles(p);
+  // memoriza o yaw inicial do modelo na primeira atualização
+  if (window.__capsuleBaseYaw == null) {
+    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
+  }
+
+  // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
+  let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
+  t = Math.max(0, Math.min(1, t)); // clamp 0..1
+
+    // faz exatamente 360° nesse intervalo e PARA
+    // Se a foto 2D estiver presente, animamos ela via CSS (rotação no sentido horário)
+    const photoEl = document.querySelector('.capsule-2d-photo');
+    if (photoEl) {
+        const deg = t * 360; // 0..360 graus
+        photoEl.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
+    } else {
+        const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
+        capsuleGroup.rotation.y = yaw;
     }
+
+  // Revelar títulos de benefícios baseado no progresso do scroll
+  revealBenefitTitles(p);
+  }
 
   function revealBenefitTitles(progress) {
     const titles = document.querySelectorAll('.benefit-title');
@@ -2092,17 +2072,15 @@ if (heroVideo && heroPoster) {
     }
 
       // 3. Inicializador do 3D (Lazy Load)
-    // Não inicializamos o 3D — trocamos para uma imagem estática/animada.
-    // Mantemos a lógica de lazy-run para comportamentos dependentes da seção,
-    // mas não carregamos a cena Three.js nem as bolhas.
     const threeSection = document.getElementById("capsula-3d");
     if (threeSection) {
         new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
-                // Inicializa as bolhas (mantém funcionalidade existente sem reativar cena 3D principal)
-                try { if (typeof initCapsuleBubbles === 'function') initCapsuleBubbles(); } catch (e) { console.warn('[BUBBLES] initCapsuleBubbles falhou:', e); }
-                // Garante binding do toggle/imagem
-                try { bindCapsuleImageToggle(); } catch (e) { console.warn('[IMAGE] bindCapsuleImageToggle falhou:', e); }
+                initThree();
+                // Inicializar bolhas 3D junto com a cena principal
+                if (typeof THREE !== 'undefined') {
+                    initCapsuleBubbles();
+                }
                 observer.unobserve(threeSection);
             }
         }, { threshold: 0.1 }).observe(threeSection);

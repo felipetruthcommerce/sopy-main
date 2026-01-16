@@ -434,23 +434,6 @@ body.theme-aqua #clean-slate-section {
   #clean-slate-section .card { width: 100%; max-width: 100%; }
 }
 
-/* Ajustes específicos para mobile para evitar que elementos fixos cortem os cards */
-@media (max-width: 768px) {
-  /* Espaço extra no final da seção para 'safe area' do toggle/overlay */
-  #clean-slate-section { padding-bottom: 220px; height: auto; overflow: visible; }
-
-  /* Garante que o cards container não oculte conteúdo e os cards ocupem a largura disponível */
-  .pinned-container { padding-bottom: 0; height: auto; overflow: visible; }
-  .pinned-container .card,
-  #clean-slate-section .card { width: 100%; max-width: 100%; }
-
-  /* Evita altura fixa que pode causar corte visual em dispositivos pequenos */
-  .card { min-height: auto; }
-
-  /* reduz gap para otimizar espaço em telas pequenas */
-  .pinned-container { gap: 24px; padding: 2rem 4%; }
-}
-
 .green-wave { 
     position: absolute; 
     top: 50%; 
@@ -516,31 +499,6 @@ body.theme-aqua .green-wave {
 
 .card-sopy-way p, .card-sopy-way h3 {
     color: #FFF;
-}
-
-/* Styles for the replacement capsule image (replaces 3D canvas) */
-#three-container { position: relative; }
-#three-container canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-
-#capsule-3d-image-wrap { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; height:100%; z-index:6; pointer-events: none; }
-#capsule-image { max-width: 28%; height: auto; transform-origin: center center; transition: transform 300ms ease-out; display:block; }
-
-@media (max-width: 1024px) {
-  #capsule-image { max-width: 44%; }
-}
-
-@media (max-width: 768px) {
-  #capsule-image { max-width: 64%; }
-}
-
-/* Capsule bubbles (DOM fallback to replace 3D bubbles) */
-.sopy-capsule-bubbles { position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: visible; }
-.sopy-capsule-bubbles .sopy-bubble { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.9; mix-blend-mode: screen; }
-
-@keyframes sopy-bubble-float {
-  0% { transform: translateY(0) scale(0.8); opacity: 0.95; }
-  50% { opacity: 0.9; }
-  100% { transform: translateY(-140%) scale(1.1); opacity: 0; }
 }
 
 .card img { 
