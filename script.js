@@ -793,6 +793,34 @@ if (document.readyState === 'loading') {
     initRotatingBanner();
 }
 
+// Atualiza a imagem da cápsula conforme o toggle de produto (verde/azul)
+function bindCapsuleImageToggle() {
+    const img = document.getElementById('capsule-image');
+    const toggle = document.getElementById('product-toggle');
+    if (!img || !toggle) return;
+
+    function updateImage() {
+        const isChecked = toggle.checked;
+        const base = 'assets/images/';
+        const blue = base + 'Soby-Capsula-Azul-01-Frente-011.png';
+        const green = base + 'Soby-Capsula-Verde-01-Frente-011.png';
+        img.src = isChecked ? blue : green;
+        img.alt = isChecked ? 'Cápsula Azul' : 'Cápsula Verde';
+        // reset any transform so rotation restarts from 0 when switching
+        img.style.transform = 'rotate(0deg)';
+    }
+
+    toggle.addEventListener('change', updateImage);
+    // inicial
+    updateImage();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindCapsuleImageToggle);
+} else {
+    bindCapsuleImageToggle();
+}
+
 function initThree() {
     const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
@@ -848,44 +876,39 @@ new THREE.RGBELoader()
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
 (function setupCapsuleSpinOnScroll(){
-  const spinSection = document.getElementById('capsula-3d');
-  if (!spinSection || !capsuleGroup) return;
+    const spinSection = document.getElementById('capsula-3d');
+    const capsuleImg = document.getElementById('capsule-image');
+    if (!spinSection || !capsuleImg) return;
 
-  const TWO_PI = Math.PI * 2;
-  let spinRaf = null;
-  let lastP = -1; // para debouncing
+    let spinRaf = null;
+    let lastP = -1; // para debouncing
 
-  // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
-  // e termina quando o fundo da seção encosta no topo da viewport
-  function computeProgress(){
-    const rect = spinSection.getBoundingClientRect();
-    const vh   = window.innerHeight;
-    const total = rect.height + vh;     // faixa “vista” total
-    const seen  = vh - rect.top;        // quanto da faixa já passou
-    return Math.max(0, Math.min(1, seen / total));
-  }
+    // progresso 0..1: começa quando o topo da seção encosta no fundo da viewport
+    // e termina quando o fundo da seção encosta no topo da viewport
+    function computeProgress(){
+        const rect = spinSection.getBoundingClientRect();
+        const vh   = window.innerHeight;
+        const total = rect.height + vh;     // faixa “vista” total
+        const seen  = vh - rect.top;        // quanto da faixa já passou
+        return Math.max(0, Math.min(1, seen / total));
+    }
 
-  function applySpin(p){
-     // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
-  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
-  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
+    function applySpin(p){
+        // limites do trecho em que acontece o giro
+        const SPIN_START = 0.05;
+        const SPIN_END = 0.65;
 
-  // memoriza o yaw inicial do modelo na primeira atualização
-  if (window.__capsuleBaseYaw == null) {
-    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
-  }
+        // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
+        let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
+        t = Math.max(0, Math.min(1, t)); // clamp 0..1
 
-  // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
-  let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
-  t = Math.max(0, Math.min(1, t)); // clamp 0..1
+        // rotaciona a imagem proporcionalmente (0 -> 360deg)
+        const deg = t * 360;
+        capsuleImg.style.transform = `rotate(${deg}deg)`;
 
-  // faz exatamente 360° nesse intervalo e PARA
-  const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
-  capsuleGroup.rotation.y = yaw;
-
-  // Revelar títulos de benefícios baseado no progresso do scroll
-  revealBenefitTitles(p);
-  }
+        // Revelar títulos de benefícios baseado no progresso do scroll
+        revealBenefitTitles(p);
+    }
 
   function revealBenefitTitles(progress) {
     const titles = document.querySelectorAll('.benefit-title');
@@ -2036,15 +2059,15 @@ if (heroVideo && heroPoster) {
     }
 
       // 3. Inicializador do 3D (Lazy Load)
+    // Não inicializamos o 3D — trocamos para uma imagem estática/animada.
+    // Mantemos a lógica de lazy-run para comportamentos dependentes da seção,
+    // mas não carregamos a cena Three.js nem as bolhas.
     const threeSection = document.getElementById("capsula-3d");
     if (threeSection) {
         new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
-                initThree();
-                // Inicializar bolhas 3D junto com a cena principal
-                if (typeof THREE !== 'undefined') {
-                    initCapsuleBubbles();
-                }
+                // Garantir binding do toggle/imagem caso não tenha sido feito
+                try { bindCapsuleImageToggle(); } catch (e) {}
                 observer.unobserve(threeSection);
             }
         }, { threshold: 0.1 }).observe(threeSection);
