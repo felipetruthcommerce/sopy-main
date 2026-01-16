@@ -801,9 +801,8 @@ function bindCapsuleImageToggle() {
 
     function updateImage() {
         const isChecked = toggle.checked;
-        const base = 'assets/images/';
-        const blue = base + 'Soby-Capsula-Azul-01-Frente-011.png';
-        const green = base + 'Soby-Capsula-Verde-01-Frente-011.png';
+        const blue = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png';
+        const green = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png';
         img.src = isChecked ? blue : green;
         img.alt = isChecked ? 'Cápsula Azul' : 'Cápsula Verde';
         // reset any transform so rotation restarts from 0 when switching
