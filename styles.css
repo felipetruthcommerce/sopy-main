@@ -437,10 +437,10 @@ body.theme-aqua #clean-slate-section {
 /* Ajustes específicos para mobile para evitar que elementos fixos cortem os cards */
 @media (max-width: 768px) {
   /* Espaço extra no final da seção para 'safe area' do toggle/overlay */
-  #clean-slate-section { padding-bottom: 160px; }
+  #clean-slate-section { padding-bottom: 220px; height: auto; overflow: visible; }
 
-  /* Garante que os cards ocupem a largura disponível e empilhem verticalmente */
-  .pinned-container { padding-bottom: 0; }
+  /* Garante que o cards container não oculte conteúdo e os cards ocupem a largura disponível */
+  .pinned-container { padding-bottom: 0; height: auto; overflow: visible; }
   .pinned-container .card,
   #clean-slate-section .card { width: 100%; max-width: 100%; }
 
