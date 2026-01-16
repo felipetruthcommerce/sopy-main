@@ -434,12 +434,21 @@ body.theme-aqua #clean-slate-section {
   #clean-slate-section .card { width: 100%; max-width: 100%; }
 }
 
-/* Mobile safe area: adiciona espaço extra no final da seção para evitar
-   que elementos fixos (ex: toggles/CTA) cortem os cards em telas pequenas */
+/* Ajustes específicos para mobile para evitar que elementos fixos cortem os cards */
 @media (max-width: 768px) {
-  #clean-slate-section { padding-bottom: 140px; }
+  /* Espaço extra no final da seção para 'safe area' do toggle/overlay */
+  #clean-slate-section { padding-bottom: 160px; }
+
+  /* Garante que os cards ocupem a largura disponível e empilhem verticalmente */
   .pinned-container { padding-bottom: 0; }
-  .pinned-container .card { width: 100%; max-width: 100%; }
+  .pinned-container .card,
+  #clean-slate-section .card { width: 100%; max-width: 100%; }
+
+  /* Evita altura fixa que pode causar corte visual em dispositivos pequenos */
+  .card { min-height: auto; }
+
+  /* reduz gap para otimizar espaço em telas pequenas */
+  .pinned-container { gap: 24px; padding: 2rem 4%; }
 }
 
 .green-wave { 
