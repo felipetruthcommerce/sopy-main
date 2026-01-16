@@ -868,7 +868,7 @@ new THREE.RGBELoader()
         if (threeContainer && !document.querySelector('.capsule-2d-photo')) {
             const img = document.createElement('img');
             img.className = 'capsule-2d-photo';
-            // fontes padrão (existem em `assets/images/`)
+            // caminhos absolutos no GitHub Pages (usar arquivos finais do repo)
             img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png');
             img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png');
             img.alt = 'Cápsula Sopy';
