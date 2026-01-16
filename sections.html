@@ -7,65 +7,13 @@
       top: 50%;
       transform: translate(-50%, -50%);
       transform-origin: center center;
-      max-width: 32vw; /* aumentado conforme solicitado */
-      max-height: 60vh;
+      max-width: 30vw; /* tamanho reduzido conforme solicitado */
+      max-height: 36vh;
       width: auto;
       height: auto;
       pointer-events: none;
       z-index: 4;
     }
-    /* Imagem final estática que aparece após o fade-out */
-    .capsule-final-photo {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      transform-origin: center center;
-      max-width: 28vw;
-      max-height: 56vh;
-      width: auto;
-      height: auto;
-      pointer-events: none;
-      z-index: 5;
-      opacity: 0;
-      display: none;
-    }
-    /* Produtos (duas colunas com imagem em cima dos cards) */
-    .capsule-products-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6vw;
-      width: min(1200px, 94%);
-      margin: 2.5rem auto 4rem auto;
-      align-items: start;
-      z-index: 2;
-      position: relative;
-    }
-    .product-block { text-align: center; }
-    .product-image {
-      width: 320px;
-      height: 320px;
-      object-fit: contain;
-      display: block;
-      margin: 0 auto 18px auto;
-      background: rgba(255,255,255,0.02);
-      padding: 18px;
-      border-radius: 8px;
-    }
-    .product-card {
-      background: rgba(255,255,255,0.04);
-      border-radius: 12px;
-      padding: 22px;
-      max-width: 360px;
-      margin: 0 auto;
-      color: var(--muted);
-      text-align: left;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    }
-    .product-card h3 { margin: 0 0 8px 0; font-size: 1.1rem; font-weight: 800; color: #fff; }
-    .product-card .price { font-size: 1.6rem; font-weight: 800; margin: 6px 0; color: #fff; }
-    .product-card .desc { color: rgba(255,255,255,0.9); margin-bottom: 14px; line-height: 1.4; }
-    .product-card .sopy-product-cta { display: inline-block; width: 100%; }
   </style>
       <section id="hero" class="sopy-hero sopy-section--full">
         <!-- Vídeo que será revelado pelo circle-reveal -->

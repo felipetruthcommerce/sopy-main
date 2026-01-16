@@ -728,77 +728,60 @@ if (document.readyState === 'loading') {
 }
 
 function initThree() {
-    // 3D disabled: this function will initialize the 2D UI and product cards only.
     const threeWrap = document.getElementById("three-container");
-    if (!threeWrap || threeWrap.__initialized2D) return;
-    threeWrap.__initialized2D = true;
+    if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
+    threeWrap.__initialized = true;
 
-    console.log('[3D] Inicialização de Three.js ignorada (modo 2D). Preparando UI 2D.');
+    console.log("[3D] Inicializando cena Three.js...");
 
-    // Remove any existing canvas to avoid showing a blank WebGL area
-    try {
-        const canvas = threeWrap.querySelector('canvas');
-        if (canvas) canvas.remove();
-    } catch (e) {}
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
+    camera.position.set(0, 0, 3.2);
 
-    // Ensure the rotating photo and final photo are injected (setupCapsuleSpinOnScroll also attempts this,
-    // but initThree may be triggered by an observer — ensure presence here).
-    try {
-        if (!document.querySelector('.capsule-2d-photo')) {
-            const img = document.createElement('img');
-            img.className = 'capsule-2d-photo';
-            img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png');
-            img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png');
-            img.alt = 'Cápsula Sopy';
-            img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
-            img.style.opacity = 1;
-            threeWrap.appendChild(img);
-        }
-        if (!document.querySelector('.capsule-final-photo')) {
-            const finalImg = document.createElement('img');
-            finalImg.className = 'capsule-final-photo';
-            finalImg.src = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png';
-            finalImg.alt = 'Cápsula Sopy - final';
-            finalImg.style.opacity = 0;
-            finalImg.style.display = 'none';
-            threeWrap.appendChild(finalImg);
-        }
-    } catch (e) { console.warn('[3D->2D] Erro ao garantir imagens 2D:', e); }
+// RENDERER
+renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.1; // um tiquinho mais claro que 1.0
+renderer.outputEncoding = THREE.SRGBColorSpace; // use sRGBEncoding se sua versão for antiga
+threeWrap.appendChild(renderer.domElement);
 
-    // Inject the two product blocks (images above cards) if not present.
-    try {
-        const section = document.getElementById('capsula-3d');
-        if (section && !section.querySelector('.capsule-products-row')) {
-            const productsRow = document.createElement('div');
-            productsRow.className = 'capsule-products-row';
-            productsRow.innerHTML = `
-                <div class="product-block">
-                    <img class="product-image" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png" alt="Produto Esquerda">
-                    <div class="product-card">
-                        <h3>CITRUS LUSH</h3>
-                        <p class="price">R$ 120,00</p>
-                        <p class="desc">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
-                        <button class="sopy-product-cta">EXPLORE CITRUS LUSH</button>
-                    </div>
-                </div>
-                <div class="product-block">
-                    <img class="product-image" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png" alt="Produto Direita">
-                    <div class="product-card">
-                        <h3>AQUA BLU</h3>
-                        <p class="price">R$ 120,00</p>
-                        <p class="desc">Cápsulas ultra concentradas que protegem fibras e perfumam por mais tempo. Compatível com todas as máquinas.</p>
-                        <button class="sopy-product-cta">EXPLORE AQUA BLU</button>
-                    </div>
-                </div>
-            `;
-            // insert productsRow after threeWrap so layout is consistent
-            threeWrap.parentNode.insertBefore(productsRow, threeWrap.nextSibling);
-        }
-    } catch (e) { console.warn('[3D->2D] Erro ao injetar blocos de produto:', e); }
+// LUZES (look “foto”: key forte, fill leve, rim suave)
+const amb  = new THREE.AmbientLight(0xffffff, 0.9);
+scene.add(amb);
 
-    // Nothing else to do for 3D — keep function lightweight.
-    return;
-}
+const key  = new THREE.DirectionalLight(0xffffff, 1.6); // brilho principal
+key.position.set(2.8, 3.5, 2.2);
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0xffffff, 0.5); // suaviza sombras
+fill.position.set(-2.2, 0.6, 2.0);
+scene.add(fill);
+
+const rim  = new THREE.DirectionalLight(0xffffff, 0.35); // recorte por trás
+rim.position.set(0, 1.8, -2.4);
+scene.add(rim);
+
+// ENV MAP (reflexo discreto tipo estúdio)
+const pmrem = new THREE.PMREMGenerator(renderer);
+pmrem.compileEquirectangularShader();
+
+capsuleGroup = new THREE.Group();
+scene.add(capsuleGroup);
+
+new THREE.RGBELoader()
+  .setDataType(THREE.UnsignedByteType)
+  .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr', (hdr) => {
+    const tex = pmrem.fromEquirectangular(hdr).texture;
+    scene.environment = tex;   // PBR reflections
+    scene.background  = null;  // mantemos teu gradiente da página
+    hdr.dispose();
+    pmrem.dispose();
+  }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
+
+    // === SPIN ON SCROLL (giro por scroll – sem pin) ===
+(function setupCapsuleSpinOnScroll(){
     const spinSection = document.getElementById('capsula-3d');
     if (!spinSection) return;
 
@@ -815,25 +798,13 @@ function initThree() {
             img.alt = 'Cápsula Sopy';
             // define src inicial baseado na classe do body
             img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
-            img.style.opacity = 1;
             threeContainer.appendChild(img);
-            // criar imagem final estática (inicialmente escondida)
-            if (!document.querySelector('.capsule-final-photo')) {
-                const finalImg = document.createElement('img');
-                finalImg.className = 'capsule-final-photo';
-                // exemplo: usar a versão citrus como placeholder final — pode ser trocada depois
-                finalImg.src = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png';
-                finalImg.alt = 'Cápsula Sopy - final';
-                finalImg.style.opacity = 0;
-                finalImg.style.display = 'none';
-                threeContainer.appendChild(finalImg);
-            }
         }
     } catch (e) {
         console.warn('[3D->2D] Falha ao injetar imagem 2D:', e);
     }
 
-    const TWO_PI = Math.PI * 2;
+  const TWO_PI = Math.PI * 2;
   let spinRaf = null;
   let lastP = -1; // para debouncing
 
@@ -849,8 +820,8 @@ function initThree() {
 
   function applySpin(p){
      // --- limites do trecho em que acontece o giro (frações do progresso 0..1)
-    const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
-    const SPIN_END   = 1.0;   // termina o giro no final da seção (apenas lá no fim)
+  const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
+  const SPIN_END   = 0.65;  // termina o giro em 65% da seção
 
     // memoriza o yaw inicial do modelo na primeira atualização (se existir)
     if (window.__capsuleBaseYaw == null) {
@@ -864,67 +835,12 @@ function initThree() {
     // faz exatamente 360° nesse intervalo e PARA
     // Se a foto 2D estiver presente, animamos ela via CSS (rotação no sentido horário)
     const photoEl = document.querySelector('.capsule-2d-photo');
-    const finalEl = document.querySelector('.capsule-final-photo');
     if (photoEl) {
         const deg = t * 360; // 0..360 graus
         photoEl.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
     } else {
         const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
         if (capsuleGroup && capsuleGroup.rotation) capsuleGroup.rotation.y = yaw;
-    }
-
-    // Quando alcança o fim do spin, fade-out da imagem giratória e exibe imagem final estática
-    if (p >= SPIN_END && !window.__capsuleEnded) {
-        window.__capsuleEnded = true;
-        if (photoEl) {
-            try {
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(photoEl, { opacity: 0, duration: 0.6, ease: 'power2.inOut', onComplete: () => { photoEl.style.display = 'none'; } });
-                } else {
-                    photoEl.style.transition = 'opacity 0.6s';
-                    photoEl.style.opacity = 0;
-                    setTimeout(() => { photoEl.style.display = 'none'; }, 650);
-                }
-            } catch (e) { console.warn('[3D->2D] Erro ao aplicar fade-out na foto:', e); }
-        }
-        if (finalEl) {
-            finalEl.style.display = 'block';
-            try {
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(finalEl, { opacity: 1, duration: 0.6, ease: 'power2.out' });
-                } else {
-                    finalEl.style.transition = 'opacity 0.6s';
-                    finalEl.style.opacity = 1;
-                }
-            } catch (e) { console.warn('[3D->2D] Erro ao mostrar foto final:', e); }
-        }
-    }
-
-    // Se o usuário scrollar para trás antes do fim, reverter o estado
-    if (p < SPIN_END && window.__capsuleEnded) {
-        window.__capsuleEnded = false;
-        if (finalEl) {
-            try {
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(finalEl, { opacity: 0, duration: 0.35, ease: 'power2.in', onComplete: () => { finalEl.style.display = 'none'; } });
-                } else {
-                    finalEl.style.transition = 'opacity 0.35s';
-                    finalEl.style.opacity = 0;
-                    setTimeout(() => { finalEl.style.display = 'none'; }, 380);
-                }
-            } catch (e) { console.warn('[3D->2D] Erro ao esconder foto final:', e); }
-        }
-        if (photoEl) {
-            photoEl.style.display = 'block';
-            try {
-                if (typeof gsap !== 'undefined') {
-                    gsap.to(photoEl, { opacity: 1, duration: 0.35, ease: 'power2.out' });
-                } else {
-                    photoEl.style.transition = 'opacity 0.35s';
-                    photoEl.style.opacity = 1;
-                }
-            } catch (e) { console.warn('[3D->2D] Erro ao restaurar foto giratória:', e); }
-        }
     }
 
   // Revelar títulos de benefícios baseado no progresso do scroll
@@ -1070,11 +986,21 @@ function initThree() {
 })();
 
 
-    // 3D animation loop and model swap removed: running in 2D-only mode.
-    // The original Three.js animation loop and model swapping were intentionally
-    // disabled when switching to the 2D photo-only implementation. If you
-    // re-enable 3D in the future, restore the animation loop and swapModel
-    // invocation here.
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Aplica o tema pendente se houver, ou detecta o tema atual
+    const currentTheme = window.__pendingTheme || 
+                        (document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
+    console.log(`[3D] Aplicando tema inicial no 3D: ${currentTheme}`);
+    swapModel(currentTheme);
+    
+    // Limpa o tema pendente
+    window.__pendingTheme = null;
+}
 
 
 
@@ -2075,7 +2001,10 @@ if (heroVideo && heroPoster) {
         new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
                 initThree();
-                // 3D/desenhos WebGL foram desativados — não inicializar bolhas nem renderer.
+                // Inicializar bolhas 3D junto com a cena principal
+                if (typeof THREE !== 'undefined') {
+                    initCapsuleBubbles();
+                }
                 observer.unobserve(threeSection);
             }
         }, { threshold: 0.1 }).observe(threeSection);
