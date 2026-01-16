@@ -798,7 +798,19 @@ new THREE.RGBELoader()
             img.alt = 'Cápsula Sopy';
             // define src inicial baseado na classe do body
             img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
+            img.style.opacity = 1;
             threeContainer.appendChild(img);
+            // criar imagem final estática (inicialmente escondida)
+            if (!document.querySelector('.capsule-final-photo')) {
+                const finalImg = document.createElement('img');
+                finalImg.className = 'capsule-final-photo';
+                // exemplo: usar a versão citrus como placeholder final — pode ser trocada depois
+                finalImg.src = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png';
+                finalImg.alt = 'Cápsula Sopy - final';
+                finalImg.style.opacity = 0;
+                finalImg.style.display = 'none';
+                threeContainer.appendChild(finalImg);
+            }
         }
     } catch (e) {
         console.warn('[3D->2D] Falha ao injetar imagem 2D:', e);
@@ -835,12 +847,67 @@ new THREE.RGBELoader()
     // faz exatamente 360° nesse intervalo e PARA
     // Se a foto 2D estiver presente, animamos ela via CSS (rotação no sentido horário)
     const photoEl = document.querySelector('.capsule-2d-photo');
+    const finalEl = document.querySelector('.capsule-final-photo');
     if (photoEl) {
         const deg = t * 360; // 0..360 graus
         photoEl.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
     } else {
         const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
         if (capsuleGroup && capsuleGroup.rotation) capsuleGroup.rotation.y = yaw;
+    }
+
+    // Quando alcança o fim do spin, fade-out da imagem giratória e exibe imagem final estática
+    if (p >= SPIN_END && !window.__capsuleEnded) {
+        window.__capsuleEnded = true;
+        if (photoEl) {
+            try {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(photoEl, { opacity: 0, duration: 0.6, ease: 'power2.inOut', onComplete: () => { photoEl.style.display = 'none'; } });
+                } else {
+                    photoEl.style.transition = 'opacity 0.6s';
+                    photoEl.style.opacity = 0;
+                    setTimeout(() => { photoEl.style.display = 'none'; }, 650);
+                }
+            } catch (e) { console.warn('[3D->2D] Erro ao aplicar fade-out na foto:', e); }
+        }
+        if (finalEl) {
+            finalEl.style.display = 'block';
+            try {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(finalEl, { opacity: 1, duration: 0.6, ease: 'power2.out' });
+                } else {
+                    finalEl.style.transition = 'opacity 0.6s';
+                    finalEl.style.opacity = 1;
+                }
+            } catch (e) { console.warn('[3D->2D] Erro ao mostrar foto final:', e); }
+        }
+    }
+
+    // Se o usuário scrollar para trás antes do fim, reverter o estado
+    if (p < SPIN_END && window.__capsuleEnded) {
+        window.__capsuleEnded = false;
+        if (finalEl) {
+            try {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(finalEl, { opacity: 0, duration: 0.35, ease: 'power2.in', onComplete: () => { finalEl.style.display = 'none'; } });
+                } else {
+                    finalEl.style.transition = 'opacity 0.35s';
+                    finalEl.style.opacity = 0;
+                    setTimeout(() => { finalEl.style.display = 'none'; }, 380);
+                }
+            } catch (e) { console.warn('[3D->2D] Erro ao esconder foto final:', e); }
+        }
+        if (photoEl) {
+            photoEl.style.display = 'block';
+            try {
+                if (typeof gsap !== 'undefined') {
+                    gsap.to(photoEl, { opacity: 1, duration: 0.35, ease: 'power2.out' });
+                } else {
+                    photoEl.style.transition = 'opacity 0.35s';
+                    photoEl.style.opacity = 1;
+                }
+            } catch (e) { console.warn('[3D->2D] Erro ao restaurar foto giratória:', e); }
+        }
     }
 
   // Revelar títulos de benefícios baseado no progresso do scroll
