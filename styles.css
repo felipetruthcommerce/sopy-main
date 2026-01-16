@@ -519,11 +519,28 @@ body.theme-aqua .green-wave {
 }
 
 /* Styles for the replacement capsule image (replaces 3D canvas) */
-#capsule-3d-image-wrap { display:flex; align-items:center; justify-content:center; height:100%; }
-#capsule-image { max-width: 48%; height: auto; transform-origin: center center; transition: transform 300ms ease-out; }
+#three-container { position: relative; }
+#three-container canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+#capsule-3d-image-wrap { position: absolute; inset: 0; display:flex; align-items:center; justify-content:center; height:100%; z-index:6; pointer-events: none; }
+#capsule-image { max-width: 28%; height: auto; transform-origin: center center; transition: transform 300ms ease-out; display:block; }
+
+@media (max-width: 1024px) {
+  #capsule-image { max-width: 44%; }
+}
 
 @media (max-width: 768px) {
-  #capsule-image { max-width: 68%; }
+  #capsule-image { max-width: 64%; }
+}
+
+/* Capsule bubbles (DOM fallback to replace 3D bubbles) */
+.sopy-capsule-bubbles { position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: visible; }
+.sopy-capsule-bubbles .sopy-bubble { position: absolute; border-radius: 50%; pointer-events: none; opacity: 0.9; mix-blend-mode: screen; }
+
+@keyframes sopy-bubble-float {
+  0% { transform: translateY(0) scale(0.8); opacity: 0.95; }
+  50% { opacity: 0.9; }
+  100% { transform: translateY(-140%) scale(1.1); opacity: 0; }
 }
 
 .card img { 

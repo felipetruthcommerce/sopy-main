@@ -820,6 +820,40 @@ if (document.readyState === 'loading') {
     bindCapsuleImageToggle();
 }
 
+// --- DOM-based floating bubbles (fallback / replacement for Three.js bubbles) ---
+function initFloatingBubbles() {
+    const container = document.querySelector('.sopy-capsule-bubbles');
+    if (!container) return;
+    // Avoid double init
+    if (container.__bubblesInited) return;
+    container.__bubblesInited = true;
+
+    const bubbleCount = 10;
+    for (let i = 0; i < bubbleCount; i++) {
+        const b = document.createElement('div');
+        b.className = 'sopy-bubble';
+        const size = Math.round(Math.random() * 40) + 18; // 18..58px
+        b.style.width = size + 'px';
+        b.style.height = size + 'px';
+
+        // color: subtle white/blue/green mix depending on theme
+        const isCitrus = document.body.classList.contains('theme-citrus');
+        const color = isCitrus ? 'rgba(180, 255, 200, 0.85)' : 'rgba(200, 240, 255, 0.9)';
+        b.style.background = `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), ${color} 60%, rgba(255,255,255,0.15))`;
+
+        // start positions (below the visible area) and random horizontal position
+        const left = Math.random() * 80 + 8; // 8%..88%
+        b.style.left = left + '%';
+        b.style.bottom = (-Math.random() * 30 - 10) + '%';
+
+        const duration = Math.random() * 6 + 6; // 6..12s
+        const delay = Math.random() * 3; // stagger
+        b.style.animation = `sopy-bubble-float ${duration}s cubic-bezier(.2,.9,.2,.9) ${delay}s infinite`;
+
+        container.appendChild(b);
+    }
+}
+
 function initThree() {
     const threeWrap = document.getElementById("three-container");
     if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
@@ -2065,8 +2099,10 @@ if (heroVideo && heroPoster) {
     if (threeSection) {
         new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
-                // Garantir binding do toggle/imagem caso não tenha sido feito
-                try { bindCapsuleImageToggle(); } catch (e) {}
+                // Inicializa as bolhas (mantém funcionalidade existente sem reativar cena 3D principal)
+                try { if (typeof initCapsuleBubbles === 'function') initCapsuleBubbles(); } catch (e) { console.warn('[BUBBLES] initCapsuleBubbles falhou:', e); }
+                // Garante binding do toggle/imagem
+                try { bindCapsuleImageToggle(); } catch (e) { console.warn('[IMAGE] bindCapsuleImageToggle falhou:', e); }
                 observer.unobserve(threeSection);
             }
         }, { threshold: 0.1 }).observe(threeSection);
