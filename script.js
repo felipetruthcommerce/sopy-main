@@ -159,88 +159,12 @@ const COLORS = {
 };
 
 function swapModel(theme) {
-    console.log(`[3D] Tentando trocar para o modelo: ${theme}`);
-    if (!THREE_READY || !capsuleGroup) {
-        console.log(`[3D] 3D ainda não inicializado. Armazenando tema ${theme} para aplicar depois.`);
-        window.__pendingTheme = theme;
-        return;
-    }
-
-    const url = MODELS[theme];
-    const loader = new THREE.GLTFLoader();
-    const dracoLoader = new THREE.DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
-    loader.setDRACOLoader(dracoLoader);
-
-    loader.load(url, 
-        (gltf) => {
-            console.log(`✅ [3D] Modelo '${theme}' carregado com sucesso!`);
-            while (capsuleGroup.children.length) {
-                capsuleGroup.remove(capsuleGroup.children[0]);
-            }
-            const model = gltf.scene;
-
-            // --- Centraliza o modelo em um pivot e escala uniformemente ---
-            // Criamos um pivot para que a rotação aplicada ao `capsuleGroup`
-            // gire o modelo em torno do seu próprio centro (evita translação)
-            const pivot = new THREE.Group();
-            pivot.add(model);
-
-            // calcula caixa delimitadora do modelo e centraliza a malha
-            const bbox = new THREE.Box3().setFromObject(model);
-            const center = bbox.getCenter(new THREE.Vector3());
-            model.position.x -= center.x;
-            model.position.y -= center.y;
-            model.position.z -= center.z;
-
-            // escala para um tamanho alvo (ajuste `desiredSize` se quiser maior/menor)
-            const size = bbox.getSize(new THREE.Vector3());
-            const maxDim = Math.max(size.x, size.y, size.z) || 1;
-            // Responsivo: diminuir um pouco em telas móveis para evitar corte
-            const isMobile = (typeof window !== 'undefined') && (window.matchMedia ? window.matchMedia('(max-width: 768px)').matches : window.innerWidth <= 768);
-            const desiredSize = isMobile ? 1.15 : 1.65; // menor em mobile
-            const scaleFactor = desiredSize / maxDim;
-            pivot.scale.setScalar(scaleFactor);
-
-            // adiciona o pivot (com o modelo centralizado) ao grupo principal
-            capsuleGroup.add(pivot);
-
-            // aumenta/refina o brilho do material PBR com o environment
-// Depois de: capsuleGroup.add(model);
-model.traverse((obj) => {
-  if (obj.isMesh && obj.material) {
-    // deixa mais “gel” com highlights bonitos
-    if ('roughness' in obj.material) obj.material.roughness = 0.3;  // menos áspero
-    if ('metalness' in obj.material) obj.material.metalness = 0.1;  // um toque metálico
-    if ('envMapIntensity' in obj.material) obj.material.envMapIntensity = 0.35; // reflexo discreto
-    obj.material.needsUpdate = true;
-  }
-});
-
-
-            
-            // Re-captura os materiais após carregar o novo modelo
-            gelA = model.getObjectByName('Gel_A')?.material;
-            gelB = model.getObjectByName('Gel_B')?.material;
-            gelC = model.getObjectByName('Gel_C')?.material;
-            
-            // Aplica a cor do tema atual aos novos materiais
-            const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
-            if (gelA && gelB && gelC) {
-                 const toCol = (mat, hex) => {
-                    const c = new THREE.Color(hex);
-                    gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
-                };
-                toCol(gelA, pal.a);
-                toCol(gelB, pal.b);
-                toCol(gelC, pal.c);
-            }
-        }, 
-        undefined, 
-        (error) => {
-            console.error(`❌ [3D] FALHA CRÍTICA ao carregar modelo '${theme}':`, error);
-        }
-    );
+    // 3D model loading removed: we no longer load GLTF models.
+    // Mantemos a API para chamadas externas (setTheme chama swapModel),
+    // mas aqui apenas registramos e garantimos que a imagem 2D seja usada.
+    console.log(`[3D] swapModel chamado para '${theme}', porém carregamento 3D foi desativado. Usando imagem 2D.`);
+    // Marca tema pendente caso a inicialização da UI precise aplicar depois
+    window.__pendingTheme = theme;
 }
 
 function setTheme(theme) {
@@ -858,8 +782,8 @@ new THREE.RGBELoader()
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
 (function setupCapsuleSpinOnScroll(){
-  const spinSection = document.getElementById('capsula-3d');
-  if (!spinSection || !capsuleGroup) return;
+    const spinSection = document.getElementById('capsula-3d');
+    if (!spinSection) return;
 
     // Se desejarmos usar a versão 2D (foto) ao invés do modelo 3D,
     // injetamos uma imagem central dentro do `#three-container`.
@@ -899,10 +823,10 @@ new THREE.RGBELoader()
   const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
   const SPIN_END   = 0.65;  // termina o giro em 65% da seção
 
-  // memoriza o yaw inicial do modelo na primeira atualização
-  if (window.__capsuleBaseYaw == null) {
-    window.__capsuleBaseYaw = capsuleGroup.rotation.y || 0;
-  }
+    // memoriza o yaw inicial do modelo na primeira atualização (se existir)
+    if (window.__capsuleBaseYaw == null) {
+        window.__capsuleBaseYaw = (capsuleGroup && capsuleGroup.rotation && typeof capsuleGroup.rotation.y === 'number') ? capsuleGroup.rotation.y : 0;
+    }
 
   // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
   let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
@@ -916,7 +840,7 @@ new THREE.RGBELoader()
         photoEl.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
     } else {
         const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
-        capsuleGroup.rotation.y = yaw;
+        if (capsuleGroup && capsuleGroup.rotation) capsuleGroup.rotation.y = yaw;
     }
 
   // Revelar títulos de benefícios baseado no progresso do scroll
