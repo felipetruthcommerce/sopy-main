@@ -1191,6 +1191,22 @@ body.theme-aqua .capsule-3d-cta {
   left: auto;
   right: clamp(24px, 8vw, 14vw); /* stay on right for aqua theme */
 }
+.capsule-3d-cta.opposite {
+  /* default opposite: place on left so themes can swap */
+  left: clamp(24px, 8vw, 14vw);
+  right: auto;
+}
+/* Theme overrides for the opposite card: ensure it sits on the opposite side of the main CTA */
+body.theme-aqua .capsule-3d-cta.opposite {
+  /* when aqua (main CTA is on right), opposite should be on left */
+  left: clamp(24px, 8vw, 14vw);
+  right: auto;
+}
+body.theme-citrus .capsule-3d-cta.opposite {
+  /* when citrus (main CTA is on left), opposite should be on right */
+  right: clamp(24px, 8vw, 14vw);
+  left: auto;
+}
 .capsule-3d-cta-inner {
   background: rgba(255,255,255,0.1); /* glassmorphism background */
   padding: 24px 28px; 
