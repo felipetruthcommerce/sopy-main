@@ -1170,7 +1170,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 }
 .capsule-3d-cta {
   position: absolute; /* fixed position within section */
-  bottom: 30vh; /* align with 3D object height */
+  bottom: 12vh; /* moved lower (closer to bottom of viewport) */
   right: clamp(24px, 8vw, 14vw); /* default position on right */
   transform: translateY(0) scale(1);
   max-width: 420px;
@@ -1276,7 +1276,7 @@ body.theme-aqua .capsule-3d-cta {
 @media (max-width: 900px) {
   .capsule-3d-cta { 
     position: absolute;
-    bottom: 74vh; /* meio termo - entre 76vh e 72vh */
+    bottom: 12vh; /* lowered for mobile/tablet */
     left: 50%;
     transform: translateX(-50%);
     width: 96%; /* mais largo */
@@ -1304,7 +1304,7 @@ body.theme-aqua .capsule-3d-cta {
   .capsule-3d-cta {
     max-width: 310px; /* mais largo */
     width: 94%; /* largura maior */
-    bottom: 68vh; /* meio termo - entre 70vh e 66vh */
+    bottom: 10vh; /* lowered for very small screens */
   }
   
   .capsule-3d-cta-inner {
@@ -1319,7 +1319,7 @@ body.theme-aqua .capsule-3d-cta {
     left: 50%; 
     right: auto;
     transform: translateX(-50%);
-    bottom: 74vh; /* consistente com o posicionamento acima */
+    bottom: 12vh; /* lowered for tablet/mobile end state */
     max-width: 340px; /* largura maior também */
   }
 }
