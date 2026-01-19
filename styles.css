@@ -1170,7 +1170,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 }
 .capsule-3d-cta {
   position: absolute; /* fixed position within section */
-  bottom: 12vh; /* moved lower (closer to bottom of viewport) */
+  bottom: 30vh; /* align with 3D object height */
   right: clamp(24px, 8vw, 14vw); /* default position on right */
   transform: translateY(0) scale(1);
   max-width: 420px;
@@ -1191,22 +1191,6 @@ body.theme-aqua .capsule-3d-cta {
   left: auto;
   right: clamp(24px, 8vw, 14vw); /* stay on right for aqua theme */
 }
-.capsule-3d-cta.opposite {
-  /* default opposite: place on left so themes can swap */
-  left: clamp(24px, 8vw, 14vw);
-  right: auto;
-}
-/* Theme overrides for the opposite card: ensure it sits on the opposite side of the main CTA */
-body.theme-aqua .capsule-3d-cta.opposite {
-  /* when aqua (main CTA is on right), opposite should be on left */
-  left: clamp(24px, 8vw, 14vw);
-  right: auto;
-}
-body.theme-citrus .capsule-3d-cta.opposite {
-  /* when citrus (main CTA is on left), opposite should be on right */
-  right: clamp(24px, 8vw, 14vw);
-  left: auto;
-}
 .capsule-3d-cta-inner {
   background: rgba(255,255,255,0.1); /* glassmorphism background */
   padding: 24px 28px; 
@@ -1216,6 +1200,34 @@ body.theme-citrus .capsule-3d-cta.opposite {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
+}
+
+/* Positioning for citrus cards */
+.citrus-card {
+  right: auto;
+  left: clamp(24px, 8vw, 14vw);
+}
+.citrus-card.opposite {
+  right: clamp(24px, 8vw, 14vw);
+  left: auto;
+}
+
+/* Positioning for aqua cards */
+.aqua-card {
+  left: auto;
+  right: clamp(24px, 8vw, 14vw);
+}
+.aqua-card.opposite {
+  left: clamp(24px, 8vw, 14vw);
+  right: auto;
+}
+
+/* Show only relevant cards per theme */
+body.theme-citrus .aqua-card {
+  display: none;
+}
+body.theme-aqua .citrus-card {
+  display: none;
 }
 .capsule-3d-cta .product-title { 
   font-size: 1.2rem; 
@@ -1292,7 +1304,7 @@ body.theme-citrus .capsule-3d-cta.opposite {
 @media (max-width: 900px) {
   .capsule-3d-cta { 
     position: absolute;
-    bottom: 12vh; /* lowered for mobile/tablet */
+    bottom: 74vh; /* meio termo - entre 76vh e 72vh */
     left: 50%;
     transform: translateX(-50%);
     width: 96%; /* mais largo */
@@ -1320,7 +1332,7 @@ body.theme-citrus .capsule-3d-cta.opposite {
   .capsule-3d-cta {
     max-width: 310px; /* mais largo */
     width: 94%; /* largura maior */
-    bottom: 10vh; /* lowered for very small screens */
+    bottom: 68vh; /* meio termo - entre 70vh e 66vh */
   }
   
   .capsule-3d-cta-inner {
@@ -1335,7 +1347,7 @@ body.theme-citrus .capsule-3d-cta.opposite {
     left: 50%; 
     right: auto;
     transform: translateX(-50%);
-    bottom: 12vh; /* lowered for tablet/mobile end state */
+    bottom: 74vh; /* consistente com o posicionamento acima */
     max-width: 340px; /* largura maior também */
   }
 }
