@@ -271,6 +271,17 @@ function setTheme(theme) {
         console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
     }
 
+    // Atualiza as imagens de overlay (se existirem) para o tema atual
+    try {
+        const overlays = document.querySelectorAll('#capsula-3d .capsule-overlay-img');
+        if (overlays && overlays.length) {
+            overlays.forEach(img => {
+                const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
+                if (newSrc) img.src = newSrc;
+            });
+        }
+    } catch (e) { /* silent */ }
+
     // Update benefit titles colors based on theme (CSS handles this via body class)
     // Force a repaint to ensure theme colors are applied immediately
     const benefitTitles = document.querySelectorAll('.benefit-title');
@@ -965,6 +976,9 @@ new THREE.RGBELoader()
                     const bubbles = document.querySelector('.sopy-capsule-bubbles');
                     if (three) three.classList.remove('hide-3d');
                     if (bubbles) bubbles.classList.remove('hide-3d');
+                    // hide overlays
+                    const section = document.getElementById('capsula-3d');
+                    if (section) section.classList.remove('show-overlays');
                 } catch (e) { /* silent */ }
             },
             onEnterBack: self => {
@@ -975,6 +989,8 @@ new THREE.RGBELoader()
                     const bubbles = document.querySelector('.sopy-capsule-bubbles');
                     if (three) three.classList.remove('hide-3d');
                     if (bubbles) bubbles.classList.remove('hide-3d');
+                    const section = document.getElementById('capsula-3d');
+                    if (section) section.classList.remove('show-overlays');
                 } catch (e) { /* silent */ }
             },
             onLeave: self => {
@@ -986,6 +1002,9 @@ new THREE.RGBELoader()
                     const bubbles = document.querySelector('.sopy-capsule-bubbles');
                     if (three) three.classList.add('hide-3d');
                     if (bubbles) bubbles.classList.add('hide-3d');
+                    // show overlays above the cards
+                    const section = document.getElementById('capsula-3d');
+                    if (section) section.classList.add('show-overlays');
                 } catch (e) { /* silent */ }
             },
             onLeaveBack: self => {
@@ -997,6 +1016,8 @@ new THREE.RGBELoader()
                     const bubbles = document.querySelector('.sopy-capsule-bubbles');
                     if (three) three.classList.remove('hide-3d');
                     if (bubbles) bubbles.classList.remove('hide-3d');
+                    const section = document.getElementById('capsula-3d');
+                    if (section) section.classList.remove('show-overlays');
                 } catch (e) { /* silent */ }
             }
         });

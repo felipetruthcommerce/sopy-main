@@ -1131,7 +1131,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 #three-container,
 .sopy-capsule-bubbles {
   opacity: 1;
-  transition: opacity .18s ease, transform .18s ease;
+  transition: opacity .3s ease, transform .3s ease;
 }
 
 #three-container.hide-3d,
@@ -1156,6 +1156,29 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   position: relative; /* normal document flow */
   width: min(1200px, 94%); margin: 0 auto; padding: 16px 0;
   display: grid; grid-template-columns: 1fr; gap: 10px; align-items: center; justify-items: center;
+
+/* Overlay images that appear above each card when 3D fades out */
+#capsula-3d .capsule-overlay-img {
+  position: absolute;
+  bottom: 12vh; /* align with CTAs */
+  width: clamp(72px, 8vw, 160px);
+  height: auto;
+  z-index: 6; /* above CTAs (CTAs z-index:4) */
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .18s ease, transform .18s ease;
+  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.18));
+}
+
+#capsula-3d .capsule-overlay-img.left { left: clamp(24px, 8vw, 14vw); }
+#capsula-3d .capsule-overlay-img.right { right: clamp(24px, 8vw, 14vw); }
+
+/* When the section has show-overlays, fade them in */
+#capsula-3d.show-overlays .capsule-overlay-img {
+  opacity: 1;
+  transform: translateY(0);
+}
   text-align: center;
   padding-top: 3.5rem;
   z-index: 2;
