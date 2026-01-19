@@ -282,6 +282,11 @@ function setTheme(theme) {
         }
     } catch (e) { /* silent */ }
 
+    // position overlays exactly above each CTA when theme changes (in case layout changed)
+    try {
+        positionCapsuleOverlays();
+    } catch (e) { /* silent */ }
+
     // Update benefit titles colors based on theme (CSS handles this via body class)
     // Force a repaint to ensure theme colors are applied immediately
     const benefitTitles = document.querySelectorAll('.benefit-title');
@@ -1004,7 +1009,11 @@ new THREE.RGBELoader()
                     if (bubbles) bubbles.classList.add('hide-3d');
                     // show overlays above the cards
                     const section = document.getElementById('capsula-3d');
-                    if (section) section.classList.add('show-overlays');
+                    if (section) {
+                        section.classList.add('show-overlays');
+                        // position overlays exactly above CTAs
+                        setTimeout(positionCapsuleOverlays, 50);
+                    }
                 } catch (e) { /* silent */ }
             },
             onLeaveBack: self => {
@@ -1031,6 +1040,36 @@ new THREE.RGBELoader()
             // refresh triggers se necessário
         });
     };
+
+    // Position overlay images exactly above each CTA
+    function positionCapsuleOverlays() {
+        const section = document.getElementById('capsula-3d');
+        if (!section) return;
+        const overlays = Array.from(section.querySelectorAll('.capsule-overlay-img'));
+        const ctas = Array.from(section.querySelectorAll('.capsule-3d-cta'));
+        if (!overlays.length || !ctas.length) return;
+
+        const sRect = section.getBoundingClientRect();
+
+        overlays.forEach((ov, i) => {
+            const targetIndex = Math.min(i, ctas.length - 1);
+            const c = ctas[targetIndex];
+            const cRect = c.getBoundingClientRect();
+
+            // compute left relative to section
+            const left = (cRect.left - sRect.left) + (cRect.width / 2) - (ov.offsetWidth / 2);
+            // position above the CTA: top relative to section
+            const top = (cRect.top - sRect.top) - ov.offsetHeight - 8;
+
+            ov.style.left = `${Math.max(8, left)}px`;
+            ov.style.top = `${Math.max(8, top)}px`;
+        });
+    }
+
+    // reposition overlays on resize to keep them centered above CTAs
+    window.addEventListener('resize', () => {
+        try { positionCapsuleOverlays(); } catch (e) {}
+    });
 
     // se já existe bootAnimations (iniciado) rodamos logo; senão esperamos DOMContentLoaded
     if (document.readyState === 'complete' || document.readyState === 'interactive') {

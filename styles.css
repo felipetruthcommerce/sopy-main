@@ -1171,8 +1171,10 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   filter: drop-shadow(0 6px 18px rgba(0,0,0,0.18));
 }
 
-#capsula-3d .capsule-overlay-img.left { left: clamp(24px, 8vw, 14vw); }
-#capsula-3d .capsule-overlay-img.right { right: clamp(24px, 8vw, 14vw); }
+#capsula-3d .capsule-overlay-img { /* allow JS to position via top/left */
+  left: 0;
+  top: 0;
+}
 
 /* When the section has show-overlays, fade them in */
 #capsula-3d.show-overlays .capsule-overlay-img {
