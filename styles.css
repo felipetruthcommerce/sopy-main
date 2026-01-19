@@ -1127,6 +1127,20 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   z-index: 3;
 }
 
+/* Fade-out helper for the 3D canvas and decorative bubbles */
+#three-container,
+.sopy-capsule-bubbles {
+  opacity: 1;
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+#three-container.hide-3d,
+.sopy-capsule-bubbles.hide-3d {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+}
+
 /* Removido o margin-top já que o card voltou para a posição inferior */
 .sopy-capsule3d::before {
   /* bolhinhas discretas na seção deep (sob o canvas) */

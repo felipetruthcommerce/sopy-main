@@ -957,17 +957,45 @@ new THREE.RGBELoader()
             end: 'bottom 35%',  // até quando considerar a seção ativa
             onEnter: self => {
                 ctas.forEach(c => c.classList.add('is-visible'));
+                // ensure 3D is visible when entering
+                try {
+                    const three = document.getElementById('three-container');
+                    const bubbles = document.querySelector('.sopy-capsule-bubbles');
+                    if (three) three.classList.remove('hide-3d');
+                    if (bubbles) bubbles.classList.remove('hide-3d');
+                } catch (e) { /* silent */ }
             },
             onEnterBack: self => {
                 ctas.forEach(c => c.classList.add('is-visible'));
+                // restore 3D when entering back
+                try {
+                    const three = document.getElementById('three-container');
+                    const bubbles = document.querySelector('.sopy-capsule-bubbles');
+                    if (three) three.classList.remove('hide-3d');
+                    if (bubbles) bubbles.classList.remove('hide-3d');
+                } catch (e) { /* silent */ }
             },
             onLeave: self => {
                 // quando sair para baixo, adiciona at-end para posicionamento final
                 ctas.forEach(c => c.classList.add('at-end'));
+                // fade out the 3D canvas and bubbles when leaving the section
+                try {
+                    const three = document.getElementById('three-container');
+                    const bubbles = document.querySelector('.sopy-capsule-bubbles');
+                    if (three) three.classList.add('hide-3d');
+                    if (bubbles) bubbles.classList.add('hide-3d');
+                } catch (e) { /* silent */ }
             },
             onLeaveBack: self => {
                 // quando voltar acima da seção, esconder
                 ctas.forEach(c => c.classList.remove('is-visible', 'at-end'));
+                // ensure 3D is visible again
+                try {
+                    const three = document.getElementById('three-container');
+                    const bubbles = document.querySelector('.sopy-capsule-bubbles');
+                    if (three) three.classList.remove('hide-3d');
+                    if (bubbles) bubbles.classList.remove('hide-3d');
+                } catch (e) { /* silent */ }
             }
         });
     };
