@@ -1157,29 +1157,28 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   width: min(1200px, 94%); margin: 0 auto; padding: 16px 0;
   display: grid; grid-template-columns: 1fr; gap: 10px; align-items: center; justify-items: center;
 
-/* Overlay images that appear above each card when 3D fades out */
-#capsula-3d .capsule-overlay-img {
+/* Overlay image placed inside each CTA (positioned above the card) */
+#capsula-3d .capsule-3d-cta {
+  position: absolute; /* ensure CTAs are positioned */
+}
+#capsula-3d .capsule-3d-cta .cta-overlay {
   position: absolute;
-  bottom: 12vh; /* align with CTAs */
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  bottom: calc(100% + 12px); /* place above the CTA */
   width: clamp(72px, 8vw, 160px);
   height: auto;
-  z-index: 6; /* above CTAs (CTAs z-index:4) */
+  z-index: 6; /* above CTAs */
   pointer-events: none;
   opacity: 0;
-  transform: translateY(6px);
   transition: opacity .18s ease, transform .18s ease;
   filter: drop-shadow(0 6px 18px rgba(0,0,0,0.18));
 }
 
-#capsula-3d .capsule-overlay-img { /* allow JS to position via top/left */
-  left: 0;
-  top: 0;
-}
-
-/* When the section has show-overlays, fade them in */
-#capsula-3d.show-overlays .capsule-overlay-img {
+/* When the section has show-overlays, fade CTA overlays in */
+#capsula-3d.show-overlays .capsule-3d-cta .cta-overlay {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateX(-50%) translateY(0);
 }
   text-align: center;
   padding-top: 3.5rem;
