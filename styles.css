@@ -1201,34 +1201,6 @@ body.theme-aqua .capsule-3d-cta {
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
 }
-
-/* Positioning for citrus cards */
-.citrus-card {
-  right: auto;
-  left: clamp(24px, 8vw, 14vw);
-}
-.citrus-card.opposite {
-  right: clamp(24px, 8vw, 14vw);
-  left: auto;
-}
-
-/* Positioning for aqua cards */
-.aqua-card {
-  left: auto;
-  right: clamp(24px, 8vw, 14vw);
-}
-.aqua-card.opposite {
-  left: clamp(24px, 8vw, 14vw);
-  right: auto;
-}
-
-/* Show only relevant cards per theme */
-body.theme-citrus .aqua-card {
-  display: none;
-}
-body.theme-aqua .citrus-card {
-  display: none;
-}
 .capsule-3d-cta .product-title { 
   font-size: 1.2rem; 
   margin: 0 0 4px 0; 
