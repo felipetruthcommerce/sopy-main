@@ -238,30 +238,34 @@ function setTheme(theme) {
 
     // Atualiza também os textos do card de produto (se presentes no DOM).
     try {
-        const cta = document.querySelector('.capsule-3d-cta');
-        if (cta) {
-            const titleEl = cta.querySelector('.product-title');
-            const priceEl = cta.querySelector('.product-price');
-            const copyEl  = cta.querySelector('.product-copy');
-            const btnEl   = cta.querySelector('.sopy-product-cta');
+        // Atualiza todos os CTAs dentro da seção (caso haja duplicatas/opposite)
+        const ctas = document.querySelectorAll('.capsule-3d-cta');
+        if (ctas && ctas.length) {
+            ctas.forEach(cta => {
+                const titleEl = cta.querySelector('.product-title');
+                const priceEl = cta.querySelector('.product-price');
+                const copyEl  = cta.querySelector('.product-copy');
+                const btnEl   = cta.querySelector('.sopy-product-cta');
 
-            const pick = (el, key) => {
-                if (!el) return;
-                const dataKey = `data-${key}`;
-                // prefer data attribute for the theme, fallback to existing text
-                const v = el.getAttribute(dataKey);
-                if (v != null) el.textContent = v;
-            };
+                const pick = (el, key) => {
+                    if (!el) return;
+                    const dataKey = `data-${key}`;
+                    const v = el.getAttribute(dataKey);
+                    if (v != null) el.textContent = v;
+                };
 
-            // data attributes are data-citrus / data-aqua on each element
-            pick(titleEl, theme === 'citrus' ? 'citrus' : 'aqua');
-            pick(priceEl, theme === 'citrus' ? 'citrus' : 'aqua');
-            pick(copyEl,  theme === 'citrus' ? 'citrus' : 'aqua');
-            // For the CTA button, some authors used data-aqua/data-citrus on the element itself
-            if (btnEl) {
-                const btnData = btnEl.getAttribute(theme === 'citrus' ? 'data-citrus' : 'data-aqua');
-                if (btnData != null) btnEl.textContent = btnData;
-            }
+                pick(titleEl, theme === 'citrus' ? 'citrus' : 'aqua');
+                pick(priceEl, theme === 'citrus' ? 'citrus' : 'aqua');
+                pick(copyEl,  theme === 'citrus' ? 'citrus' : 'aqua');
+
+                if (btnEl) {
+                    const btnData = btnEl.getAttribute(theme === 'citrus' ? 'data-citrus' : 'data-aqua');
+                    if (btnData != null) btnEl.textContent = btnData;
+                }
+
+                // Garante que ambos CTAs fiquem visíveis quando o tema muda
+                cta.classList.add('is-visible');
+            });
         }
     } catch (e) {
         console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
@@ -923,10 +927,10 @@ new THREE.RGBELoader()
     // aguarda até que o DOM e o ScrollTrigger estejam prontos
     const trySetup = () => {
         const section = document.getElementById('capsula-3d');
-        const cta = document.querySelector('.capsule-3d-cta');
+        const ctas = document.querySelectorAll('.capsule-3d-cta');
         const toggleContainer = document.querySelector('.product-toggle-container');
         
-        if (!section || !cta || !toggleContainer) return;
+        if (!section || !ctas || !ctas.length || !toggleContainer) return;
         if (typeof ScrollTrigger === 'undefined') return;
 
         // criar hint "CLIQUE AQUI" acima do toggle se não existir
@@ -943,8 +947,8 @@ new THREE.RGBELoader()
             }
         }
 
-        // garante que o CTA comece escondido
-        cta.classList.remove('is-visible', 'at-end');
+        // garante que os CTAs comecem escondidos
+        ctas.forEach(c => c.classList.remove('is-visible', 'at-end'));
 
         // cria o ScrollTrigger que mostra e depois marca como at-end
         ScrollTrigger.create({
@@ -952,18 +956,18 @@ new THREE.RGBELoader()
             start: 'top 65%',   // ajusta quando começa a aparecer
             end: 'bottom 35%',  // até quando considerar a seção ativa
             onEnter: self => {
-                cta.classList.add('is-visible');
+                ctas.forEach(c => c.classList.add('is-visible'));
             },
             onEnterBack: self => {
-                cta.classList.add('is-visible');
+                ctas.forEach(c => c.classList.add('is-visible'));
             },
             onLeave: self => {
                 // quando sair para baixo, adiciona at-end para posicionamento final
-                cta.classList.add('at-end');
+                ctas.forEach(c => c.classList.add('at-end'));
             },
             onLeaveBack: self => {
                 // quando voltar acima da seção, esconder
-                cta.classList.remove('is-visible', 'at-end');
+                ctas.forEach(c => c.classList.remove('is-visible', 'at-end'));
             }
         });
     };
