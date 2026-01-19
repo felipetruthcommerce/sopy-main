@@ -1182,14 +1182,31 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 }
 
 /* Theme-based positioning */
-body.theme-citrus .capsule-3d-cta {
+body.theme-citrus .capsule-3d-cta:not(.opposite) {
   right: auto;
-  left: clamp(24px, 8vw, 14vw); /* move to left for citrus theme */
+  left: clamp(24px, 8vw, 14vw); /* move main CTA to left for citrus theme */
 }
 
-body.theme-aqua .capsule-3d-cta {
+body.theme-aqua .capsule-3d-cta:not(.opposite) {
   left: auto;
-  right: clamp(24px, 8vw, 14vw); /* stay on right for aqua theme */
+  right: clamp(24px, 8vw, 14vw); /* keep main CTA on right for aqua theme */
+}
+/* Opposite CTA: always place on the opposite side to the main CTA */
+.capsule-3d-cta.opposite {
+  /* default opposite: put on left */
+  left: clamp(24px, 8vw, 14vw);
+  right: auto;
+}
+/* Theme overrides for the opposite CTA */
+body.theme-aqua .capsule-3d-cta.opposite {
+  /* when aqua (main CTA on right), opposite should be on left */
+  left: clamp(24px, 8vw, 14vw);
+  right: auto;
+}
+body.theme-citrus .capsule-3d-cta.opposite {
+  /* when citrus (main CTA on left), opposite should be on right */
+  right: clamp(24px, 8vw, 14vw);
+  left: auto;
 }
 .capsule-3d-cta-inner {
   background: rgba(255,255,255,0.1); /* glassmorphism background */
