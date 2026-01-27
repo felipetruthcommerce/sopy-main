@@ -979,6 +979,13 @@ new THREE.RGBELoader()
                     // hide overlays
                     const section = document.getElementById('capsula-3d');
                     if (section) section.classList.remove('show-overlays');
+                    // restore 2D photo visibility (if present)
+                    const photo = document.querySelector('.capsule-2d-photo');
+                    if (photo) {
+                        photo.style.transition = 'opacity .28s ease, transform .28s ease';
+                        photo.style.opacity = '1';
+                        photo.style.transform = photo.style.transform || '';
+                    }
                 } catch (e) { /* silent */ }
             },
             onEnterBack: self => {
@@ -991,6 +998,12 @@ new THREE.RGBELoader()
                     if (bubbles) bubbles.classList.remove('hide-3d');
                     const section = document.getElementById('capsula-3d');
                     if (section) section.classList.remove('show-overlays');
+                    // ensure 2D photo fades back in
+                    const photo = document.querySelector('.capsule-2d-photo');
+                    if (photo) {
+                        photo.style.transition = 'opacity .28s ease, transform .28s ease';
+                        photo.style.opacity = '1';
+                    }
                 } catch (e) { /* silent */ }
             },
             onLeave: self => {
@@ -1002,9 +1015,31 @@ new THREE.RGBELoader()
                     const bubbles = document.querySelector('.sopy-capsule-bubbles');
                     if (three) three.classList.add('hide-3d');
                     if (bubbles) bubbles.classList.add('hide-3d');
-                    // show overlays above the cards
+
+                    // fade the 2D photo out first (if present), then add show-overlays
                     const section = document.getElementById('capsula-3d');
-                    if (section) section.classList.add('show-overlays');
+                    const photo = document.querySelector('.capsule-2d-photo');
+                    const showOverlaysNow = () => {
+                        if (section && !section.classList.contains('show-overlays')) section.classList.add('show-overlays');
+                    };
+
+                    if (photo) {
+                        // ensure photo has a transition for opacity
+                        photo.style.transition = 'opacity .32s ease, transform .32s ease';
+                        // listen for transitionend on the three container (preferred) or fallback to photo
+                        const targetForEvent = three || photo;
+                        const onEnd = (ev) => {
+                            if (ev && ev.target !== targetForEvent) return;
+                            targetForEvent.removeEventListener('transitionend', onEnd);
+                            showOverlaysNow();
+                        };
+                        targetForEvent.addEventListener('transitionend', onEnd);
+                        // trigger fade
+                        photo.style.opacity = '0';
+                    } else {
+                        // no photo present — add overlays after a small delay matching CSS transition
+                        setTimeout(showOverlaysNow, 320);
+                    }
                 } catch (e) { /* silent */ }
             },
             onLeaveBack: self => {
@@ -1018,6 +1053,12 @@ new THREE.RGBELoader()
                     if (bubbles) bubbles.classList.remove('hide-3d');
                     const section = document.getElementById('capsula-3d');
                     if (section) section.classList.remove('show-overlays');
+                    // restore 2D photo visibility when coming back
+                    const photo = document.querySelector('.capsule-2d-photo');
+                    if (photo) {
+                        photo.style.transition = 'opacity .28s ease, transform .28s ease';
+                        photo.style.opacity = '1';
+                    }
                 } catch (e) { /* silent */ }
             }
         });
