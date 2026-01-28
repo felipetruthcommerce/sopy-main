@@ -1020,7 +1020,43 @@ new THREE.RGBELoader()
                     const section = document.getElementById('capsula-3d');
                     const photo = document.querySelector('.capsule-2d-photo');
                     const showOverlaysNow = () => {
-                        if (section && !section.classList.contains('show-overlays')) section.classList.add('show-overlays');
+                        if (!section) return;
+                        // Determine current theme (fallback to 'aqua')
+                        const theme = document.body.classList.contains('theme-citrus') ? 'citrus' : 'aqua';
+
+                        // Preload overlay images and only add class after they're loaded (or timeout)
+                        const overlays = section.querySelectorAll('.capsule-3d-cta .cta-overlay');
+                        if (!overlays || overlays.length === 0) {
+                            if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
+                            return;
+                        }
+
+                        const loadPromises = Array.from(overlays).map(img => {
+                            return new Promise(resolve => {
+                                const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
+                                if (!newSrc) return resolve();
+                                // If already set to same src, resolve immediately
+                                if (img.src && img.src.includes(newSrc.split('/').pop())) return resolve();
+
+                                const onLoad = () => { cleanup(); resolve(); };
+                                const onErr = () => { cleanup(); resolve(); };
+                                const cleanup = () => {
+                                    img.removeEventListener('load', onLoad);
+                                    img.removeEventListener('error', onErr);
+                                };
+
+                                img.addEventListener('load', onLoad);
+                                img.addEventListener('error', onErr);
+                                // start loading
+                                img.src = newSrc;
+                                // safety timeout in case load event doesn't fire
+                                setTimeout(() => { cleanup(); resolve(); }, 800);
+                            });
+                        });
+
+                        Promise.all(loadPromises).then(() => {
+                            if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
+                        });
                     };
 
                     if (photo) {
