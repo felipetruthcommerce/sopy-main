@@ -965,13 +965,12 @@ new THREE.RGBELoader()
         try {
             const section = document.getElementById('capsula-3d');
             const overlays = section ? section.querySelectorAll('.capsule-3d-cta .cta-overlay') : null;
-            if (overlays && overlays.length) {
+                    if (overlays && overlays.length) {
                 overlays.forEach(img => {
                     img.style.transition = 'opacity .28s ease, transform .28s ease';
                     img.style.opacity = '0';
                     img.style.visibility = 'hidden';
-                    // keep transform in hidden state (slightly lower)
-                    img.style.transform = 'translateX(-50%) translateY(6px)';
+                    // let CSS handle transform/positioning to ensure consistent centering
                 });
             }
         } catch (e) { /* silent */ }
@@ -1074,15 +1073,8 @@ new THREE.RGBELoader()
                             overlays.forEach(img => {
                                 try {
                                     img.style.visibility = 'visible';
-                                    // ensure starting state for transition
                                     img.style.opacity = '0';
-                                    img.style.transform = 'translateX(-50%) translateY(6px)';
-                                    // trigger reflow and then animate to visible
-                                    requestAnimationFrame(() => {
-                                        img.style.transition = 'opacity .28s ease, transform .28s ease';
-                                        img.style.transform = 'translateX(-50%) translateY(0)';
-                                        img.style.opacity = '1';
-                                    });
+                                    // allow CSS class show-overlays to animate transform (position) and opacity
                                 } catch (e) { /* silent */ }
                             });
                             if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
