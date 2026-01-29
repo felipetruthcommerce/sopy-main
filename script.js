@@ -981,7 +981,7 @@ new THREE.RGBELoader()
         ScrollTrigger.create({
             trigger: section,
             start: 'top 65%',   // ajusta quando começa a aparecer
-            end: 'bottom 20%',  // dispara o onLeave mais cedo (quando o fim da seção atingir 80% da viewport)
+            end: 'bottom 10%',  // dispara o onLeave muito mais cedo (quando o fim da seção atingir 10% da viewport)
             onEnter: self => {
                 ctas.forEach(c => c.classList.add('is-visible'));
                 // ensure 3D is visible when entering
@@ -1124,6 +1124,26 @@ new THREE.RGBELoader()
                 } catch (e) { /* silent */ }
             }
         });
+
+        // Dedicated ScrollTrigger to precisely fade the 2D capsule photo earlier
+        try {
+            const photo = document.querySelector('.capsule-2d-photo');
+            if (photo) {
+                ScrollTrigger.create({
+                    trigger: section,
+                    // These values control WHEN the photo starts/ends fading.
+                    // Decrease the second percentage to make fade happen earlier on the page.
+                    start: 'top 95%',
+                    end:   'top 60%',
+                    scrub: true,
+                    onUpdate: self => {
+                        const p = Math.max(0, Math.min(1, self.progress));
+                        photo.style.opacity = String(1 - p);
+                    },
+                    onEnterBack: self => { if (photo) photo.style.opacity = '1'; }
+                });
+            }
+        } catch (e) { /* silent */ }
     };
 
     // tentar após bootAnimations (caso ScrollTrigger seja registrado lá)
