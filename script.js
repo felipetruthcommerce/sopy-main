@@ -1070,14 +1070,18 @@ new THREE.RGBELoader()
 
                         Promise.all(loadPromises).then(() => {
                             // reveal overlays with a smooth fade-in only after images are ready
-                            overlays.forEach(img => {
-                                try {
-                                    img.style.visibility = 'visible';
-                                    img.style.opacity = '0';
-                                    // allow CSS class show-overlays to animate transform (position) and opacity
-                                } catch (e) { /* silent */ }
-                            });
+                            // Add class first so CSS applies target styles, then remove inline opacity
                             if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
+                            requestAnimationFrame(() => {
+                                overlays.forEach(img => {
+                                    try {
+                                        img.style.visibility = 'visible';
+                                        // remove inline opacity so stylesheet can transition it to 1
+                                        img.style.removeProperty('opacity');
+                                        img.style.removeProperty('transition');
+                                    } catch (e) { /* silent */ }
+                                });
+                            });
                         });
                     };
 
