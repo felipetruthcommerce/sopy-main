@@ -961,6 +961,21 @@ new THREE.RGBELoader()
         // garante que os CTAs comecem escondidos
         ctas.forEach(c => c.classList.remove('is-visible', 'at-end'));
 
+        // ensure CTA overlay images are hidden initially (in case srcs are set elsewhere)
+        try {
+            const section = document.getElementById('capsula-3d');
+            const overlays = section ? section.querySelectorAll('.capsule-3d-cta .cta-overlay') : null;
+            if (overlays && overlays.length) {
+                overlays.forEach(img => {
+                    img.style.transition = 'opacity .28s ease, transform .28s ease';
+                    img.style.opacity = '0';
+                    img.style.visibility = 'hidden';
+                    // keep transform in hidden state (slightly lower)
+                    img.style.transform = 'translateX(-50%) translateY(6px)';
+                });
+            }
+        } catch (e) { /* silent */ }
+
         // cria o ScrollTrigger que mostra e depois marca como at-end
         // Nota: end ajustado para 'bottom bottom' para que onLeave ocorra exatamente
         // quando o final da seção alcança a base da viewport.
@@ -1055,6 +1070,21 @@ new THREE.RGBELoader()
                         });
 
                         Promise.all(loadPromises).then(() => {
+                            // reveal overlays with a smooth fade-in only after images are ready
+                            overlays.forEach(img => {
+                                try {
+                                    img.style.visibility = 'visible';
+                                    // ensure starting state for transition
+                                    img.style.opacity = '0';
+                                    img.style.transform = 'translateX(-50%) translateY(6px)';
+                                    // trigger reflow and then animate to visible
+                                    requestAnimationFrame(() => {
+                                        img.style.transition = 'opacity .28s ease, transform .28s ease';
+                                        img.style.transform = 'translateX(-50%) translateY(0)';
+                                        img.style.opacity = '1';
+                                    });
+                                } catch (e) { /* silent */ }
+                            });
                             if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
                         });
                     };
