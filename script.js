@@ -1124,27 +1124,6 @@ new THREE.RGBELoader()
                 } catch (e) { /* silent */ }
             }
         });
-
-        // Dedicated ScrollTrigger to precisely fade the 2D capsule photo earlier
-        try {
-            const photo = document.querySelector('.capsule-2d-photo');
-            if (photo) {
-                ScrollTrigger.create({
-                    trigger: section,
-                    // Fade from the moment the section enters the viewport (top hits bottom)
-                    // until the section top reaches 20% of the viewport. This avoids
-                    // instantly setting progress to 1 on enter while making fade happen early.
-                    start: 'top bottom',
-                    end:   'top 20%',
-                    scrub: true,
-                    onUpdate: self => {
-                        const p = Math.max(0, Math.min(1, self.progress));
-                        photo.style.opacity = String(1 - p);
-                    },
-                    onEnterBack: self => { if (photo) photo.style.opacity = '1'; }
-                });
-            }
-        } catch (e) { /* silent */ }
     };
 
     // tentar após bootAnimations (caso ScrollTrigger seja registrado lá)
