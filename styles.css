@@ -3,6 +3,7 @@
   padding-left: 2.2em;
   padding-right: 2.2em;
 }
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 /* Use local Houschka Pro for titles (replaces Nunito). */
 
 /* Houschka Pro - local files in assets/fonts/houschkapro/ */
@@ -107,8 +108,8 @@ html, body {
 
 body {
   margin: 0;
-  /* Use Inter for body text */
-  font-family: 'Inter', 'Avant Garde Book BT', sans-serif;
+  /* Use Montserrat for body/text (non-titles) */
+  font-family: 'Montserrat', 'Inter', 'Avant Garde Book BT', sans-serif;
   color: var(--text);
   background: #1B4332; /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
@@ -186,8 +187,8 @@ body.theme-aqua {
 /* Tipos */
 /* Headings: use Houschka Pro for titles (no fallbacks so the font shows directly) */
 h1, h2, h3, h4, h5, h6 { font-family: 'Houschka Pro', sans-serif; font-weight: 700; letter-spacing: 0; }
-/* Paragraphs use Inter for better readability */
-p { font-family: 'Inter', 'Avant Garde Book BT', sans-serif; }
+/* Paragraphs use Montserrat for better readability */
+p { font-family: 'Montserrat', 'Avant Garde Book BT', sans-serif; }
 /* Subtitles: use local Gotham */
 .tc-sub,
 .slider-des,
@@ -206,7 +207,7 @@ h3 {
 h1 { font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.02; margin: 0 0 0.5rem; }
 h2 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.06; margin: 0 0 .5rem; }
 h3 { font-size: clamp(1.25rem, 2.4vw, 1.4rem); margin: 0; }
-p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--text); margin: 0; }
+p  { font-family: 'Montserrat', 'Inter', sans-serif; font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--text); margin: 0; }
 .muted { color: var(--muted); font-size: 1.03rem; line-height: 1.6; }
 
 /* ========== GRID & SEÇÕES ========== */
@@ -1057,7 +1058,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 .loader-center { position: relative; z-index: 2; display: grid; place-items: center; gap: 18px; }
 
 .loader-counter { 
-  font-family: 'Syne', Inter, sans-serif; font-weight: 700;
+  font-family: 'Syne', 'Montserrat', sans-serif; font-weight: 700;
   font-size: clamp(2.25rem, 10vw, 8rem); line-height: 1; letter-spacing: -0.02em;
 }
 
