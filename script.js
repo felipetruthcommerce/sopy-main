@@ -158,6 +158,88 @@ const COLORS = {
     citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
 };
 
+// Helper: fade-swap for <img> elements
+function fadeSwapImg(imgEl, newSrc, duration = 320) {
+    if (!imgEl || !newSrc) return;
+    const current = (imgEl.getAttribute('src') || imgEl.src || '');
+    if (current && current.includes(newSrc.split('/').pop())) return;
+
+    const preload = new Image();
+    preload.onload = () => {
+        try {
+            const prevTransition = imgEl.style.transition || '';
+            // ensure element is visible and has an opacity value
+            const comp = window.getComputedStyle(imgEl);
+            if (!comp) { imgEl.src = newSrc; return; }
+            const startOpacity = parseFloat(comp.opacity || 1);
+            imgEl.style.transition = `opacity ${duration}ms ease`;
+
+            if (startOpacity > 0) {
+                const onFadeOut = () => {
+                    imgEl.removeEventListener('transitionend', onFadeOut);
+                    try { imgEl.src = newSrc; } catch (e) {}
+                    // fade in
+                    requestAnimationFrame(() => { imgEl.style.opacity = '1'; });
+                    // cleanup transition after finished
+                    setTimeout(() => { try { imgEl.style.transition = prevTransition; } catch(e){} }, duration + 50);
+                };
+                imgEl.addEventListener('transitionend', onFadeOut);
+                // trigger fade-out
+                requestAnimationFrame(() => { imgEl.style.opacity = '0'; });
+            } else {
+                // already invisible: set src and fade in
+                imgEl.src = newSrc;
+                requestAnimationFrame(() => { imgEl.style.opacity = '1'; });
+                setTimeout(() => { try { imgEl.style.transition = prevTransition; } catch(e){} }, duration + 50);
+            }
+        } catch (e) {
+            imgEl.src = newSrc;
+        }
+    };
+    preload.onerror = () => { imgEl.src = newSrc; };
+    preload.src = newSrc;
+}
+
+// Helper: fade-swap for elements with background-image (creates overlay div)
+function fadeSwapBackground(el, newBg, duration = 320) {
+    if (!el || !newBg) return;
+    const currentBg = (el.style.backgroundImage || '').replace(/url\(["']?(.*?)["']?\)/, '$1');
+    if (currentBg && currentBg.includes(newBg.split('/').pop())) return;
+
+    const preload = new Image();
+    preload.onload = () => {
+        try {
+            // ensure container can hold absolute overlay
+            const cs = window.getComputedStyle(el);
+            if (cs.position === 'static') el.style.position = 'relative';
+
+            const overlay = document.createElement('div');
+            Object.assign(overlay.style, {
+                position: 'absolute', inset: '0',
+                backgroundImage: `url('${newBg}')`,
+                backgroundSize: 'cover', backgroundPosition: 'center',
+                opacity: '0', transition: `opacity ${duration}ms ease`, zIndex: 2, pointerEvents: 'none'
+            });
+            el.appendChild(overlay);
+            // force paint then fade in
+            requestAnimationFrame(() => { overlay.style.opacity = '1'; });
+
+            const onEnd = () => {
+                overlay.removeEventListener('transitionend', onEnd);
+                try { el.style.backgroundImage = `url('${newBg}')`; } catch (e) {}
+                overlay.remove();
+            };
+            overlay.addEventListener('transitionend', onEnd);
+            // safety: in case transitionend doesn't fire
+            setTimeout(() => { if (overlay.parentNode) { try { el.style.backgroundImage = `url('${newBg}')`; } catch(e){}; overlay.remove(); } }, duration + 200);
+        } catch (e) {
+            try { el.style.backgroundImage = `url('${newBg}')`; } catch(e){}
+        }
+    };
+    preload.onerror = () => { try { el.style.backgroundImage = `url('${newBg}')`; } catch(e){} };
+    preload.src = newBg;
+}
+
 function swapModel(theme) {
     // 3D model loading removed: we no longer load GLTF models.
     // Mantemos a API para chamadas externas (setTheme chama swapModel),
@@ -211,11 +293,12 @@ function setTheme(theme) {
                 // Preload da imagem para evitar flicker
                 const img = new Image();
                 img.onload = () => {
-                    sopyCardImage.src = newSrc;
+                    fadeSwapImg(sopyCardImage, newSrc, 360);
                     console.log(`[TEMA] Imagem ${theme} carregada com sucesso`);
                 };
                 img.onerror = () => {
                     console.warn(`[TEMA] Erro ao carregar imagem ${theme}:`, newSrc);
+                    sopyCardImage.src = newSrc;
                 };
                 img.src = newSrc;
             }
@@ -228,10 +311,51 @@ function setTheme(theme) {
             const capsulePhoto = document.querySelector('.capsule-2d-photo');
             if (capsulePhoto) {
                 const newSrc = theme === 'citrus' ? capsulePhoto.getAttribute('data-citrus') : capsulePhoto.getAttribute('data-aqua');
-                if (newSrc) capsulePhoto.src = newSrc;
+                if (newSrc) fadeSwapImg(capsulePhoto, newSrc, 360);
             }
         } catch (e) {
             console.warn('[TEMA] Falha ao trocar imagem 2D da cápsula:', e);
+        }
+
+        // Atualiza imagens da seção de benefícios (sustentabilidade) quando houver data attributes
+        try {
+            const panels = document.querySelectorAll('#sustentabilidade .fullscreen-panel .image-wrapper img');
+            panels.forEach(img => {
+                const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
+                if (!newSrc) return;
+                const current = (img.getAttribute('src') || img.src || '').split('/').pop();
+                if (current && current.includes(newSrc.split('/').pop())) return;
+
+                const p = new Image();
+                p.onload = () => { try { fadeSwapImg(img, newSrc, 360); } catch(e){} };
+                p.onerror = () => { try { img.src = newSrc; } catch(e){} };
+                p.src = newSrc;
+            });
+        } catch (e) {
+            console.warn('[TEMA] Falha ao atualizar imagens de benefícios:', e);
+        }
+
+        // Atualiza imagens do slider (slides 1 e 2) se dados de tema estiverem presentes
+        try {
+            const themedSlides = document.querySelectorAll('.slider-item[data-slide]');
+            themedSlides.forEach(slide => {
+                const newBg = theme === 'citrus' ? slide.getAttribute('data-citrus') : slide.getAttribute('data-aqua');
+                if (!newBg) return;
+
+                // evitar trocar se já estiver usando a mesma imagem
+                const currentBg = (slide.style.backgroundImage || '').replace(/url\(["']?(.*?)["']?\)/, '$1');
+                if (currentBg && currentBg.includes(newBg.split('/').pop())) return;
+
+                // preload antes de aplicar para evitar flicker
+                const img = new Image();
+                img.onload = () => {
+                    try { fadeSwapBackground(slide, newBg, 360); } catch(e) { slide.style.backgroundImage = `url('${newBg}')`; }
+                };
+                img.onerror = () => { /* fallback: aplicar mesmo assim */ slide.style.backgroundImage = `url('${newBg}')`; };
+                img.src = newBg;
+            });
+        } catch (e) {
+            console.warn('[TEMA] Falha ao atualizar imagens do slider:', e);
         }
     
     // ... (seu código para atualizar textos do card de produto) ...
@@ -277,7 +401,7 @@ function setTheme(theme) {
         if (overlays && overlays.length) {
             overlays.forEach(img => {
                 const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
-                if (newSrc) img.src = newSrc;
+                if (newSrc) fadeSwapImg(img, newSrc, 300);
             });
         }
     } catch (e) { /* silent */ }
@@ -667,7 +791,11 @@ function updateFragranceImage(theme) {
         const img = new Image();
         img.onload = () => {
             try {
-                media.src = newSrc;
+                if (media.tagName && media.tagName.toLowerCase() === 'img') {
+                    fadeSwapImg(media, newSrc, 360);
+                } else {
+                    media.src = newSrc;
+                }
                 // se for vídeo, recarrega e tenta tocar (autoplay settings podem impedir)
                 if (media.tagName && media.tagName.toLowerCase() === 'video') {
                     media.load();
@@ -1406,7 +1534,7 @@ if (heroVideo && heroPoster) {
                 
                 if (correctSrc && !sopyCardImage.src.includes(correctSrc.split('/').pop())) {
                     console.log(`[BENEFÍCIOS] Definindo imagem inicial para tema ${currentTheme}:`, correctSrc);
-                    sopyCardImage.src = correctSrc;
+                    fadeSwapImg(sopyCardImage, correctSrc, 360);
                 }
             }
         } catch (e) {

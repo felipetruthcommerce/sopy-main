@@ -189,10 +189,10 @@ body.theme-aqua {
 h1, h2, h3, h4, h5, h6 { font-family: 'Houschka Pro', sans-serif; font-weight: 700; letter-spacing: 0; }
 /* Paragraphs use Montserrat for better readability */
 p { font-family: 'Montserrat', 'Avant Garde Book BT', sans-serif; }
-/* Subtitles: use local Gotham */
+/* Subtitles and small descriptive text: use Montserrat */
 .tc-sub,
 .slider-des,
-.sopy-section-header p { font-family: 'Gotham', sans-serif; font-weight: 400; }
+.sopy-section-header p { font-family: 'Montserrat', sans-serif; font-weight: 400; }
 /* Stronger display for H2 specifically */
 h2 {
   text-transform: uppercase;
