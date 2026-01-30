@@ -981,7 +981,7 @@ new THREE.RGBELoader()
         ScrollTrigger.create({
             trigger: section,
             start: 'top 65%',   // ajusta quando começa a aparecer
-            end: 'bottom 99%',  // dispara onLeave mais perto do final da seção (bottom 99%)
+            end: 'center 99%',  // dispara onLeave mais perto do final da seção (bottom 99%)
             onEnter: self => {
                 ctas.forEach(c => c.classList.add('is-visible'));
                 // ensure 3D is visible when entering
