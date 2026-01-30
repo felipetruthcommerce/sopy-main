@@ -1,8 +1,11 @@
-.sopy-btn, .sopy-btn-primary, .sopy-btn-outline {
+.sopy-btn,
+.sopy-btn-primary,
+.sopy-btn-outline {
   letter-spacing: 0.02em;
   padding-left: 2.2em;
   padding-right: 2.2em;
 }
+
 /* Use local Houschka Pro for titles (replaces Nunito). */
 
 /* Houschka Pro - local files in assets/fonts/houschkapro/ */
@@ -13,6 +16,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Houschka Pro';
   src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Light.otf') format('opentype');
@@ -20,6 +24,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Houschka Pro';
   src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Medium.otf') format('opentype');
@@ -27,6 +32,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Houschka Pro';
   src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Bold.otf') format('opentype');
@@ -34,6 +40,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Houschka Pro';
   src: url('assets/fonts/houschkapro/fonnts.com-Houschka_Pro_Extra_Bold.otf') format('opentype');
@@ -50,6 +57,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Gotham';
   src: url('assets/fonts/gotham/Gotham Fonts Family/GOTHAM-MEDIUM.TTF') format('truetype');
@@ -57,6 +65,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Gotham';
   src: url('assets/fonts/gotham/Gotham Fonts Family/GOTHAM-BOLD.TTF') format('truetype');
@@ -64,6 +73,7 @@
   font-style: normal;
   font-display: swap;
 }
+
 /* -------------------------------------------------------
    SOPY â€“ styles.css
    Reset + Tokens + Layout + States para animações GSAP
@@ -73,12 +83,17 @@
 /* ========== RESET BÁSICO ========== */
 *,
 *::before,
-*::after { box-sizing: border-box; }
-
-html, body {
-  min-height: 100%;
-  scroll-behavior: auto; /* Lenis cuida do smooth */
+*::after {
+  box-sizing: border-box;
 }
+
+html,
+body {
+  min-height: 100%;
+  scroll-behavior: auto;
+  /* Lenis cuida do smooth */
+}
+
 /* Local fonts handled via @font-face below (Avant Garde) */
 
 /* Local Avant Garde fonts (placed in assets/fonts/) */
@@ -89,6 +104,7 @@ html, body {
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Avant Garde Book BT';
   src: url('assets/fonts/AVGARDN_2.woff') format('woff');
@@ -96,6 +112,7 @@ html, body {
   font-style: normal;
   font-display: swap;
 }
+
 @font-face {
   font-family: 'Avant Garde Demi Oblique BT';
   src: url('assets/fonts/AVGARDDO_2.woff') format('woff');
@@ -110,18 +127,28 @@ body {
   /* Use Inter for body text */
   font-family: 'Inter', 'Avant Garde Book BT', sans-serif;
   color: var(--text);
-  background: #1B4332; /* match FAQ section background to avoid white behind footer */
+  background: #1B4332;
+  /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 /* Hide native scrollbars but keep scrolling functional */
 /* Firefox */
-html { scrollbar-width: none; }
+html {
+  scrollbar-width: none;
+}
+
 /* WebKit browsers */
-html::-webkit-scrollbar { width: 0; height: 0; }
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 /* For IE/Edge older implementations, ensure no visual scrollbar track */
-html { -ms-overflow-style: none; }
+html {
+  -ms-overflow-style: none;
+}
 
 /* Bloqueia scroll durante o loading */
 body.is-loading {
@@ -130,12 +157,30 @@ body.is-loading {
 }
 
 /* Links e botões */
-a { color: inherit; text-decoration: none; }
-button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
-img, video { display: block; max-width: 100%; }
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+img,
+video {
+  display: block;
+  max-width: 100%;
+}
 
 /* Acessibilidade */
-:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
 
 /* interactive elements keep their default cursors (no global custom cursor) */
 
@@ -146,52 +191,84 @@ img, video { display: block; max-width: 100%; }
   --surface: #f6f7fb;
   --surface-2: #eef1f6;
   --text: #0e0f12;
-  --muted: #ffffff; /* agora branco para melhor contraste conforme pedido */
+  --muted: #ffffff;
+  /* agora branco para melhor contraste conforme pedido */
   --line: #e5e7eb;
-  --shadow: 0 10px 25px rgba(0,0,0,.12);
+  --shadow: 0 10px 25px rgba(0, 0, 0, .12);
 
-    /* Citrus Lush (default) — palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
-    --brand: #5FD97E;       /* primary */
-    --brand-2: #91D9A3;     /* secondary */
-    --accent: #D7D9D2;      /* accent/neutral */
-    --brand-dark: #167312;  /* dark */
-    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
-                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
+  /* Citrus Lush (default) — palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
+  --brand: #5FD97E;
+  /* primary */
+  --brand-2: #91D9A3;
+  /* secondary */
+  --accent: #D7D9D2;
+  /* accent/neutral */
+  --brand-dark: #167312;
+  /* dark */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95, 217, 126, .18), transparent),
+    radial-gradient(800px 400px at 20% 80%, rgba(145, 217, 163, .18), transparent);
   /* Water seam controls */
-  --mask-start: 52%;   /* onde começa a desvanecer o vídeo (45â€“60%) */
-  --seam-height: 22vh; /* altura da zona de mistura (15â€“30vh) */
+  --mask-start: 52%;
+  /* onde começa a desvanecer o vídeo (45â€“60%) */
+  --seam-height: 22vh;
+  /* altura da zona de mistura (15â€“30vh) */
 }
 
 body.theme-citrus {
   /* Citrus Lush â€” palette: #5FD97E, #91D9A3, #167312, #D7D9D2 */
-    --brand: #5FD97E;       /* primary */
-    --brand-2: #91D9A3;     /* secondary */
-    --accent: #D7D9D2;      /* accent/neutral */
-    --brand-dark: #167312;  /* dark */
-    --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95,217,126,.18), transparent),
-                radial-gradient(800px 400px at 20% 80%, rgba(145,217,163,.18), transparent);
+  --brand: #5FD97E;
+  /* primary */
+  --brand-2: #91D9A3;
+  /* secondary */
+  --accent: #D7D9D2;
+  /* accent/neutral */
+  --brand-dark: #167312;
+  /* dark */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(95, 217, 126, .18), transparent),
+    radial-gradient(800px 400px at 20% 80%, rgba(145, 217, 163, .18), transparent);
 }
 
 /* Aqua theme token overrides: ensure all var(--brand*) switch on theme */
 body.theme-aqua {
   /* Aqua Blues — align with 3D palette and section colors */
-  --brand: #076DF2;       /* primary */
-  --brand-2: #0C87F2;     /* secondary */
-  --accent: #1DDDF2;      /* accent/neutral */
-  --brand-dark: #083DA6;  /* dark (used by hero title and Como Usar bg) */
-  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(12,135,242,.18), transparent),
-              radial-gradient(800px 400px at 20% 80%, rgba(29,221,242,.18), transparent);
+  --brand: #076DF2;
+  /* primary */
+  --brand-2: #0C87F2;
+  /* secondary */
+  --accent: #1DDDF2;
+  /* accent/neutral */
+  --brand-dark: #083DA6;
+  /* dark (used by hero title and Como Usar bg) */
+  --gradient: radial-gradient(1200px 600px at 70% 30%, rgba(12, 135, 242, .18), transparent),
+    radial-gradient(800px 400px at 20% 80%, rgba(29, 221, 242, .18), transparent);
 }
 
 /* Tipos */
 /* Headings: use Houschka Pro for titles (no fallbacks so the font shows directly) */
-h1, h2, h3, h4, h5, h6 { font-family: 'Houschka Pro', sans-serif; font-weight: 700; letter-spacing: 0; }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Houschka Pro', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
 /* Paragraphs use Inter for better readability */
-p { font-family: 'Inter', 'Avant Garde Book BT', sans-serif; }
+p {
+  font-family: 'Inter', 'Avant Garde Book BT', sans-serif;
+}
+
 /* Subtitles: use local Gotham */
 .tc-sub,
 .slider-des,
-.sopy-section-header p { font-family: 'Gotham', sans-serif; font-weight: 400; }
+.sopy-section-header p {
+  font-family: 'Gotham', sans-serif;
+  font-weight: 400;
+}
+
 /* Stronger display for H2 specifically */
 h2 {
   text-transform: uppercase;
@@ -199,49 +276,85 @@ h2 {
   line-height: 1.02;
   letter-spacing: 0.02em;
 }
+
 /* H3 slightly larger but not uppercase */
 h3 {
   font-size: clamp(1.4rem, 2.4vw, 2rem);
 }
-h1 { font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.02; margin: 0 0 0.5rem; }
-h2 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.06; margin: 0 0 .5rem; }
-h3 { font-size: clamp(1.25rem, 2.4vw, 1.4rem); margin: 0; }
-p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--text); margin: 0; }
-.muted { color: var(--muted); font-size: 1.03rem; line-height: 1.6; }
+
+h1 {
+  font-size: clamp(2.25rem, 6vw, 4rem);
+  line-height: 1.02;
+  margin: 0 0 0.5rem;
+}
+
+h2 {
+  font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+  line-height: 1.06;
+  margin: 0 0 .5rem;
+}
+
+h3 {
+  font-size: clamp(1.25rem, 2.4vw, 1.4rem);
+  margin: 0;
+}
+
+p {
+  font-size: clamp(1rem, 1.3vw, 1.06rem);
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 1.03rem;
+  line-height: 1.6;
+}
 
 /* ========== GRID & SEÇÕES ========== */
-.sopy-section { 
-  padding: clamp(56px, 8vw, 96px) clamp(16px, 5vw, 64px); 
-  position: relative; 
-  min-height: 100vh; /* volta para 100vh */
-  display: flex; 
-  flex-direction: column; 
-  justify-content: center; /* centraliza verticalmente o conteúdo */
-  z-index: 3; /* garante que seções após o hero cubram o vídeo sticky */
+.sopy-section {
+  padding: clamp(56px, 8vw, 96px) clamp(16px, 5vw, 64px);
+  position: relative;
+  min-height: 100vh;
+  /* volta para 100vh */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* centraliza verticalmente o conteúdo */
+  z-index: 3;
+  /* garante que seções após o hero cubram o vídeo sticky */
 }
-.sopy-section--full { 
-  height: 100vh; /* volta para 100vh */
-  position: relative; 
-  overflow: visible; /* não clipe para permitir sticky e sobreposição */
-  display: flex; 
-  align-items: center; 
-  justify-content: center; /* centraliza conteúdo */
+
+.sopy-section--full {
+  height: 100vh;
+  /* volta para 100vh */
+  position: relative;
+  overflow: visible;
+  /* não clipe para permitir sticky e sobreposição */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* centraliza conteúdo */
 }
 
 /* Benefícios - big 2x2 cards */
 #beneficios {
   padding: 40px 24px;
-  min-height: 180vh; /* aumentar a altura da seção */
+  min-height: 180vh;
+  /* aumentar a altura da seção */
 }
 
 /* Make the section title for Benefícios very large, left-aligned and bold */
 #beneficios .sopy-section-header {
   /* move the header off-center visually */
   text-align: left;
-  max-width: none; /* allow wide heading */
+  max-width: none;
+  /* allow wide heading */
   margin-left: clamp(16px, 6vw, 96px);
   margin-bottom: 1.25rem;
 }
+
 #beneficios .sopy-section-header h2 {
   color: #ffffff;
   /* slightly reduced size to match card scale */
@@ -251,6 +364,7 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
   line-height: 0.95;
   letter-spacing: 0;
 }
+
 #beneficios .sopy-section-header p {
   color: var(--muted);
   text-align: left;
@@ -258,24 +372,37 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
 }
 
 @media (max-width: 900px) {
+
   /* on small screens keep it centered and smaller to avoid overflow */
-  #beneficios .sopy-section-header { text-align: center; margin-left: 0; }
-  #beneficios .sopy-section-header h2 { font-size: clamp(2rem, 10vw, 3.4rem); line-height: 1.04; }
-  #beneficios .sopy-section-header p { text-align: center; }
+  #beneficios .sopy-section-header {
+    text-align: center;
+    margin-left: 0;
+  }
+
+  #beneficios .sopy-section-header h2 {
+    font-size: clamp(2rem, 10vw, 3.4rem);
+    line-height: 1.04;
+  }
+
+  #beneficios .sopy-section-header p {
+    text-align: center;
+  }
 }
+
 .benefit-grid.big-cards {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 36px; /* larger gap to match sketch spacing */
+  gap: 36px;
+  /* larger gap to match sketch spacing */
   width: min(1300px, 96%);
   margin: 0 auto;
 }
 
 /* ====== SplitText helpers (Osmo style) ====== */
 /* Estilos para animações Osmo */
-.split-line, 
-.split-word, 
+.split-line,
+.split-word,
 .split-char {
   overflow: hidden !important;
   display: inline-block !important;
@@ -283,9 +410,9 @@ p  { font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--tex
   position: relative;
 }
 
-.split-line > span, 
-.split-word > span, 
-.split-char > span {
+.split-line>span,
+.split-word>span,
+.split-char>span {
   display: inline-block !important;
   will-change: transform;
   /* REMOVIDO: transform: translateY(110%) !important; - isso vai ser definido pelo GSAP */
@@ -297,8 +424,8 @@ p .split-word {
 }
 
 /* Evitar problemas de alinhamento */
-h1 .split-line, 
-h2 .split-line, 
+h1 .split-line,
+h2 .split-line,
 h3 .split-line {
   width: 100%;
   display: block;
@@ -310,33 +437,49 @@ h3 .split-line {
 }
 
 /* Força o mascaramento para elementos que foram splitados */
-h1[class*="split"], h2[class*="split"], h3[class*="split"], 
-p[class*="split"], .sopy-section-header[class*="split"] {
-  overflow: visible !important; /* permite que as linhas internas sejam mascaradas individualmente */
+h1[class*="split"],
+h2[class*="split"],
+h3[class*="split"],
+p[class*="split"],
+.sopy-section-header[class*="split"] {
+  overflow: visible !important;
+  /* permite que as linhas internas sejam mascaradas individualmente */
 }
+
 .sopy-card-large {
   position: relative;
-  background: #fff; /* white surface like the sketch */
+  background: #fff;
+  /* white surface like the sketch */
   border-radius: 28px;
   padding: 28px;
   overflow: visible;
-  min-height: 420px; /* increased height to match the larger cards in the image */
+  min-height: 420px;
+  /* increased height to match the larger cards in the image */
   display: block;
 }
+
 .card-large .card-svg {
   position: absolute;
   left: 28px;
   top: 28px;
-  width: 150px; /* bigger icon to match sketch */
+  width: 150px;
+  /* bigger icon to match sketch */
   height: 150px;
   opacity: 1;
 }
-.sopy-card-large .sopy-card-svg img { width: 100%; height: 100%; object-fit: contain; }
+
+.sopy-card-large .sopy-card-svg img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .sopy-card-large .benefit-title {
   position: absolute;
   right: 28px;
   bottom: 28px;
-  font-size: clamp(1rem, 2.2vw, 1.4rem); /* slightly larger title for visual balance */
+  font-size: clamp(1rem, 2.2vw, 1.4rem);
+  /* slightly larger title for visual balance */
   max-width: 50%;
   text-align: right;
   color: var(--text);
@@ -345,48 +488,53 @@ p[class*="split"], .sopy-section-header[class*="split"] {
 
 /* add subtle outline like the sketch (dark border) for stronger visual matching */
 .benefit-grid.big-cards .sopy-card-large {
-  border: 6px solid rgba(0,0,0,0.95); /* thicker outline to mimic sketch */
+  border: 6px solid rgba(0, 0, 0, 0.95);
+  /* thicker outline to mimic sketch */
 }
 
 /* ===================== BENEFÍCIOS - CLEAN SLATE EFFECT ===================== */
 :root {
-    --cor-fundo-inicial: #f0f2f5;
-    --cor-fundo-sopy: #1A4731;
+  --cor-fundo-inicial: #f0f2f5;
+  --cor-fundo-sopy: #1A4731;
 }
 
-#clean-slate-section { 
-    width: 100%;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background-color: var(--cor-fundo-inicial); 
+#clean-slate-section {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--cor-fundo-inicial);
 }
 
 /* Cores de fundo baseadas no tema - ambos com a mesma cor */
 body.theme-citrus #clean-slate-section {
-    background-color: #F0F2F5; /* Cor padrão */
+  background-color: #F0F2F5;
+  /* Cor padrão */
 }
 
 body.theme-aqua #clean-slate-section {
-    background-color: #F0F2F5; /* Mesma cor para tema aqua */
+  background-color: #F0F2F5;
+  /* Mesma cor para tema aqua */
 }
 
-.pinned-container { 
-    width: 100%; 
-    height: 100vh; 
-    position: relative; 
-    overflow: hidden; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
+.pinned-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 /*
 # Quando a animação de "clean-slate" estiver desativada, exibir os dois cards lado-a-lado
 # Aplica tanto para o container com id quanto para o container solto `.pinned-container`.
 # Mantém as mesmas classes HTML; altera apenas o fluxo/posicionamento para layout responsivo.*/
 .pinned-container,
 #clean-slate-section .pinned-container {
-  height: auto; /* permite que o conteúdo fique em fluxo normal */
+  height: auto;
+  /* permite que o conteúdo fique em fluxo normal */
   min-height: 0;
   padding: 4rem 5%;
   display: flex;
@@ -409,7 +557,9 @@ body.theme-aqua #clean-slate-section {
 
 /* Garante que o card Sopy esteja visível por padrão (CSS original o deixava com opacity:0) */
 .pinned-container .card-sopy-way,
-#clean-slate-section .card-sopy-way { opacity: 1 !important; }
+#clean-slate-section .card-sopy-way {
+  opacity: 1 !important;
+}
 
 /* Força fonte preta e fundo branco quando o layout está em fluxo (cards lado-a-lado) */
 .pinned-container .card,
@@ -428,114 +578,143 @@ body.theme-aqua #clean-slate-section {
 }
 
 /* Espaçamento um pouco maior entre os cards para combinar com o design de referência */
-.pinned-container { gap: 56px; }
-
-@media (max-width: 900px) {
-  #clean-slate-section .card { width: 100%; max-width: 100%; }
+.pinned-container {
+  gap: 56px;
 }
 
-.green-wave { 
-    position: absolute; 
-    top: 50%; 
-    left: 50%; 
-    width: 100%; 
-    height: 100%; 
-    background-color: #019c51; 
-    transform: translate(-50%, -50%) translateX(-100%); 
-    z-index: 1; 
+@media (max-width: 900px) {
+  #clean-slate-section .card {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.green-wave {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  background-color: #019c51;
+  transform: translate(-50%, -50%) translateX(-100%);
+  z-index: 1;
 }
 
 /* Wave com cores baseadas no tema */
 body.theme-citrus .green-wave {
-    background-color: #77DD77; /* Verde para tema citrus */
+  background-color: #77DD77;
+  /* Verde para tema citrus */
 }
 
 body.theme-aqua .green-wave {
-    background-color: #48acf8; /* Azul para tema aqua */
+  background-color: #48acf8;
+  /* Azul para tema aqua */
 }
 
-.card { 
-    width: 90%; 
-    max-width: 550px;
-    min-height: 600px; /* Altura mínima fixa */
-    padding: 3rem;
-    border-radius: 32px;
-    position: absolute; 
-    z-index: 5; 
-    transform: translate(-50%, -50%); 
-    left: 50%; 
-    top: 50%;
-    display: flex;
-    flex-direction: column;
+.card {
+  width: 90%;
+  max-width: 550px;
+  min-height: 600px;
+  /* Altura mínima fixa */
+  padding: 3rem;
+  border-radius: 32px;
+  position: absolute;
+  z-index: 5;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
 }
 
-.card-old-way { 
-    background-color: #fff; 
-    border: 1px solid #ddd; 
-    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+.card-old-way {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
 }
 
-.card-sopy-way { 
-    background: rgba(255, 255, 255, 0.12); /* Aumentado de 0.05 para 0.12 - mais claro */
-    border: 1px solid rgba(255, 255, 255, 0.25); 
-    backdrop-filter: blur(20px); 
-    -webkit-backdrop-filter: blur(20px); 
-    color: #FFF; 
-    opacity: 0;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15); /* Adiciona sombra para destacar */
+.card-sopy-way {
+  background: rgba(255, 255, 255, 0.12);
+  /* Aumentado de 0.05 para 0.12 - mais claro */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #FFF;
+  opacity: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  /* Adiciona sombra para destacar */
 }
 
-.card h3 { 
-    font-size: 2.2rem;
-    margin-top: 0;
-    margin-bottom: 2rem;
+.card h3 {
+  font-size: 2.2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
 }
 
-.card p { 
-    font-size: 1.1rem;
-    line-height: 1.6; 
-    color: #555;
+.card p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #555;
 }
 
-.card-sopy-way p, .card-sopy-way h3 {
-    color: #FFF;
+.card-sopy-way p,
+.card-sopy-way h3 {
+  color: #FFF;
 }
 
-.card img { 
-    width: 100%; 
-    height: 200px; /* Altura fixa para todas as imagens */
-    object-fit: cover; /* Mantém proporção e preenche o espaço */
-    border-radius: 16px; 
-    margin-bottom: 2rem;
-    flex-shrink: 0; /* Não permite que a imagem encolha */
+.card img {
+  width: 100%;
+  height: 200px;
+  /* Altura fixa para todas as imagens */
+  object-fit: cover;
+  /* Mantém proporção e preenche o espaço */
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  flex-shrink: 0;
+  /* Não permite que a imagem encolha */
 }
 
 /* Controle específico para a imagem do card da Sopy */
 .sopy-card-image {
-    background-color: #f8f9fa; /* Fundo neutro durante carregamento */
-    transition: opacity 0.3s ease; /* Transição suave na troca */
-    object-position: center; /* Centraliza a imagem */
+  background-color: #f8f9fa;
+  /* Fundo neutro durante carregamento */
+  transition: opacity 0.3s ease;
+  /* Transição suave na troca */
+  object-position: center;
+  /* Centraliza a imagem */
 }
 
 /* Comparative lists inside cards */
 .card .card-features {
   margin: 0;
   padding: 0;
-  flex-grow: 1; /* Ocupa o espaço restante do card */
-  list-style: none; /* Remove dots de ambos os cards */
+  flex-grow: 1;
+  /* Ocupa o espaço restante do card */
+  list-style: none;
+  /* Remove dots de ambos os cards */
 }
+
 .card .card-features li {
   margin: 0.4rem 0;
   font-size: 1rem;
   line-height: 1.5;
 }
-.card-old-way .card-features li { color: #444; }
-.card-sopy-way .card-features { list-style: none; padding-left: 0; }
+
+.card-old-way .card-features li {
+  color: #444;
+}
+
+.card-sopy-way .card-features {
+  list-style: none;
+  padding-left: 0;
+}
+
 .card-sopy-way .card-features li::before {
   content: "✔";
   color: #9FF2C2;
   margin-right: 0.6rem;
 }
+
 .card-old-way .card-features li::before {
   content: "✖";
   color: #CC4B4B;
@@ -546,28 +725,33 @@ body.theme-aqua .green-wave {
 /* Seção de comparação: remover padding-bottom para evitar corte visual
    e manter o conteúdo centralizado. */
 #comparison-section {
-  background-color: #F0F2F5; /* Cor fixa independente do tema */
+  background-color: #F0F2F5;
+  /* Cor fixa independente do tema */
   color: var(--cor-texto-escuro);
-  padding: 5rem 5% 0; /* remove padding-bottom conforme solicitado */
+  padding: 5rem 5% 0;
+  /* remove padding-bottom conforme solicitado */
   text-align: center;
-  height: 100vh; /* Altura total da viewport */
+  height: 100vh;
+  /* Altura total da viewport */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .comparison-intro {
-  padding-bottom: 0; /* garante que a própria div não tenha padding inferior */
+  padding-bottom: 0;
+  /* garante que a própria div não tenha padding inferior */
 }
 
 .comparison-intro h2 {
-  font-size: 3.5rem; 
-  font-weight: 800; 
+  font-size: 3.5rem;
+  font-weight: 800;
   text-transform: uppercase;
-  margin-top: 0; 
+  margin-top: 0;
   margin-bottom: 1.2rem;
   color: #333333;
-  line-height: 1.12; /* aumenta ligeiramente para evitar corte de acentos */
+  line-height: 1.12;
+  /* aumenta ligeiramente para evitar corte de acentos */
   overflow: visible;
 }
 
@@ -580,10 +764,10 @@ body.theme-aqua .green-wave {
   overflow: visible !important;
 }
 
-#comparison-section .split-line > span,
-#comparison-section .split-word > span,
-.comparison-intro .split-line > span,
-.comparison-intro .split-word > span {
+#comparison-section .split-line>span,
+#comparison-section .split-word>span,
+.comparison-intro .split-line>span,
+.comparison-intro .split-word>span {
   display: inline-block;
   transform-origin: center;
   -webkit-font-smoothing: antialiased;
@@ -591,10 +775,10 @@ body.theme-aqua .green-wave {
 }
 
 .comparison-intro p {
-  font-size: 1.1rem; 
-  line-height: 1.7; 
+  font-size: 1.1rem;
+  line-height: 1.7;
   color: #555;
-  max-width: 500px; 
+  max-width: 500px;
   margin: 0 auto;
 }
 
@@ -641,7 +825,7 @@ body.theme-aqua .green-wave {
 }
 
 .banner-controls button {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   border: none;
   width: 44px;
   height: 44px;
@@ -651,75 +835,127 @@ body.theme-aqua .green-wave {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 768px) {
-  .banner-controls { right: 12px; bottom: 12px; }
-  .banner-controls button { width: 40px; height: 40px; }
+  .banner-controls {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .banner-controls button {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 /* Mobile: título da seção menor */
 @media (max-width: 768px) {
   #comparison-section {
     padding: 3rem 3%;
-    height: auto; /* No mobile, altura automática */
-    min-height: 80vh; /* Altura mínima no mobile */
+    height: auto;
+    /* No mobile, altura automática */
+    min-height: 80vh;
+    /* Altura mínima no mobile */
   }
-  
+
   .comparison-intro h2 {
     font-size: 2.5rem;
   }
-  
+
   /* Cards menores no mobile */
   .card {
     width: 95%;
-    max-width: 420px; /* Menor que antes (era 500px) */
-    min-height: 480px; /* Menor que antes (era 550px) */
-    padding: 2rem; /* Menor que antes (era 2.5rem) */
+    max-width: 420px;
+    /* Menor que antes (era 500px) */
+    min-height: 480px;
+    /* Menor que antes (era 550px) */
+    padding: 2rem;
+    /* Menor que antes (era 2.5rem) */
   }
-  
+
   .card h3 {
-    font-size: 1.6rem; /* Menor que antes (era 1.8rem) */
+    font-size: 1.6rem;
+    /* Menor que antes (era 1.8rem) */
     margin-bottom: 1.5rem;
   }
-  
+
   .card img {
-    height: 160px; /* Menor que antes (era 200px) */
+    height: 160px;
+    /* Menor que antes (era 200px) */
     margin-bottom: 1.5rem;
   }
-  
+
   .card .card-features li {
-    font-size: 0.9rem; /* Menor para caber melhor */
+    font-size: 0.9rem;
+    /* Menor para caber melhor */
     margin: 0.3rem 0;
   }
 }
 
 /* theme overrides for icon color to ensure contrast across themes */
-body.theme-citrus #beneficios .sopy-benefits-card { --icon: var(--brand-dark); }
-body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
+body.theme-citrus #beneficios .sopy-benefits-card {
+  --icon: var(--brand-dark);
+}
+
+body.theme-aqua #beneficios .sopy-benefits-card {
+  --icon: var(--brand);
+}
 
 /* Ensure titles and labels have good contrast when icons change */
-#beneficios .sopy-benefits-card-title { color: #fff; font-size: 1.25rem; margin: 0 0 8px 0; }
-#beneficios .sopy-benefits-card-label { color: rgba(255,255,255,0.85); font-weight: 700; letter-spacing: .08em; }
+#beneficios .sopy-benefits-card-title {
+  color: #fff;
+  font-size: 1.25rem;
+  margin: 0 0 8px 0;
+}
+
+#beneficios .sopy-benefits-card-label {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 700;
+  letter-spacing: .08em;
+}
 
 /* Make sure the blob stays behind content and doesn't cover the icon area on large screens */
-#beneficios .sopy-benefits-card-blob { transform: translate(40%, -10%); }
+#beneficios .sopy-benefits-card-blob {
+  transform: translate(40%, -10%);
+}
 
 @media (max-width: 900px) {
-  #beneficios .sopy-benefits-card { padding: 32px; height: auto; }
-  #beneficios .sopy-benefits-card-icon { width: 72px; margin-bottom: 12px; }
+  #beneficios .sopy-benefits-card {
+    padding: 32px;
+    height: auto;
+  }
+
+  #beneficios .sopy-benefits-card-icon {
+    width: 72px;
+    margin-bottom: 12px;
+  }
 }
 
 
 
-  /* Ensure the hero remains highest visually so video looks correct */
-  #hero { z-index: 2; }
-  /* other sections slightly lower so overlap order is predictable */
-  .sopy-section { z-index: 1; }
+/* Ensure the hero remains highest visually so video looks correct */
+#hero {
+  z-index: 2;
+}
 
-.sopy-section-header { max-width: 900px; margin: 0 auto 2.25rem; text-align: center; }
-.sopy-section-header p { color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
+/* other sections slightly lower so overlap order is predictable */
+.sopy-section {
+  z-index: 1;
+}
+
+.sopy-section-header {
+  max-width: 900px;
+  margin: 0 auto 2.25rem;
+  text-align: center;
+}
+
+.sopy-section-header p {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
 
 
 
@@ -731,10 +967,18 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   --_fg: #fff;
   --_bd: var(--brand);
   position: relative;
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: .5rem; padding: .85rem 1.8rem; border-radius: 999rem;
-  border: 1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
-  font-weight: 600; letter-spacing: .05em; box-shadow: none; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .85rem 1.8rem;
+  border-radius: 999rem;
+  border: 1px solid var(--_bd);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-weight: 600;
+  letter-spacing: .05em;
+  box-shadow: none;
   transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease;
   overflow: hidden;
 }
@@ -763,14 +1007,22 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   z-index: 1;
 }
 
-.sopy-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
-.sopy-btn:active { transform: translateY(0); box-shadow: none; }
+.sopy-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, .08);
+}
+
+.sopy-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
 
 .sopy-btn-ghost {
-  --_bg: rgba(255,255,255,.7);
+  --_bg: rgba(255, 255, 255, .7);
   --_fg: var(--brand);
-  --_bd: rgba(0,0,0,0);
+  --_bd: rgba(0, 0, 0, 0);
 }
+
 .sopy-btn-outline {
   --_bg: transparent;
   --_fg: var(--brand);
@@ -778,71 +1030,116 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 }
 
 /* ========== HERO (VÃDEO) ========== */
-.sopy-hero, #hero {
+.sopy-hero,
+#hero {
   display: flex;
   flex-direction: column;
   /* Use small viewport units and include safe-area to avoid notch overlap */
   min-height: 100svh;
-  padding-top: calc(clamp(96px, 16vh, 200px) + env(safe-area-inset-top)); /* mais espaço acima */
-  justify-content: flex-start; /* alinha o conteúdo para o topo */
+  padding-top: calc(clamp(96px, 16vh, 200px) + env(safe-area-inset-top));
+  /* mais espaço acima */
+  justify-content: flex-start;
+  /* alinha o conteúdo para o topo */
 }
 
 .sopy-hero-media {
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background: var(--gradient);
 }
+
 .sopy-hero-video {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   filter: saturate(105%) contrast(102%);
   mix-blend-mode: normal;
   -webkit-mask-image:
     linear-gradient(to bottom,
       #000 0%,
       #000 var(--mask-start),
-      rgba(0,0,0,.98) calc(var(--mask-start) + 4%),
-      rgba(0,0,0,.90) calc(var(--mask-start) + 9%),
-      rgba(0,0,0,.75) calc(var(--mask-start) + 15%),
-      rgba(0,0,0,.55) calc(var(--mask-start) + 22%),
-      rgba(0,0,0,.35) calc(var(--mask-start) + 29%),
-      rgba(0,0,0,.18) calc(var(--mask-start) + 35%),
-      rgba(0,0,0,0) 100%
-    );
-          mask-image:
+      rgba(0, 0, 0, .98) calc(var(--mask-start) + 4%),
+      rgba(0, 0, 0, .90) calc(var(--mask-start) + 9%),
+      rgba(0, 0, 0, .75) calc(var(--mask-start) + 15%),
+      rgba(0, 0, 0, .55) calc(var(--mask-start) + 22%),
+      rgba(0, 0, 0, .35) calc(var(--mask-start) + 29%),
+      rgba(0, 0, 0, .18) calc(var(--mask-start) + 35%),
+      rgba(0, 0, 0, 0) 100%);
+  mask-image:
     linear-gradient(to bottom,
       #000 0%,
       #000 var(--mask-start),
-      rgba(0,0,0,.98) calc(var(--mask-start) + 4%),
-      rgba(0,0,0,.90) calc(var(--mask-start) + 9%),
-      rgba(0,0,0,.75) calc(var(--mask-start) + 15%),
-      rgba(0,0,0,.55) calc(var(--mask-start) + 22%),
-      rgba(0,0,0,.35) calc(var(--mask-start) + 29%),
-      rgba(0,0,0,.18) calc(var(--mask-start) + 35%),
-      rgba(0,0,0,0) 100%
-    );
+      rgba(0, 0, 0, .98) calc(var(--mask-start) + 4%),
+      rgba(0, 0, 0, .90) calc(var(--mask-start) + 9%),
+      rgba(0, 0, 0, .75) calc(var(--mask-start) + 15%),
+      rgba(0, 0, 0, .55) calc(var(--mask-start) + 22%),
+      rgba(0, 0, 0, .35) calc(var(--mask-start) + 29%),
+      rgba(0, 0, 0, .18) calc(var(--mask-start) + 35%),
+      rgba(0, 0, 0, 0) 100%);
 }
+
 .sopy-hero-poster {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-  opacity: 1; transition: opacity .35s ease;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  transition: opacity .35s ease;
 }
-.sopy-hero-poster.is-hidden { opacity: 0; }
+
+.sopy-hero-poster.is-hidden {
+  opacity: 0;
+}
+
 .sopy-hero-content {
-  position: relative; z-index: 1; width: min(1100px, 92%);
-  margin: 0 auto; padding: 0 0 0;
-  display: grid; gap: clamp(12px, 1.8vw, 18px); justify-items: center; text-align: center;
+  position: relative;
+  z-index: 1;
+  width: min(1100px, 92%);
+  margin: 0 auto;
+  padding: 0 0 0;
+  display: grid;
+  gap: clamp(12px, 1.8vw, 18px);
+  justify-items: center;
+  text-align: center;
 }
+
 .sopy-hero-content h1 {
   color: var(--brand-dark);
-  text-shadow: 0 2px 12px rgba(0,0,0,.28);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, .28);
   /* Large on desktop, scales down fluidly on smaller screens */
   font-size: clamp(2.6rem, 10vw, 5.5rem);
   line-height: 1.02;
   letter-spacing: -0.005em;
   text-wrap: balance;
 }
-.sopy-hero-content p { max-width: 780px; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,.25); }
-.sopy-hero section, .sopy-hero { color: #fff; }
-.sopy-hero .sopy-btn-primary { background: #fff; color: var(--brand); border-color: #fff; }
-.sopy-hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.sopy-hero-content p {
+  max-width: 780px;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+}
+
+.sopy-hero section,
+.sopy-hero {
+  color: #fff;
+}
+
+.sopy-hero .sopy-btn-primary {
+  background: #fff;
+  color: var(--brand);
+  border-color: #fff;
+}
+
+.sopy-hero-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
 /* CTA movido da seção intermediária para o final da seção hero */
 .sopy-hero .cta-content {
@@ -867,11 +1164,11 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   border: none;
   cursor: pointer;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
-              0 4px 12px rgba(0, 0, 0, 0.1);
+    0 4px 12px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
-  
+
   /* Animação de pulso para chamar atenção */
   animation: ctaPulse 3s infinite ease-in-out;
 }
@@ -884,12 +1181,10 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent);
   transition: left 0.6s ease;
 }
 
@@ -898,15 +1193,18 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 }
 
 @keyframes ctaPulse {
-  0%, 100% { 
-    transform: scale(1); 
+
+  0%,
+  100% {
+    transform: scale(1);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15),
-                0 4px 12px rgba(0, 0, 0, 0.1);
+      0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  50% { 
-    transform: scale(1.05); 
+
+  50% {
+    transform: scale(1.05);
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2),
-                0 6px 16px rgba(0, 0, 0, 0.15);
+      0 6px 16px rgba(0, 0, 0, 0.15);
   }
 }
 
@@ -914,7 +1212,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
   animation-play-state: paused;
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25),
-              0 8px 20px rgba(0, 0, 0, 0.15);
+    0 8px 20px rgba(0, 0, 0, 0.15);
   background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
 }
 
@@ -926,12 +1224,14 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 /* Responsividade mobile */
 @media (max-width: 768px) {
   .sopy-hero .cta-content {
-    bottom: 8vh; /* Mantém posicionamento absoluto embaixo */
+    bottom: 8vh;
+    /* Mantém posicionamento absoluto embaixo */
     width: 90%;
     max-width: 400px;
-    text-align: center; /* Centraliza o botão */
+    text-align: center;
+    /* Centraliza o botão */
   }
-  
+
   .sopy-hero .btn-comprar-agora {
     font-size: 1.1rem;
     padding: 18px 40px;
@@ -1010,7 +1310,7 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
     margin: 32px auto 0;
     width: min(100%, 320px);
   }
-  
+
   .hero-cta-inner {
     padding: 20px;
   }
@@ -1019,8 +1319,12 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 /* Espuma/seam sutil entre hero e seção seguinte */
 #hero::after {
   content: "";
-  position: absolute; left: 0; right: 0; bottom: calc(-1 * var(--seam-height) * 0.5); height: var(--seam-height);
-  background: radial-gradient(140% 110% at 50% 0%, rgba(255,255,255,.9) 0 34%, rgba(255,255,255,0) 60%);
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * var(--seam-height) * 0.5);
+  height: var(--seam-height);
+  background: radial-gradient(140% 110% at 50% 0%, rgba(255, 255, 255, .9) 0 34%, rgba(255, 255, 255, 0) 60%);
   filter: blur(8px);
   opacity: .25;
   pointer-events: none;
@@ -1028,78 +1332,141 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 
 /* ========== LOADER ========== */
 #loader {
-  position: fixed; inset: 0; z-index: 1000; background: transparent; /* fundo vem do ::before mascarado */
-  color: #fff; display: grid; place-items: center; pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: transparent;
+  /* fundo vem do ::before mascarado */
+  color: #fff;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
 }
+
 /* Máscara tipo "gota": cria um furo circular que revela o vídeo ao fundo */
 #loader {
   /* variáveis controladas via JS/GSAP */
-  --r: 0px;      /* raio da gota */
-  --cx: 50vw;    /* centro X */
-  --cy: 50vh;    /* centro Y */
+  --r: 0px;
+  /* raio da gota */
+  --cx: 50vw;
+  /* centro X */
+  --cy: 50vh;
+  /* centro Y */
 }
 
 #loader::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: 0; /* fica atrás do conteúdo do loader */
+  z-index: 0;
+  /* fica atrás do conteúdo do loader */
   background: var(--brand-dark);
   /* Dentro do raio -> transparente (revela o vídeo); fora -> sólido (escuro) */
   -webkit-mask: radial-gradient(circle at var(--cx) var(--cy), transparent 0 var(--r), black calc(var(--r) + 1px) 100%);
   mask: radial-gradient(circle at var(--cx) var(--cy), transparent 0 var(--r), black calc(var(--r) + 1px) 100%);
   pointer-events: none;
 }
-.loader-overlay {
-  position: absolute; inset: 0; display: none; grid-template-columns: 1fr 1fr; z-index: 1;
-}
-.loader-block { background: rgba(255,255,255,.06); }
-.loader-center { position: relative; z-index: 2; display: grid; place-items: center; gap: 18px; }
 
-.loader-counter { 
-  font-family: 'Syne', Inter, sans-serif; font-weight: 700;
-  font-size: clamp(2.25rem, 10vw, 8rem); line-height: 1; letter-spacing: -0.02em;
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  grid-template-columns: 1fr 1fr;
+  z-index: 1;
+}
+
+.loader-block {
+  background: rgba(255, 255, 255, .06);
+}
+
+.loader-center {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  gap: 18px;
+}
+
+.loader-counter {
+  font-family: 'Syne', Inter, sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.25rem, 10vw, 8rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 /* Remove a linha vertical do loader */
-.loader-divider { display: none; }
+.loader-divider {
+  display: none;
+}
 
 .loader-circle {
-  width: 240px; aspect-ratio: 1; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.35);
-  box-shadow: inset 0 0 80px rgba(255,255,255,.06), 0 10px 30px rgba(0,0,0,.2);
-  transform: scale(0); /* não usamos mais para o reveal, só efeito visual se quiser */
-  display: none; /* oculto para evitar segundo círculo visível */
+  width: 240px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, .35);
+  box-shadow: inset 0 0 80px rgba(255, 255, 255, .06), 0 10px 30px rgba(0, 0, 0, .2);
+  transform: scale(0);
+  /* não usamos mais para o reveal, só efeito visual se quiser */
+  display: none;
+  /* oculto para evitar segundo círculo visível */
 }
 
 /* custom cursor removed to use default system cursor */
 
 /* ========== 3D (CAPSULE PIN) ========== */
-.sopy-capsule3d { background: var(--surface); }
-#capsula-3d { height: 200vh; --capsule-ui-offset: 120px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 0; position: relative; z-index: 2; isolation: isolate; }
+.sopy-capsule3d {
+  background: var(--surface);
+}
+
+#capsula-3d {
+  height: 200vh;
+  --capsule-ui-offset: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 0;
+  position: relative;
+  z-index: 2;
+  isolation: isolate;
+}
+
 #capsula-3d::before {
   /* zona de mistura suave no topo e gradiente profundo */
   content: "";
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
     linear-gradient(to bottom,
-      #a6d1df 0%,  /* azul claro da superfície */
+      #a6d1df 0%,
+      /* azul claro da superfície */
       #6fb8c4 38%,
       #2a7f95 80%,
       #166277 100%);
 }
+
 #capsula-3d::after {
   /* bolhinhas discretas na seção deep (sob o canvas) */
   content: "";
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background-image: radial-gradient(circle at 30% 75%, rgba(255,255,255,.22) 0 1px, transparent 2px);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 30% 75%, rgba(255, 255, 255, .22) 0 1px, transparent 2px);
   background-size: 240px 240px;
   opacity: .18;
   animation: bubbles 28s linear infinite;
 }
+
 #capsula-3d::before {
   content: "";
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
   background:
     linear-gradient(to bottom,
       #a6d1df 0%,
@@ -1107,23 +1474,33 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
       #2a7f95 80%,
       #166277 100%);
 }
+
 #capsula-3d::after {
   content: "";
-  position: absolute; left: 0; right: 0; top: -2vh;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -2vh;
   height: calc(var(--seam-height) + 8vh);
   background: linear-gradient(to top,
-    rgba(166,209,223,.92) 0%,
-    rgba(166,209,223,.65) 35%,
-    rgba(166,209,223,.35) 65%,
-    rgba(166,209,223,0) 100%);
+      rgba(166, 209, 223, .92) 0%,
+      rgba(166, 209, 223, .65) 35%,
+      rgba(166, 209, 223, .35) 65%,
+      rgba(166, 209, 223, 0) 100%);
   mix-blend-mode: soft-light;
   filter: blur(10px);
   pointer-events: none;
 }
+
 #three-container {
-  position: sticky; top: var(--capsule-ui-offset); width: 100%; height: calc(100vh - var(--capsule-ui-offset));
+  position: sticky;
+  top: var(--capsule-ui-offset);
+  width: 100%;
+  height: calc(100vh - var(--capsule-ui-offset));
   background: transparent;
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 3;
 }
 
@@ -1145,174 +1522,296 @@ body.theme-aqua #beneficios .sopy-benefits-card { --icon: var(--brand); }
 .sopy-capsule3d::before {
   /* bolhinhas discretas na seção deep (sob o canvas) */
   content: "";
-  position: absolute; inset: 0; z-index: 0; pointer-events: none;
-  background-image: radial-gradient(circle at 30% 75%, rgba(255,255,255,.22) 0 1px, transparent 2px);
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle at 30% 75%, rgba(255, 255, 255, .22) 0 1px, transparent 2px);
   background-size: 240px 240px;
   opacity: .18;
   animation: bubbles 28s linear infinite;
 }
+
 .sopy-capsule3d-ui {
   /* Make the UI static so titles and copy don't pin or move with scroll */
-  position: relative; /* normal document flow */
-  width: min(1200px, 94%); margin: 0 auto; padding: 16px 0;
-  display: grid; grid-template-columns: 1fr; gap: 10px; align-items: center; justify-items: center;
+  position: relative;
+  /* normal document flow */
+  width: min(1200px, 94%);
+  margin: 0 auto;
+  padding: 16px 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  align-items: center;
+  justify-items: center;
 
-/* Overlay image placed inside each CTA (positioned above the card) */
-#capsula-3d .capsule-3d-cta {
-  position: absolute; /* ensure CTAs are positioned */
-}
-#capsula-3d .capsule-3d-cta .cta-overlay {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%) translateY(6px);
-  bottom: calc(100% + 12px); /* place above the CTA */
-  width: clamp(72px, 8vw, 160px);
-  height: auto;
-  z-index: 6; /* above CTAs */
-  pointer-events: none;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity .18s ease, transform .18s ease;
-  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.18));
-}
+  /* Overlay image placed inside each CTA (positioned above the card) */
+  #capsula-3d .capsule-3d-cta {
+    position: absolute;
+    /* ensure CTAs are positioned */
+  }
 
-/* When the section has show-overlays, fade CTA overlays in */
-#capsula-3d.show-overlays .capsule-3d-cta .cta-overlay {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(-50%) translateY(0);
-}
+  #capsula-3d .capsule-3d-cta .cta-overlay {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    bottom: calc(100% + 12px);
+    /* place above the CTA */
+    width: clamp(72px, 8vw, 160px);
+    height: auto;
+    z-index: 6;
+    /* above CTAs */
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .18s ease, transform .18s ease;
+    filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.18));
+  }
+
+  /* When the section has show-overlays, fade CTA overlays in */
+  #capsula-3d.show-overlays .capsule-3d-cta .cta-overlay {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
   text-align: center;
   padding-top: 3.5rem;
   z-index: 2;
-  order: -1; /* keeps UI before the canvas in column direction */
+  order: -1;
+  /* keeps UI before the canvas in column direction */
 }
+
 .sopy-capsule3d-title-over {
-  position: absolute;              /* fixed inside the #capsula-3d container */
-  top: 65vh;                       /* higher position without sticking */
+  position: absolute;
+  /* fixed inside the #capsula-3d container */
+  top: 65vh;
+  /* higher position without sticking */
   left: 50%;
-  transform: translateX(-50%);     /* center horizontally */
+  transform: translateX(-50%);
+  /* center horizontally */
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2;                      /* below CTA (z:4) and canvas (z:3) if desired */
+  z-index: 2;
+  /* below CTA (z:4) and canvas (z:3) if desired */
   pointer-events: none;
 }
+
 .sopy-capsule3d-title-over h2 {
   color: #ffffff;
   text-align: center;
   font-weight: 900;
   letter-spacing: 0;
-  font-size: clamp(2.2rem, 6vw, 6rem); /* slightly smaller */
+  font-size: clamp(2.2rem, 6vw, 6rem);
+  /* slightly smaller */
   line-height: 0.98;
   margin: 0;
 }
+
 .capsule-3d-cta {
-  position: absolute; /* fixed position within section */
-  bottom: 12vh; /* alinhado mais baixo (mais próximo da base) */
-  right: clamp(24px, 8vw, 14vw); /* default position on right */
+  position: absolute;
+  /* fixed position within section */
+  bottom: 12vh;
+  /* alinhado mais baixo (mais próximo da base) */
+  right: clamp(24px, 8vw, 14vw);
+  /* default position on right */
   transform: translateY(0) scale(1);
   max-width: 420px;
-  z-index: 4; /* above title */
+  z-index: 4;
+  /* above title */
   pointer-events: none;
-  opacity: 0; /* shown near the end via class */
+  opacity: 0;
+  /* shown near the end via class */
   visibility: hidden;
-  transition: opacity .45s cubic-bezier(.22,.9,.25,1), transform .45s cubic-bezier(.22,.9,.25,1), visibility .45s, left .6s ease, right .6s ease;
+  transition: opacity .45s cubic-bezier(.22, .9, .25, 1), transform .45s cubic-bezier(.22, .9, .25, 1), visibility .45s, left .6s ease, right .6s ease;
 }
 
 /* Theme-based positioning */
 body.theme-citrus .capsule-3d-cta:not(.opposite) {
   right: auto;
-  left: clamp(24px, 8vw, 14vw); /* move main CTA to left for citrus theme */
+  left: clamp(24px, 8vw, 14vw);
+  /* move main CTA to left for citrus theme */
 }
 
 body.theme-aqua .capsule-3d-cta:not(.opposite) {
   left: auto;
-  right: clamp(24px, 8vw, 14vw); /* keep main CTA on right for aqua theme */
+  right: clamp(24px, 8vw, 14vw);
+  /* keep main CTA on right for aqua theme */
 }
+
 /* Opposite CTA: always place on the opposite side to the main CTA */
 .capsule-3d-cta.opposite {
   /* default opposite: put on left */
   left: clamp(24px, 8vw, 14vw);
   right: auto;
 }
+
 /* Theme overrides for the opposite CTA */
 body.theme-aqua .capsule-3d-cta.opposite {
   /* when aqua (main CTA on right), opposite should be on left */
   left: clamp(24px, 8vw, 14vw);
   right: auto;
 }
+
 body.theme-citrus .capsule-3d-cta.opposite {
   /* when citrus (main CTA on left), opposite should be on right */
   right: clamp(24px, 8vw, 14vw);
   left: auto;
 }
+
+/* ===== Mobile adjustments for the Capsula 3D section ===== */
+@media (max-width: 900px) {
+
+  /* Make the 2D capsule image larger and centered for mobile */
+  .capsule-2d-photo {
+    max-width: 64vw !important;
+    max-height: 50vh !important;
+    top: 46% !important;
+    transform: translate(-50%, -46%) !important;
+    z-index: 3;
+  }
+
+  /* Keep CTAs positioned near the bottom (absolute) but offset vertically to avoid overlap */
+  #capsula-3d .capsule-3d-cta {
+    position: absolute !important;
+    width: min(46%, 320px) !important;
+    margin: 0 !important;
+    transform: translateY(0) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 6 !important;
+    bottom: 8vh !important;
+    /* primary CTA sits near the bottom */
+  }
+
+  /* Opposite CTA sits slightly higher to prevent overlap */
+  #capsula-3d .capsule-3d-cta.opposite {
+    bottom: 20vh !important;
+  }
+
+  /* Keep overlay images positioned above their CTA (absolute) so they don't shift layout */
+  #capsula-3d .capsule-3d-cta .cta-overlay {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) translateY(6px) !important;
+    bottom: calc(100% + 8px) !important;
+    /* slightly above the CTA */
+    width: clamp(72px, 18vw, 160px) !important;
+    display: block !important;
+    margin: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: none !important;
+  }
+
+  /* Reduce internal padding and scale text for better fit */
+  .capsule-3d-cta .capsule-3d-cta-inner {
+    padding: 12px !important;
+  }
+
+  .capsule-3d-cta .product-title {
+    font-size: 1rem !important;
+  }
+
+  .capsule-3d-cta .product-price {
+    font-size: 1.05rem !important;
+  }
+
+  .capsule-3d-cta .product-copy {
+    display: none !important;
+  }
+
+  /* Revert: keep default three-container sizing on mobile to preserve original spin behaviour */
+  /* (no forced height/top here) */
+
+  /* Hide decorative bubbles on small screens to reduce visual clutter */
+  .sopy-capsule-bubbles {
+    display: none !important;
+  }
+}
+
 .capsule-3d-cta-inner {
-  background: rgba(255,255,255,0.1); /* glassmorphism background */
-  padding: 24px 28px; 
-  border-radius: 16px; 
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.1);
+  /* glassmorphism background */
+  padding: 24px 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   pointer-events: auto;
 }
-.capsule-3d-cta .product-title { 
-  font-size: 1.2rem; 
-  margin: 0 0 4px 0; 
+
+.capsule-3d-cta .product-title {
+  font-size: 1.2rem;
+  margin: 0 0 4px 0;
   font-weight: 700;
-  color: #ffffff; /* white text for glassmorphism */
+  color: #ffffff;
+  /* white text for glassmorphism */
 }
-.capsule-3d-cta .product-price { 
-  font-size: 1.8rem; 
-  margin: 0 0 2px 0; 
+
+.capsule-3d-cta .product-price {
+  font-size: 1.8rem;
+  margin: 0 0 2px 0;
   font-weight: 700;
-  color: #ffffff; /* white text for glassmorphism */
+  color: #ffffff;
+  /* white text for glassmorphism */
 }
-.capsule-3d-cta .product-vat { 
-  font-size: 0.8rem; 
-  margin: 0 0 16px 0; 
-  color: rgba(255,255,255,0.8); /* semi-transparent white */
+
+.capsule-3d-cta .product-vat {
+  font-size: 0.8rem;
+  margin: 0 0 16px 0;
+  color: rgba(255, 255, 255, 0.8);
+  /* semi-transparent white */
   font-weight: 400;
 }
-.capsule-3d-cta .product-copy { 
-  margin: 0 0 20px 0; 
-  color: rgba(255,255,255,0.9); /* semi-transparent white */
-  font-size: 0.9rem; 
+
+.capsule-3d-cta .product-copy {
+  margin: 0 0 20px 0;
+  color: rgba(255, 255, 255, 0.9);
+  /* semi-transparent white */
+  font-size: 0.9rem;
   line-height: 1.4;
 }
 
 /* Tamanhos menores para mobile */
 @media (max-width: 900px) {
+
   /* Título maior para mobile */
   .sopy-capsule3d-title-over h2 {
     font-size: clamp(3rem, 10vw, 5rem);
   }
-  
-  .capsule-3d-cta .product-title { 
-    font-size: 1rem; 
-    margin: 0 0 3px 0; 
+
+  .capsule-3d-cta .product-title {
+    font-size: 1rem;
+    margin: 0 0 3px 0;
   }
-  .capsule-3d-cta .product-price { 
-    font-size: 1.4rem; 
-    margin: 0 0 2px 0; 
+
+  .capsule-3d-cta .product-price {
+    font-size: 1.4rem;
+    margin: 0 0 2px 0;
   }
-  .capsule-3d-cta .product-copy { 
-    display: none; /* remove o texto da descrição */
+
+  .capsule-3d-cta .product-copy {
+    display: none;
+    /* remove o texto da descrição */
   }
-  
+
   /* Botão volta ao normal */
-  .capsule-3d-cta .sopy-product-cta { 
+  .capsule-3d-cta .sopy-product-cta {
     padding: 10px 20px;
     font-size: 0.8rem;
   }
 }
-.capsule-3d-cta .sopy-product-cta { 
+
+.capsule-3d-cta .sopy-product-cta {
   width: 100%;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   padding: 12px 24px;
   border-radius: 50px;
   font-weight: 600;
@@ -1322,62 +1821,89 @@ body.theme-citrus .capsule-3d-cta.opposite {
   backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 }
+
 .capsule-3d-cta .sopy-product-cta:hover {
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
 }
-.capsule-3d-cta .product-copy { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.06rem; line-height: 1.6; }
-.capsule-3d-cta .sopy-product-cta { display: inline-block; pointer-events: auto; }
-.capsule-3d-cta.is-visible { opacity: 1; visibility: visible; }
+
+.capsule-3d-cta .product-copy {
+  margin: 0 0 1.1rem;
+  color: var(--muted);
+  font-size: 1.06rem;
+  line-height: 1.6;
+}
+
+.capsule-3d-cta .sopy-product-cta {
+  display: inline-block;
+  pointer-events: auto;
+}
+
+.capsule-3d-cta.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
 
 @media (max-width: 900px) {
-  .capsule-3d-cta { 
+  .capsule-3d-cta {
     position: absolute;
-    bottom: 12vh; /* movido mais para baixo em mobile */
+    bottom: 12vh;
+    /* movido mais para baixo em mobile */
     left: 50%;
     transform: translateX(-50%);
-    width: 96%; /* mais largo */
-    max-width: 340px; /* largura máxima maior */
+    width: 96%;
+    /* mais largo */
+    max-width: 340px;
+    /* largura máxima maior */
     right: auto;
   }
-  
+
   body.theme-citrus .capsule-3d-cta,
   body.theme-aqua .capsule-3d-cta {
     right: auto;
     left: 50%;
     transform: translateX(-50%);
   }
-  
-  .capsule-3d-cta-inner { 
+
+  .capsule-3d-cta-inner {
     border-radius: 12px;
     padding: 16px 20px;
   }
 }
+
 /* Quando visível, o CTA pode receber eventos do ponteiro */
-.capsule-3d-cta.is-visible { pointer-events: auto; }
+.capsule-3d-cta.is-visible {
+  pointer-events: auto;
+}
 
 /* Limita o deslocamento direito para evitar overflow em telas muito pequenas */
 @media (max-width: 480px) {
   .capsule-3d-cta {
-    max-width: 310px; /* mais largo */
-    width: 94%; /* largura maior */
-    bottom: 10vh; /* ficar ainda mais próximo da base em telas pequenas */
+    max-width: 310px;
+    /* mais largo */
+    width: 94%;
+    /* largura maior */
+    bottom: 10vh;
+    /* ficar ainda mais próximo da base em telas pequenas */
   }
-  
+
   .capsule-3d-cta-inner {
-    padding: 12px 16px; /* padding ainda menor */
+    padding: 12px 16px;
+    /* padding ainda menor */
   }
-  
+
   /* Texto removido - sem necessidade de estilizar */
 }
 
 @media (max-width: 900px) {
-  .capsule-3d-cta.at-end { 
-    left: 50%; 
+  .capsule-3d-cta.at-end {
+    left: 50%;
     right: auto;
     transform: translateX(-50%);
-    bottom: 12vh; /* consistente com o posicionamento acima */
-    max-width: 340px; /* largura maior também */
+    bottom: 12vh;
+    /* consistente com o posicionamento acima */
+    max-width: 340px;
+    /* largura maior também */
   }
 }
 
@@ -1388,44 +1914,55 @@ body.theme-citrus .capsule-3d-cta.opposite {
   justify-content: center;
   gap: 6px;
   position: absolute;
-  top: -18px;                 /* moved down closer to the toggle */
+  top: -18px;
+  /* moved down closer to the toggle */
   left: 50%;
-  transform: translateX(-50%);/* center above toggle */
-  white-space: nowrap;        /* keep on a single line */
+  transform: translateX(-50%);
+  /* center above toggle */
+  white-space: nowrap;
+  /* keep on a single line */
   text-align: center;
-  background: transparent;   /* no background */
+  background: transparent;
+  /* no background */
   color: #000;
   padding: 0 6px;
   font-size: 14px;
   font-weight: 800;
   line-height: 1;
   z-index: 1200;
-  pointer-events: none;      /* let clicks pass to the toggle underneath */
-  transition: none !important; /* disable any hover transitions */
+  pointer-events: none;
+  /* let clicks pass to the toggle underneath */
+  transition: none !important;
+  /* disable any hover transitions */
 }
 
-.toggle-hint .hint-arrow { opacity: 0.8; }
+.toggle-hint .hint-arrow {
+  opacity: 0.8;
+}
 
 /* Restore smooth toggle animations but keep hint stable */
 .product-toggle-container .pod-toggle-label {
-  transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
+  transition: background-color 0.35s cubic-bezier(.2, .8, .2, 1), border-color 0.35s cubic-bezier(.2, .8, .2, 1);
 }
+
 .product-toggle-container .pod-toggle-handle {
-  transition: transform 0.6s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease;
+  transition: transform 0.6s cubic-bezier(.2, .8, .2, 1), box-shadow 0.25s ease;
 }
 
 /* preserve existing positioning for product-toggle-container */
 .product-toggle-container {
   position: fixed;
   right: 18px;
-  bottom: 30px; /* moved slightly lower */
+  bottom: 30px;
+  /* moved slightly lower */
   z-index: 80;
   padding: 0px 8px 8px 8px;
 }
 
 /* Seção 3D estendida para acomodar animações */
 .sopy-section--extended {
-  min-height: 400vh; /* Quadruplicar a altura para máximo espaçamento entre títulos */
+  min-height: 400vh;
+  /* Quadruplicar a altura para máximo espaçamento entre títulos */
 }
 
 /* Benefit titles animation */
@@ -1447,7 +1984,8 @@ body.theme-citrus .capsule-3d-cta.opposite {
 }
 
 .benefit-title h2 {
-  font-size: clamp(2rem, 6vw, 5rem); /* Reduzido para garantir que caiba */
+  font-size: clamp(2rem, 6vw, 5rem);
+  /* Reduzido para garantir que caiba */
   font-weight: 700;
   line-height: 1.3;
   color: #ffffff;
@@ -1507,23 +2045,24 @@ body.theme-citrus footer.js-footer {
 /* Mobile adjustments */
 @media (max-width: 768px) {
   .benefit-title h2 {
-    font-size: clamp(1.4rem, 5vw, 2.8rem); /* Ainda menor para garantir que caiba no mobile */
+    font-size: clamp(1.4rem, 5vw, 2.8rem);
+    /* Ainda menor para garantir que caiba no mobile */
     white-space: nowrap;
     overflow: visible;
   }
-  
+
   .benefit-1 {
     top: 6%;
     left: 5%;
     right: 5%;
   }
-  
+
   .benefit-2 {
     top: 30%;
     left: 5%;
     right: 5%;
   }
-  
+
   .benefit-3 {
     top: 54%;
     left: 5%;
@@ -1531,7 +2070,13 @@ body.theme-citrus footer.js-footer {
   }
 }
 
-.sopy-capsule3d-copy p { color: var(--muted); max-width: 680px; margin: 0 auto; font-size: 1.05rem; line-height: 1.6; }
+.sopy-capsule3d-copy p {
+  color: var(--muted);
+  max-width: 680px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
 
 /* ==== Decorative bubbles inside the 3D section ====
    Bubbles rise from the 3D area upward toward the hero. JS will inject
@@ -1540,31 +2085,47 @@ body.theme-citrus footer.js-footer {
 .sopy-capsule-bubbles {
   position: absolute;
   inset: 0;
-  pointer-events: auto; /* habilita cliques para explodir bolhas 3D */
+  pointer-events: auto;
+  /* habilita cliques para explodir bolhas 3D */
   overflow: visible;
-  z-index: 3; /* under CTA (60) and header (50), above background */
+  z-index: 3;
+  /* under CTA (60) and header (50), above background */
 }
+
 .sopy-capsule-bubbles .sopy-bubble {
   position: absolute;
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.85), rgba(255,255,255,0.15));
-  box-shadow: 0 8px 24px rgba(0,0,0,0.12), inset 0 2px 8px rgba(255,255,255,0.12);
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.15));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset 0 2px 8px rgba(255, 255, 255, 0.12);
   opacity: 0.9;
   mix-blend-mode: screen;
-  transform: translate3d(0,0,0) scale(0.9);
+  transform: translate3d(0, 0, 0) scale(0.9);
 }
-.sopy-capsule-bubbles .sopy-bubble.small { width: 28px; height: 28px; opacity: 0.8; }
-.sopy-capsule-bubbles .sopy-bubble.large { width: 78px; height: 78px; opacity: 0.6; }
+
+.sopy-capsule-bubbles .sopy-bubble.small {
+  width: 28px;
+  height: 28px;
+  opacity: 0.8;
+}
+
+.sopy-capsule-bubbles .sopy-bubble.large {
+  width: 78px;
+  height: 78px;
+  opacity: 0.6;
+}
 
 @media (max-width: 900px) {
-  .sopy-capsule-bubbles .sopy-bubble { width: 34px; height: 34px; }
+  .sopy-capsule-bubbles .sopy-bubble {
+    width: 34px;
+    height: 34px;
+  }
 }
 
 /* --- Toggle Animado de Produtos --- */
 .product-toggle-container {
-    text-align: center;
+  text-align: center;
 }
 
 /* Posicionamento flutuante igual ao antigo fragrance-toggle */
@@ -1575,20 +2136,24 @@ body.theme-citrus footer.js-footer {
   z-index: 80;
   padding: 0px 8px 8px 8px;
 }
+
 .pod-toggle-checkbox {
-    display: none;
+  display: none;
 }
+
 .pod-toggle-label {
-    display: inline-block;
-    width: 120px; /* smaller */
-    height: 60px; /* smaller */
-    border-radius: 36px;
-    position: relative;
-    cursor: pointer;
-    box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(255, 255, 255, 0.45);
-    background-color: #5cb85c;
-    border: 4px solid #449d44;
-    transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
+  display: inline-block;
+  width: 120px;
+  /* smaller */
+  height: 60px;
+  /* smaller */
+  border-radius: 36px;
+  position: relative;
+  cursor: pointer;
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(255, 255, 255, 0.45);
+  background-color: #5cb85c;
+  border: 4px solid #449d44;
+  transition: background-color 0.35s cubic-bezier(.2, .8, .2, 1), border-color 0.35s cubic-bezier(.2, .8, .2, 1);
 }
 
 /* Mobile toggle adjustments - maintain smooth animation */
@@ -1597,55 +2162,60 @@ body.theme-citrus footer.js-footer {
     bottom: 20px;
     right: 15px;
   }
-  
+
   .pod-toggle-label {
     width: 90px;
     height: 45px;
     border-radius: 25px;
     border: 3px solid #449d44;
-    transition: background-color 0.35s cubic-bezier(.2,.8,.2,1), border-color 0.35s cubic-bezier(.2,.8,.2,1);
+    transition: background-color 0.35s cubic-bezier(.2, .8, .2, 1), border-color 0.35s cubic-bezier(.2, .8, .2, 1);
   }
-  
+
   .pod-toggle-handle {
     width: 36px;
     height: 36px;
     left: 4px;
     --tx: 0px;
     transform: translate(var(--tx), -50%);
-    transition: transform 0.6s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease;
+    transition: transform 0.6s cubic-bezier(.2, .8, .2, 1), box-shadow 0.25s ease;
   }
-  
-  .pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
+
+  .pod-toggle-checkbox:checked+.pod-toggle-label .pod-toggle-handle {
     /* precise end position for 90x45 label, 36px handle, 3px border, 4px left gap */
     transform: translate(25px, -50%) !important;
   }
-  
+
   .toggle-hint {
     font-size: 12px;
     top: -16px;
   }
 }
+
 .pod-toggle-handle {
   position: absolute;
   /* vertically center the handle inside the label */
   top: 50%;
   left: 6px;
-  width: 48px; /* smaller */
-  height: 48px; /* smaller */
+  width: 48px;
+  /* smaller */
+  height: 48px;
+  /* smaller */
   background-color: #fff;
   border-radius: 50%;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
   --tx: 0px;
   transform: translate(var(--tx), -50%);
-  transition: transform 0.6s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease;
+  transition: transform 0.6s cubic-bezier(.2, .8, .2, 1), box-shadow 0.25s ease;
   will-change: transform;
   overflow: hidden;
 }
+
 .pod-image-wrapper {
-    position: relative;
-    width: 100%;
-    height: 100%;
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
+
 .pod-image {
   position: absolute;
   width: 130%;
@@ -1654,92 +2224,143 @@ body.theme-citrus footer.js-footer {
   left: 50%;
   transform: translate(-50%, -50%);
   object-fit: contain;
-  transition: opacity 0.45s cubic-bezier(.2,.8,.2,1);
+  transition: opacity 0.45s cubic-bezier(.2, .8, .2, 1);
 }
-.pod-image.green { opacity: 1; }
-.pod-image.blue { opacity: 0; }
-.pod-toggle-checkbox:checked + .pod-toggle-label .pod-toggle-handle {
+
+.pod-image.green {
+  opacity: 1;
+}
+
+.pod-image.blue {
+  opacity: 0;
+}
+
+.pod-toggle-checkbox:checked+.pod-toggle-label .pod-toggle-handle {
   /* move the handle to the right while preserving vertical centering */
-  --tx: 56px; /* adjusted for smaller label */
-  transform: translate(56px, -50%); /* set explicit transform to ensure smooth animation across browsers */
+  --tx: 56px;
+  /* adjusted for smaller label */
+  transform: translate(56px, -50%);
+  /* set explicit transform to ensure smooth animation across browsers */
 }
-.pod-toggle-checkbox:checked + .pod-toggle-label {
-    background-color: #007bff;
-    border-color: #0056b3;
+
+.pod-toggle-checkbox:checked+.pod-toggle-label {
+  background-color: #007bff;
+  border-color: #0056b3;
 }
-.pod-toggle-checkbox:checked + .pod-toggle-label .pod-image.green {
-    opacity: 0;
+
+.pod-toggle-checkbox:checked+.pod-toggle-label .pod-image.green {
+  opacity: 0;
 }
-.pod-toggle-checkbox:checked + .pod-toggle-label .pod-image.blue {
-    opacity: 1;
+
+.pod-toggle-checkbox:checked+.pod-toggle-label .pod-image.blue {
+  opacity: 1;
 }
 
 /* ========== BENEFÃCIOS ========== */
 .benefit-grid {
-  display: grid; grid-template-columns: repeat(6, minmax(0,1fr));
-  gap: clamp(12px, 2vw, 20px); align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(12px, 2vw, 20px);
+  align-items: stretch;
 }
+
 .benefit-item {
-  background: #fff; border: 1px solid var(--line); border-radius: 16px;
-  padding: clamp(14px, 2.2vw, 18px); display: grid; gap: 10px; text-align: center;
-  box-shadow: 0 4px 16px rgba(0,0,0,.04);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: clamp(14px, 2.2vw, 18px);
+  display: grid;
+  gap: 10px;
+  text-align: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .04);
 }
-.benefit-item img { width: 40px; height: 40px; margin: 0 auto .25rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,.06)); }
-.benefit-item h3 { font-size: .98rem; color: var(--text); }
+
+.benefit-item img {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto .25rem;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .06));
+}
+
+.benefit-item h3 {
+  font-size: .98rem;
+  color: var(--text);
+}
 
 /* ========== COMO USAR (Horizontal Scroll) ========== */
 .sopy-how-section {
-  height: 400vh;            /* altura expandida para permitir scroll suficiente para 4 cards */
+  height: 400vh;
+  /* altura expandida para permitir scroll suficiente para 4 cards */
   position: relative;
   overflow: hidden;
   background-color: var(--brand-dark);
-  padding: 0;               /* sem padding para centralizar perfeitamente */
+  padding: 0;
+  /* sem padding para centralizar perfeitamente */
 }
 
-.sopy-how-title { display: none; }
+.sopy-how-title {
+  display: none;
+}
+
 /* Hide mobile slider by default (desktop) */
-.sopy-how-stack{ display:none; }
+.sopy-how-stack {
+  display: none;
+}
 
 .sopy-how-track {
   display: flex;
-  position: relative; /* GSAP pinna a seção, não o track */
-  height: 100vh;      /* ocupa toda a viewport conforme solicitado */
-  will-change: transform; /* performance */
+  position: relative;
+  /* GSAP pinna a seção, não o track */
+  height: 100vh;
+  /* ocupa toda a viewport conforme solicitado */
+  will-change: transform;
+  /* performance */
 }
 
 .sopy-how-background-text {
   position: absolute;
   inset: 0;
-  display: grid; place-items: center;
+  display: grid;
+  place-items: center;
   font-size: 18vw;
   text-align: center;
-  color: rgba(255,255,255,0.35);
+  color: rgba(255, 255, 255, 0.35);
   font-weight: 800;
-  z-index: 1; /* por trás do card */
+  z-index: 1;
+  /* por trás do card */
   pointer-events: none;
 }
 
 .sopy-how-panel {
-  flex: 0 0 100vw;   /* cada painel ocupa 100% da largura da viewport */
-  height: 100vh;     /* cada painel usa a altura inteira da viewport */
+  flex: 0 0 100vw;
+  /* cada painel ocupa 100% da largura da viewport */
+  height: 100vh;
+  /* cada painel usa a altura inteira da viewport */
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   padding: 0 10%;
   box-sizing: border-box;
   position: relative;
   z-index: 2;
 }
 
-@media (max-width: 768px){
-  .sopy-how-track{ height: 78vh; }
-  .sopy-how-section { height: 300vh; } /* altura reduzida para mobile */
-  
+@media (max-width: 768px) {
+  .sopy-how-track {
+    height: 78vh;
+  }
+
+  .sopy-how-section {
+    height: 300vh;
+  }
+
+  /* altura reduzida para mobile */
+
   /* Reduz o blur em mobile para melhor performance */
   .sopy-how-card {
     filter: blur(3px);
   }
-  
+
   .sopy-how-panel.is-selected .sopy-how-card,
   .sopy-how-card.is-selected {
     filter: blur(0);
@@ -1749,15 +2370,19 @@ body.theme-citrus footer.js-footer {
 /* todos os painéis centralizados verticalmente, sem offsets */
 .sopy-how-panel:nth-child(2),
 .sopy-how-panel:nth-child(3),
-.sopy-how-panel:nth-child(4) { align-self: center; padding: 0; }
+.sopy-how-panel:nth-child(4) {
+  align-self: center;
+  padding: 0;
+}
 
 .sopy-how-card {
   /* Estilo carousel com blur e opacity */
   background: #b9b9b9;
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 28px;
   padding: 40px 40px 70px 40px;
-  max-width: 520px;             /* um pouco mais largo, como na referência */
+  max-width: 520px;
+  /* um pouco mais largo, como na referência */
   min-height: 200px;
   box-sizing: border-box;
   display: flex;
@@ -1768,7 +2393,8 @@ body.theme-citrus footer.js-footer {
   opacity: 0.3;
   filter: blur(6px);
   transform: scale(0.95);
-  margin: 0 auto;                /* centraliza no painel */
+  margin: 0 auto;
+  /* centraliza no painel */
   will-change: transform, opacity, filter;
 }
 
@@ -1799,8 +2425,8 @@ body.theme-citrus footer.js-footer {
 body.theme-citrus .sopy-how-card,
 body.theme-aqua .sopy-how-card {
   /* on strong brand backgrounds, keep the glass slightly lighter */
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
-  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--muted);
 }
 
@@ -1850,7 +2476,8 @@ body.theme-aqua .sopy-how-card {
 .sopy-how-progress {
   position: fixed;
   left: 50%;
-  bottom: 32px;                 /* como a referência sugere */
+  bottom: 32px;
+  /* como a referência sugere */
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -1860,7 +2487,7 @@ body.theme-aqua .sopy-how-card {
   width: auto;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.34s cubic-bezier(.22,1,.36,1);
+  transition: opacity 0.34s cubic-bezier(.22, 1, .36, 1);
 }
 
 .sopy-how-progress.visible {
@@ -1876,10 +2503,11 @@ body.theme-aqua .sopy-how-card {
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background-color: #b9b9b9; /* cinza por padrão */
+  background-color: #b9b9b9;
+  /* cinza por padrão */
   transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              background-color .25s ease, transform .2s ease;
+    height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    background-color .25s ease, transform .2s ease;
 }
 
 body.theme-citrus .sopy-how-progress-dot.active {
@@ -1949,104 +2577,220 @@ body.theme-citrus .how-fullscreen .how-button {
 }
 
 /* ========== COMO USAR (Fullscreen vertical slides) ========== */
-.how-fullscreen { 
-  position: relative; 
-  height: 100vh; 
+.how-fullscreen {
+  position: relative;
+  height: 100vh;
   overflow: hidden;
-  background: #000; /* Fundo neutro sólido para evitar flashes de cor */
+  background: #000;
+  /* Fundo neutro sólido para evitar flashes de cor */
 }
-.how-fullscreen .how-slides-track { 
-  position: absolute; 
-  inset: 0; 
+
+.how-fullscreen .how-slides-track {
+  position: absolute;
+  inset: 0;
   will-change: transform;
-  overflow: hidden; /* Extra overflow protection */
-  background-color: #000; /* fallback sólido por trás dos slides */
+  overflow: hidden;
+  /* Extra overflow protection */
+  background-color: #000;
+  /* fallback sólido por trás dos slides */
 }
-.how-fullscreen .how-slide { 
-  position: absolute; 
+
+.how-fullscreen .how-slide {
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%; 
-  height: 100vh; 
-  background-size: cover; 
-  background-position: center; 
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  background-position: center;
   will-change: transform, opacity;
-  background-color: #000; /* fallback para evitar fundo verde quando imagem não renderiza */
+  background-color: #000;
+  /* fallback para evitar fundo verde quando imagem não renderiza */
   opacity: 1;
   /* Garantir que não haja gaps durante animações */
-  transform: translateZ(0); /* Force hardware acceleration */
-  backface-visibility: hidden; /* Evitar flickering */
+  transform: translateZ(0);
+  /* Force hardware acceleration */
+  backface-visibility: hidden;
+  /* Evitar flickering */
 }
 
 /* Overlay text content container */
 .how-fullscreen .how-text-content {
-  position: absolute; top: 120px; left: clamp(16px, 7vw, 120px);
-  z-index: 20; pointer-events: none; max-width: 600px;
+  position: absolute;
+  top: 120px;
+  left: clamp(16px, 7vw, 120px);
+  z-index: 20;
+  pointer-events: none;
+  max-width: 600px;
 }
 
 .how-fullscreen .how-text {
-  color: #fff; font-size: clamp(28px, 6vw, 48px); 
-  font-weight: 800; line-height: 1.2;
+  color: #fff;
+  font-size: clamp(28px, 6vw, 48px);
+  font-weight: 800;
+  line-height: 1.2;
   margin: 0 0 1rem 0;
-  opacity: 1; transform: translateY(-50px);
+  opacity: 1;
+  transform: translateY(-50px);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), 0px 0px 12px rgba(0, 0, 0, 0.6);
 }
 
 .how-fullscreen .how-text-support {
-  color: #fff; 
+  color: #fff;
   font-size: clamp(16px, 3vw, 20px);
   line-height: 1.5;
   margin: 0;
-  opacity: 1; transform: translateY(-50px);
+  opacity: 1;
+  transform: translateY(-50px);
   text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.8), 0px 0px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* Labeled nav with loading bars - REMOVIDA, agora usamos dots */
 .how-fullscreen .how-nav {
-  display: none; /* Escondida para usar os novos dots */
+  display: none;
+  /* Escondida para usar os novos dots */
 }
-.how-fullscreen .how-nav-item { display: flex; flex-direction: column; align-items: start; cursor: pointer; }
-.how-fullscreen .how-nav-item span { 
-  color: #fff; opacity: .7; transition: opacity .5s ease; font-size: 14px; font-weight: 600;
+
+.how-fullscreen .how-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  cursor: pointer;
+}
+
+.how-fullscreen .how-nav-item span {
+  color: #fff;
+  opacity: .7;
+  transition: opacity .5s ease;
+  font-size: 14px;
+  font-weight: 600;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
-.how-fullscreen .how-nav-item.active span { opacity: 1; }
-.how-fullscreen .how-nav-bar { 
-  width: 260px; max-width: 32vw; height: 6px; 
-  background: rgba(0, 0, 0, 0.4); 
+
+.how-fullscreen .how-nav-item.active span {
+  opacity: 1;
+}
+
+.how-fullscreen .how-nav-bar {
+  width: 260px;
+  max-width: 32vw;
+  height: 6px;
+  background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(255, 255, 255, 0.3);
-  position: relative; overflow: hidden; opacity: .8; 
-  transition: opacity .5s ease, width .5s ease; margin-top: 12px; 
+  position: relative;
+  overflow: hidden;
+  opacity: .8;
+  transition: opacity .5s ease, width .5s ease;
+  margin-top: 12px;
   border-radius: 3px;
 }
-.how-fullscreen .how-nav-bar::before { 
-  content:""; position: absolute; inset: 0; background: #fff; 
-  transform: translateX(-100%); opacity: 1; 
-  transition: transform .8s ease, opacity .5s ease; 
+
+.how-fullscreen .how-nav-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: translateX(-100%);
+  opacity: 1;
+  transition: transform .8s ease, opacity .5s ease;
   border-radius: 2px;
 }
-.how-fullscreen .how-nav-item.active .how-nav-bar { opacity: 1; }
-.how-fullscreen .how-nav-item.active .how-nav-bar::before { transform: translateX(0); }
+
+.how-fullscreen .how-nav-item.active .how-nav-bar {
+  opacity: 1;
+}
+
+.how-fullscreen .how-nav-item.active .how-nav-bar::before {
+  transform: translateX(0);
+}
 
 /* Next button top-right (desktop and mobile) */
-.how-fullscreen .how-button { position: absolute; top: clamp(16px, 4vh, 32px); right: clamp(12px, 6vw, 40px); background: transparent; border: none; cursor: pointer; z-index: 20; padding: 6px 8px; color: #fff; font-weight: 800; font-size: clamp(18px, 2.6vw, 28px); line-height: 1; }
-.how-fullscreen .how-button span { pointer-events: none; display:inline-block; transform: translateY(-1px); }
+.how-fullscreen .how-button {
+  position: absolute;
+  top: clamp(16px, 4vh, 32px);
+  right: clamp(12px, 6vw, 40px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 20;
+  padding: 6px 8px;
+  color: #fff;
+  font-weight: 800;
+  font-size: clamp(18px, 2.6vw, 28px);
+  line-height: 1;
+}
+
+.how-fullscreen .how-button span {
+  pointer-events: none;
+  display: inline-block;
+  transform: translateY(-1px);
+}
 
 /* Mobile: allow natural scroll with scroll-snap as graceful fallback when no JS */
 @media (max-width: 900px) {
-  .how-fullscreen { scroll-snap-type: y mandatory; overflow-y: auto; height: 100vh; }
-  .how-fullscreen .how-slide { scroll-snap-align: start; }
+  .how-fullscreen {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  .how-fullscreen .how-slide {
+    scroll-snap-align: start;
+  }
+
   /* When JS enables mobile swipe, switch to horizontal drag layout */
-  .how-fullscreen.mobile-swipe { scroll-snap-type: none; overflow: hidden; }
-  .how-fullscreen.mobile-swipe .how-slides-track { cursor: grab; touch-action: pan-x; }
-  .how-fullscreen.mobile-swipe .how-slides-track.is-grabbing { cursor: grabbing; }
-  .how-fullscreen.mobile-swipe .how-text-content { top: 86px; left: 16px; max-width: calc(100vw - 32px); }
-  .how-fullscreen.mobile-swipe .how-text { font-size: clamp(22px, 7vw, 36px); margin-bottom: 0.8rem; }
-  .how-fullscreen.mobile-swipe .how-text-support { font-size: clamp(14px, 4vw, 18px); }
-  .how-fullscreen.mobile-swipe .how-nav { left: 16px; right: 16px; bottom: 16px; gap: 10px; align-items: flex-end; }
-  .how-fullscreen.mobile-swipe .how-nav-item span { font-size: 12px; }
-  .how-fullscreen.mobile-swipe .how-nav-bar { width: 64px; height: 3px; max-width: none; }
-  .how-fullscreen.mobile-swipe .how-button { top: 12px; right: 12px; font-size: 24px; }
+  .how-fullscreen.mobile-swipe {
+    scroll-snap-type: none;
+    overflow: hidden;
+  }
+
+  .how-fullscreen.mobile-swipe .how-slides-track {
+    cursor: grab;
+    touch-action: pan-x;
+  }
+
+  .how-fullscreen.mobile-swipe .how-slides-track.is-grabbing {
+    cursor: grabbing;
+  }
+
+  .how-fullscreen.mobile-swipe .how-text-content {
+    top: 86px;
+    left: 16px;
+    max-width: calc(100vw - 32px);
+  }
+
+  .how-fullscreen.mobile-swipe .how-text {
+    font-size: clamp(22px, 7vw, 36px);
+    margin-bottom: 0.8rem;
+  }
+
+  .how-fullscreen.mobile-swipe .how-text-support {
+    font-size: clamp(14px, 4vw, 18px);
+  }
+
+  .how-fullscreen.mobile-swipe .how-nav {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    gap: 10px;
+    align-items: flex-end;
+  }
+
+  .how-fullscreen.mobile-swipe .how-nav-item span {
+    font-size: 12px;
+  }
+
+  .how-fullscreen.mobile-swipe .how-nav-bar {
+    width: 64px;
+    height: 3px;
+    max-width: none;
+  }
+
+  .how-fullscreen.mobile-swipe .how-button {
+    top: 12px;
+    right: 12px;
+    font-size: 24px;
+  }
 }
 
 /* Garantir que todos os slides tenham configuração adequada */
@@ -2068,13 +2812,15 @@ body.theme-citrus .how-fullscreen .how-button {
   position: sticky;
   top: 0;
   left: 0;
-  width: 100%;        /* como no teste.html */
+  width: 100%;
+  /* como no teste.html */
   height: 100vh;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff; /* Fundo branco */
+  background-color: #ffffff;
+  /* Fundo branco */
 }
 
 /* Container flexível para o conteúdo do painel */
@@ -2082,7 +2828,8 @@ body.theme-citrus .how-fullscreen .how-button {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: row !important; /* garante imagem e texto lado a lado por padrão */
+  flex-direction: row !important;
+  /* garante imagem e texto lado a lado por padrão */
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
@@ -2115,8 +2862,13 @@ body.theme-citrus .how-fullscreen .how-button {
 }
 
 /* alinhamento da imagem encostada à borda correta */
-.sustainability-parallax .fullscreen-panel[data-layout="right-image"] .image-column { align-items: flex-end; }
-.sustainability-parallax .fullscreen-panel[data-layout="left-image"]  .image-column { align-items: flex-start; }
+.sustainability-parallax .fullscreen-panel[data-layout="right-image"] .image-column {
+  align-items: flex-end;
+}
+
+.sustainability-parallax .fullscreen-panel[data-layout="left-image"] .image-column {
+  align-items: flex-start;
+}
 
 /* Colunas de texto e imagem com tamanhos iguais */
 .sustainability-parallax .text-column,
@@ -2127,22 +2879,27 @@ body.theme-citrus .how-fullscreen .how-button {
 }
 
 /* center text vertically inside the text column */
-.sustainability-parallax .text-column { 
-  display:flex; 
-  flex-direction:column; 
-  justify-content:flex-start; /* move texto para o topo */
-  align-items:flex-start; 
-  padding: 3rem 2rem; /* mais padding no topo */
+.sustainability-parallax .text-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* move texto para o topo */
+  align-items: flex-start;
+  padding: 3rem 2rem;
+  /* mais padding no topo */
 }
 
 /* central por padrão; alinhamento final vem do data-layout */
-.sustainability-parallax .image-column { align-items: center; }
+.sustainability-parallax .image-column {
+  align-items: center;
+}
 
 /* Container da imagem com proporção fixa */
 .sustainability-parallax .image-wrapper {
   width: clamp(320px, 48vw, 520px);
   margin: 0 auto;
-  aspect-ratio: 3 / 4.1; /* um pouco maior que antes */
+  aspect-ratio: 3 / 4.1;
+  /* um pouco maior que antes */
   overflow: hidden;
   border-radius: 16px;
   transform-origin: center center;
@@ -2157,17 +2914,22 @@ body.theme-citrus .how-fullscreen .how-button {
 /* Estilos de texto */
 .sustainability-parallax .text-column h2 {
   font-size: clamp(2.8rem, 6.5vw, 5rem);
-  line-height: 1.3; /* Aumentado para não cortar caracteres com acentos */
+  line-height: 1.3;
+  /* Aumentado para não cortar caracteres com acentos */
   margin-bottom: 1rem;
-  color: #333333; /* Preto para títulos */
-  padding: 0.1em 0; /* Espaço extra para caracteres com cedilha */
-  overflow: visible; /* Garante que caracteres não sejam cortados */
+  color: #333333;
+  /* Preto para títulos */
+  padding: 0.1em 0;
+  /* Espaço extra para caracteres com cedilha */
+  overflow: visible;
+  /* Garante que caracteres não sejam cortados */
 }
 
 .sustainability-parallax .text-column p {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: #444444; /* Cinza escuro para textos */
+  color: #444444;
+  /* Cinza escuro para textos */
   max-width: 55ch;
 }
 
@@ -2180,13 +2942,15 @@ body.theme-citrus .how-fullscreen .how-button {
 
 .sustainability-parallax .intro-panel h1 {
   font-size: 3rem;
-  color: #333333; /* Preto para título principal */
+  color: #333333;
+  /* Preto para título principal */
   margin-bottom: 0.5rem;
 }
 
 .sustainability-parallax .intro-panel p {
   font-size: 1.2rem;
-  color: #444444; /* Cinza escuro para subtítulo */
+  color: #444444;
+  /* Cinza escuro para subtítulo */
 }
 
 /* Responsividade */
@@ -2203,12 +2967,16 @@ body.theme-citrus .how-fullscreen .how-button {
     max-width: 100%;
   }
 
-  .sustainability-parallax .text-column h2 { 
-    font-size: clamp(2rem, 8vw, 3rem); 
-    line-height: 1.3; /* Garante que não corte no mobile também */
+  .sustainability-parallax .text-column h2 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.3;
+    /* Garante que não corte no mobile também */
     padding: 0.1em 0;
   }
-  .sustainability-parallax .text-column p  { margin: 0 auto; }
+
+  .sustainability-parallax .text-column p {
+    margin: 0 auto;
+  }
 
   .sustainability-parallax .image-wrapper {
     width: min(320px, 80vw);
@@ -2221,17 +2989,20 @@ body.theme-citrus .how-fullscreen .how-button {
   position: relative;
   overflow: hidden;
 }
+
 .t-bg-title {
-  position: absolute; inset: auto 0 10%;
+  position: absolute;
+  inset: auto 0 10%;
   text-align: center;
   font-family: 'Syne', sans-serif;
   font-size: clamp(4rem, 18vw, 14rem);
   line-height: .9;
-  color: rgba(0,0,0,.12);
+  color: rgba(0, 0, 0, .12);
   mix-blend-mode: normal;
   pointer-events: none;
   z-index: 0;
 }
+
 .t-cards {
   width: min(1200px, 92%);
   margin: 0 auto;
@@ -2242,50 +3013,103 @@ body.theme-citrus .how-fullscreen .how-button {
   position: relative;
   z-index: 1;
 }
+
 /* Glassmorphism aprimorado: bolha translúcida */
 .t-card {
   position: relative;
   padding: clamp(18px, 2.6vw, 24px);
   border-radius: 22px;
-  border: 1.5px solid rgba(255,255,255,0.32);
-  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.10) 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.10) 100%);
   backdrop-filter: blur(18px) saturate(1.25);
   -webkit-backdrop-filter: blur(18px) saturate(1.25);
   color: #e9eef5;
-  box-shadow: 0 12px 32px 0 rgba(0,0,0,.22), 0 1.5px 8px 0 rgba(255,255,255,0.12) inset;
+  box-shadow: 0 12px 32px 0 rgba(0, 0, 0, .22), 0 1.5px 8px 0 rgba(255, 255, 255, 0.12) inset;
   transition: box-shadow .18s, background .18s;
 }
+
 .t-card::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: radial-gradient(ellipse at 60% 20%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 80%, transparent 100%);
+  background: radial-gradient(ellipse at 60% 20%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 80%, transparent 100%);
   opacity: 0.85;
   z-index: 2;
 }
-.t-card:hover {
-  box-shadow: 0 16px 40px 0 rgba(0,0,0,.28), 0 2px 12px 0 rgba(255,255,255,0.16) inset;
-  background: linear-gradient(135deg, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0.13) 100%);
-}
-body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background: rgba(255,255,255,0.95); border-color: rgba(255,255,255,0.2); backdrop-filter: blur(10px); }
-.t-card__meta { font-size: .9rem; opacity: .7; margin-bottom: .6rem; }
-.t-card__text { font-size: clamp(0.98rem, 1.2vw, 1.06rem); line-height: 1.6; margin: 0; }
-.t-card__author { margin-top: .9rem; font-weight: 600; opacity: .8; }
 
-.t-card--right { transform: translateY(-6%); }
-.t-card--left  { transform: translateY(6%); }
-.t-card--right { animation: t-float-right 6.5s ease-in-out infinite; will-change: transform; }
-.t-card--left  { animation: t-float-left 7.2s ease-in-out infinite; will-change: transform; }
+.t-card:hover {
+  box-shadow: 0 16px 40px 0 rgba(0, 0, 0, .28), 0 2px 12px 0 rgba(255, 255, 255, 0.16) inset;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.13) 100%);
+}
+
+body.theme-citrus .t-card,
+body.theme-aqua .t-card {
+  color: #333333;
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.t-card__meta {
+  font-size: .9rem;
+  opacity: .7;
+  margin-bottom: .6rem;
+}
+
+.t-card__text {
+  font-size: clamp(0.98rem, 1.2vw, 1.06rem);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.t-card__author {
+  margin-top: .9rem;
+  font-weight: 600;
+  opacity: .8;
+}
+
+.t-card--right {
+  transform: translateY(-6%);
+}
+
+.t-card--left {
+  transform: translateY(6%);
+}
+
+.t-card--right {
+  animation: t-float-right 6.5s ease-in-out infinite;
+  will-change: transform;
+}
+
+.t-card--left {
+  animation: t-float-left 7.2s ease-in-out infinite;
+  will-change: transform;
+}
 
 @keyframes t-float-right {
-  0%, 100% { transform: translateY(-6%); }
-  50%       { transform: translateY(-10%); }
+
+  0%,
+  100% {
+    transform: translateY(-6%);
+  }
+
+  50% {
+    transform: translateY(-10%);
+  }
 }
+
 @keyframes t-float-left {
-  0%, 100% { transform: translateY(6%); }
-  50%       { transform: translateY(2%); }
+
+  0%,
+  100% {
+    transform: translateY(6%);
+  }
+
+  50% {
+    transform: translateY(2%);
+  }
 }
 
 .t-stats {
@@ -2298,22 +3122,43 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   position: relative;
   z-index: 1;
 }
-.t-stat__num { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 6vw, 3.2rem); }
-.t-stat__label { opacity: .75; }
+
+.t-stat__num {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.2rem);
+}
+
+.t-stat__label {
+  opacity: .75;
+}
 
 @media (max-width: 900px) {
-  .t-cards { grid-template-columns: 1fr; }
-  .t-card--right, .t-card--left { transform: none; animation: none; }
-  .t-bg-title { font-size: 22vw; bottom: 14%; }
+  .t-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .t-card--right,
+  .t-card--left {
+    transform: none;
+    animation: none;
+  }
+
+  .t-bg-title {
+    font-size: 22vw;
+    bottom: 14%;
+  }
 }
 
 /* ========== FAQ (accordeão animado) ========== */
-#faq { 
+#faq {
   scroll-margin-top: 96px;
-  background-color: #FFFFFF !important; /* FORÇA FUNDO BRANCO DA SEÇÃO */
+  background-color: #FFFFFF !important;
+  /* FORÇA FUNDO BRANCO DA SEÇÃO */
 }
 
-#faq h2 { color: black; }
+#faq h2 {
+  color: black;
+}
 
 #faq .sopy-faq-accordion {
   --d: 0deg;
@@ -2335,16 +3180,17 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   width: min(900px, 92%);
   margin: 0 auto 1rem;
   border-radius: min(12px, 0.5rem);
-  border: 2px solid #000000; /* borda preta bem visível */
+  border: 2px solid #000000;
+  /* borda preta bem visível */
   display: grid;
-  grid-template-rows: auto 0fr; 
+  grid-template-rows: auto 0fr;
   overflow: hidden;
   position: relative;
-  
+
   /* Transições para cor do texto e grid */
-  transition: box-shadow 200ms ease, 
-              grid-template-rows var(--slide-duration) var(--slide-ease),
-              color var(--circle-duration) ease;
+  transition: box-shadow 200ms ease,
+    grid-template-rows var(--slide-duration) var(--slide-ease),
+    color var(--circle-duration) ease;
   box-shadow: none;
   scroll-margin-top: 88px;
 }
@@ -2359,13 +3205,14 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
 #faq .sopy-faq-accordion::after {
   box-shadow: none !important;
   outline: none !important;
-  background-clip: padding-box !important; /* avoid strokes showing beyond radius */
+  background-clip: padding-box !important;
+  /* avoid strokes showing beyond radius */
 }
 
 /* Estado aberto - mantém texto preto */
 #faq .sopy-faq-accordion.open {
   --d: 90deg;
-  grid-template-rows: auto 1fr; 
+  grid-template-rows: auto 1fr;
   /* cor do texto continua a mesma (preto) */
 }
 
@@ -2373,7 +3220,8 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   overflow: hidden;
   font-size: var(--size-accordion-content);
   line-height: 140%;
-  z-index: 2; /* fica na frente da animação de fundo */
+  z-index: 2;
+  /* fica na frente da animação de fundo */
   position: relative;
 }
 
@@ -2382,25 +3230,29 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   padding-inline: 1.25rem;
 }
 
-#faq .sopy-faq-accordion .sopy-content p { 
-  margin: 0; 
-  color: currentColor; /* herda cor do accordion */
+#faq .sopy-faq-accordion .sopy-content p {
+  margin: 0;
+  color: currentColor;
+  /* herda cor do accordion */
 }
 
 #faq .sopy-faq-accordion .sopy-title {
-  z-index: 2; /* fica na frente da animação de fundo */
+  z-index: 2;
+  /* fica na frente da animação de fundo */
 }
 
 #faq .sopy-faq-accordion .sopy-title a {
   padding: 1rem 1.25rem;
   font-size: var(--size-accordion-title);
   font-weight: 800;
-  color: currentColor; /* Herda a cor do .accordion (preto ou branco) */
+  color: currentColor;
+  /* Herda a cor do .accordion (preto ou branco) */
   text-decoration: none;
   display: flex;
   align-items: center;
   position: relative;
-  z-index: 2; /* acima do overlay */
+  z-index: 2;
+  /* acima do overlay */
 }
 
 #faq .sopy-faq-accordion .sopy-title a::before {
@@ -2414,7 +3266,8 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   transition: transform var(--slide-ease) var(--slide-duration) var(--slide-delay);
   mask-image: var(--chevron-icon);
   mask-size: 100%;
-  background-color: currentColor; /* Herda a cor (preto ou branco) */
+  background-color: currentColor;
+  /* Herda a cor (preto ou branco) */
 }
 
 /* Animação de fundo com círculo expandindo */
@@ -2423,12 +3276,14 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: #076DF2; /* cor do tema (verde citrus / azul aqua) */
+  background-color: #076DF2;
+  /* cor do tema (verde citrus / azul aqua) */
   transition: clip-path var(--circle-duration) ease;
   pointer-events: none;
   clip-path: circle(0% at var(--circle-x) var(--circle-y));
   border-radius: inherit;
-  z-index: 1; /* Fica entre o fundo branco e o conteúdo */
+  z-index: 1;
+  /* Fica entre o fundo branco e o conteúdo */
 }
 
 /* Expande o círculo quando o card está aberto */
@@ -2436,11 +3291,11 @@ body.theme-citrus .t-card, body.theme-aqua .t-card { color: #333333; background:
   clip-path: circle(var(--circle-r) at var(--circle-x) var(--circle-y));
 }
 
-#faq .sopy-faq-accordion .sopy-title a:focus-visible { 
-  outline: 2px solid var(--brand); 
-  outline-offset: 3px; 
-  border-radius: 10px; 
-  background: rgba(0,0,0,0.03); 
+#faq .sopy-faq-accordion .sopy-title a:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 /* Cor específica para o tema aqua no FAQ (azul quando aberto) */
@@ -2458,45 +3313,117 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
 
 /* Nav e botões no hero (entrada suave) â€“ serão animados no JS */
 .hero .btn,
-.sopy-nav { will-change: transform, opacity; }
+.sopy-nav {
+  will-change: transform, opacity;
+}
 
 /* ========== RESPONSIVO ========== */
 @media (max-width: 1280px) {
-  .benefit-grid { grid-template-columns: repeat(3, 1fr); }
-  .shop .product-grid { grid-template-columns: repeat(3, 1fr); }
-  .badges { grid-template-columns: repeat(2, 1fr); }
+  .benefit-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .shop .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .badges {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 900px) {
-  .sopy-nav-links { display: none; }
-  .sopy-capsule3d-ui { grid-template-columns: 1fr; gap: 12px; }
-  .howto-steps { grid-template-columns: 1fr; }
-  .fragrance-grid { grid-template-columns: 1fr; }
-  .shop .product-grid { grid-template-columns: 1fr 1fr; }
-  .testimonial-grid { grid-template-columns: 1fr; }
+  .sopy-nav-links {
+    display: none;
+  }
+
+  .sopy-capsule3d-ui {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .howto-steps {
+    grid-template-columns: 1fr;
+  }
+
+  .fragrance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .shop .product-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+
   /* Hero adjustments – tighter mask and more room for title */
-  :root { --mask-start: 58%; --seam-height: 18vh; }
-  .sopy-hero-content { width: min(100%, 92%); padding-inline: 16px; }
-  .sopy-hero-content h1 { font-size: clamp(2.2rem, 9.5vw, 3.6rem); line-height: .98; }
-  .sopy-hero-ctas { justify-content: center; gap: 10px; }
+  :root {
+    --mask-start: 58%;
+    --seam-height: 18vh;
+  }
+
+  .sopy-hero-content {
+    width: min(100%, 92%);
+    padding-inline: 16px;
+  }
+
+  .sopy-hero-content h1 {
+    font-size: clamp(2.2rem, 9.5vw, 3.6rem);
+    line-height: .98;
+  }
+
+  .sopy-hero-ctas {
+    justify-content: center;
+    gap: 10px;
+  }
 }
 
 @media (max-width: 600px) {
-  .sopy-footer-inner { flex-direction: column; gap: 8px; }
-  .sopy-hero-ctas { width: 100%; justify-content: center; }
-  .fragrance-toggle { right: 12px; bottom: 12px; padding: 6px; }
-  .sopy-btn { width: 100%; }
+  .sopy-footer-inner {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sopy-hero-ctas {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .fragrance-toggle {
+    right: 12px;
+    bottom: 12px;
+    padding: 6px;
+  }
+
+  .sopy-btn {
+    width: 100%;
+  }
+
   /* Make hero title very bold and multi-line; reduce video seam */
-  :root { --mask-start: 62%; --seam-height: 16vh; }
+  :root {
+    --mask-start: 62%;
+    --seam-height: 16vh;
+  }
+
   /* Force the hero to start content near the top on small screens */
-  .sopy-hero, #hero { 
-    min-height: 100svh; 
-    height: 100svh; /* força altura completa para preencher */
-    padding-top: calc(110px + env(safe-area-inset-top)); /* mais espaço acima para o header */
-    justify-content: flex-start; /* puxa o conteúdo para o topo */
+  .sopy-hero,
+  #hero {
+    min-height: 100svh;
+    height: 100svh;
+    /* força altura completa para preencher */
+    padding-top: calc(110px + env(safe-area-inset-top));
+    /* mais espaço acima para o header */
+    justify-content: flex-start;
+    /* puxa o conteúdo para o topo */
     align-items: stretch;
   }
-  .sopy-hero-content { gap: 10px; }
+
+  .sopy-hero-content {
+    gap: 10px;
+  }
+
   .sopy-hero-content h1 {
     font-size: clamp(2.4rem, 12vw, 3.2rem);
     line-height: .96;
@@ -2506,13 +3433,27 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
 
 /* ========== REDUÇÃƒO DE MOVIMENTO (acessibilidade) ========== */
 @media (prefers-reduced-motion: reduce) {
-  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ========== UTILITÁRIOS ========== */
-.sopy-hide { display: none !important; }
-.sopy-center { text-align: center; }
-.sopy-max-w { width: min(1100px, 94%); margin-inline: auto; }
+.sopy-hide {
+  display: none !important;
+}
+
+.sopy-center {
+  text-align: center;
+}
+
+.sopy-max-w {
+  width: min(1100px, 94%);
+  margin-inline: auto;
+}
 
 /* ======================================================
    Layout estático (inspirado em teste.html)
@@ -2524,7 +3465,8 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
   display: grid !important;
   grid-template-columns: 520px 520px !important;
   gap: 56px !important;
-  width: min(1136px, 96%) !important; /* 520 + 520 + gap */
+  width: min(1136px, 96%) !important;
+  /* 520 + 520 + gap */
   max-width: 1136px !important;
   margin: 0 auto !important;
   justify-content: center !important;
@@ -2544,7 +3486,7 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
   max-width: 520px !important;
   padding: 2.5rem !important;
   border-radius: 24px !important;
-  box-shadow: 0 18px 40px rgba(0,0,0,0.06) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.06) !important;
   background: #fff !important;
   color: #000 !important;
   display: flex !important;
@@ -2557,12 +3499,27 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
   color: #000 !important;
 }
 
-.pinned-container .card img { width: 100% !important; height: 200px !important; object-fit: cover !important; border-radius: 16px !important; margin-bottom: 1.5rem !important; }
+.pinned-container .card img {
+  width: 100% !important;
+  height: 200px !important;
+  object-fit: cover !important;
+  border-radius: 16px !important;
+  margin-bottom: 1.5rem !important;
+}
 
 @media (max-width: 1200px) {
-  .pinned-container { grid-template-columns: 1fr !important; width: 100% !important; padding: 2rem 1rem !important; }
-  .pinned-container .card { max-width: 100% !important; padding: 2rem !important; }
+  .pinned-container {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    padding: 2rem 1rem !important;
+  }
+
+  .pinned-container .card {
+    max-width: 100% !important;
+    padding: 2rem !important;
+  }
 }
+
 /* -------------------------------------------------------
    Fim
 ------------------------------------------------------- */
@@ -2576,16 +3533,19 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
 } */
 
 body.theme-aqua #como-usar {
-  background: #000 !important; /* Preto para evitar vazamentos durante transições (mobile/desktop) */
+  background: #000 !important;
+  /* Preto para evitar vazamentos durante transições (mobile/desktop) */
 }
 
 
 body.theme-aqua #sustentabilidade {
-  background: #0D1B2A !important; /* aqua theme: set to requested blue */
+  background: #0D1B2A !important;
+  /* aqua theme: set to requested blue */
 }
 
 body.theme-aqua #testemunhos {
-  background: #007FFF !important; /* brand */
+  background: #007FFF !important;
+  /* brand */
 }
 
 /* body.theme-aqua #faq {
@@ -2593,7 +3553,7 @@ body.theme-aqua #testemunhos {
 } */
 
 body.theme-aqua #capsula-3d {
-  background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(103, 167, 194, 1) 93%, rgba(64, 154, 192, 1) 100%);
+  background: linear-gradient(180deg, rgba(253, 254, 254, 1) 0%, rgba(103, 167, 194, 1) 93%, rgba(64, 154, 192, 1) 100%);
 }
 
 /* CITRUS â€” verdes fortes com neutros escuros para variação */
@@ -2602,11 +3562,13 @@ body.theme-aqua #capsula-3d {
 } */
 
 body.theme-citrus #como-usar {
-  background: #000 !important; /* Preto para evitar vazamentos durante transições (mobile/desktop) */
+  background: #000 !important;
+  /* Preto para evitar vazamentos durante transições (mobile/desktop) */
 }
 
 body.theme-citrus #fragrancias {
-  background: #436147 !important; /* secondary */
+  background: #436147 !important;
+  /* secondary */
 }
 
 /* body.theme-citrus #sustentabilidade {
@@ -2614,7 +3576,8 @@ body.theme-citrus #fragrancias {
 } */
 
 body.theme-citrus #testemunhos {
-  background: #00BF63 !important; /* brand */
+  background: #00BF63 !important;
+  /* brand */
 }
 
 /* body.theme-citrus #faq {
@@ -2622,71 +3585,176 @@ body.theme-citrus #testemunhos {
 } */
 
 body.theme-citrus #capsula-3d {
-    background: linear-gradient(180deg,rgba(253, 254, 254, 1) 0%, rgba(183, 215, 212, 1) 50%, rgba(21, 135, 84, 1) 100%)
-
+  background: linear-gradient(180deg, rgba(253, 254, 254, 1) 0%, rgba(183, 215, 212, 1) 50%, rgba(21, 135, 84, 1) 100%)
 }
 
 /* Force solid backgrounds in sustainability section (no transparency) */
 body.theme-citrus #sustentabilidade .fullscreen-panel,
-body.theme-citrus .sustainability-parallax .fullscreen-panel { background: #ffffff !important; }
+body.theme-citrus .sustainability-parallax .fullscreen-panel {
+  background: #ffffff !important;
+}
 
 body.theme-aqua #sustentabilidade .fullscreen-panel,
-body.theme-aqua .sustainability-parallax .fullscreen-panel { background: #ffffff !important; }
+body.theme-aqua .sustainability-parallax .fullscreen-panel {
+  background: #ffffff !important;
+}
 
 body.theme-citrus #sustentabilidade .panel-content,
-body.theme-citrus .sustainability-parallax .panel-content { background: #ffffff !important; }
+body.theme-citrus .sustainability-parallax .panel-content {
+  background: #ffffff !important;
+}
 
 body.theme-aqua #sustentabilidade .panel-content,
-body.theme-aqua .sustainability-parallax .panel-content { background: #ffffff !important; }
+body.theme-aqua .sustainability-parallax .panel-content {
+  background: #ffffff !important;
+}
 
-.tc-testimonials{ padding: clamp(24px, 6vw, 56px) 24px; overflow-x: hidden; min-height: 100vh; display:flex; align-items:center }
-.tc-wrap{ max-width: 1200px; margin: 0 auto; display: grid; gap: clamp(20px, 4vw, 40px); grid-template-columns: 1fr }
-@media (min-width: 960px){ .tc-wrap{ grid-template-columns: 1fr 1.4fr } }
+.tc-testimonials {
+  padding: clamp(24px, 6vw, 56px) 24px;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  align-items: center
+}
+
+.tc-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(20px, 4vw, 40px);
+  grid-template-columns: 1fr
+}
+
+@media (min-width: 960px) {
+  .tc-wrap {
+    grid-template-columns: 1fr 1.4fr
+  }
+}
 
 /* cores por tema (section background) */
-body.theme-aqua .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(29,221,242,.06), transparent 55%), #007FFF !important; color: #ffffff }
-body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 60%, rgba(95,217,126,.06), transparent 55%), #00BF63 !important; color: #ffffff }
+body.theme-aqua .tc-testimonials {
+  background: radial-gradient(60% 120% at 85% 60%, rgba(29, 221, 242, .06), transparent 55%), #007FFF !important;
+  color: #ffffff
+}
 
-.tc-left .tc-title{ font-size: clamp(28px, 4vw, 44px); line-height:1.12; letter-spacing:.2px; margin:0 0 16px; font-weight:800; color: #ffffff }
-.tc-sub{ color: rgba(255,255,255,0.9); max-width:44ch; margin:0 0 24px }
-.tc-cta{ display:flex; gap:14px; flex-wrap:wrap }
+body.theme-citrus .tc-testimonials {
+  background: radial-gradient(60% 120% at 85% 60%, rgba(95, 217, 126, .06), transparent 55%), #00BF63 !important;
+  color: #ffffff
+}
+
+.tc-left .tc-title {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.12;
+  letter-spacing: .2px;
+  margin: 0 0 16px;
+  font-weight: 800;
+  color: #ffffff
+}
+
+.tc-sub {
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 44ch;
+  margin: 0 0 24px
+}
+
+.tc-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap
+}
+
 /* Match header CTA (sopy-btn) spacing/behavior */
-.sopy-tc-btn{
+.sopy-tc-btn {
   --_bg: var(--brand);
   --_fg: #fff;
   --_bd: var(--brand);
   position: relative;
-  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
-  padding:.85rem 1.8rem; border-radius:999rem;
-  border:1px solid var(--_bd); background: var(--_bg); color: var(--_fg);
-  font-weight:600; letter-spacing:.05em; text-decoration:none; box-shadow:none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .85rem 1.8rem;
+  border-radius: 999rem;
+  border: 1px solid var(--_bd);
+  background: var(--_bg);
+  color: var(--_fg);
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-decoration: none;
+  box-shadow: none;
   transition: transform .12s ease, background .2s ease, box-shadow .2s ease, color .2s ease, border-color .2s ease;
-  overflow:hidden;
+  overflow: hidden;
 }
 
-.sopy-tc-btn::before{
-  content:"";
-  position:absolute; left:var(--xPos, 50%); top:var(--yPos, 50%);
-  transform:translate(-50%, -50%);
-  width:0; height:0; background-color:rgba(255,255,255,0.15);
-  border-radius:50%; transition: width 1.5s ease, height 1.5s ease; z-index:0;
+.sopy-tc-btn::before {
+  content: "";
+  position: absolute;
+  left: var(--xPos, 50%);
+  top: var(--yPos, 50%);
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transition: width 1.5s ease, height 1.5s ease;
+  z-index: 0;
 }
-.sopy-tc-btn *{ position:relative; z-index:1; }
-.sopy-tc-btn:hover{ transform: translateY(-1px); box-shadow: 0 10px 18px rgba(0,0,0,.08); }
-.sopy-tc-btn:active{ transform: translateY(0); box-shadow: none; }
-.sopy-tc-btn:hover::before{ width:400px; height:400px; }
-.sopy-tc-btn:focus-visible{ outline:2px solid #fff2; outline-offset:2px }
+
+.sopy-tc-btn * {
+  position: relative;
+  z-index: 1;
+}
+
+.sopy-tc-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, .08);
+}
+
+.sopy-tc-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.sopy-tc-btn:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.sopy-tc-btn:focus-visible {
+  outline: 2px solid #fff2;
+  outline-offset: 2px
+}
+
 /* Keep the visual variant similar but on top of header-like base */
-.sopy-tc-btn--primary{ background: linear-gradient(135deg, var(--brand-2), var(--brand)); color:#1b1b1e; border:none; box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 0 0 1px rgba(255,255,255,.08) }
-.sopy-tc-btn--primary:hover{ transform: translateY(-1px) scale(1.02) }
-.sopy-tc-btn--ghost{ background: rgba(255,255,255,0.2); color: #ffffff; border: 2px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); border-radius: 50px; }
-.sopy-tc-btn--ghost:hover{ background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.5); }
+.sopy-tc-btn--primary {
+  background: linear-gradient(135deg, var(--brand-2), var(--brand));
+  color: #1b1b1e;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .25), inset 0 0 0 1px rgba(255, 255, 255, .08)
+}
+
+.sopy-tc-btn--primary:hover {
+  transform: translateY(-1px) scale(1.02)
+}
+
+.sopy-tc-btn--ghost {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(10px);
+  border-radius: 50px;
+}
+
+.sopy-tc-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+}
 
 /* Botão ghost específico nos testemunhos com glassmorphism original */
 .tc-testimonials .sopy-tc-btn--ghost {
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
   backdrop-filter: blur(5px);
   text-transform: uppercase;
@@ -2698,7 +3766,10 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   overflow: hidden;
 }
 
-.tc-testimonials .sopy-tc-btn--ghost * { position: relative; z-index: 1; }
+.tc-testimonials .sopy-tc-btn--ghost * {
+  position: relative;
+  z-index: 1;
+}
 
 .tc-testimonials .sopy-tc-btn--ghost::before {
   content: "";
@@ -2706,27 +3777,31 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   left: var(--xPos, 50%);
   top: var(--yPos, 50%);
   transform: translate(-50%, -50%);
-  width: 0; height: 0;
-  background-color: rgba(255,255,255,0.15);
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   transition: width 1.5s ease, height 1.5s ease;
   z-index: 0;
 }
 
-.tc-testimonials .sopy-tc-btn--ghost:hover::before { width: 400px; height: 400px; }
+.tc-testimonials .sopy-tc-btn--ghost:hover::before {
+  width: 400px;
+  height: 400px;
+}
 
 .tc-testimonials .sopy-tc-btn--ghost:hover {
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
   box-shadow: none;
   transform: none;
 }
 
 /* Testimonials CTA com glassmorphism original */
-.tc-testimonials .sopy-tc-btn{
-  background: rgba(255,255,255,0.2);
+.tc-testimonials .sopy-tc-btn {
+  background: rgba(255, 255, 255, 0.2);
   color: #ffffff;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50px;
   backdrop-filter: blur(5px);
   text-transform: uppercase;
@@ -2737,28 +3812,36 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
   box-shadow: none;
   transform: none;
 }
-.tc-testimonials .sopy-tc-btn::before{
+
+.tc-testimonials .sopy-tc-btn::before {
   content: "";
   position: absolute;
   left: var(--xPos, 50%);
   top: var(--yPos, 50%);
   transform: translate(-50%, -50%);
-  width: 0; height: 0;
-  background-color: rgba(255,255,255,0.15);
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.15);
   border-radius: 50%;
   transition: width 1.5s ease, height 1.5s ease;
   z-index: 0;
 }
-.tc-testimonials .sopy-tc-btn:hover::before{ width: 400px; height: 400px; }
-.tc-testimonials .sopy-tc-btn:hover{
-  background: rgba(255,255,255,0.3);
-  border-color: rgba(255,255,255,0.5);
+
+.tc-testimonials .sopy-tc-btn:hover::before {
+  width: 400px;
+  height: 400px;
+}
+
+.tc-testimonials .sopy-tc-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
   box-shadow: none;
   transform: none;
 }
-.tc-testimonials .sopy-tc-btn:active{
-  background: rgba(255,255,255,0.25);
-  border-color: rgba(255,255,255,0.4);
+
+.tc-testimonials .sopy-tc-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
   box-shadow: none;
   transform: none;
 }
@@ -2766,7 +3849,8 @@ body.theme-citrus .tc-testimonials{ background: radial-gradient(60% 120% at 85% 
 /* Botão primário (Comprar) com fundo branco e cor do tema */
 body.theme-aqua .tc-testimonials .sopy-tc-btn--primary {
   background: #FFFFFF !important;
-  color: #083DA6 !important; /* azul do tema aqua */
+  color: #083DA6 !important;
+  /* azul do tema aqua */
   border: 2px solid #FFFFFF !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -2778,7 +3862,8 @@ body.theme-aqua .tc-testimonials .sopy-tc-btn--primary:hover {
 
 body.theme-citrus .tc-testimonials .sopy-tc-btn--primary {
   background: #FFFFFF !important;
-  color: #167312 !important; /* verde do tema citrus */
+  color: #167312 !important;
+  /* verde do tema citrus */
   border: 2px solid #FFFFFF !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -2793,7 +3878,8 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
 /* Botões de navegação dos depoimentos - Design melhorado */
 .tc-nav-buttons {
   position: absolute;
-  bottom: 24px; /* Posicionado na parte inferior do card */
+  bottom: 24px;
+  /* Posicionado na parte inferior do card */
   left: 50%;
   width: 100%;
   max-width: 100%;
@@ -2833,70 +3919,157 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
   transform: scale(0.95);
 }
 
-.tc-right{ position:relative; min-width:0 }
-.tc-topActions{ display:none !important }
-/* Track container para cards sobrepostos */
-.tc-testimonials-track{ position:relative; overflow:hidden; min-width:0; touch-action: pan-y; cursor:grab; min-height:320px; border-radius:16px }
-.tc-testimonials-track.tc-grabbing{ cursor:grabbing }
-/* Cards sobrepostos com position absolute */
-.tc-testimonial-card{ position:absolute; inset:0; opacity:0; transform:translateX(100%); transition: opacity 0.3s ease, transform 0.6s ease }
-.tc-testimonial-card.active{ opacity:1; transform:translateX(0) }
-/* Glassmorphism cards: translucent surface, blur backdrop, soft border and subtle shadow */
-.tc-card{ 
-  background: rgba(255,255,255,0.06); 
-  -webkit-backdrop-filter: blur(8px); 
-  backdrop-filter: blur(8px); 
-  border:1px solid rgba(255,255,255,0.12); 
-  border-radius:16px; 
-  padding: clamp(20px, 3.2vw, 34px) clamp(20px, 3.2vw, 34px) clamp(80px, 8vw, 100px) clamp(20px, 3.2vw, 34px); /* padding-bottom maior para espaço das setas */
-  box-shadow: 0 8px 30px rgba(6,10,12,0.22); 
-  min-height:280px; 
-  display:grid; 
-  gap:18px; 
-  overflow:hidden; 
-  color: inherit; 
-  width: 100%; 
-  height: 100%;
-  align-content: start; /* Alinha conteúdo no topo */
+.tc-right {
+  position: relative;
+  min-width: 0
 }
-.tc-card::after{ content:""; position:absolute; inset:0; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); pointer-events:none }
-.tc-quoteMark{ font-size: clamp(32px, 6vw, 52px); line-height:1; opacity:.14; user-select:none }
-.tc-quote{ margin:0; font-size: clamp(16px, 1.8vw, 18px); color: rgba(255,255,255,0.95); max-width:60ch; animation: tcFade .45s ease }
-@keyframes tcFade{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:translateY(0)} }
-.tc-cardFoot { background: transparent !important; border-radius: 0 0 18px 18px; border-top: 1px solid rgba(255,255,255,0.08); }
+
+.tc-topActions {
+  display: none !important
+}
+
+/* Track container para cards sobrepostos */
+.tc-testimonials-track {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+  touch-action: pan-y;
+  cursor: grab;
+  min-height: 320px;
+  border-radius: 16px
+}
+
+.tc-testimonials-track.tc-grabbing {
+  cursor: grabbing
+}
+
+/* Cards sobrepostos com position absolute */
+.tc-testimonial-card {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.3s ease, transform 0.6s ease
+}
+
+.tc-testimonial-card.active {
+  opacity: 1;
+  transform: translateX(0)
+}
+
+/* Glassmorphism cards: translucent surface, blur backdrop, soft border and subtle shadow */
+.tc-card {
+  background: rgba(255, 255, 255, 0.06);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: clamp(20px, 3.2vw, 34px) clamp(20px, 3.2vw, 34px) clamp(80px, 8vw, 100px) clamp(20px, 3.2vw, 34px);
+  /* padding-bottom maior para espaço das setas */
+  box-shadow: 0 8px 30px rgba(6, 10, 12, 0.22);
+  min-height: 280px;
+  display: grid;
+  gap: 18px;
+  overflow: hidden;
+  color: inherit;
+  width: 100%;
+  height: 100%;
+  align-content: start;
+  /* Alinha conteúdo no topo */
+}
+
+.tc-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  pointer-events: none
+}
+
+.tc-quoteMark {
+  font-size: clamp(32px, 6vw, 52px);
+  line-height: 1;
+  opacity: .14;
+  user-select: none
+}
+
+.tc-quote {
+  margin: 0;
+  font-size: clamp(16px, 1.8vw, 18px);
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 60ch;
+  animation: tcFade .45s ease
+}
+
+@keyframes tcFade {
+  from {
+    opacity: 0;
+    transform: translateY(6px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+
+.tc-cardFoot {
+  background: transparent !important;
+  border-radius: 0 0 18px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 .tc-author {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: transparent !important;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent !important;
 }
 
 .tc-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.15);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.15);
 }
 
 .tc-name {
-    display: block;
-    font-weight: 600;
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.95);
-    margin-bottom: 2px;
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 2px;
 }
 
 .tc-role {
-    display: block;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.6);
-    font-weight: 400;
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
 }
-.tc-rating{ display:flex; align-items:center; gap:8px }
-.tc-stars{ display:flex; gap:4px }
-.tc-stars svg{ width:18px; height:18px }
-.tc-score{ color:#f2f3f7; font-weight:700 }
+
+.tc-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px
+}
+
+.tc-stars {
+  display: flex;
+  gap: 4px
+}
+
+.tc-stars svg {
+  width: 18px;
+  height: 18px
+}
+
+.tc-score {
+  color: #f2f3f7;
+  font-weight: 700
+}
+
 /* Progress dos depoimentos igual ao Como Usar */
 .tc-progress-wrap {
   /* place the dots inside the testimonials section so they're fixed to the cards area
@@ -2904,7 +4077,8 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
      — this keeps them visually under the cards, not at the viewport bottom */
   position: absolute;
   left: 50%;
-  bottom: -56px; /* sits below the cards container when placed inside .tc-right */
+  bottom: -56px;
+  /* sits below the cards container when placed inside .tc-right */
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -2930,10 +4104,11 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background-color: rgba(255,255,255,0.6); /* branco semi-transparente por padrão */
+  background-color: rgba(255, 255, 255, 0.6);
+  /* branco semi-transparente por padrão */
   transition: width .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-              background-color .25s ease, transform .2s ease;
+    height .25s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    background-color .25s ease, transform .2s ease;
 }
 
 body.theme-citrus .tc-progress-dot.active,
@@ -2941,37 +4116,45 @@ body.theme-aqua .tc-progress-dot.active {
   width: 56px;
   height: 12px;
   border-radius: 999px;
-  background-color: #ffffff; /* branco sólido quando ativo */
+  background-color: #ffffff;
+  /* branco sólido quando ativo */
   transform: translateY(-1px);
 }
 
 /* Remove dots antigos */
-.tc-testimonials-dots { display: none; }
+.tc-testimonials-dots {
+  display: none;
+}
 
 /* Responsividade dos cards de depoimentos */
 @media (max-width: 768px) {
   .tc-card {
-    padding-bottom: clamp(70px, 7vw, 85px); /* Padding inferior menor no tablet */
+    padding-bottom: clamp(70px, 7vw, 85px);
+    /* Padding inferior menor no tablet */
   }
 }
 
 @media (max-width: 480px) {
   .tc-card {
-    padding-bottom: clamp(60px, 6vw, 70px); /* Padding inferior ainda menor no mobile */
+    padding-bottom: clamp(60px, 6vw, 70px);
+    /* Padding inferior ainda menor no mobile */
   }
 }
 
 /* Responsividade dos dots de progresso */
 @media (max-width: 768px) {
   .tc-progress-wrap {
-    bottom: -40px; /* Mais alto no tablet */
+    bottom: -40px;
+    /* Mais alto no tablet */
   }
 }
 
 @media (max-width: 480px) {
   .tc-progress-wrap {
-    bottom: -32px; /* Ainda mais alto no mobile para não ser cortado */
-    gap: 10px; /* Gap menor para economizar espaço */
+    bottom: -32px;
+    /* Ainda mais alto no mobile para não ser cortado */
+    gap: 10px;
+    /* Gap menor para economizar espaço */
   }
 
   .tc-progress-dot {
@@ -2981,7 +4164,8 @@ body.theme-aqua .tc-progress-dot.active {
 
   body.theme-citrus .tc-progress-dot.active,
   body.theme-aqua .tc-progress-dot.active {
-    width: 44px; /* Menor no mobile */
+    width: 44px;
+    /* Menor no mobile */
     height: 10px;
   }
 }
@@ -2989,7 +4173,8 @@ body.theme-aqua .tc-progress-dot.active {
 /* Responsividade dos botões de navegação dos depoimentos */
 @media (max-width: 768px) {
   .tc-nav-buttons {
-    bottom: 20px; /* Mais próximo do fundo no tablet */
+    bottom: 20px;
+    /* Mais próximo do fundo no tablet */
     padding: 0 clamp(6px, 1.5vw, 14px);
   }
 
@@ -3002,7 +4187,8 @@ body.theme-aqua .tc-progress-dot.active {
 
 @media (max-width: 480px) {
   .tc-nav-buttons {
-    bottom: 16px; /* Ainda mais próximo no mobile */
+    bottom: 16px;
+    /* Ainda mais próximo no mobile */
     padding: 0 clamp(4px, 1vw, 10px);
   }
 
@@ -3018,15 +4204,20 @@ body.theme-aqua .tc-progress-dot.active {
 
 /* Ensure theme body backgrounds match the FAQ section colors so the area behind the footer aligns */
 body.theme-citrus {
-  background: #ffffff; /* same as citrus FAQ section */
+  background: #ffffff;
+  /* same as citrus FAQ section */
 }
 
 body.theme-aqua {
-  background: #ffffff; /* same as aqua FAQ section */
+  background: #ffffff;
+  /* same as aqua FAQ section */
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .page-footer { transition: none !important; transform: none !important; }
+  .page-footer {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* ========== RESPONSIVO: COMO USAR & SUSTENTABILIDADE ========== */
@@ -3034,9 +4225,11 @@ body.theme-aqua {
 /* Tablet e mobile: Como usar */
 @media (max-width: 900px) {
   .sopy-how-section {
-    min-height: 100vh; /* manter 100vh como pedido */
+    min-height: 100vh;
+    /* manter 100vh como pedido */
     height: 100vh;
-    padding: clamp(20px, 6.5vw, 32px) 0 80px; /* espaço para dots */
+    padding: clamp(20px, 6.5vw, 32px) 0 80px;
+    /* espaço para dots */
     display: flex;
     flex-direction: column;
     position: relative;
@@ -3052,44 +4245,51 @@ body.theme-aqua {
     text-align: left;
     margin: 0 14px 12px;
     padding: 0;
-    max-width: 10.5ch; /* força quebra em ~4 linhas */
+    max-width: 10.5ch;
+    /* força quebra em ~4 linhas */
   }
 
   /* hide original track on mobile; we use cu-stack slider */
-  .sopy-how-track { display: none !important; }
+  .sopy-how-track {
+    display: none !important;
+  }
 
   .sopy-how-background-text {
-    display: none; /* esconder o texto de fundo no mobile; usamos o how-title */
+    display: none;
+    /* esconder o texto de fundo no mobile; usamos o how-title */
   }
 
   /* Mobile Touch Slider */
-  .sopy-how-stack { 
-    display: block; 
-    position: relative; 
-    overflow: hidden; 
+  .sopy-how-stack {
+    display: block;
+    position: relative;
+    overflow: hidden;
     width: calc(100% - 24px);
-    margin: 4px 12px 0; 
-    height: 36vh; 
+    margin: 4px 12px 0;
+    height: 36vh;
     min-height: 240px;
-    touch-action: pan-y; 
+    touch-action: pan-y;
     cursor: grab;
     flex: 1;
   }
-  .sopy-how-stack.sopy-how-grabbing { cursor: grabbing; }
-  
-  .sopy-how-mobile-card { 
+
+  .sopy-how-stack.sopy-how-grabbing {
+    cursor: grabbing;
+  }
+
+  .sopy-how-mobile-card {
     position: absolute;
     top: 8px;
     left: 16px;
     right: 16px;
     bottom: 12px;
-    background: rgba(255,255,255,0.06); 
-    -webkit-backdrop-filter: blur(8px); 
-    backdrop-filter: blur(8px); 
-    border: 1px solid rgba(255,255,255,0.12); 
-    border-radius: 22px; 
-    padding: 20px; 
-    box-shadow: 0 12px 34px rgba(6,10,12,0.28); 
+    background: rgba(255, 255, 255, 0.06);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 22px;
+    padding: 20px;
+    box-shadow: 0 12px 34px rgba(6, 10, 12, 0.28);
     color: #fff;
     display: flex;
     align-items: center;
@@ -3097,20 +4297,20 @@ body.theme-aqua {
     will-change: transform;
     transition: opacity 0.3s ease;
   }
-  
-  .sopy-how-mobile-card .sopy-how-card { 
-    background: transparent !important; 
-    border: 0 !important; 
-    box-shadow: none !important; 
+
+  .sopy-how-mobile-card .sopy-how-card {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
     padding: 0 !important;
     text-align: center;
     width: 100%;
   }
-  
-  .sopy-how-mobile-card .sopy-how-step-number { 
-    width: 40px; 
-    height: 40px; 
-    font-size: 1rem; 
+
+  .sopy-how-mobile-card .sopy-how-step-number {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
     margin: 0 auto 16px;
     background: var(--brand);
     color: #fff;
@@ -3120,9 +4320,9 @@ body.theme-aqua {
     justify-content: center;
     font-weight: 600;
   }
-  
-  .sopy-how-mobile-card p { 
-    font-size: 1rem; 
+
+  .sopy-how-mobile-card p {
+    font-size: 1rem;
     line-height: 1.5;
     margin: 0;
     max-width: 280px;
@@ -3130,30 +4330,39 @@ body.theme-aqua {
   }
 
 
-@media (max-width: 600px) {
-  .sopy-how-stack { height: 34vh; min-height: 200px; }
-  
-  .sopy-how-mobile-card { 
-    padding: 16px; 
-    border-radius: 18px;
-    top: 6px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-  }
-  
-  .sopy-how-mobile-card .sopy-how-step-number {
-    width: 36px;
-    height: 36px;
-    font-size: 0.9rem;
-    margin-bottom: 12px;
-  }
-  
-  .sopy-how-mobile-card p { font-size: 0.9rem; }
+  @media (max-width: 600px) {
+    .sopy-how-stack {
+      height: 34vh;
+      min-height: 200px;
+    }
 
-  /* Larger heading on very small screens */
-  .sopy-how-title { font-size: clamp(4.2rem, 15.5vw, 5.8rem); max-width: 10ch; }
-}
+    .sopy-how-mobile-card {
+      padding: 16px;
+      border-radius: 18px;
+      top: 6px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+    }
+
+    .sopy-how-mobile-card .sopy-how-step-number {
+      width: 36px;
+      height: 36px;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+
+    .sopy-how-mobile-card p {
+      font-size: 0.9rem;
+    }
+
+    /* Larger heading on very small screens */
+    .sopy-how-title {
+      font-size: clamp(4.2rem, 15.5vw, 5.8rem);
+      max-width: 10ch;
+    }
+  }
+
   .sopy-how-panel {
     width: 85vw;
     min-width: 85vw;
@@ -3171,11 +4380,19 @@ body.theme-aqua {
     min-height: auto;
     height: 100%;
     border-radius: 20px;
-    box-shadow: 0 10px 24px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.04);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.04);
   }
 
-  .sopy-how-step-number { width: 36px; height: 36px; font-size: 0.9rem; margin-bottom: 14px; }
-  .sopy-how-card p { font-size: 1rem; }
+  .sopy-how-step-number {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
+  }
+
+  .sopy-how-card p {
+    font-size: 1rem;
+  }
 }
 
 @media (max-width: 600px) {
@@ -3211,15 +4428,16 @@ body.theme-aqua {
     bottom: 18px;
     left: 50%;
     transform: translateX(-50%);
-    opacity: 1 !important; /* Always visible on mobile */
+    opacity: 1 !important;
+    /* Always visible on mobile */
     display: flex !important;
   }
-  
+
   .sopy-how-progress-dot {
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  
+
   .sopy-how-progress-dot:hover {
     transform: translateY(-1px);
   }
@@ -3268,7 +4486,8 @@ body.theme-aqua {
   }
 
   .sustainability-parallax .text-column {
-    padding: 1rem 0 0.5rem; /* mais espaço no topo no mobile */
+    padding: 1rem 0 0.5rem;
+    /* mais espaço no topo no mobile */
   }
 
   /* Padding for subtitle under SUSTENTABILIDADE */
@@ -3281,7 +4500,8 @@ body.theme-aqua {
   /* Imagens um pouco maiores no mobile */
   .sustainability-parallax .image-wrapper {
     width: clamp(280px, 65vw, 360px);
-    aspect-ratio: 3 / 3.6; /* um pouco maior no mobile */
+    aspect-ratio: 3 / 3.6;
+    /* um pouco maior no mobile */
   }
 
   /* Diminui fonte do título SUSTENTABILIDADE no mobile */
@@ -3292,18 +4512,21 @@ body.theme-aqua {
 }
 
 /* Ensure testimonials section is a positioned container for absolute dots */
-#testemunhos { position: relative; }
+#testemunhos {
+  position: relative;
+}
 
 /* ===================== HEADER THEME ADAPTATIONS ===================== */
 /* Por padrão o header é verde (tema citrus), quando muda para aqua fica azul */
 /* Forçar mudança simultânea de cor em todo o header e suas partes */
-body.theme-aqua .head-main, 
+body.theme-aqua .head-main,
 body.theme-aqua .js-head-main,
 body.theme-aqua .head-logo-row,
 body.theme-aqua .js-menu-and-banners-row,
 body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #083DA6 !important;
-  transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
+  transition: background-color 0.1s ease !important;
+  /* transição rápida e simultânea */
 }
 
 /* Badge no tema aqua - verde */
@@ -3318,7 +4541,8 @@ body.theme-citrus .head-logo-row,
 body.theme-citrus .js-menu-and-banners-row,
 body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
   background-color: #167312 !important;
-  transition: background-color 0.1s ease !important; /* transição rápida e simultânea */
+  transition: background-color 0.1s ease !important;
+  /* transição rápida e simultânea */
 }
 
 /* Badge no tema citrus - azul */
@@ -3330,7 +4554,8 @@ body.theme-citrus .head-main .badge {
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 300vh; /* Ajustado para 300vh - sai do último slide mais cedo */
+  height: 300vh;
+  /* Ajustado para 300vh - sai do último slide mais cedo */
   background: #000;
 }
 
@@ -3377,17 +4602,19 @@ body.theme-citrus .head-main .badge {
 
 /* Mostra 2 previews ao lado por padrão */
 .slider-item:nth-child(3) {
-  left: calc(58% + 240px); /* Movido para a posição mais à direita */
+  left: calc(58% + 240px);
+  /* Movido para a posição mais à direita */
   opacity: 1;
 }
 
-.slider-item:nth-child(4) { 
-  left: 58%; /* Movido para a posição mais à esquerda */
+.slider-item:nth-child(4) {
+  left: 58%;
+  /* Movido para a posição mais à esquerda */
   opacity: 1;
 }
 
 /* Esconde os demais */
-.slider-item:nth-child(n+5) { 
+.slider-item:nth-child(n+5) {
   opacity: 0;
   pointer-events: none;
 }
@@ -3400,7 +4627,8 @@ body.theme-citrus .head-main .badge {
 }
 
 .slider-slide.penultimate-slide .slider-item:nth-child(3) {
-  left: calc(58% + 240px); /* Mantém na posição mais à direita */
+  left: calc(58% + 240px);
+  /* Mantém na posição mais à direita */
   opacity: 1;
   pointer-events: auto;
 }
@@ -3477,6 +4705,7 @@ body.theme-citrus .head-main .badge {
     transform: translate(0, 32px);
     filter: blur(18px);
   }
+
   to {
     opacity: 1;
     transform: translate(0, 0);
@@ -3485,7 +4714,8 @@ body.theme-citrus .head-main .badge {
 }
 
 .slider-button {
-  position: absolute; /* Mudado de fixed para absolute - fica dentro da seção .*/
+  position: absolute;
+  /* Mudado de fixed para absolute - fica dentro da seção .*/
   left: 50%;
   bottom: 28px;
   transform: translateX(-50%);
@@ -3528,11 +4758,28 @@ body.theme-citrus .head-main .badge {
 }
 
 @media (max-width: 768px) {
+
   .slider-item:nth-child(3),
   .slider-item:nth-child(4),
   .slider-item:nth-child(5),
   .slider-item:nth-child(n+6) {
     opacity: 0 !important;
     pointer-events: none;
+  }
+}
+
+/* ========== 2D CAPSULE ANIMATION FIX ========== */
+.capsule-2d-photo {
+  height: 70vh;
+  width: auto;
+  max-width: 90%;
+  object-fit: contain;
+  display: block;
+  will-change: transform;
+}
+
+@media (max-width: 900px) {
+  .capsule-2d-photo {
+    height: 55vh;
   }
 }
