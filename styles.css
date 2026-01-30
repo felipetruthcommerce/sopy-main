@@ -3536,3 +3536,16 @@ body.theme-citrus .head-main .badge {
     pointer-events: none;
   }
 }
+
+
+@media (max-width: 900px) {
+  /* Make the 2D capsule image larger and centered for mobile */
+  .capsule-2d-photo {
+    max-width: 64vw !important;
+    max-height: 50vh !important;
+    top: 46% !important;
+    transform: translate(-50%, -46%) !important;
+    z-index: 3;
+  }
+
+}
