@@ -981,7 +981,7 @@ new THREE.RGBELoader()
         ScrollTrigger.create({
             trigger: section,
             start: 'top 65%',   // ajusta quando começa a aparecer
-            end: 'bottom 10%',  // dispara o onLeave muito mais cedo (quando o fim da seção atingir 10% da viewport)
+            end: 'bottom 99%',  // dispara onLeave mais perto do final da seção (bottom 99%)
             onEnter: self => {
                 ctas.forEach(c => c.classList.add('is-visible'));
                 // ensure 3D is visible when entering
@@ -1088,19 +1088,13 @@ new THREE.RGBELoader()
                     if (photo) {
                         // ensure photo has a transition for opacity
                         photo.style.transition = 'opacity .32s ease, transform .32s ease';
-                        // listen for transitionend on the three container (preferred) or fallback to photo
-                        const targetForEvent = three || photo;
-                        const onEnd = (ev) => {
-                            if (ev && ev.target !== targetForEvent) return;
-                            targetForEvent.removeEventListener('transitionend', onEnd);
-                            showOverlaysNow();
-                        };
-                        targetForEvent.addEventListener('transitionend', onEnd);
                         // trigger fade
                         photo.style.opacity = '0';
+                        // show overlays immediately so fade-in (overlays) and fade-out (photo) happen concurrently
+                        showOverlaysNow();
                     } else {
-                        // no photo present — add overlays after a small delay matching CSS transition
-                        setTimeout(showOverlaysNow, 320);
+                        // no photo present — reveal overlays immediately
+                        showOverlaysNow();
                     }
                 } catch (e) { /* silent */ }
             },
