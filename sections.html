@@ -28,14 +28,15 @@
           <img class="sopy-hero-poster" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg" alt="" aria-hidden="true" />
           -->
         </div>
-
+<!--
         <div class="sopy-hero-content">
           <h1>
             Limpeza que cabe na palma da mão
           </h1>
-
         </div>
 
+        -->
+        
         <!-- CTA movido da seção intermediária para o final da hero, centralizado -->
         <div class="cta-content">
           <a href="#comprar" class="btn-comprar-agora" role="button">Compre Agora</a>
@@ -293,7 +294,7 @@
             <h2 class="tc-title">Clientes que amam a Sopy</h2>
             <p class="tc-sub">Veja o que a galera diz sobre praticidade, perfume e resultado. Depoimentos reais de quem já usa no dia a dia.</p>
             <div class="tc-cta">
-                <a href="/comprar.html" class="sopy-tc-btn sopy-tc-btn--primary">Comprar agora</a>
+                <a href="https://sopy3.lojavirtualnuvem.com.br/capsulas-lava-roupa/" class="sopy-tc-btn sopy-tc-btn--primary">Comprar agora</a>
                 <a href="#comparison-section" class="sopy-tc-btn sopy-tc-btn--ghost">Ver benefícios</a>
             </div>
         </div>
@@ -412,6 +413,39 @@
 
 
     </main>
+
+    <!-- Page-specific: hide product-toggle and header by default; header reveal controlled by global script on scroll -->
+    <style>
+      /* when body.nav-hidden is present, hide the toggle on this page */
+      body.nav-hidden .product-toggle-container {
+        opacity: 0;
+        transform: translateY(12px);
+        pointer-events: none;
+        visibility: hidden;
+        transition: opacity .25s ease, transform .25s ease;
+      }
+    </style>
+
+    <script>
+      // Ensure header and toggle are hidden on first page load for this section.
+      // The global autoHideHeader (in index.html) will remove `nav-hidden` when the user scrolls up.
+      (function(){
+        try {
+          // Esconde imediatamente
+          document.body.classList.add('nav-hidden');
+          // E também após o autoHideHeader do index.html rodar (ele usa showNav() no início)
+          requestAnimationFrame(() => document.body.classList.add('nav-hidden'));
+          // Reforço adicional após DOMContentLoaded para garantir
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              setTimeout(() => document.body.classList.add('nav-hidden'), 50);
+            });
+          } else {
+            setTimeout(() => document.body.classList.add('nav-hidden'), 50);
+          }
+        } catch(e) { /* silent */ }
+      })();
+    </script>
 
     <div class="product-toggle-container">
       <input type="checkbox" id="product-toggle" class="pod-toggle-checkbox">
