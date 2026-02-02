@@ -194,8 +194,9 @@ p { font-family: 'Montserrat', 'Avant Garde Book BT', sans-serif; }
 .slider-des,
 .sopy-section-header p { font-family: 'Montserrat', sans-serif; font-weight: 400; }
 /* Stronger display for H2 specifically */
+/* Headings should keep their font but not be forced uppercase */
 h2 {
-  text-transform: uppercase;
+  text-transform: none;
   font-size: clamp(2.75rem, 6vw, 5rem);
   line-height: 1.02;
   letter-spacing: 0.02em;
@@ -208,6 +209,11 @@ h1 { font-size: clamp(2.25rem, 6vw, 4rem); line-height: 1.02; margin: 0 0 0.5rem
 h2 { font-size: clamp(1.75rem, 3.6vw, 2.5rem); line-height: 1.06; margin: 0 0 .5rem; }
 h3 { font-size: clamp(1.25rem, 2.4vw, 1.4rem); margin: 0; }
 p  { font-family: 'Montserrat', 'Inter', sans-serif; font-size: clamp(1rem, 1.3vw, 1.06rem); line-height: 1.55; color: var(--text); margin: 0; }
+
+/* Fragrances list tweaks: make fragrance name look like paragraph text */
+.fragrances-list { margin-left: 1rem; }
+.fragrances-list .fragrance-name { margin: .25rem 0 .25rem 0; font-weight: 600; font-size: inherit; }
+.fragrances-list li ul { margin-left: 1rem; }
 .muted { color: var(--muted); font-size: 1.03rem; line-height: 1.6; }
 
 /* ========== GRID & SEÇÕES ========== */
