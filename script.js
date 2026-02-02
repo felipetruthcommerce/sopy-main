@@ -761,7 +761,8 @@ function updateFragranceImage(theme) {
     try {
         const FRAGRANCE_BASE = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/';
         const FILES = {
-            citrus: 'perfume-citrus-01.png',
+            // use the existing file name in assets/images (jpg version available)
+            citrus: 'perfume-citrus-01.jpg',
             aqua: 'perfume-aqua-01.png'
         };
 
