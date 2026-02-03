@@ -2947,20 +2947,20 @@ body.theme-citrus .how-fullscreen .how-button {
     align-items: center;
   }
 
-  /* Smaller fonts for mobile */
+  /* Larger fonts for mobile */
   .sustainability-parallax .text-column h2 {
-    font-size: clamp(1.4rem, 6vw, 2rem);
+    font-size: clamp(1.8rem, 7vw, 2.4rem);
     line-height: 1.15;
     padding: 0;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     text-align: center;
   }
 
   .sustainability-parallax .text-column p,
   .sustainability-parallax .text-column li {
     text-align: left;
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-size: 1rem;
+    line-height: 1.5;
   }
 
   .sustainability-parallax .text-column ul {
@@ -2971,17 +2971,17 @@ body.theme-citrus .how-fullscreen .how-button {
   }
 
   .sustainability-parallax .text-column h3 {
-    font-size: 1rem;
-    margin: 8px 0 4px 0;
+    font-size: 1.1rem;
+    margin: 10px 0 6px 0;
   }
 
-  /* Smaller images for mobile */
+  /* Larger images for mobile */
   .sustainability-parallax .image-wrapper {
-    width: 55vw;
-    max-width: 200px;
+    width: 70vw;
+    max-width: 280px;
     aspect-ratio: 3 / 4;
     height: auto;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .sustainability-parallax .image-wrapper img {
