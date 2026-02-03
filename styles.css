@@ -4821,35 +4821,39 @@ body.theme-citrus .head-main .badge {
 /* Mobile Adaptation for 3D Capsule Product CTAs */
 @media (max-width: 900px) {
 
-  /* Position the first CTA (Bag) at the top area */
-  #capsula-3d .capsule-3d-cta {
-    top: 15vh !important;
-    /* Move to top */
-    bottom: auto !important;
-    /* Override default bottom */
-    left: 50% !important;
-    /* Center horizontally */
-    right: auto !important;
-    /* Override default right */
-    transform: translateX(-50%) !important;
-    width: 90%;
-    max-width: 380px;
-    margin: 0;
+  /* Reduce CTA overlay image size on mobile */
+  .capsule-3d-cta .cta-overlay {
+    width: 140px !important;
+    /* Smaller image */
+    max-width: 40% !important;
   }
 
-  /* Position the second CTA (Opposite/Box) at the bottom area */
+  /* 2. BOX (Opposite) - Agora deve ficar ACIMA */
   #capsula-3d .capsule-3d-cta.opposite {
-    top: auto !important;
-    /* Ensure unset top */
-    bottom: 12vh !important;
-    /* Move to bottom */
+    top: 22vh !important;
+    /* Near top but not AT the top (padding) */
+    bottom: auto !important;
     left: 50% !important;
-    /* Center horizontally */
     right: auto !important;
-    /* Override default */
     transform: translateX(-50%) !important;
-    width: 90%;
+    width: 85%;
     max-width: 380px;
     margin: 0;
+    z-index: 10 !important;
+    /* Ensure visibility */
+  }
+
+  /* 1. BAG (Default) - Agora deve ficar ABAIXO */
+  #capsula-3d .capsule-3d-cta:not(.opposite) {
+    top: auto !important;
+    bottom: 12vh !important;
+    /* Near bottom */
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: 85%;
+    max-width: 380px;
+    margin: 0;
+    z-index: 10 !important;
   }
 }
