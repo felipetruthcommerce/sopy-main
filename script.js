@@ -2,21 +2,21 @@
 
 // Respect 'sopy-force-theme' marker injected by sections.html.
 // If present, set a pending theme early so the rest of the script honors it.
-(function(){
-    try{
+(function () {
+    try {
         const el = document.getElementById('sopy-force-theme');
-        if(el){
+        if (el) {
             const t = (el.dataset && el.dataset.theme) ? el.dataset.theme : el.getAttribute('data-theme');
-            if(t === 'aqua' || t === 'citrus'){
+            if (t === 'aqua' || t === 'citrus') {
                 window.__pendingTheme = t;
                 // also set body classes early so CSS toggles immediately
-                if(document && document.body){
+                if (document && document.body) {
                     document.body.classList.toggle('theme-aqua', t === 'aqua');
                     document.body.classList.toggle('theme-citrus', t === 'citrus');
                 }
             }
         }
-    }catch(e){ /* silent */ }
+    } catch (e) { /* silent */ }
 })();
 
 function setupLenis() {
@@ -1144,7 +1144,7 @@ function initThree() {
                         // restore 2D photo visibility (if present)
                         const photo = document.querySelector('.capsule-2d-photo');
                         if (photo) {
-                            photo.style.transition = 'opacity .28s ease, transform .28s ease';
+                            photo.style.transition = 'opacity .28s ease';
                             photo.style.opacity = '1';
                             photo.style.transform = photo.style.transform || '';
                         }
@@ -1163,7 +1163,7 @@ function initThree() {
                         // ensure 2D photo fades back in
                         const photo = document.querySelector('.capsule-2d-photo');
                         if (photo) {
-                            photo.style.transition = 'opacity .28s ease, transform .28s ease';
+                            photo.style.transition = 'opacity .28s ease';
                             photo.style.opacity = '1';
                         }
                     } catch (e) { /* silent */ }
@@ -1235,7 +1235,7 @@ function initThree() {
 
                         if (photo) {
                             // ensure photo has a transition for opacity
-                            photo.style.transition = 'opacity .32s ease, transform .32s ease';
+                            photo.style.transition = 'opacity .32s ease';
                             // trigger fade
                             photo.style.opacity = '0';
                             // show overlays immediately so fade-in (overlays) and fade-out (photo) happen concurrently
@@ -1260,7 +1260,7 @@ function initThree() {
                         // restore 2D photo visibility when coming back
                         const photo = document.querySelector('.capsule-2d-photo');
                         if (photo) {
-                            photo.style.transition = 'opacity .28s ease, transform .28s ease';
+                            photo.style.transition = 'opacity .28s ease';
                             photo.style.opacity = '1';
                         }
                     } catch (e) { /* silent */ }
