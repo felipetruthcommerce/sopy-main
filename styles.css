@@ -2863,8 +2863,8 @@ body.theme-citrus .how-fullscreen .how-button {
 /* Ajuste específico para notebooks para evitar imagens gigantes */
 @media (min-width: 901px) and (max-width: 1440px) {
   .sustainability-parallax .image-wrapper {
-    width: clamp(300px, 35vw, 420px);
-    /* Reduzido consideravelmente para notebooks */
+    width: clamp(200px, 28vw, 320px);
+    /* Reduzido drasticamente para notebooks */
     aspect-ratio: 3 / 4;
   }
 }
