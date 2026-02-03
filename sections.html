@@ -425,6 +425,16 @@
         visibility: hidden;
         transition: opacity .25s ease, transform .25s ease;
       }
+
+      /* Override toggle colors per user request */
+      .pod-toggle-label {
+        background-color: #25d16f !important; /* Citrus Green */
+        border-color: #25d16f !important;
+      }
+      .pod-toggle-checkbox:checked + .pod-toggle-label {
+        background-color: #25a6e0 !important; /* Blue */
+        border-color: #25a6e0 !important;
+      }
     </style>
 
     <script>
