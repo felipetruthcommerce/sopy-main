@@ -4817,3 +4817,39 @@ body.theme-citrus .head-main .badge {
   }
 
 }
+
+/* Mobile Adaptation for 3D Capsule Product CTAs */
+@media (max-width: 900px) {
+
+  /* Position the first CTA (Bag) at the top area */
+  #capsula-3d .capsule-3d-cta {
+    top: 15vh !important;
+    /* Move to top */
+    bottom: auto !important;
+    /* Override default bottom */
+    left: 50% !important;
+    /* Center horizontally */
+    right: auto !important;
+    /* Override default right */
+    transform: translateX(-50%) !important;
+    width: 90%;
+    max-width: 380px;
+    margin: 0;
+  }
+
+  /* Position the second CTA (Opposite/Box) at the bottom area */
+  #capsula-3d .capsule-3d-cta.opposite {
+    top: auto !important;
+    /* Ensure unset top */
+    bottom: 12vh !important;
+    /* Move to bottom */
+    left: 50% !important;
+    /* Center horizontally */
+    right: auto !important;
+    /* Override default */
+    transform: translateX(-50%) !important;
+    width: 90%;
+    max-width: 380px;
+    margin: 0;
+  }
+}
