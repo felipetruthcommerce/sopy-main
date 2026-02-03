@@ -1937,7 +1937,7 @@ body.theme-citrus .capsule-3d-cta.opposite {
   color: #ffffff;
   text-align: center;
   margin: 0;
-  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: none;
   white-space: nowrap;
   overflow: visible;
   padding: 0.2em 0;
@@ -1971,12 +1971,12 @@ body.theme-citrus .capsule-3d-cta.opposite {
 /* Theme variations - mantém branco mas com sombra temática */
 body.theme-aqua .benefit-title h2 {
   color: #ffffff;
-  text-shadow: 2px 2px 8px rgba(75, 179, 255, 0.6), 0 0 20px rgba(75, 179, 255, 0.3);
+  text-shadow: none;
 }
 
 body.theme-citrus .benefit-title h2 {
   color: #ffffff;
-  text-shadow: 2px 2px 8px rgba(34, 139, 34, 0.8), 0 0 20px rgba(34, 139, 34, 0.5);
+  text-shadow: none;
 }
 
 /* Footer theme colors */
