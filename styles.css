@@ -2860,6 +2860,15 @@ body.theme-citrus .how-fullscreen .how-button {
   transform-origin: center center;
 }
 
+/* Ajuste específico para notebooks para evitar imagens gigantes */
+@media (min-width: 901px) and (max-width: 1440px) {
+  .sustainability-parallax .image-wrapper {
+    width: clamp(300px, 35vw, 420px);
+    /* Reduzido consideravelmente para notebooks */
+    aspect-ratio: 3 / 4;
+  }
+}
+
 .sustainability-parallax .image-wrapper img {
   width: 100%;
   height: 100%;
