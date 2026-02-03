@@ -2863,8 +2863,29 @@ body.theme-citrus .how-fullscreen .how-button {
 /* Ajuste específico para notebooks para evitar imagens gigantes */
 @media (min-width: 901px) and (max-width: 1440px) {
   .sustainability-parallax .image-wrapper {
-    width: clamp(340px, 38vw, 400px);
-    aspect-ratio: 3 / 4.1;
+    width: auto;
+    /* Deixa a largura livre */
+    max-width: 80%;
+    /* Limite de segurança lateral */
+    height: auto;
+    /* Altura natural */
+    max-height: 55vh;
+    /* Limite de altura relativo à tela */
+    aspect-ratio: auto;
+    /* Remove proporção forçada para não conflitar */
+    display: flex;
+    /* Centraliza imagem se sobrar espaço */
+    justify-content: center;
+  }
+
+  .sustainability-parallax .image-wrapper img {
+    width: auto;
+    height: 100%;
+    /* Preenche a altura do wrapper */
+    max-height: 55vh;
+    /* Garante que a imagem obedeça */
+    object-fit: contain;
+    /* Mostra imagem inteira sem cortes */
   }
 }
 
