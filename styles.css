@@ -128,7 +128,6 @@ body {
   /* Use Montserrat for body/text (non-titles) */
   font-family: 'Montserrat', 'Inter', 'Avant Garde Book BT', sans-serif;
   color: var(--text);
-  background: #1B4332;
   /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -607,27 +606,6 @@ body.theme-aqua #clean-slate-section {
   }
 }
 
-.green-wave {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  background-color: #019c51;
-  transform: translate(-50%, -50%) translateX(-100%);
-  z-index: 1;
-}
-
-/* Wave com cores baseadas no tema */
-body.theme-citrus .green-wave {
-  background-color: #77DD77;
-  /* Verde para tema citrus */
-}
-
-body.theme-aqua .green-wave {
-  background-color: #48acf8;
-  /* Azul para tema aqua */
-}
 
 .card {
   width: 90%;
