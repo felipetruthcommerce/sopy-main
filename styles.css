@@ -2879,32 +2879,83 @@ body.theme-citrus .how-fullscreen .how-button {
 
 /* Responsividade */
 @media (max-width: 900px) {
+  .sustainability-parallax .fullscreen-panel {
+    position: relative !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
   .sustainability-parallax .panel-content {
     flex-direction: column !important;
     text-align: center;
-    justify-content: center;
-    gap: 2rem;
+    justify-content: flex-start;
+    gap: 24px;
+    height: auto !important;
+    padding: 60px 24px 140px 24px;
+    /* Bottom padding avoids toggle overlap */
   }
 
   .sustainability-parallax .text-column,
   .sustainability-parallax .image-column {
     max-width: 100%;
+    flex: none;
+    height: auto;
+    padding: 0;
+  }
+
+  /* Reorder for mobile: Image first, then Title/Text */
+  .sustainability-parallax .panel-content,
+  .sustainability-parallax .fullscreen-panel[data-layout="right-image"] .panel-content,
+  .sustainability-parallax .fullscreen-panel[data-layout="left-image"] .panel-content {
+    flex-direction: column !important;
+  }
+
+  /* Ensure image is first visually if desired, or keep source order. 
+     Source order: image-column then text-column. 
+     So default column direction puts image on top. Good. */
+
+  .sustainability-parallax .text-column {
+    align-items: center;
+    /* Center text on mobile */
   }
 
   .sustainability-parallax .text-column h2 {
     font-size: clamp(2rem, 8vw, 3rem);
-    line-height: 1.3;
-    /* Garante que não corte no mobile também */
+    line-height: 1.2;
     padding: 0.1em 0;
+    text-align: center;
   }
 
-  .sustainability-parallax .text-column p {
+  .sustainability-parallax .text-column p,
+  .sustainability-parallax .text-column li {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .sustainability-parallax .text-column ul {
+    text-align: left;
+    /* Keep list left-aligned for readability but centered container */
+    display: inline-block;
     margin: 0 auto;
+    padding-left: 20px;
   }
 
   .sustainability-parallax .image-wrapper {
-    width: min(320px, 80vw);
-    aspect-ratio: 3 / 4.5;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: auto;
+    /* Allow natural aspect ratio */
+    height: auto;
+    margin-bottom: 16px;
+  }
+
+  .sustainability-parallax .image-wrapper img {
+    object-fit: contain;
+    /* Show full image, no cropping */
+    height: auto;
+    border-radius: 16px;
   }
 }
 
