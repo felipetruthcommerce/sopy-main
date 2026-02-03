@@ -600,9 +600,40 @@ body.theme-aqua #clean-slate-section {
 }
 
 @media (max-width: 900px) {
-  #clean-slate-section .card {
+
+  #clean-slate-section,
+  .pinned-container {
+    height: auto !important;
+    min-height: auto !important;
+    padding: 40px 16px 120px 16px;
+  }
+
+  .pinned-container {
+    flex-direction: column !important;
+    gap: 32px;
+  }
+
+  #clean-slate-section .card,
+  .pinned-container .card {
     width: 100%;
     max-width: 100%;
+    min-height: auto;
+    padding: 24px;
+  }
+
+  .card h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+
+  .card .card-features li {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .card img {
+    height: 160px;
+    margin-bottom: 1rem;
   }
 }
 
@@ -2879,22 +2910,23 @@ body.theme-citrus .how-fullscreen .how-button {
 
 /* Responsividade */
 @media (max-width: 900px) {
+
+  /* Keep sticky parallax but with smaller elements */
   .sustainability-parallax .fullscreen-panel {
-    position: relative !important;
-    height: auto !important;
-    min-height: auto !important;
-    overflow: visible !important;
-    display: block !important;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .sustainability-parallax .panel-content {
     flex-direction: column !important;
     text-align: center;
-    justify-content: flex-start;
-    gap: 24px;
-    height: auto !important;
-    padding: 60px 24px 140px 24px;
-    /* Bottom padding avoids toggle overlap */
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    height: 100%;
+    padding: 48px 16px 80px 16px;
   }
 
   .sustainability-parallax .text-column,
@@ -2905,57 +2937,57 @@ body.theme-citrus .how-fullscreen .how-button {
     padding: 0;
   }
 
-  /* Reorder for mobile: Image first, then Title/Text */
   .sustainability-parallax .panel-content,
   .sustainability-parallax .fullscreen-panel[data-layout="right-image"] .panel-content,
   .sustainability-parallax .fullscreen-panel[data-layout="left-image"] .panel-content {
     flex-direction: column !important;
   }
 
-  /* Ensure image is first visually if desired, or keep source order. 
-     Source order: image-column then text-column. 
-     So default column direction puts image on top. Good. */
-
   .sustainability-parallax .text-column {
     align-items: center;
-    /* Center text on mobile */
   }
 
+  /* Smaller fonts for mobile */
   .sustainability-parallax .text-column h2 {
-    font-size: clamp(2rem, 8vw, 3rem);
-    line-height: 1.2;
-    padding: 0.1em 0;
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    line-height: 1.15;
+    padding: 0;
+    margin-bottom: 8px;
     text-align: center;
   }
 
   .sustainability-parallax .text-column p,
   .sustainability-parallax .text-column li {
-    text-align: center;
-    font-size: 1rem;
+    text-align: left;
+    font-size: 0.85rem;
+    line-height: 1.4;
   }
 
   .sustainability-parallax .text-column ul {
     text-align: left;
-    /* Keep list left-aligned for readability but centered container */
-    display: inline-block;
-    margin: 0 auto;
-    padding-left: 20px;
+    display: block;
+    margin: 0;
+    padding-left: 16px;
   }
 
+  .sustainability-parallax .text-column h3 {
+    font-size: 1rem;
+    margin: 8px 0 4px 0;
+  }
+
+  /* Smaller images for mobile */
   .sustainability-parallax .image-wrapper {
-    width: 100%;
-    max-width: 360px;
-    aspect-ratio: auto;
-    /* Allow natural aspect ratio */
+    width: 55vw;
+    max-width: 200px;
+    aspect-ratio: 3 / 4;
     height: auto;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .sustainability-parallax .image-wrapper img {
-    object-fit: contain;
-    /* Show full image, no cropping */
-    height: auto;
-    border-radius: 16px;
+    object-fit: cover;
+    height: 100%;
+    border-radius: 12px;
   }
 }
 
