@@ -1981,11 +1981,11 @@ body.theme-citrus .benefit-title h2 {
 
 /* Footer theme colors */
 body.theme-aqua footer.js-footer {
-  background-color: #083DA6;
+  background-color: #25a6e0;
 }
 
 body.theme-citrus footer.js-footer {
-  background-color: #167312;
+  background-color: #25d16f;
 }
 
 /* Mobile adjustments */
@@ -4470,7 +4470,7 @@ body.theme-aqua .js-head-main,
 body.theme-aqua .head-logo-row,
 body.theme-aqua .js-menu-and-banners-row,
 body.theme-aqua .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
-  background-color: #083DA6 !important;
+  background-color: #25a6e0 !important;
   transition: background-color 0.1s ease !important;
   /* transição rápida e simultânea */
 }
@@ -4486,7 +4486,7 @@ body.theme-citrus .js-head-main,
 body.theme-citrus .head-logo-row,
 body.theme-citrus .js-menu-and-banners-row,
 body.theme-citrus .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
-  background-color: #167312 !important;
+  background-color: #25d16f !important;
   transition: background-color 0.1s ease !important;
   /* transição rápida e simultânea */
 }
