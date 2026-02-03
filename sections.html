@@ -1,18 +1,6 @@
 <main>
-  <script>
-    (function(){
-      function applyTheme(){
-        try{
-          if(!document.body) return;
-          document.body.classList.remove('theme-citrus');
-          document.body.classList.add('theme-aqua');
-          const toggle = document.getElementById('product-toggle');
-          if(toggle) toggle.checked = true;
-        }catch(e){}
-      }
-      if(document.body) applyTheme(); else window.addEventListener('DOMContentLoaded', applyTheme);
-    })();
-  </script>
+  <!-- Marker for preferred theme: script.js will read this and apply theme on load -->
+  <div id="sopy-force-theme" data-theme="aqua" style="display:none"></div>
   <style>
     /* Estilos da imagem 2D da cápsula (escopo: apenas nesta página/section) */
     .capsule-2d-photo {

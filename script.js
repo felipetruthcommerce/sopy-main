@@ -1,5 +1,24 @@
 // --- PARTE 1: DEFINIÇÃO DAS FUNÇÕES DE APOIO ---
 
+// Respect 'sopy-force-theme' marker injected by sections.html.
+// If present, set a pending theme early so the rest of the script honors it.
+(function(){
+    try{
+        const el = document.getElementById('sopy-force-theme');
+        if(el){
+            const t = (el.dataset && el.dataset.theme) ? el.dataset.theme : el.getAttribute('data-theme');
+            if(t === 'aqua' || t === 'citrus'){
+                window.__pendingTheme = t;
+                // also set body classes early so CSS toggles immediately
+                if(document && document.body){
+                    document.body.classList.toggle('theme-aqua', t === 'aqua');
+                    document.body.classList.toggle('theme-citrus', t === 'citrus');
+                }
+            }
+        }
+    }catch(e){ /* silent */ }
+})();
+
 function setupLenis() {
     console.log('[SETUP] Inicializando Lenis (Scroll Suave)...');
     const lenis = new Lenis();
