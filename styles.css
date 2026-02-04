@@ -4880,6 +4880,6 @@ body.theme-citrus .head-main .badge {
 
   /* Box CTA (Opposite - stacked just above Bag CTA) */
   .capsule-3d-cta.opposite {
-    bottom: 28vh !important;
+    bottom: 4vh !important;
   }
 }
