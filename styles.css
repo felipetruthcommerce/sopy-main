@@ -4999,26 +4999,31 @@ body.theme-citrus .head-main .badge {
    DESKTOP: Reduce Sustainability Section Font Sizes
    ========================================= */
 @media (min-width: 901px) {
+
+  /* Responsive font sizes that scale with viewport width */
+  /* Full size on 24" (1920px), smaller on 16" (1366px), even smaller on 13" (1280px) */
   #sustentabilidade .text-column h2 {
-    font-size: clamp(1.5rem, 2.5vw, 2.2rem) !important;
+    font-size: clamp(1.8rem, 2vw + 0.5rem, 2.8rem) !important;
   }
 
   #sustentabilidade .text-column p,
   #sustentabilidade .text-column li {
-    font-size: 0.95rem !important;
-    line-height: 1.5 !important;
+    font-size: clamp(0.9rem, 0.6vw + 0.6rem, 1.1rem) !important;
+    line-height: 1.6 !important;
   }
 
   #sustentabilidade .text-column h3 {
-    font-size: 1.1rem !important;
+    font-size: clamp(1rem, 0.5vw + 0.7rem, 1.3rem) !important;
   }
 }
 
 /* =========================================
-   Comparison Section: Reduce photo div padding/height
+   Comparison Section: Reduce section height (no longer fullscreen)
    ========================================= */
 #comparison-section {
   padding-top: 40px !important;
+  min-height: auto !important;
+  height: auto !important;
 }
 
 #comparison-section .comparison-header-wrapper {
