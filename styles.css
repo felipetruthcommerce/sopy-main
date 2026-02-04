@@ -4821,12 +4821,18 @@ body.theme-citrus .head-main .badge {
 /* Mobile Adaptation for 3D Capsule Product CTAs */
 @media (max-width: 900px) {
 
-  /* Reduce CTA overlay image size on mobile and center it */
+  /* Reduce CTA overlay image size on mobile and center it above CTA */
   .capsule-3d-cta .cta-overlay {
+    position: absolute !important;
     width: 120px !important;
     max-width: 35% !important;
     left: 50% !important;
+    right: auto !important;
+    bottom: calc(100% + 8px) !important;
+    top: auto !important;
     transform: translateX(-50%) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
   /* 2. BOX (Opposite) - Agora deve ficar ACIMA do BAG */
