@@ -4938,4 +4938,26 @@ body.theme-citrus .head-main .badge {
     max-height: none !important;
     overflow: visible !important;
   }
+
+  /* DISABLE PARALLAX EFFECT FOR MOBILE - show panels sequentially */
+  .sustainability-parallax .fullscreen-panel {
+    position: relative !important;
+    top: auto !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding: 60px 20px !important;
+  }
+
+  /* Remove sticky behavior that causes overlap */
+  .sustainability-parallax .fullscreen-panel,
+  #sustentabilidade .fullscreen-panel {
+    position: static !important;
+  }
+
+  /* Ensure intro panel is also not sticky */
+  .sustainability-parallax .intro-panel {
+    position: static !important;
+    min-height: 40vh !important;
+    padding: 40px 20px !important;
+  }
 }
