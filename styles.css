@@ -4846,7 +4846,7 @@ body.theme-citrus .head-main .badge {
   /* 1. BAG (Default) - Agora deve ficar ABAIXO */
   #capsula-3d .capsule-3d-cta:not(.opposite) {
     top: auto !important;
-    bottom: 12vh !important;
+    bottom: 6vh !important;
     /* Near bottom */
     left: 50% !important;
     right: auto !important;
