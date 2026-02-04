@@ -4928,4 +4928,14 @@ body.theme-citrus .head-main .badge {
   #sustentabilidade .fullscreen-panel .text-column li {
     margin-bottom: 12px !important;
   }
+
+  /* Override parent container height limits for mobile */
+  .scroll-container,
+  .sustainability-parallax,
+  #sustentabilidade {
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
 }
