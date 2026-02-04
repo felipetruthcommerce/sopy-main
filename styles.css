@@ -4960,4 +4960,51 @@ body.theme-citrus .head-main .badge {
     min-height: 40vh !important;
     padding: 40px 20px !important;
   }
+
+  /* Increase sustainability images even more for mobile */
+  #sustentabilidade .fullscreen-panel .image-wrapper,
+  #sustentabilidade .fullscreen-panel .image-wrapper img,
+  #sustentabilidade .fullscreen-panel .image-column {
+    max-height: 55vh !important;
+  }
+}
+
+/* =========================================
+   DESKTOP: Reduce Sustainability Section Font Sizes
+   ========================================= */
+@media (min-width: 901px) {
+  #sustentabilidade .text-column h2 {
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem) !important;
+  }
+
+  #sustentabilidade .text-column p,
+  #sustentabilidade .text-column li {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+  }
+
+  #sustentabilidade .text-column h3 {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* =========================================
+   Comparison Section: Reduce photo div padding/height
+   ========================================= */
+#comparison-section {
+  padding-top: 40px !important;
+}
+
+#comparison-section .comparison-header-wrapper {
+  margin-bottom: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+/* =========================================
+   MOBILE: Reduce Capsule-3D Benefit Titles (being cut off)
+   ========================================= */
+@media (max-width: 900px) {
+  .benefit-title h2 {
+    font-size: clamp(1.4rem, 5vw, 1.8rem) !important;
+  }
 }
