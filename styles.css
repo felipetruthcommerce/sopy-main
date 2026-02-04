@@ -4864,3 +4864,24 @@ body.theme-citrus .head-main .badge {
     z-index: 10 !important;
   }
 }
+
+/* =========================================
+   MOBILE: Reduce Sustainability Section Image Height
+   ========================================= */
+@media (max-width: 900px) {
+  #sustentabilidade .fullscreen-panel .image-wrapper {
+    max-height: 35vh !important;
+    overflow: hidden;
+  }
+
+  #sustentabilidade .fullscreen-panel .image-wrapper img {
+    max-height: 35vh !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
+
+  #sustentabilidade .fullscreen-panel .image-column {
+    max-height: 35vh !important;
+  }
+}
