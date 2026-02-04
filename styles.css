@@ -4859,19 +4859,15 @@ body.theme-citrus .head-main .badge {
 }
 
 /* =========================================
-   MOBILE FIXES FOR 3D CAPSULE LAYOUT
+   MOBILE FIXES FOR 3D CAPSULE CTA STACKING
    ========================================= */
 @media (max-width: 900px) {
 
-  /* Reduce section height significantly on mobile */
-  #capsula-3d {
-    height: 140vh !important;
-  }
-
-  /* Force both CTAs to be strictly positioned relative to the bottom */
+  /* Force both CTAs to be strictly positioned at the bottom, stacked */
   .capsule-3d-cta {
     position: absolute !important;
     top: auto !important;
+    bottom: 4vh !important;
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
@@ -4880,18 +4876,10 @@ body.theme-citrus .head-main .badge {
     opacity: 1 !important;
     visibility: visible !important;
     z-index: 20 !important;
-    /* Ensure on top */
   }
 
-  /* Bag CTA (Bottom) */
-  .capsule-3d-cta:not(.opposite) {
-    bottom: 4vh !important;
-    /* Small margin from bottom */
-  }
-
-  /* Box CTA (Opposite - Top of stack) */
+  /* Box CTA (Opposite - stacked just above Bag CTA) */
   .capsule-3d-cta.opposite {
-    bottom: 42vh !important;
-    /* Positioned ABOVE the Bag CTA */
+    bottom: 28vh !important;
   }
 }
