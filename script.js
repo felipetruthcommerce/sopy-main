@@ -1124,12 +1124,13 @@ function initThree() {
             } catch (e) { /* silent */ }
 
             // cria o ScrollTrigger que mostra e depois marca como at-end
-            // Nota: end ajustado para 'bottom bottom' para que onLeave ocorra exatamente
-            // quando o final da seção alcança a base da viewport.
+            // Nota: end ajustado para disparar onLeave. Mobile usa valor mais alto para fadeout mais cedo.
+            const isMobile = window.innerWidth <= 900;
+            const triggerEnd = isMobile ? 'bottom-=350px bottom' : 'bottom-=120px bottom';
             ScrollTrigger.create({
                 trigger: section,
                 start: 'top 65%',   // ajusta quando começa a aparecer
-                end: 'bottom-=120px bottom',  // dispara onLeave mais perto do final da seção (bottom 99%)
+                end: triggerEnd,  // dispara onLeave - mobile faz fadeout mais cedo
                 onEnter: self => {
                     ctas.forEach(c => c.classList.add('is-visible'));
                     // ensure 3D is visible when entering
