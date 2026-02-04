@@ -2463,6 +2463,22 @@ function bootAnimations() {
     const totalSlides = track.querySelectorAll(".slider-item").length;
     let isTransitioning = false;
 
+    /* HELPER: Verifica se a seção está suficientemente visível para permitir slide changes */
+    function isSliderActive() {
+        const rect = section.getBoundingClientRect();
+        const vh = window.innerHeight;
+        // Calcula quanto da seção está realmente visível
+        const visibleTop = Math.max(rect.top, 0);
+        const visibleBottom = Math.min(rect.bottom, vh);
+        const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+        const sectionHeight = rect.height;
+        const visibilityRatio = visibleHeight / sectionHeight;
+
+        // Exige que pelo menos 50% da seção esteja visível E que o topo da seção
+        // esteja na metade superior da viewport
+        return visibilityRatio >= 0.5 && rect.top < vh * 0.4 && rect.bottom > vh * 0.4;
+    }
+
     /* Atualiza classes do penúltimo e último slide */
     function updateLastSlideClass() {
         // Penúltimo slide (index 2 = slide 3)
@@ -2614,10 +2630,7 @@ function bootAnimations() {
     let wheelDelta = 0;
 
     function onWheel(e) {
-        const rect = section.getBoundingClientRect();
-        const isInView = rect.top <= 50 && rect.bottom >= window.innerHeight - 50;
-
-        if (!isInView) return;
+        if (!isSliderActive()) return;
 
         clearTimeout(wheelTimeout);
         wheelDelta += e.deltaY;
@@ -2638,10 +2651,7 @@ function bootAnimations() {
 
     /* TECLADO */
     window.addEventListener("keydown", (e) => {
-        const rect = section.getBoundingClientRect();
-        const isInView = rect.top < window.innerHeight && rect.bottom > 0;
-
-        if (!isInView) return;
+        if (!isSliderActive()) return;
 
         const k = e.key;
         if (k === "ArrowRight" || k === "ArrowDown" || k === "PageDown") {
@@ -2659,9 +2669,7 @@ function bootAnimations() {
     const SWIPE_THRESHOLD = 50;
 
     window.addEventListener("touchstart", (e) => {
-        const rect = section.getBoundingClientRect();
-        const isInView = rect.top < window.innerHeight && rect.bottom > 0;
-        if (!isInView) return;
+        if (!isSliderActive()) return;
 
         if (e.touches.length !== 1) return;
         touchActive = true;
