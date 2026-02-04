@@ -4859,36 +4859,39 @@ body.theme-citrus .head-main .badge {
 }
 
 /* =========================================
-   OVERRIDES FOR 3D CAPSULE LAYOUT
+   MOBILE FIXES FOR 3D CAPSULE LAYOUT
    ========================================= */
-#capsula-3d {
-  height: 140vh !important;
-  /* Reduce height from 200vh to fit content */
-}
-
-/* Base CTA (Bag) - ensures it stays at the bottom */
-.capsule-3d-cta {
-  bottom: 0vh !important;
-}
-
-/* Opposite CTA (Box) - positions it ABOVE the Bag */
-.capsule-3d-cta.opposite {
-  bottom: 45vh !important;
-  /* Position higher */
-  right: clamp(24px, 8vw, 14vw) !important;
-  /* Ensure alignment */
-}
-
 @media (max-width: 900px) {
+
+  /* Reduce section height significantly on mobile */
   #capsula-3d {
-    height: 120vh !important;
+    height: 140vh !important;
   }
 
+  /* Force both CTAs to be strictly positioned relative to the bottom */
   .capsule-3d-cta {
-    bottom: 5vh !important;
+    position: absolute !important;
+    top: auto !important;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 380px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 20 !important;
+    /* Ensure on top */
   }
 
+  /* Bag CTA (Bottom) */
+  .capsule-3d-cta:not(.opposite) {
+    bottom: 4vh !important;
+    /* Small margin from bottom */
+  }
+
+  /* Box CTA (Opposite - Top of stack) */
   .capsule-3d-cta.opposite {
-    bottom: 40vh !important;
+    bottom: 42vh !important;
+    /* Positioned above the Bag CTA */
   }
 }
