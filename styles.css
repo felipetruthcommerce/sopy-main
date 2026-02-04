@@ -4807,13 +4807,19 @@ body.theme-citrus .head-main .badge {
 
 @media (max-width: 900px) {
 
-  /* Make the 2D capsule image larger and centered for mobile */
+  /* Reduce the 2D capsule image size for mobile */
   .capsule-2d-photo {
-    max-width: 64vw !important;
-    max-height: 50vh !important;
+    max-width: 50vw !important;
+    max-height: 40vh !important;
     top: 46% !important;
     /* transform handled by JS for rotation animation - do not use !important */
     z-index: 3;
+  }
+
+  /* Increase benefit titles size for mobile */
+  .benefit-title h2 {
+    font-size: clamp(1.8rem, 6vw, 2.5rem) !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
 
 }
@@ -4892,5 +4898,15 @@ body.theme-citrus .head-main .badge {
     justify-content: center !important;
     align-items: center !important;
     width: 100% !important;
+  }
+}
+
+/* =========================================
+   MOBILE: Hero Video - Show Full 16:9 Video
+   ========================================= */
+@media (max-width: 900px) {
+  .sopy-hero-video {
+    object-fit: contain !important;
+    background: linear-gradient(to bottom, #a6d1df 0%, #6fb8c4 100%);
   }
 }
