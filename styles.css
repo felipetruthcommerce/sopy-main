@@ -4812,7 +4812,7 @@ body.theme-citrus .head-main .badge {
     max-width: 64vw !important;
     max-height: 50vh !important;
     top: 46% !important;
-    transform: translate(-50%, -46%) !important;
+    /* transform handled by JS for rotation animation - do not use !important */
     z-index: 3;
   }
 
