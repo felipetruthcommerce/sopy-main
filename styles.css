@@ -4902,21 +4902,30 @@ body.theme-citrus .head-main .badge {
 
   /* Increase sustainability panel height for mobile to fit all text */
   #sustentabilidade .fullscreen-panel {
-    min-height: auto !important;
+    min-height: 120vh !important;
     height: auto !important;
-    padding: 40px 20px !important;
+    padding: 60px 20px 80px !important;
   }
 
   #sustentabilidade .fullscreen-panel .panel-content {
     flex-direction: column !important;
-    gap: 24px !important;
+    gap: 32px !important;
   }
 
   #sustentabilidade .fullscreen-panel .text-column {
-    padding: 0 !important;
+    padding: 0 16px !important;
   }
 
   #sustentabilidade .fullscreen-panel .text-column ul {
     padding-left: 20px !important;
+  }
+
+  #sustentabilidade .fullscreen-panel .text-column h2 {
+    font-size: 1.8rem !important;
+    margin-bottom: 16px !important;
+  }
+
+  #sustentabilidade .fullscreen-panel .text-column li {
+    margin-bottom: 12px !important;
   }
 }
