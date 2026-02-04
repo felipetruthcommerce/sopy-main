@@ -1,3 +1,29 @@
+/* =========================================
+   FORCE LIGHT MODE - Prevent dark mode from changing colors
+   ========================================= */
+:root {
+  color-scheme: light only;
+}
+
+html,
+body {
+  color-scheme: light only;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Override any forced dark mode */
+@media (prefers-color-scheme: dark) {
+
+  :root,
+  html,
+  body {
+    color-scheme: light only !important;
+    background-color: inherit !important;
+    color: inherit !important;
+  }
+}
+
 .sopy-btn,
 .sopy-btn-primary,
 .sopy-btn-outline {
@@ -5006,5 +5032,21 @@ body.theme-citrus .head-main .badge {
 @media (max-width: 900px) {
   .benefit-title h2 {
     font-size: clamp(1.4rem, 5vw, 1.8rem) !important;
+  }
+}
+
+/* =========================================
+   Reduce "Por quê Sopy?" Intro Panel Height
+   ========================================= */
+#sustentabilidade .intro-panel {
+  min-height: 40vh !important;
+  height: auto !important;
+  padding: 60px 20px !important;
+}
+
+@media (max-width: 900px) {
+  #sustentabilidade .intro-panel {
+    min-height: 30vh !important;
+    padding: 40px 20px !important;
   }
 }

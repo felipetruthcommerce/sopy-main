@@ -2537,8 +2537,13 @@ function bootAnimations() {
         const sectionHeight = section.offsetHeight;
         const viewportHeight = window.innerHeight;
 
-        // Só atua quando a seção está na viewport
-        if (sectionTop > viewportHeight || rect.bottom < 0) {
+        // Só atua quando a seção está SIGNIFICATIVAMENTE na viewport
+        // Verifica se pelo menos 60% da seção está visível
+        const sectionVisibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+        const visibilityRatio = sectionVisibleHeight / sectionHeight;
+
+        // Só atua se a seção está pelo menos 50% visível E o topo já passou
+        if (sectionTop > viewportHeight * 0.5 || rect.bottom < viewportHeight * 0.3 || visibilityRatio < 0.4) {
             ticking = false;
             return;
         }
