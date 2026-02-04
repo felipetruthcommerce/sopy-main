@@ -4899,14 +4899,24 @@ body.theme-citrus .head-main .badge {
     align-items: center !important;
     width: 100% !important;
   }
-}
 
-/* =========================================
-   MOBILE: Hero Video - Show Full 16:9 Video
-   ========================================= */
-@media (max-width: 900px) {
-  .sopy-hero-video {
-    object-fit: contain !important;
-    background: linear-gradient(to bottom, #a6d1df 0%, #6fb8c4 100%);
+  /* Increase sustainability panel height for mobile to fit all text */
+  #sustentabilidade .fullscreen-panel {
+    min-height: auto !important;
+    height: auto !important;
+    padding: 40px 20px !important;
+  }
+
+  #sustentabilidade .fullscreen-panel .panel-content {
+    flex-direction: column !important;
+    gap: 24px !important;
+  }
+
+  #sustentabilidade .fullscreen-panel .text-column {
+    padding: 0 !important;
+  }
+
+  #sustentabilidade .fullscreen-panel .text-column ul {
+    padding-left: 20px !important;
   }
 }
