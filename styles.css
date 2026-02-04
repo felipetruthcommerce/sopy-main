@@ -4844,7 +4844,7 @@ body.theme-citrus .head-main .badge {
   /* 2. BOX (Opposite) - Agora deve ficar ACIMA do BAG */
   #capsula-3d .capsule-3d-cta.opposite {
     top: auto !important;
-    bottom: 80vh !important;
+    bottom: 60vh !important;
     /* Stacked above BAG (which is at 12vh) */
     left: 50% !important;
     right: auto !important;
@@ -4859,7 +4859,7 @@ body.theme-citrus .head-main .badge {
   /* 1. BAG (Default) - Agora deve ficar ABAIXO */
   #capsula-3d .capsule-3d-cta:not(.opposite) {
     top: auto !important;
-    bottom: 6vh !important;
+    bottom: 20vh !important;
     /* Near bottom */
     left: 50% !important;
     right: auto !important;
