@@ -4876,7 +4876,7 @@ body.theme-citrus .head-main .badge {
    ========================================= */
 @media (max-width: 900px) {
   #sustentabilidade .fullscreen-panel .image-wrapper {
-    max-height: 35vh !important;
+    max-height: 45vh !important;
     overflow: hidden;
     display: flex !important;
     justify-content: center !important;
@@ -4884,7 +4884,7 @@ body.theme-citrus .head-main .badge {
   }
 
   #sustentabilidade .fullscreen-panel .image-wrapper img {
-    max-height: 35vh !important;
+    max-height: 45vh !important;
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
@@ -4893,7 +4893,7 @@ body.theme-citrus .head-main .badge {
   }
 
   #sustentabilidade .fullscreen-panel .image-column {
-    max-height: 35vh !important;
+    max-height: 45vh !important;
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
