@@ -4857,3 +4857,38 @@ body.theme-citrus .head-main .badge {
     z-index: 10 !important;
   }
 }
+
+/* =========================================
+   OVERRIDES FOR 3D CAPSULE LAYOUT
+   ========================================= */
+#capsula-3d {
+  height: 140vh !important;
+  /* Reduce height from 200vh to fit content */
+}
+
+/* Base CTA (Bag) - ensures it stays at the bottom */
+.capsule-3d-cta {
+  bottom: 0vh !important;
+}
+
+/* Opposite CTA (Box) - positions it ABOVE the Bag */
+.capsule-3d-cta.opposite {
+  bottom: 45vh !important;
+  /* Position higher */
+  right: clamp(24px, 8vw, 14vw) !important;
+  /* Ensure alignment */
+}
+
+@media (max-width: 900px) {
+  #capsula-3d {
+    height: 120vh !important;
+  }
+
+  .capsule-3d-cta {
+    bottom: 5vh !important;
+  }
+
+  .capsule-3d-cta.opposite {
+    bottom: 40vh !important;
+  }
+}
