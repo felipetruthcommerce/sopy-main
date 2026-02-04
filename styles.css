@@ -4828,11 +4828,11 @@ body.theme-citrus .head-main .badge {
     max-width: 40% !important;
   }
 
-  /* 2. BOX (Opposite) - Agora deve ficar ACIMA */
+  /* 2. BOX (Opposite) - Agora deve ficar ACIMA do BAG */
   #capsula-3d .capsule-3d-cta.opposite {
-    top: 22vh !important;
-    /* Near top but not AT the top (padding) */
-    bottom: auto !important;
+    top: auto !important;
+    bottom: 36vh !important;
+    /* Stacked above BAG (which is at 12vh) */
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
@@ -4855,31 +4855,5 @@ body.theme-citrus .head-main .badge {
     max-width: 380px;
     margin: 0;
     z-index: 10 !important;
-  }
-}
-
-/* =========================================
-   MOBILE FIXES FOR 3D CAPSULE CTA STACKING
-   ========================================= */
-@media (max-width: 900px) {
-
-  /* Force both CTAs to be strictly positioned at the bottom, stacked */
-  .capsule-3d-cta {
-    position: absolute !important;
-    top: auto !important;
-    bottom: 4vh !important;
-    left: 50% !important;
-    right: auto !important;
-    transform: translateX(-50%) !important;
-    width: 90% !important;
-    max-width: 380px !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    z-index: 20 !important;
-  }
-
-  /* Box CTA (Opposite - stacked just above Bag CTA) */
-  .capsule-3d-cta.opposite {
-    bottom: 4vh !important;
   }
 }
