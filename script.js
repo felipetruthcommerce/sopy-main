@@ -1126,7 +1126,7 @@ function initThree() {
             // cria o ScrollTrigger que mostra e depois marca como at-end
             // Nota: end ajustado para disparar onLeave. Mobile usa valor mais alto para fadeout mais cedo.
             const isMobile = window.innerWidth <= 900;
-            const triggerEnd = isMobile ? 'bottom-=350px bottom' : 'bottom-=120px bottom';
+            const triggerEnd = isMobile ? 'bottom-=420px bottom' : 'bottom-=120px bottom';
             ScrollTrigger.create({
                 trigger: section,
                 start: 'top 65%',   // ajusta quando começa a aparecer
