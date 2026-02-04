@@ -4891,7 +4891,7 @@ body.theme-citrus .head-main .badge {
 
   /* Box CTA (Opposite - Top of stack) */
   .capsule-3d-cta.opposite {
-    bottom: 10vh !important;
-    /* Positioned above the Bag CTA */
+    bottom: 42vh !important;
+    /* Positioned ABOVE the Bag CTA */
   }
 }
