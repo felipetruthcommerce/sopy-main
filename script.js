@@ -420,10 +420,13 @@ function setTheme(theme) {
         if (overlays && overlays.length) {
             overlays.forEach(img => {
                 const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
-                if (newSrc) fadeSwapImg(img, newSrc, 300);
+                if (newSrc) {
+                    // Force direct src update for reliability
+                    img.src = newSrc;
+                }
             });
         }
-    } catch (e) { /* silent */ }
+    } catch (e) { console.warn('[TEMA] Falha ao atualizar overlay images:', e); }
 
     // Update benefit titles colors based on theme (CSS handles this via body class)
     // Force a repaint to ensure theme colors are applied immediately
@@ -441,6 +444,22 @@ function setTheme(theme) {
     }
 
     swapModel(theme);
+
+    // Update CTA button click handlers to navigate to correct product URL based on theme
+    try {
+        const ctaButtons = document.querySelectorAll('.capsule-3d-cta .sopy-product-cta');
+        ctaButtons.forEach(btn => {
+            // Remove old listeners by cloning
+            const newBtn = btn.cloneNode(true);
+            btn.parentNode.replaceChild(newBtn, btn);
+
+            newBtn.addEventListener('click', () => {
+                const currentTheme = document.body.classList.contains('theme-citrus') ? 'citrus' : 'aqua';
+                const href = currentTheme === 'citrus' ? newBtn.getAttribute('data-href-citrus') : newBtn.getAttribute('data-href-aqua');
+                if (href) window.location.href = href;
+            });
+        });
+    } catch (e) { console.warn('[TEMA] Falha ao configurar links dos CTAs:', e); }
 }
 
 // ===================================================
