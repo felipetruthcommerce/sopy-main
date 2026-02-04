@@ -4821,11 +4821,12 @@ body.theme-citrus .head-main .badge {
 /* Mobile Adaptation for 3D Capsule Product CTAs */
 @media (max-width: 900px) {
 
-  /* Reduce CTA overlay image size on mobile */
+  /* Reduce CTA overlay image size on mobile and center it */
   .capsule-3d-cta .cta-overlay {
-    width: 140px !important;
-    /* Smaller image */
-    max-width: 40% !important;
+    width: 120px !important;
+    max-width: 35% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
   }
 
   /* 2. BOX (Opposite) - Agora deve ficar ACIMA do BAG */
@@ -4836,8 +4837,8 @@ body.theme-citrus .head-main .badge {
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
-    width: 85%;
-    max-width: 380px;
+    width: 75%;
+    max-width: 280px;
     margin: 0;
     z-index: 10 !important;
     /* Ensure visibility */
@@ -4851,8 +4852,8 @@ body.theme-citrus .head-main .badge {
     left: 50% !important;
     right: auto !important;
     transform: translateX(-50%) !important;
-    width: 85%;
-    max-width: 380px;
+    width: 75%;
+    max-width: 280px;
     margin: 0;
     z-index: 10 !important;
   }
