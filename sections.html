@@ -22,8 +22,9 @@
         <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="sopy-hero-media">
           <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="auto">
-            <!-- Quando tiver uma versão WebM otimizada, adicione como primeira source -->
-            <source src="assets/videos/hero.webm" type="video/webm" ../>
+            <!-- WebM otimizado (carrega primeiro, mais leve) -->
+            <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/hero-desktop.webm" type="video/webm" />
+            <!-- MP4 fallback para navegadores que não suportam WebM -->
             <source src="https://pub-e9b60b9516b34b12a17721a563e4c098.r2.dev/video-hero%20(1).mp4" type="video/mp4" />
           </video>
           <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader 

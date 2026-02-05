@@ -17,8 +17,12 @@
   <!-- Inter Tight font for section titles -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;800;900&display=swap">
 
-  <!-- Pré-carrega o vídeo principal para start mais rápido (mp4). Adicione também webm quando disponível. -->
-  <link rel="preload" href="assets/videos/hero.mp4" as="video" type="video/mp4" />
+    <!-- Preconnect aos domínios R2 da Cloudflare para carregar vídeo mais rápido -->
+    <link rel="preconnect" href="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev" crossorigin>
+    <link rel="preconnect" href="https://pub-e9b60b9516b34b12a17721a563e4c098.r2.dev" crossorigin>
+
+  <!-- Pré-carrega o vídeo WebM principal para start mais rápido -->
+  <link rel="preload" href="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/hero-desktop.webm" as="video" type="video/webm" />
 
   <!-- Ícone / Favicon (opcional) -->
     <link rel="icon" href="assets/favicon.png" type="image/png" />
@@ -4482,3 +4486,164 @@ window.start3DScrollAnimation = start3DScrollAnimation; // para debug
 </script>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/CustomEase.min.js"></script>
+<script src="https://unpkg.com/split-type"></script>
+<script src="https://unpkg.com/lenis@1.1.16/dist/lenis.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/RGBELoader.js"></script>
+
+<script>
+(function () {
+  // --- Só na home exata (ignora query/hash) ---
+  const REQUIRED_ORIGIN = "https://www.sopy.com.br";
+  if (location.origin !== REQUIRED_ORIGIN) return;
+  if (location.pathname !== "/") return;
+
+  // evita duplicar
+  if (document.querySelector(".sopy-main[data-sopy-loaded]")) return;
+
+  const ENDPOINT_ROOT = "https://felipetruthcommerce.github.io/sopy-main/";
+  const abs = (u,b)=> new URL(u,b).href;
+
+  function boot(){
+    // acha o footer; se não tiver, usa body
+    const footer = document.querySelector("footer");
+    const parent = footer?.parentNode || document.body;
+
+    // cria container e insere ANTES do footer
+    const container = document.createElement("section");
+    container.className = "sopy-main";
+    container.setAttribute("data-sopy-loaded","pending");
+    parent.insertBefore(container, footer || null);
+    container.innerHTML = '<div style="padding:24px;text-align:center;">Carregando…</div>';
+
+    // injeta CSS
+    const css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = abs("styles.css", ENDPOINT_ROOT);
+    document.head.appendChild(css);
+
+    // carrega HTML e depois animações (sem esperas longas)
+    fetch(abs("sections.html", ENDPOINT_ROOT) + "?v=" + Date.now())
+      .then(r => { if(!r.ok) throw new Error("Falha ao buscar HTML"); return r.text(); })
+      .then(html => {
+        container.innerHTML = html;
+        // fonts/imagens só do bloco
+        const imgs = [...container.querySelectorAll("img")].filter(i=>!i.complete);
+        return Promise.all(imgs.map(i=>new Promise(res=>{ i.onload=i.onerror=res; })));
+      })
+      .then(() => {
+        const anim = document.createElement("script");
+        anim.src = abs("script.js", ENDPOINT_ROOT);
+        anim.onload = () => {
+          if (typeof bootAnimations === "function") {
+            bootAnimations();
+            setTimeout(()=> window.ScrollTrigger?.refresh?.(), 200);
+          }
+        };
+        document.body.appendChild(anim);
+        container.setAttribute("data-sopy-loaded","true");
+      })
+      .catch(err => {
+        console.error("[SOPY]", err);
+        container.innerHTML = '<div style="padding:24px;color:red;">Erro ao carregar conteúdo.</div>';
+        container.setAttribute("data-sopy-loaded","error");
+      });
+  }
+
+  // garante DOM disponível
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once:true });
+  } else {
+    boot();
+  }
+})();
+</script>
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // === Estilos responsivos ===
+  const style = document.createElement("style");
+  style.textContent = `
+    .truthcommerce-inline{
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      font-size:10px; color:#fff; margin-bottom:4px;
+    }
+    .truthcommerce-inline a{
+      display:flex; align-items:center; gap:6px; text-decoration:none; color:#fff;
+    }
+    .truthcommerce-sep{ margin:0 6px; font-size:10px; color:#fff; }
+    .truthcommerce-inline img{ height:auto; max-width:100%; }
+    .truthcommerce-logo{ width:35px; display:block; }
+
+    /* --- Mobile --- */
+    @media (max-width:640px){
+      .truthcommerce-inline{ flex-direction:column; gap:4px; text-align:center; }
+      .truthcommerce-inline a{ justify-content:center; }
+      .truthcommerce-sep{ display:none; } /* remove o "|" no mobile */
+    }
+  `;
+  document.head.appendChild(style);
+
+  // --- Script principal ---
+  const poweredLogo = document.querySelector(".powered-by-logo");
+  if (poweredLogo && !document.querySelector(".truthcommerce-inline")) {
+    const nuvemClone = poweredLogo.cloneNode(true);
+
+    // Oculta o bloco original da Nuvemshop
+    poweredLogo.style.display = "none";
+
+    // Container principal
+    const container = document.createElement("div");
+    container.className = "truthcommerce-inline";
+
+    // Link Truth Commerce
+    const link = document.createElement("a");
+    link.href = "https://truthcommerce.com.br";
+    link.target = "_blank";
+    link.rel = "noopener";
+
+    // Texto "Desenvolvido por"
+    const texto = document.createElement("span");
+    texto.textContent = "Desenvolvido por";
+
+    // Ícone Truth (branco)
+    const image = document.createElement("img");
+    image.src = "https://d1a9qnv764bsoo.cloudfront.net/stores/004/457/700/rte/icone%20truth.png";
+    image.alt = "Truth Commerce Logo branco";
+    image.className = "truthcommerce-logo";
+
+    // Nome Truth Commerce
+    const spanTexto = document.createElement("span");
+    spanTexto.innerHTML = '<span style="color:#fff; margin:0 2px;">Truth</span><span style="color:#fff;"> Commerce</span>';
+
+    link.appendChild(texto);
+    link.appendChild(image);
+    link.appendChild(spanTexto);
+
+    // Separador (só aparece no desktop)
+    const separator = document.createElement("span");
+    separator.className = "truthcommerce-sep";
+    separator.textContent = "|";
+
+    // Deixa o logo da Nuvemshop em branco também
+    if (nuvemClone && nuvemClone.style) {
+      nuvemClone.style.filter = "brightness(0) invert(1)";
+      nuvemClone.style.display = "inline-block";
+    }
+
+    // Montagem final
+    container.appendChild(link);
+    container.appendChild(separator);
+    container.appendChild(nuvemClone);
+
+    poweredLogo.parentNode.insertBefore(container, poweredLogo);
+  }
+});
+</script>
