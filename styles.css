@@ -1,39 +1,27 @@
 /* =========================================
-   FORCE LIGHT MODE & PREVENT INVERSIONS
+   FORCE LIGHT MODE - Prevent dark mode from changing colors
    ========================================= */
 :root {
-  color-scheme: light;
+  color-scheme: light only;
 }
 
 html,
 body {
-  color-scheme: light;
+  color-scheme: light only;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-/* Evitar que CSS de “dark mode” seja aplicado e bloquear ajustes automáticos */
+/* Override any forced dark mode */
 @media (prefers-color-scheme: dark) {
 
   :root,
   html,
   body {
-    color-scheme: light;
+    color-scheme: light only !important;
+    background-color: inherit !important;
+    color: inherit !important;
   }
-}
-
-/* Prevenir inversões em imagens e logos (muito comum com extensões) */
-img,
-svg,
-video,
-iframe,
-canvas {
-  filter: none !important;
-}
-
-/* Se a extensão estiver aplicando filter no html/body */
-html,
-body {
-  filter: none !important;
-  -webkit-filter: none !important;
 }
 
 .sopy-btn,
@@ -4458,13 +4446,13 @@ body.theme-aqua {
 
   .sopy-how-step-number {
     width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+    margin-bottom: 14px;
   }
 
-  .slider-container {
-    position: relative !important;
-    /* Remove sticky */
-    height: 100vh !important;
-    top: auto !important;
+  .sopy-how-card p {
+    font-size: 1rem;
   }
 }
 

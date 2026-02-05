@@ -2463,14 +2463,15 @@ function bootAnimations() {
     const totalSlides = track.querySelectorAll(".slider-item").length;
     let isTransitioning = false;
 
-    /* HELPER: Verifica se a seção está VISÍVEL para permitir slide changes */
-    // Relaxed tolerance for iOS (address bars etc)
+    /* HELPER: Verifica se a seção está 100% visível para permitir slide changes */
     function isSliderActive() {
         const rect = section.getBoundingClientRect();
         const vh = window.innerHeight;
 
-        // Tolerância aumentada para 100px (facilitando ativação no iOS)
-        return rect.top <= 100 && rect.bottom >= vh - 100;
+        // A seção é considerada ativa APENAS quando está 100% na viewport:
+        // - O topo da seção deve estar no topo ou acima (-20px tolerância)
+        // - A base da seção deve estar na base ou abaixo (+20px tolerância)
+        return rect.top <= 20 && rect.bottom >= vh - 20;
     }
 
     /* Atualiza classes do penúltimo e último slide */
@@ -2542,12 +2543,6 @@ function bootAnimations() {
     const SCROLL_MULTIPLIER = 1; // Ajustado para 1 para corrigir bug do iOS (antes 1.5 impedia chegar ao fim)
 
     function updateSlideByScroll() {
-        // No mobile (abaixo de 900px), desativa o scroll-jacking
-        if (window.innerWidth <= 900) {
-            ticking = false;
-            return;
-        }
-
         const rect = section.getBoundingClientRect();
         const sectionTop = rect.top;
         const sectionHeight = section.offsetHeight;
