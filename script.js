@@ -2543,6 +2543,12 @@ function bootAnimations() {
     const SCROLL_MULTIPLIER = 1; // Ajustado para 1 para corrigir bug do iOS (antes 1.5 impedia chegar ao fim)
 
     function updateSlideByScroll() {
+        // MOBILE: desativa scroll-jacking (apenas setas/swipe)
+        if (window.innerWidth <= 900) {
+            ticking = false;
+            return;
+        }
+
         const rect = section.getBoundingClientRect();
         const sectionTop = rect.top;
         const sectionHeight = section.offsetHeight;

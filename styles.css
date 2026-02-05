@@ -4456,6 +4456,19 @@ body.theme-aqua {
   }
 }
 
+/* ========== MOBILE: DISABLE SCROLL-JACKING ========== */
+@media (max-width: 900px) {
+  .slider-fullscreen-section {
+    height: auto !important;
+    min-height: 100vh;
+  }
+
+  .slider-container {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
 @media (max-width: 600px) {
   .sopy-how-section {
     padding: 22px 0 64px;
