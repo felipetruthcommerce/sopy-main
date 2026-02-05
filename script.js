@@ -2463,16 +2463,15 @@ function bootAnimations() {
     const totalSlides = track.querySelectorAll(".slider-item").length;
     let isTransitioning = false;
 
-    /* HELPER: Verifica se a seção está suficientemente visível para permitir slide changes */
+    /* HELPER: Verifica se a seção está 100% visível para permitir slide changes */
     function isSliderActive() {
         const rect = section.getBoundingClientRect();
         const vh = window.innerHeight;
 
-        // A seção é considerada ativa quando:
-        // - O topo da seção está acima de 70% da viewport (já entrou suficientemente)
-        // - A base da seção ainda está visível (não saiu completamente)
-        // Isso é menos restritivo mas ainda impede trigger prematuro
-        return rect.top < vh * 0.7 && rect.bottom > vh * 0.2;
+        // A seção é considerada ativa APENAS quando está 100% na viewport:
+        // - O topo da seção deve estar no topo ou acima (-20px tolerância)
+        // - A base da seção deve estar na base ou abaixo (+20px tolerância)
+        return rect.top <= 20 && rect.bottom >= vh - 20;
     }
 
     /* Atualiza classes do penúltimo e último slide */
