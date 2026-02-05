@@ -22,8 +22,10 @@
         <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="sopy-hero-media">
           <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="auto">
-            <!-- WebM otimizado (carrega primeiro, mais leve) -->
-            <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/hero-desktop.webm" type="video/webm" />
+            <!-- WebM para DESKTOP (min-width: 900px) -->
+            <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/hero-desktop.webm" type="video/webm" media="(min-width: 900px)" />
+            <!-- WebM para MOBILE (max-width: 899px) - mais leve e otimizado -->
+            <source src="https://pub-6ab98439333c4b3da88cdddb52f2acf4.r2.dev/hero-mobile.webm" type="video/webm" media="(max-width: 899px)" />
             <!-- MP4 fallback para navegadores que não suportam WebM -->
             <source src="https://pub-e9b60b9516b34b12a17721a563e4c098.r2.dev/video-hero%20(1).mp4" type="video/mp4" />
           </video>
