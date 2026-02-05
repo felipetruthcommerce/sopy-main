@@ -2247,7 +2247,6 @@ body.theme-citrus footer.js-footer {
 
 .benefit-item {
   background: #fff;
-  border: 1px solid var(--line);
   border-radius: 16px;
   padding: clamp(14px, 2.2vw, 18px);
   display: grid;
@@ -4928,9 +4927,9 @@ body.theme-citrus .head-main .badge {
 
   /* Increase sustainability panel height for mobile to fit all text */
   #sustentabilidade .fullscreen-panel {
-    min-height: 100vh !important;
+    min-height: 120vh !important;
     height: auto !important;
-    padding: 40px 20px 40px !important;
+    padding: 20px 20px 20px !important;
   }
 
   #sustentabilidade .fullscreen-panel .panel-content {
