@@ -19,6 +19,23 @@
     } catch (e) { /* silent */ }
 })();
 
+// Log qual vídeo está sendo carregado (desktop ou mobile)
+window.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById('heroVideo');
+    if (video) {
+        video.addEventListener('loadedmetadata', () => {
+            const currentSrc = video.currentSrc;
+            if (currentSrc.includes('16x9')) {
+                console.log('🎬 Vídeo DESKTOP (16:9) carregado:', currentSrc);
+            } else if (currentSrc.includes('9x16')) {
+                console.log('🎬 Vídeo MOBILE (9:16) carregado:', currentSrc);
+            } else {
+                console.log('🎬 Vídeo MP4 fallback carregado:', currentSrc);
+            }
+        });
+    }
+});
+
 function setupLenis() {
     console.log('[SETUP] Inicializando Lenis (Scroll Suave)...');
     const lenis = new Lenis();
