@@ -2540,7 +2540,7 @@ function bootAnimations() {
     let ticking = false;
 
     // ✨ AUMENTA A ALTURA VIRTUAL DA SEÇÃO PARA TORNAR O SCROLL MAIS LENTO
-    const SCROLL_MULTIPLIER = 1.5; // Multiplicador moderado (ajuste esse valor para mais/menos lento)
+    const SCROLL_MULTIPLIER = 1; // Ajustado para 1 para corrigir bug do iOS (antes 1.5 impedia chegar ao fim)
 
     function updateSlideByScroll() {
         const rect = section.getBoundingClientRect();

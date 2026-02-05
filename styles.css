@@ -4616,8 +4616,8 @@ body.theme-citrus .head-main .badge {
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 300vh;
-  /* Ajustado para 300vh - sai do último slide mais cedo */
+  height: 400vh;
+  /* Ajustado para 400vh - garante espaço suficiente para 4 slides */
   background: #000;
 }
 
@@ -5021,8 +5021,8 @@ body.theme-citrus .head-main .badge {
    Comparison Section: Reduce section height (no longer fullscreen)
    ========================================= */
 #comparison-section {
-  padding-top: 60px !important;
-  padding-bottom: 60px !important;
+  padding-top: 70px !important;
+  padding-bottom: 70px !important;
   min-height: auto !important;
   height: auto !important;
 
