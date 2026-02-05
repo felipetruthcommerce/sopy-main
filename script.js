@@ -377,6 +377,24 @@ function setTheme(theme) {
         console.warn('[TEMA] Falha ao atualizar imagens do slider:', e);
     }
 
+    // Atualiza imagens CTA (capsule-3d-cta overlay) - MESMO PADRÃO DA SUSTENTABILIDADE
+    try {
+        const ctaOverlays = document.querySelectorAll('.cta-overlay');
+        ctaOverlays.forEach(img => {
+            const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
+            if (!newSrc) return;
+            const current = (img.getAttribute('src') || img.src || '').split('/').pop();
+            if (current && current.includes(newSrc.split('/').pop())) return;
+
+            const p = new Image();
+            p.onload = () => { try { fadeSwapImg(img, newSrc, 360); } catch (e) { } };
+            p.onerror = () => { try { img.src = newSrc; } catch (e) { } };
+            p.src = newSrc;
+        });
+    } catch (e) {
+        console.warn('[TEMA] Falha ao atualizar imagens CTA:', e);
+    }
+
     // ... (seu código para atualizar textos do card de produto) ...
 
     // Atualiza também os textos do card de produto (se presentes no DOM).
