@@ -2814,8 +2814,9 @@ body.theme-citrus .how-fullscreen .how-button {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  padding: clamp(1.5rem, 5vw, 4rem);
-  gap: clamp(1.5rem, 5vw, 4rem);
+  /* Reduzido o padding conforme solicitado para diminuir espaçamento top/bottom */
+  padding: clamp(1rem, 2.5vw, 2rem);
+  gap: clamp(1rem, 2.5vw, 2rem);
   /* RESET do estilo de .panel-content usado na seção horizontal */
   max-width: none !important;
   border: 0 !important;
