@@ -2467,16 +2467,12 @@ function bootAnimations() {
     function isSliderActive() {
         const rect = section.getBoundingClientRect();
         const vh = window.innerHeight;
-        // Calcula quanto da seção está realmente visível
-        const visibleTop = Math.max(rect.top, 0);
-        const visibleBottom = Math.min(rect.bottom, vh);
-        const visibleHeight = Math.max(0, visibleBottom - visibleTop);
-        const sectionHeight = rect.height;
-        const visibilityRatio = visibleHeight / sectionHeight;
 
-        // Exige que pelo menos 50% da seção esteja visível E que o topo da seção
-        // esteja na metade superior da viewport
-        return visibilityRatio >= 0.5 && rect.top < vh * 0.4 && rect.bottom > vh * 0.4;
+        // A seção é considerada ativa quando:
+        // - O topo da seção está acima de 70% da viewport (já entrou suficientemente)
+        // - A base da seção ainda está visível (não saiu completamente)
+        // Isso é menos restritivo mas ainda impede trigger prematuro
+        return rect.top < vh * 0.7 && rect.bottom > vh * 0.2;
     }
 
     /* Atualiza classes do penúltimo e último slide */
