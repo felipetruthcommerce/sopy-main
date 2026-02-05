@@ -3600,8 +3600,8 @@ body.theme-aqua #como-usar {
 
 
 body.theme-aqua #sustentabilidade {
-  background: #0D1B2A !important;
-  /* aqua theme: set to requested blue */
+  background: #ffffff !important;
+  /* aqua theme: set to white to match panels and avoid "borders" */
 }
 
 body.theme-aqua #testemunhos {
