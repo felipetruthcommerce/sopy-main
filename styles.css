@@ -5069,3 +5069,31 @@ body.theme-citrus .head-main .badge {
     padding: 40px 20px !important;
   }
 }
+
+/* ========== COMPARISON SECTION: FIX MOBILE TITLE CLIPPING ========== */
+.comparison-intro {
+  padding: clamp(40px, 8vw, 80px) 20px;
+  text-align: center;
+}
+
+.comparison-intro h2 {
+  font-size: clamp(2rem, 7vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding: 12px 0;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .comparison-intro {
+    padding: 32px 16px;
+  }
+
+  .comparison-intro h2 {
+    font-size: clamp(1.8rem, 6.5vw, 2.5rem);
+    line-height: 1.4;
+    padding: 16px 0;
+  }
+}
