@@ -23,15 +23,28 @@
 window.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('heroVideo');
     if (video) {
+        // Tenta reproduzir se estiver pausado (força autoplay em alguns browsers)
+        if (video.paused) {
+            video.play().catch(e => console.warn('Autoplay bloqueado pelo navegador:', e));
+        }
+
         video.addEventListener('loadedmetadata', () => {
             const currentSrc = video.currentSrc;
-            if (currentSrc.includes('16x9')) {
-                console.log('🎬 Vídeo DESKTOP (16:9) carregado:', currentSrc);
-            } else if (currentSrc.includes('9x16')) {
-                console.log('🎬 Vídeo MOBILE (9:16) carregado:', currentSrc);
-            } else {
-                console.log('🎬 Vídeo MP4 fallback carregado:', currentSrc);
-            }
+            const w = video.videoWidth;
+            const h = video.videoHeight;
+            let label = 'DESCONHECIDO';
+
+            if (currentSrc.includes('video_demonstrativo_vertical_site_low.webm')) label = 'MOBILE WebM';
+            else if (currentSrc.includes('video_demonstrativo_vertical_site_low.mp4')) label = 'MOBILE MP4';
+            else if (currentSrc.includes('WhatsApp%20Video')) label = 'DESKTOP WebM';
+            else if (currentSrc.includes('video-hero')) label = 'DESKTOP MP4 Fallback';
+
+            console.log(`🎬 VÍDEO CARREGADO: [${label}] | Src: ${currentSrc} | Dimensões: ${w}x${h}`);
+        });
+
+        // Fallback visual: Se der erro, garante que o poster/img esteja visível
+        video.addEventListener('error', (e) => {
+            console.error('❌ Erro no carregamento do vídeo:', e);
         });
     }
 });

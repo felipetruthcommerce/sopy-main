@@ -21,17 +21,21 @@
       <section id="hero" class="sopy-hero sopy-section--full">
         <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="sopy-hero-media">
-          <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="auto">
+          <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="auto" poster="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg">
             <!-- WebM para DESKTOP (16:9) - min-width: 900px -->
             <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/WhatsApp%20Video%202026-02-05%20at%2014.50.37.webm" type="video/webm" media="(min-width: 900px)" />
+            
             <!-- WebM para MOBILE (9:16) - max-width: 899px -->
             <source src="https://pub-6ab98439333c4b3da88cdddb52f2acf4.r2.dev/video_demonstrativo_vertical_site_low.webm" type="video/webm" media="(max-width: 899px)" />
-            <!-- MP4 fallback para navegadores que não suportam WebM -->
+            
+            <!-- MP4 para MOBILE (9:16) - Fallback para iOS/Safari Mobile -->
+            <source src="https://pub-4009096f9b234998870e8b50e237f762.r2.dev/video_demonstrativo_vertical_site_low.mp4" type="video/mp4" media="(max-width: 899px)" />
+
+            <!-- MP4 fallback para navegadores que não suportam WebM (Desktop Fallback) -->
             <source src="https://pub-e9b60b9516b34b12a17721a563e4c098.r2.dev/video-hero%20(1).mp4" type="video/mp4" />
           </video>
-          <!-- Poster overlay para fallback/crossfade caso o vídeo ainda não esteja tocando ao fim do loader 
-          <img class="sopy-hero-poster" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg" alt="" aria-hidden="true" />
-          -->
+          <!-- (Poster is now inline in the video tag for better support, but we can keep the img as a backup layer if needed, though video poster attr is standard) -->
+          <img class="sopy-hero-poster" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg" alt="" aria-hidden="true" style="position: absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index: -1;" />
         </div> -->
 <!--
         <div class="sopy-hero-content">
