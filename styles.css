@@ -2814,9 +2814,8 @@ body.theme-citrus .how-fullscreen .how-button {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  /* Reduzido o padding conforme solicitado para diminuir espaçamento top/bottom */
-  padding: clamp(1rem, 2.5vw, 2rem);
-  gap: clamp(1rem, 2.5vw, 2rem);
+  padding: clamp(1.5rem, 5vw, 4rem);
+  gap: clamp(1.5rem, 5vw, 4rem);
   /* RESET do estilo de .panel-content usado na seção horizontal */
   max-width: none !important;
   border: 0 !important;
@@ -4617,8 +4616,8 @@ body.theme-citrus .head-main .badge {
 .slider-fullscreen-section {
   position: relative;
   width: 100%;
-  height: 400vh;
-  /* Ajustado para 400vh - garante espaço suficiente para 4 slides */
+  height: 300vh;
+  /* Ajustado para 300vh - sai do último slide mais cedo */
   background: #000;
 }
 
@@ -4929,9 +4928,9 @@ body.theme-citrus .head-main .badge {
 
   /* Increase sustainability panel height for mobile to fit all text */
   #sustentabilidade .fullscreen-panel {
-    min-height: 120vh !important;
+    min-height: 100vh !important;
     height: auto !important;
-    padding: 60px 20px 80px !important;
+    padding: 40px 20px 40px !important;
   }
 
   #sustentabilidade .fullscreen-panel .panel-content {
