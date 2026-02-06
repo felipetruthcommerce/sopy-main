@@ -3535,8 +3535,30 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
   margin: 0 auto !important;
   justify-content: center !important;
   align-items: start !important;
-  padding: 4rem 2rem !important;
+  padding: 0 2rem 4rem 2rem !important;
+  /* Removido padding-top */
   background: transparent !important;
+}
+
+/* Telas de notebook (1200px - 1440px) - melhor espaçamento */
+@media (min-width: 1200px) and (max-width: 1440px) {
+  .pinned-container {
+    grid-template-columns: minmax(400px, 480px) minmax(400px, 480px) !important;
+    gap: 40px !important;
+    width: 96% !important;
+    max-width: 1100px !important;
+    padding: 0 3rem 3rem 3rem !important;
+  }
+
+  .pinned-container .card,
+  .pinned-container .card-old-way,
+  .pinned-container .card-sopy-way {
+    padding: 2rem !important;
+  }
+
+  .pinned-container .card img {
+    height: 180px !important;
+  }
 }
 
 .pinned-container .card,
