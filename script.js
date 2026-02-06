@@ -61,6 +61,16 @@ window.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+
+        // === DIAGNÓSTICO DETALHADO ===
+        console.log('🔍 DIAGNÓSTICO DE VÍDEO:');
+        console.log('  - User Agent:', navigator.userAgent);
+        console.log('  - Tela:', window.innerWidth + 'x' + window.innerHeight);
+        console.log('  - Sources disponíveis:', Array.from(video.querySelectorAll('source')).map(s => s.type).join(', '));
+        console.log('  - Autoplay permitido?', video.autoplay);
+        console.log('  - Muted?', video.muted);
+        console.log('  - ReadyState inicial:', video.readyState);
+
         // Função auxiliar para logar
         const logLoadedVideo = (v) => {
             const currentSrc = v.currentSrc;
@@ -76,9 +86,31 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log(`🎬 VÍDEO CARREGADO: [${label}] | Src: ${currentSrc} | Dimensões: ${w}x${h}`);
         };
 
+        // Flag para evitar múltiplas tentativas
+        let videoLoaded = false;
+
+        // Callback quando vídeo carregar
+        const onVideoReady = () => {
+            if (videoLoaded) return;
+            videoLoaded = true;
+            console.log('✅ Vídeo pronto! ReadyState:', video.readyState);
+            logLoadedVideo(video);
+        };
+
         // Tenta reproduzir se estiver pausado
         if (video.paused) {
-            video.play().catch(e => console.warn('Autoplay bloqueado pelo navegador:', e));
+            video.play().then(() => {
+                console.log('▶️ Autoplay iniciado com sucesso');
+            }).catch(e => {
+                console.warn('⚠️ Autoplay bloqueado:', e.message);
+                // Tenta novamente com muted (Chrome exige muted para autoplay)
+                video.muted = true;
+                video.play().then(() => {
+                    console.log('▶️ Autoplay com muted iniciado');
+                }).catch(e2 => {
+                    console.error('❌ Autoplay falhou mesmo com muted:', e2.message);
+                });
+            });
         }
 
         // GARANTIA DE LOOP (Alguns mobiles falham no loop nativo)
@@ -90,17 +122,49 @@ window.addEventListener('DOMContentLoaded', () => {
             this.play().catch(() => { });
         });
 
-        // Listener padrão
-        video.addEventListener('loadedmetadata', () => logLoadedVideo(video));
+        // Listeners de eventos
+        video.addEventListener('loadedmetadata', onVideoReady);
+        video.addEventListener('canplay', () => console.log('🎥 canplay disparado'));
+        video.addEventListener('playing', () => console.log('🎥 playing disparado'));
+        video.addEventListener('stalled', () => console.warn('⏸️ stalled - download travou'));
+        video.addEventListener('waiting', () => console.warn('⏳ waiting - buffering'));
 
         // Check imediato para caso o metadata já tenha carregado (cache ou race condition)
         if (video.readyState >= 1) {
-            logLoadedVideo(video);
+            onVideoReady();
         }
 
+        // Listener de erro com detalhes
         video.addEventListener('error', (e) => {
-            console.error('❌ Erro no carregamento do vídeo:', e);
+            const error = video.error;
+            console.error('❌ Erro no vídeo:', {
+                code: error ? error.code : 'N/A',
+                message: error ? error.message : 'N/A',
+                currentSrc: video.currentSrc,
+                networkState: video.networkState
+            });
         });
+
+        // Cada source também pode ter erro
+        video.querySelectorAll('source').forEach((source, i) => {
+            source.addEventListener('error', () => {
+                console.warn(`⚠️ Falha no source ${i}: ${source.src}`);
+            });
+        });
+
+        // === FALLBACK: Se não carregar em 8s, tenta forçar MP4 ===
+        setTimeout(() => {
+            if (!videoLoaded && video.readyState < 2) {
+                console.warn('⏰ Timeout! Tentando forçar MP4...');
+                const mp4Url = 'https://pub-4009096f9b234998870e8b50e237f762.r2.dev/video_demonstrativo_vertical_site_low.mp4';
+                video.src = mp4Url;
+                video.load();
+                video.play().catch(() => {
+                    video.muted = true;
+                    video.play().catch(() => { });
+                });
+            }
+        }, 8000);
     }
 });
 
