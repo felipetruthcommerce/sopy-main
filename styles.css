@@ -781,8 +781,8 @@ body.theme-aqua #clean-slate-section {
   background-color: #F0F2F5;
   /* Cor fixa independente do tema */
   color: var(--cor-texto-escuro);
-  padding: 5rem 5% 0;
-  /* remove padding-bottom conforme solicitado */
+  padding: 2rem 5% 0;
+  /* padding-top reduzido */
   text-align: center;
   height: 100vh;
   /* Altura total da viewport */
@@ -3535,8 +3535,8 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
   margin: 0 auto !important;
   justify-content: center !important;
   align-items: start !important;
-  padding: 0 2rem 4rem 2rem !important;
-  /* Removido padding-top */
+  padding: 0 2rem 6rem 2rem !important;
+  /* Margem inferior aumentada para espaçar da próxima seção */
   background: transparent !important;
 }
 
@@ -3547,7 +3547,8 @@ body.theme-citrus #faq .sopy-faq-accordion::before {
     gap: 40px !important;
     width: 96% !important;
     max-width: 1100px !important;
-    padding: 0 3rem 3rem 3rem !important;
+    padding: 0 3rem 6rem 3rem !important;
+    /* Margem inferior aumentada */
   }
 
   .pinned-container .card,
