@@ -543,9 +543,11 @@ p[class*="split"],
 
 #clean-slate-section {
   width: 100%;
-  height: 80vh;
+  height: auto;
+  /* Altura automática para acomodar o conteúdo */
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  /* Permite que o padding seja visível */
   background-color: var(--cor-fundo-inicial);
 }
 
