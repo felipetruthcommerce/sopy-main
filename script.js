@@ -1,20 +1,5 @@
 // --- PARTE 1: DEFINIÇÃO DAS FUNÇÕES DE APOIO ---
 
-// === ERUDA DEBUG CONSOLE (REMOVER EM PRODUÇÃO) ===
-(function () {
-    var script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-    script.onload = function () {
-        if (typeof eruda !== 'undefined') {
-            eruda.init();
-            setTimeout(function () {
-                eruda.position({ x: 20, y: window.innerHeight - 100 });
-            }, 500);
-        }
-    };
-    document.head.appendChild(script);
-})();
-
 // Respect 'sopy-force-theme' marker injected by sections.html.
 // If present, set a pending theme early so the rest of the script honors it.
 (function () {
@@ -40,45 +25,58 @@ function isIOS() {
         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 
-// Log qual vídeo está sendo carregado (desktop ou mobile)
+// === VIDEO LOADING PARA MOBILE ===
+// Android: WebM (12MB) | iOS: MP4 (24MB)
 window.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('heroVideo');
-    if (video) {
-        const isMobile = window.innerWidth < 900;
-        console.log('🎬 Video encontrado! Mobile:', isMobile, 'iOS:', isIOS());
+    if (!video) return;
 
-        if (isMobile) {
-            // FORÇA o vídeo correto diretamente via src
-            if (isIOS()) {
-                // iOS: MP4 (compatibilidade Safari)
-                video.src = 'https://pub-4009096f9b234998870e8b50e237f762.r2.dev/video_demonstrativo_vertical_site_low.mp4';
-                console.log('📱 iOS: Carregando MP4 (24MB)');
-            } else {
-                // Android/Outros: WebM (menor, 12MB)
-                video.src = 'https://pub-6ab98439333c4b3da88cdddb52f2acf4.r2.dev/video_demonstrativo_vertical_site_low.webm';
-                console.log('📱 Android: Carregando WebM (12MB) - MAIS RÁPIDO!');
-            }
+    const isMobile = window.innerWidth < 900;
+    if (!isMobile) return; // Desktop usa sources do HTML
 
-            // Remove todas as sources para evitar conflito
-            video.querySelectorAll('source').forEach(s => s.remove());
+    // URLs dos vídeos mobile
+    const WEBM_URL = 'https://pub-6ab98439333c4b3da88cdddb52f2acf4.r2.dev/video_demonstrativo_vertical_site_low.webm';
+    const MP4_URL = 'https://pub-4009096f9b234998870e8b50e237f762.r2.dev/video_demonstrativo_vertical_site_low.mp4';
 
-            // Carrega e reproduz
-            video.load();
-            video.play().catch(e => {
-                console.warn('⚠️ Autoplay bloqueado:', e.message);
-                video.muted = true;
-                video.play().catch(() => { });
-            });
-        }
+    // Remove sources do HTML para evitar conflito
+    video.querySelectorAll('source').forEach(s => s.remove());
 
-        // Eventos de diagnóstico
-        video.addEventListener('loadstart', () => console.log('📥 loadstart'));
-        video.addEventListener('canplay', () => console.log('✅ canplay'));
-        video.addEventListener('playing', () => console.log('▶️ playing'));
-        video.addEventListener('error', (e) => console.error('❌ Erro:', video.error?.message));
+    // Define o vídeo baseado no dispositivo
+    if (isIOS()) {
+        video.src = MP4_URL;
     } else {
-        console.error('❌ heroVideo NÃO encontrado!');
+        // Android: tenta WebM primeiro, fallback para MP4
+        video.src = WEBM_URL;
+
+        // Se WebM falhar em 5 segundos, tenta MP4
+        const fallbackTimer = setTimeout(() => {
+            if (video.readyState < 2) {
+                video.src = MP4_URL;
+                video.load();
+                tryPlay();
+            }
+        }, 5000);
+
+        video.addEventListener('canplay', () => clearTimeout(fallbackTimer), { once: true });
     }
+
+    // Função para tentar reproduzir
+    function tryPlay() {
+        video.play().catch(() => {
+            video.muted = true;
+            video.play().catch(() => { });
+        });
+    }
+
+    // Carrega e reproduz
+    video.load();
+    tryPlay();
+
+    // Garante loop (alguns mobiles falham)
+    video.addEventListener('ended', function () {
+        this.currentTime = 0;
+        this.play().catch(() => { });
+    });
 });
 
 // === PRE-CARREGA IMAGENS DO CTA PARA EVITAR TRAVADAS ===
