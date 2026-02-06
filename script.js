@@ -43,6 +43,15 @@ window.addEventListener('DOMContentLoaded', () => {
             video.play().catch(e => console.warn('Autoplay bloqueado pelo navegador:', e));
         }
 
+        // GARANTIA DE LOOP (Alguns mobiles falham no loop nativo)
+        if (typeof video.loop === 'boolean') {
+            video.loop = true; // Força atributo via JS
+        }
+        video.addEventListener('ended', function () {
+            this.currentTime = 0;
+            this.play().catch(() => { });
+        });
+
         // Listener padrão
         video.addEventListener('loadedmetadata', () => logLoadedVideo(video));
 
