@@ -56,8 +56,28 @@ window.addEventListener('DOMContentLoaded', () => {
                             console.log('📱 Android detectado: WebM priorizado (12MB)');
                         }
                     }
-                    // Força reload das fontes
+                    // Força reload das fontes e inicia reprodução
+                    console.log('🔄 Recarregando vídeo após reordenar fontes...');
                     video.load();
+
+                    // Aguarda o vídeo estar pronto e força play
+                    video.addEventListener('canplaythrough', function onCanPlay() {
+                        video.removeEventListener('canplaythrough', onCanPlay);
+                        console.log('✅ Video pronto após reordenação, iniciando play...');
+                        video.play().catch(e => {
+                            console.warn('⚠️ Play falhou após load:', e.message);
+                            video.muted = true;
+                            video.play().catch(e2 => console.error('❌ Play muted também falhou:', e2.message));
+                        });
+                    }, { once: true });
+
+                    // Timeout de segurança
+                    setTimeout(() => {
+                        if (video.paused && video.readyState >= 2) {
+                            console.log('⏰ Timeout: Forçando play...');
+                            video.play().catch(() => { });
+                        }
+                    }, 3000);
                 }
             }
         }
