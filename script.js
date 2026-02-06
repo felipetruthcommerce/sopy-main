@@ -19,10 +19,48 @@
     } catch (e) { /* silent */ }
 })();
 
+// Detecta se é iOS (iPhone, iPad, iPod)
+function isIOS() {
+    return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
 // Log qual vídeo está sendo carregado (desktop ou mobile)
 window.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('heroVideo');
     if (video) {
+        // === REORDENAÇÃO DINÂMICA DE FONTES ===
+        // iOS → MP4 primeiro (compatibilidade)
+        // Android/Outros → WebM primeiro (menor: 12MB vs 24MB)
+        const sources = Array.from(video.querySelectorAll('source'));
+        const isMobile = window.innerWidth < 900;
+
+        if (isMobile && sources.length > 1) {
+            const mobileSources = sources.filter(s => s.media && s.media.includes('max-width'));
+
+            if (mobileSources.length >= 2) {
+                const mp4Source = mobileSources.find(s => s.type === 'video/mp4');
+                const webmSource = mobileSources.find(s => s.type === 'video/webm');
+
+                if (mp4Source && webmSource) {
+                    if (isIOS()) {
+                        // iOS: MP4 primeiro
+                        if (webmSource.compareDocumentPosition(mp4Source) & Node.DOCUMENT_POSITION_PRECEDING) {
+                            webmSource.parentNode.insertBefore(mp4Source, webmSource);
+                            console.log('📱 iOS detectado: MP4 priorizado');
+                        }
+                    } else {
+                        // Android/Outros: WebM primeiro (menor)
+                        if (mp4Source.compareDocumentPosition(webmSource) & Node.DOCUMENT_POSITION_PRECEDING) {
+                            mp4Source.parentNode.insertBefore(webmSource, mp4Source);
+                            console.log('📱 Android detectado: WebM priorizado (12MB)');
+                        }
+                    }
+                    // Força reload das fontes
+                    video.load();
+                }
+            }
+        }
         // Função auxiliar para logar
         const logLoadedVideo = (v) => {
             const currentSrc = v.currentSrc;
@@ -531,9 +569,39 @@ function setTheme(theme) {
 // FUNCIONALIDADE: BOLHAS INTERATIVAS 3D
 // Bolhas flutuantes com física, explosões de partículas, HDRI lighting
 // ===================================================
+
+// Detecta se o dispositivo suporta WebGL
+function isWebGLSupported() {
+    try {
+        const canvas = document.createElement('canvas');
+        return !!(window.WebGLRenderingContext &&
+            (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
+    } catch (e) {
+        return false;
+    }
+}
+
+// Detecta se é dispositivo de baixo desempenho
+function isLowEndDevice() {
+    // Memória < 4GB ou núcleos < 4 indica dispositivo fraco
+    const lowMemory = navigator.deviceMemory && navigator.deviceMemory < 4;
+    const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+    return lowMemory || lowCores;
+}
+
 function initCapsuleBubbles() {
     const container = document.querySelector('.sopy-capsule-bubbles');
     if (!container || typeof THREE === 'undefined') return;
+
+    // ⚠️ SKIP 3D em dispositivos sem WebGL ou muito fracos
+    if (!isWebGLSupported()) {
+        console.warn('[BUBBLES] WebGL não suportado. Pulando bolhas 3D.');
+        return;
+    }
+    if (isLowEndDevice()) {
+        console.warn('[BUBBLES] Dispositivo de baixo desempenho detectado. Pulando bolhas 3D.');
+        return;
+    }
 
     // Evita inicialização múltipla
     if (container.__bubblesInitialized) return;
