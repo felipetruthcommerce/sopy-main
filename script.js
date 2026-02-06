@@ -168,6 +168,31 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// === PRE-CARREGA IMAGENS DO CTA PARA EVITAR TRAVADAS ===
+// Chamado no início da página para que as imagens já estejam em cache
+// quando o usuário chegar na seção da cápsula
+function preloadCtaImages() {
+    const imagesToPreload = [
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/bag_citrus.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/bag_aqua1.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/box_citrus.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/box_aqua.png'
+    ];
+
+    imagesToPreload.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+    console.log('[PRELOAD] Imagens do CTA pré-carregadas');
+}
+
+// Executa preload após a página estar interativa (não bloqueia o carregamento inicial)
+if (document.readyState === 'complete') {
+    setTimeout(preloadCtaImages, 100);
+} else {
+    window.addEventListener('load', () => setTimeout(preloadCtaImages, 100));
+}
+
 function setupLenis() {
     console.log('[SETUP] Inicializando Lenis (Scroll Suave)...');
     const lenis = new Lenis();
@@ -1386,82 +1411,59 @@ function initThree() {
                     } catch (e) { /* silent */ }
                 },
                 onLeave: self => {
-                    // quando sair para baixo, adiciona at-end para posicionamento final
+                    // OTIMIZADO: Espalha o trabalho em múltiplos frames para evitar travadas
+
+                    // Frame 1: Classes básicas (leve)
                     ctas.forEach(c => c.classList.add('at-end'));
-                    // fade out the 3D canvas and bubbles when leaving the section
-                    try {
+
+                    // Frame 2: Esconder 3D (próximo frame)
+                    requestAnimationFrame(() => {
                         const three = document.getElementById('three-container');
                         const bubbles = document.querySelector('.sopy-capsule-bubbles');
                         if (three) three.classList.add('hide-3d');
                         if (bubbles) bubbles.classList.add('hide-3d');
 
-                        // fade the 2D photo out first (if present), then add show-overlays
-                        const section = document.getElementById('capsula-3d');
-                        const photo = document.querySelector('.capsule-2d-photo');
-                        const showOverlaysNow = () => {
-                            if (!section) return;
-                            // Determine current theme (fallback to 'aqua')
-                            const theme = document.body.classList.contains('theme-citrus') ? 'citrus' : 'aqua';
+                        // Frame 3: Fade da foto 2D e mostrar overlays (próximo frame)
+                        requestAnimationFrame(() => {
+                            const section = document.getElementById('capsula-3d');
+                            const photo = document.querySelector('.capsule-2d-photo');
 
-                            // Preload overlay images and only add class after they're loaded (or timeout)
-                            const overlays = section.querySelectorAll('.capsule-3d-cta .cta-overlay');
-                            if (!overlays || overlays.length === 0) {
-                                if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
-                                return;
+                            if (photo) {
+                                photo.style.transition = 'opacity .32s ease';
+                                photo.style.opacity = '0';
                             }
 
-                            const loadPromises = Array.from(overlays).map(img => {
-                                return new Promise(resolve => {
+                            // Frame 4: Mostrar overlays (próximo frame)
+                            requestAnimationFrame(() => {
+                                if (!section) return;
+                                const theme = document.body.classList.contains('theme-citrus') ? 'citrus' : 'aqua';
+                                const overlays = section.querySelectorAll('.capsule-3d-cta .cta-overlay');
+
+                                if (!overlays || overlays.length === 0) {
+                                    section.classList.add('show-overlays');
+                                    return;
+                                }
+
+                                // Como as imagens já foram pré-carregadas, apenas atualiza o src
+                                overlays.forEach(img => {
                                     const newSrc = theme === 'citrus' ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
-                                    if (!newSrc) return resolve();
-                                    // If already set to same src, resolve immediately
-                                    if (img.src && img.src.includes(newSrc.split('/').pop())) return resolve();
-
-                                    const onLoad = () => { cleanup(); resolve(); };
-                                    const onErr = () => { cleanup(); resolve(); };
-                                    const cleanup = () => {
-                                        img.removeEventListener('load', onLoad);
-                                        img.removeEventListener('error', onErr);
-                                    };
-
-                                    img.addEventListener('load', onLoad);
-                                    img.addEventListener('error', onErr);
-                                    // start loading
-                                    img.src = newSrc;
-                                    // safety timeout in case load event doesn't fire
-                                    setTimeout(() => { cleanup(); resolve(); }, 800);
+                                    if (newSrc && (!img.src || !img.src.includes(newSrc.split('/').pop()))) {
+                                        img.src = newSrc;
+                                    }
                                 });
-                            });
 
-                            Promise.all(loadPromises).then(() => {
-                                // reveal overlays with a smooth fade-in only after images are ready
-                                if (!section.classList.contains('show-overlays')) section.classList.add('show-overlays');
+                                // Frame 5: Revelar overlays suavemente
                                 requestAnimationFrame(() => {
+                                    section.classList.add('show-overlays');
                                     overlays.forEach(img => {
-                                        try {
-                                            // make sure overlay is visible and will animate
-                                            img.style.visibility = 'visible';
-                                            img.style.transition = 'opacity .32s ease, transform .32s ease';
-                                            // explicitly trigger fade-in by setting opacity to 1 (initial opacity should be 0)
-                                            img.style.opacity = '1';
-                                        } catch (e) { /* silent */ }
+                                        img.style.visibility = 'visible';
+                                        img.style.transition = 'opacity .32s ease, transform .32s ease';
+                                        img.style.opacity = '1';
                                     });
                                 });
                             });
-                        };
-
-                        if (photo) {
-                            // ensure photo has a transition for opacity
-                            photo.style.transition = 'opacity .32s ease';
-                            // trigger fade
-                            photo.style.opacity = '0';
-                            // show overlays immediately so fade-in (overlays) and fade-out (photo) happen concurrently
-                            showOverlaysNow();
-                        } else {
-                            // no photo present — reveal overlays immediately
-                            showOverlaysNow();
-                        }
-                    } catch (e) { /* silent */ }
+                        });
+                    });
                 },
                 onLeaveBack: self => {
                     // quando voltar acima da seção, esconder

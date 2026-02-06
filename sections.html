@@ -483,3 +483,16 @@
         </div>
       </label>
     </div>
+
+<!-- ERUDA: Console de debug para mobile (REMOVER EM PRODUÇÃO) -->
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>
+  // Inicializa Eruda após o DOM estar pronto
+  if (typeof eruda !== 'undefined') {
+    eruda.init();
+    eruda.position({x: 10, y: window.innerHeight - 80});
+    console.log('✅ Eruda carregado com sucesso!');
+  } else {
+    console.error('❌ Eruda não carregou');
+  }
+</script>
