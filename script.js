@@ -23,15 +23,11 @@
 window.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('heroVideo');
     if (video) {
-        // Tenta reproduzir se estiver pausado (força autoplay em alguns browsers)
-        if (video.paused) {
-            video.play().catch(e => console.warn('Autoplay bloqueado pelo navegador:', e));
-        }
-
-        video.addEventListener('loadedmetadata', () => {
-            const currentSrc = video.currentSrc;
-            const w = video.videoWidth;
-            const h = video.videoHeight;
+        // Função auxiliar para logar
+        const logLoadedVideo = (v) => {
+            const currentSrc = v.currentSrc;
+            const w = v.videoWidth;
+            const h = v.videoHeight;
             let label = 'DESCONHECIDO';
 
             if (currentSrc.includes('video_demonstrativo_vertical_site_low.webm')) label = 'MOBILE WebM';
@@ -40,9 +36,21 @@ window.addEventListener('DOMContentLoaded', () => {
             else if (currentSrc.includes('video-hero')) label = 'DESKTOP MP4 Fallback';
 
             console.log(`🎬 VÍDEO CARREGADO: [${label}] | Src: ${currentSrc} | Dimensões: ${w}x${h}`);
-        });
+        };
 
-        // Fallback visual: Se der erro, garante que o poster/img esteja visível
+        // Tenta reproduzir se estiver pausado
+        if (video.paused) {
+            video.play().catch(e => console.warn('Autoplay bloqueado pelo navegador:', e));
+        }
+
+        // Listener padrão
+        video.addEventListener('loadedmetadata', () => logLoadedVideo(video));
+
+        // Check imediato para caso o metadata já tenha carregado (cache ou race condition)
+        if (video.readyState >= 1) {
+            logLoadedVideo(video);
+        }
+
         video.addEventListener('error', (e) => {
             console.error('❌ Erro no carregamento do vídeo:', e);
         });
