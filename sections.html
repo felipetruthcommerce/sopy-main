@@ -22,13 +22,16 @@
         <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="sopy-hero-media">
           <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="auto" poster="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg">
-            <!-- DESKTOP: WebM (melhor qualidade/compressão) -->
+            <!-- DESKTOP: WebM (16:9) -->
             <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/WhatsApp%20Video%202026-02-05%20at%2014.50.37.webm" type="video/webm" media="(min-width: 900px)" />
             
-            <!-- MOBILE: MP4 apenas (máxima compatibilidade) -->
+            <!-- MOBILE: WebM primeiro (Android prefere) -->
+            <source src="https://pub-6ab98439333c4b3da88cdddb52f2acf4.r2.dev/video_demonstrativo_vertical_site_low.webm" type="video/webm" media="(max-width: 899px)" />
+            
+            <!-- MOBILE: MP4 fallback (iOS Safari) -->
             <source src="https://pub-4009096f9b234998870e8b50e237f762.r2.dev/video_demonstrativo_vertical_site_low.mp4" type="video/mp4" media="(max-width: 899px)" />
 
-            <!-- FALLBACK: MP4 universal (sem media query) -->
+            <!-- FALLBACK universal: MP4 sem media query -->
             <source src="https://pub-4009096f9b234998870e8b50e237f762.r2.dev/video_demonstrativo_vertical_site_low.mp4" type="video/mp4" />
           </video>
           <!-- (Poster is now inline in the video tag for better support, but we can keep the img as a backup layer if needed, though video poster attr is standard) -->
