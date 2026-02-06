@@ -1,5 +1,20 @@
 // --- PARTE 1: DEFINIÇÃO DAS FUNÇÕES DE APOIO ---
 
+// === ERUDA DEBUG CONSOLE (REMOVER EM PRODUÇÃO) ===
+(function () {
+    var script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/eruda';
+    script.onload = function () {
+        if (typeof eruda !== 'undefined') {
+            eruda.init();
+            setTimeout(function () {
+                eruda.position({ x: 20, y: window.innerHeight - 100 });
+            }, 500);
+        }
+    };
+    document.head.appendChild(script);
+})();
+
 // Respect 'sopy-force-theme' marker injected by sections.html.
 // If present, set a pending theme early so the rest of the script honors it.
 (function () {
