@@ -5147,3 +5147,67 @@ body.theme-citrus .head-main .badge {
   line-height: 1.5 !important;
   opacity: 0.9 !important;
 }
+
+/* =========================================
+   SECTION REORDERING: Flexbox Order for Desktop vs Mobile
+   ========================================= */
+
+/* Make sections.html <main> a flex container for reordering */
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Desktop order (default) */
+#hero {
+  order: 1;
+}
+
+#capsula-3d {
+  order: 2;
+}
+
+.slider-fullscreen-section {
+  order: 3;
+}
+
+/* Como Usar */
+#sustentabilidade {
+  order: 4;
+}
+
+#comparison-section {
+  order: 5;
+}
+
+#clean-slate-section {
+  order: 6;
+}
+
+#testemunhos {
+  order: 7;
+}
+
+#faq {
+  order: 8;
+}
+
+/* Mobile: Swap sustentabilidade and comparison */
+@media (max-width: 900px) {
+  #comparison-section {
+    order: 4;
+  }
+
+  #clean-slate-section {
+    order: 5;
+  }
+
+  #sustentabilidade {
+    order: 6;
+  }
+
+  /* Hide extended text on mobile (show only bold titles) */
+  .mobile-hide {
+    display: none !important;
+  }
+}
