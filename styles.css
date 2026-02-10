@@ -5211,3 +5211,14 @@ main {
     display: none !important;
   }
 }
+
+/* =========================================
+   COLON LIST (Mobile vs Desktop)
+   Mobile: Hide colon (done in HTML)
+   Desktop: Add colon via CSS
+   ========================================= */
+@media (min-width: 901px) {
+  .colon-list li b::after {
+    content: ":";
+  }
+}
