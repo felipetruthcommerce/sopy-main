@@ -5216,10 +5216,3 @@ main {
 /* =========================================
    Desktop Adjustments
    ========================================= */
-@media (min-width: 901px) {
-
-  /* Pull the colon back to remove the gap caused by inline-block rendering */
-  .colon-list li p span.mobile-hide {
-    margin-left: -4px;
-  }
-}
