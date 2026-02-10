@@ -168,7 +168,7 @@ function initTextAnimations() {
     document.head.appendChild(style);
 
     const titles = document.querySelectorAll('h1:not(#hero *), h2:not(#hero *), h3:not(#hero *), h4:not(#hero *), .tc-title, .tc-sub');
-    const paragraphs = document.querySelectorAll('p:not(#hero *):not(.colon-list *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
+    const paragraphs = document.querySelectorAll('p:not(#hero *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
     const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
 
     console.log(`[TEXT] Encontrados para animar: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
