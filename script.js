@@ -1108,8 +1108,8 @@ function initThree() {
                 const img = document.createElement('img');
                 img.className = 'capsule-2d-photo';
                 // caminhos absolutos no GitHub Pages (usar arquivos finais do repo)
-                img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Azul-01-Frente-011.png');
-                img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/Soby-Capsula-Verde-01-Frente-011.png');
+                img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.png');
+                img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.png');
                 img.alt = 'Cápsula Sopy';
                 // define src inicial baseado na classe do body
                 img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
