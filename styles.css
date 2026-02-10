@@ -5219,6 +5219,6 @@ main {
    ========================================= */
 @media (min-width: 901px) {
   .colon-list li b::after {
-    content: ":";
+    content: ": ";
   }
 }
