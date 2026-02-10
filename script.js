@@ -1,3 +1,12 @@
+// --- PRELOAD: Download capsule 2D images early so they appear instantly on scroll ---
+(function () {
+    var imgs = [
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.png'
+    ];
+    imgs.forEach(function (src) { var i = new Image(); i.src = src; });
+})();
+
 // --- PARTE 1: DEFINIÇÃO DAS FUNÇÕES DE APOIO ---
 
 // Respect 'sopy-force-theme' marker injected by sections.html.
