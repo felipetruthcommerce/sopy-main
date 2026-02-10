@@ -5222,12 +5222,4 @@ main {
   .colon-list li p span.mobile-hide {
     margin-left: -4px;
   }
-
-  /* FORCE INLINE: Prevents SplitType from breaking lines between <b> and <span> */
-  /* This might disable the translateY animation for these specific lines, but fixes layout */
-  .colon-list li p,
-  .colon-list li p * {
-    display: inline !important;
-    vertical-align: baseline !important;
-  }
 }
