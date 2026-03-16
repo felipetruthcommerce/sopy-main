@@ -1475,7 +1475,7 @@ body.theme-aqua #beneficios .sopy-benefits-card {
 }
 
 #capsula-3d {
-  height: 400vh;
+  height: 240vh;
   /* FIXO para forçar o navegador a reservar o espaço imediatamente */
   --capsule-ui-offset: 120px;
   display: flex;
