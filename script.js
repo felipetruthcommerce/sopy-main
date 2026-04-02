@@ -88,6 +88,30 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// === PRE-CARREGA IMAGENS DO CTA PARA EVITAR TRAVADAS ===
+// Chamado no início da página para que as imagens já estejam em cache
+// quando o usuário chegar na seção da cápsula
+function preloadCtaImages() {
+    const imagesToPreload = [
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/bag_citrus.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/bag_aqua1.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/box_citrus.png',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/box_aqua.png'
+    ];
+
+    imagesToPreload.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+    console.log('[PRELOAD] Imagens do CTA pré-carregadas');
+}
+
+// Executa preload após a página estar interativa (não bloqueia o carregamento inicial)
+if (document.readyState === 'complete') {
+    setTimeout(preloadCtaImages, 100);
+} else {
+    window.addEventListener('load', () => setTimeout(preloadCtaImages, 100));
+}
 
 function setupLenis() {
     console.log('[SETUP] Inicializando Lenis (Scroll Suave)...');
