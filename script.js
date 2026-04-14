@@ -660,7 +660,7 @@ function initCapsuleBubbles() {
 
     // --- OBJETOS (AS BOLHAS) ---
     const bubbles = [];
-    const bubbleCount = 10;
+    const bubbleCount = 5;
     const bubbleGeometry = new THREE.SphereGeometry(1, 64, 64);
 
     const bubbleMaterial = new THREE.MeshPhysicalMaterial({
@@ -2421,9 +2421,7 @@ function bootAnimations() {
                 const startThree = () => {
                     THREE_READY = true;
                     initThree();
-                    // TESTE DE PERFORMANCE: bolhas comentadas para verificar impacto no travamento
-                    // Para reativar: remova o comentário da linha abaixo
-                    // initCapsuleBubbles();
+                    initCapsuleBubbles();
                 };
                 if (typeof THREE !== 'undefined') {
                     // Three.js já carregado (ex: via tema Nuvemshop)
