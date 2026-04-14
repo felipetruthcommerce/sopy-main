@@ -1,8 +1,8 @@
 // --- PRELOAD: Download capsule 2D images early so they appear instantly on scroll ---
 (function () {
     var imgs = [
-        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.png',
-        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.png'
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.webp',
+        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.webp'
     ];
     imgs.forEach(function (src) { var i = new Image(); i.src = src; });
 })();
@@ -1093,8 +1093,8 @@ function initThree() {
                 const img = document.createElement('img');
                 img.className = 'capsule-2d-photo';
                 // caminhos absolutos no GitHub Pages (usar arquivos finais do repo)
-                img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.png');
-                img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.png');
+                img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.webp');
+                img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.webp');
                 img.alt = 'Cápsula Sopy';
                 // define src inicial baseado na classe do body
                 img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
