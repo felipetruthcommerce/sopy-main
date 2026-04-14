@@ -237,10 +237,10 @@ let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 //     citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509855927_citrus.glb",
 // };
 
-const MODELS = {
-    aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Azul-v024.glb",
-    citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Verde-v024.glb",
-};
+// const MODELS = {
+//     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Azul-v024.glb",
+//     citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Verde-v024.glb",
+// };
 
 const COLORS = {
     aqua: { a: '#076DF2', b: '#0C87F2', c: '#1DDDF2' },
@@ -2415,12 +2415,22 @@ function bootAnimations() {
     if (threeSection) {
         new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
-                initThree();
-                // Inicializar bolhas 3D junto com a cena principal
-                if (typeof THREE !== 'undefined') {
-                    initCapsuleBubbles();
-                }
                 observer.unobserve(threeSection);
+                const startThree = () => {
+                    THREE_READY = true;
+                    initThree();
+                    initCapsuleBubbles();
+                };
+                if (typeof THREE !== 'undefined') {
+                    // Three.js já carregado (ex: via tema Nuvemshop)
+                    startThree();
+                } else {
+                    // Carrega Three.js dinamicamente, só agora que o usuário chegou na seção
+                    const s = document.createElement('script');
+                    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+                    s.onload = startThree;
+                    document.head.appendChild(s);
+                }
             }
         }, { threshold: 0.1 }).observe(threeSection);
     }
