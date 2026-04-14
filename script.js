@@ -2261,7 +2261,8 @@ function bootAnimations() {
                 const startThree = () => {
                     THREE_READY = true;
                     initThree();
-                    initCapsuleBubbles();
+                    // BOLHAS REMOVIDAS — para reativar descomente a linha abaixo e o container no sections.html
+                    // initCapsuleBubbles();
                 };
                 if (typeof THREE !== 'undefined') {
                     // Three.js já carregado (ex: via tema Nuvemshop)
