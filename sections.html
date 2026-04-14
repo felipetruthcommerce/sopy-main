@@ -18,26 +18,48 @@
       transition: opacity .32s ease;
     }
   </style>
+
+      <!-- ============================================================
+        SEÇÃO: HERO (vídeo de fundo em tela cheia)
+      ============================================================ -->
       <section id="hero" class="sopy-hero sopy-section--full">
-        <!-- Vídeo que será revelado pelo circle-reveal -->
         <div class="sopy-hero-media">
-          <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="metadata" poster="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg">
-            <!-- DESKTOP: WebM (16:9) — mobile é gerenciado pelo script.js -->
+
+          <!-- ┌─────────────────────────────────────────────────────────┐
+               │  TROCAR POSTER DO VÍDEO (imagem exibida enquanto        │
+               │  o vídeo carrega)                                        │
+               │                                                          │
+               │  1. Faça upload da nova imagem no GitHub Pages em:       │
+               │     assets/images/                                       │
+               │  2. Troque a URL em DOIS lugares abaixo:                 │
+               │     • atributo  poster="..."  na tag <video>             │
+               │     • atributo  src="..."     na tag <img> logo abaixo  │
+               └─────────────────────────────────────────────────────────┘ -->
+          <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="metadata"
+            poster="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg">
+
+            <!-- ┌─────────────────────────────────────────────────────────┐
+                 │  TROCAR VÍDEO — DESKTOP (telas ≥ 900px)                 │
+                 │                                                          │
+                 │  Formato: WebM, proporção 16:9                           │
+                 │  1. Faça upload do novo vídeo no Cloudflare R2           │
+                 │  2. Copie a URL pública gerada pelo R2                   │
+                 │  3. Substitua a URL no atributo src= abaixo             │
+                 └─────────────────────────────────────────────────────────┘ -->
             <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/WhatsApp%20Video%202026-02-05%20at%2014.50.37.webm" type="video/webm" media="(min-width: 900px)" />
+
+            <!-- MOBILE: vídeo mobile é controlado pelo script.js
+                 Para trocar: edite as constantes WEBM_URL e MP4_URL
+                 no início do arquivo script.js -->
           </video>
-          <!-- (Poster is now inline in the video tag for better support, but we can keep the img as a backup layer if needed, though video poster attr is standard) -->
-          <img class="sopy-hero-poster" src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg" alt="" aria-hidden="true" fetchpriority="high" width="1280" height="720" style="position: absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index: -1;" />
-        </div>
-<!--
-        <div class="sopy-hero-content">
-          <h1>ª
-            Limpeza que cabe na palma da mão
-          </h1>
+
+          <!-- Imagem de fallback — mesma URL do poster acima -->
+          <img class="sopy-hero-poster"
+            src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg"
+            alt="" aria-hidden="true" fetchpriority="high" width="1280" height="720"
+            style="position: absolute; inset:0; width:100%; height:100%; object-fit: cover; z-index: -1;" />
         </div>
 
-        -->
-        
-        <!-- CTA movido da seção intermediária para o final da hero, centralizado -->
         <div class="cta-content">
           <a href="https://sopy.com.br/capsulas-lava-roupa/" class="btn-comprar-agora" role="button">Compre Agora</a>
         </div>
@@ -45,17 +67,15 @@
       </section>
 
 
-      <!-- ===================== SEÇÃO 3D (PIN) ===================== -->
+      <!-- ============================================================
+        SEÇÃO: CÁPSULA 3D
+        A imagem da cápsula que gira é controlada pelo script.js.
+        Para trocar: edite as linhas com data-aqua / data-citrus
+        da função initThree() em script.js (~linha 1096)
+      ============================================================ -->
       <section id="capsula-3d" style="height:80vh;" class="sopy-capsule3d sopy-section--full sopy-section--extended" aria-label="Cápsula 3D interativa">
-        <!-- Canvas Three.js será injetado aqui -->
         <div id="three-container"></div>
 
-        <!-- Título posicionado sobre o objeto 3D
-        <div class="sopy-capsule3d-title-over">
-          <h2>Tecnologia que dissolve 100%</h2>
-        </div> -->
-
-        <!-- Títulos de benefícios revelados durante o scroll -->
         <div class="capsule-benefits" aria-hidden="true">
           <div class="benefit-title benefit-1" data-reveal="0.05">
             <h2>Cápsula lava roupa Sopy!</h2>
@@ -65,8 +85,16 @@
           </div>
         </div>
 
-        <!-- Bloco de produto que aparece/alinhará ao final da seção 3D -->
-        <!-- Primary CTA (will show theme content via data-aqua / data-citrus) -->
+        <!-- ┌─────────────────────────────────────────────────────────┐
+             │  CARD DE PRODUTO — BAG (bolsa pequena)                   │
+             │                                                          │
+             │  Aparece à esquerda após o scroll na seção 3D            │
+             │  Muda automaticamente com o toggle Aqua/Citrus           │
+             │                                                          │
+             │  Para trocar as imagens:                                 │
+             │  • Tema CITRUS (verde): edite data-citrus="..."          │
+             │  • Tema AQUA (azul):   edite data-aqua="..."            │
+             └─────────────────────────────────────────────────────────┘ -->
         <div class="capsule-3d-cta" aria-hidden="true">
           <img class="cta-overlay" aria-hidden="true"
             data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/bag_citrus.webp"
@@ -76,15 +104,24 @@
             <h3 class="product-title" data-aqua="Lava Roupas em Cápsula Sopy Aqua Blu 225ml (15 unidades)" data-citrus="Lava Roupas em Cápsula Sopy Citrush Lush 225ml (15 unidades)">AQUA BLU BAG</h3>
             <p class="product-price" data-aqua="R$ 44,90" data-citrus="R$ 44,90">R$ 44,90</p>
             <p class="product-copy" data-aqua="Cápsulas ultra concentradas com enzimas que dissolvem 100% e protegem as fibras. Para todas as máquinas." data-citrus="Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
-            <button class="sopy-btn sopy-product-cta" 
-              data-aqua="EXPLORE AQUA BLU" 
+            <button class="sopy-btn sopy-product-cta"
+              data-aqua="EXPLORE AQUA BLU"
               data-citrus="EXPLORE CITRUS LUSH"
               data-href-aqua="https://www.sopy.com.br/produtos/lava-roupas-em-capsula-sopy-aqua-blu-225ml-15-unidades-1sln2/"
               data-href-citrus="https://www.sopy.com.br/produtos/lava-roupas-em-capsula-sopy-citrush-lush-225ml-15-unidades-16tqc/">EXPLORE CITRUS LUSH</button>
           </div>
         </div>
 
-        <!-- Duplicated CTA: same data attributes so theme switching updates both -->
+        <!-- ┌─────────────────────────────────────────────────────────┐
+             │  CARD DE PRODUTO — BOX (caixa grande)                    │
+             │                                                          │
+             │  Aparece à direita após o scroll na seção 3D             │
+             │  Muda automaticamente com o toggle Aqua/Citrus           │
+             │                                                          │
+             │  Para trocar as imagens:                                 │
+             │  • Tema CITRUS (verde): edite data-citrus="..."          │
+             │  • Tema AQUA (azul):   edite data-aqua="..."            │
+             └─────────────────────────────────────────────────────────┘ -->
         <div class="capsule-3d-cta opposite" aria-hidden="true">
           <img class="cta-overlay" aria-hidden="true"
             data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/box_citrus.webp"
@@ -94,30 +131,47 @@
             <h3 class="product-title" data-aqua="Lava Roupas em Cápsulas Sopy Aqua Blu 300ml (20 unidades)" data-citrus="Lava Roupas em Cápsulas Citrus Lush 300ml (20 unidades)">AQUA BLU BOX</h3>
             <p class="product-price" data-aqua="R$ 64,90" data-citrus="R$ 64,90">R$ 64,90</p>
             <p class="product-copy" data-aqua="Cápsulas ultra concentradas com enzimas que dissolvem 100% e protegem as fibras. Para todas as máquinas." data-citrus="Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.">Cápsulas ultra concentradas com poder cítrico que dissolvem 100% e protegem a cor. Para todas as máquinas.</p>
-            <button class="sopy-btn sopy-product-cta" 
-              data-aqua="EXPLORE AQUA BLU" 
+            <button class="sopy-btn sopy-product-cta"
+              data-aqua="EXPLORE AQUA BLU"
               data-citrus="EXPLORE CITRUS LUSH"
               data-href-aqua="https://www.sopy.com.br/produtos/lava-roupas-em-capsulas-sopy-aqua-blu-300ml-20-unidades-c85k1/"
               data-href-citrus="https://www.sopy.com.br/produtos/lava-roupas-em-capsulas-citrus-lush-300ml-20-unidades-a77s2/">EXPLORE CITRUS LUSH</button>
           </div>
         </div>
-        <!-- decorative bubbles container: created by JS -->
+
         <div class="sopy-capsule-bubbles" aria-hidden="true"></div>
       </section>
 
-      <!-- ===================== SUSTENTABILIDADE (Parallax - estrutura do template) ======================= -->
+
+      <!-- ============================================================
+        SEÇÃO: SUSTENTABILIDADE (4 painéis com parallax)
+        Cada painel tem uma imagem lateral que muda com o tema.
+        Regra: edite src= (padrão) + data-aqua= + data-citrus=
+      ============================================================ -->
       <div id="sustentabilidade" class="scroll-container sustainability-parallax">
+
         <section class="fullscreen-panel intro-panel">
           <div>
             <h1>Por quê Sopy?</h1>
           </div>
         </section>
 
+        <!-- PAINEL 1 — "Mais praticidade" (imagem à ESQUERDA)
+             ┌──────────────────────────────────────────────┐
+             │ TROCAR IMAGEM deste painel:                   │
+             │ • src="..."        → imagem padrão (Aqua)    │
+             │ • data-aqua="..."  → tema Aqua (azul)        │
+             │ • data-citrus="..." → tema Citrus (verde)    │
+             └──────────────────────────────────────────────┘ -->
         <section class="fullscreen-panel" data-layout="left-image">
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/mais-praticidade-01.webp" alt="Mais praticidade" data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/mais-praticidade-01.webp" data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/mais-praticidade-01-citrus.webp" style="width:100%;height:100%;object-fit:cover;" />
+                <img
+                  src="https://felipetruthcommerce.github.io/sopy-main/assets/images/mais-praticidade-01.webp"
+                  data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/mais-praticidade-01.webp"
+                  data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/mais-praticidade-01-citrus.webp"
+                  alt="Mais praticidade" style="width:100%;height:100%;object-fit:cover;" />
               </div>
             </div>
             <div class="text-column">
@@ -129,16 +183,26 @@
                 <li><p><b>Sem bagunça</b><span class="mobile-hide">: zero risco de derramar produto no chão.</span></p></li>
                 <li><p><b>Embalagem leve e prática</b><span class="mobile-hide">: fácil de transportar e ideal para viagens</span></p></li>
               </ul>
-                
             </div>
           </div>
         </section>
 
+        <!-- PAINEL 2 — "Melhores Resultados" (imagem à DIREITA)
+             ┌──────────────────────────────────────────────┐
+             │ TROCAR IMAGEM deste painel:                   │
+             │ • src="..."        → imagem padrão (Aqua)    │
+             │ • data-aqua="..."  → tema Aqua (azul)        │
+             │ • data-citrus="..." → tema Citrus (verde)    │
+             └──────────────────────────────────────────────┘ -->
         <section class="fullscreen-panel" data-layout="right-image">
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/melhores-resultados-01.webp" alt="Melhores resultados" data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/melhores-resultados-01.webp" data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/melhores-resultados-01-citrus.webp" style="width:100%;height:100%;object-fit:cover;" />
+                <img
+                  src="https://felipetruthcommerce.github.io/sopy-main/assets/images/melhores-resultados-01.webp"
+                  data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/melhores-resultados-01.webp"
+                  data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/melhores-resultados-01-citrus.webp"
+                  alt="Melhores resultados" style="width:100%;height:100%;object-fit:cover;" />
               </div>
             </div>
             <div class="text-column">
@@ -154,11 +218,23 @@
           </div>
         </section>
 
+        <!-- PAINEL 3 — "Fragrâncias" (imagem à ESQUERDA)
+             ┌──────────────────────────────────────────────┐
+             │ TROCAR IMAGEM deste painel:                   │
+             │ • src="..."  → única imagem, sem variante    │
+             │                                               │
+             │ ATENÇÃO: a imagem Citrus é trocada pelo JS   │
+             │ (script.js função updateFragranceImage)       │
+             │ Para trocar a versão Citrus, edite o arquivo  │
+             │ script.js na constante FRAGRANCE_BASE (~918) │
+             └──────────────────────────────────────────────┘ -->
         <section class="fullscreen-panel" data-layout="left-image">
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/perfume-aqua-01.webp" alt="Fragrâncias - Aqua" style="width:100%;height:100%;object-fit:cover;" />
+                <img
+                  src="https://felipetruthcommerce.github.io/sopy-main/assets/images/perfume-aqua-01.webp"
+                  alt="Fragrâncias - Aqua" style="width:100%;height:100%;object-fit:cover;" />
               </div>
             </div>
             <div class="text-column">
@@ -186,12 +262,23 @@
             </div>
           </div>
         </section>
-          
+
+        <!-- PAINEL 4 — "Menos plástico" (imagem à DIREITA)
+             ┌──────────────────────────────────────────────┐
+             │ TROCAR IMAGEM deste painel:                   │
+             │ • src="..."        → imagem padrão           │
+             │ • data-aqua="..."  → tema Aqua (azul)        │
+             │ • data-citrus="..." → tema Citrus (verde)    │
+             └──────────────────────────────────────────────┘ -->
         <section class="fullscreen-panel" data-layout="right-image">
           <div class="panel-content">
             <div class="image-column">
               <div class="image-wrapper">
-                <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/menos-plastico-01.webp" alt="Família usando produtos seguros" data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/menos-plastico-01-aqua.webp" data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/menos-plastico-01-citrus.webp">
+                <img
+                  src="https://felipetruthcommerce.github.io/sopy-main/assets/images/menos-plastico-01.webp"
+                  data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/menos-plastico-01-aqua.webp"
+                  data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/menos-plastico-01-citrus.webp"
+                  alt="Família usando produtos seguros">
               </div>
             </div>
             <div class="text-column">
@@ -205,15 +292,27 @@
             </div>
           </div>
         </section>
+
       </div>
 
 
-      <!-- ===================== SLIDER FULLSCREEN ===================== -->
+      <!-- ============================================================
+        SEÇÃO: SLIDER "COMO USAR" (4 slides)
+        Cada slide usa background-image para a foto de fundo.
+        Slides 2 e 3 também têm variante por tema (data-aqua / data-citrus).
+      ============================================================ -->
       <section id="como-usar" class="slider-fullscreen-section" aria-label="Como usar">
         <div class="slider-container" aria-live="polite">
           <div class="slider-slide" role="list">
-            <!-- Ordem invertida: o primeiro visível será o slide4, depois mostra 3, 2, 1 ao lado -->
-            <div class="slider-item" role="listitem" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/Como_usar_4.jpg')">
+
+            <!-- SLIDE 4 — "Selecione o ciclo"
+                 ┌──────────────────────────────────────────────┐
+                 │ TROCAR IMAGEM: substitua a URL dentro de      │
+                 │ style="background-image:url('AQUI')"          │
+                 │ Sem variante por tema.                        │
+                 └──────────────────────────────────────────────┘ -->
+            <div class="slider-item" role="listitem"
+              style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/Como_usar_4.jpg')">
               <div class="slider-content">
                 <div class="slider-name">Selecione o ciclo</div>
                 <div class="slider-des">Utilize o ciclo de sua preferência. Funciona com qualquer velocidade, temperatura e modelo de máquina</div>
@@ -221,7 +320,17 @@
               </div>
             </div>
 
-            <div class="slider-item" role="listitem" data-slide="1" data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-01-aqua.webp" data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-01-citrus.webp" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-01-aqua.webp')">
+            <!-- SLIDE 1 — "Como usar / Três passos simples"
+                 ┌──────────────────────────────────────────────┐
+                 │ TROCAR IMAGEM:                                │
+                 │ • Fundo padrão: style="background-image:..."  │
+                 │ • Tema Aqua:   data-aqua="..."               │
+                 │ • Tema Citrus: data-citrus="..."             │
+                 └──────────────────────────────────────────────┘ -->
+            <div class="slider-item" role="listitem" data-slide="1"
+              data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-01-aqua.webp"
+              data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-01-citrus.webp"
+              style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-01-aqua.webp')">
               <div class="slider-content">
                 <div class="slider-name">Como usar</div>
                 <div class="slider-des">Três passos simples</div>
@@ -229,7 +338,17 @@
               </div>
             </div>
 
-            <div class="slider-item" role="listitem" data-slide="2" data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-02-aqua.webp" data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-02-citrus.webp" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-02-aqua.webp')">
+            <!-- SLIDE 2 — "Jogue a cápsula no tambor vazio"
+                 ┌──────────────────────────────────────────────┐
+                 │ TROCAR IMAGEM:                                │
+                 │ • Fundo padrão: style="background-image:..."  │
+                 │ • Tema Aqua:   data-aqua="..."               │
+                 │ • Tema Citrus: data-citrus="..."             │
+                 └──────────────────────────────────────────────┘ -->
+            <div class="slider-item" role="listitem" data-slide="2"
+              data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-02-aqua.webp"
+              data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-02-citrus.webp"
+              style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/slide-02-aqua.webp')">
               <div class="slider-content">
                 <div class="slider-name">Jogue a cápsula no tambor vazio</div>
                 <div class="slider-des">Jogue 2 cápsulas para cargas maiores. ATENÇÃO! Não rasgue a cápsula, jogue-a inteira</div>
@@ -237,13 +356,21 @@
               </div>
             </div>
 
-            <div class="slider-item" role="listitem" style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/Como_usar_03.jpg')">
+            <!-- SLIDE 3 — "Coloque as roupas no tambor"
+                 ┌──────────────────────────────────────────────┐
+                 │ TROCAR IMAGEM: substitua a URL dentro de      │
+                 │ style="background-image:url('AQUI')"          │
+                 │ Sem variante por tema.                        │
+                 └──────────────────────────────────────────────┘ -->
+            <div class="slider-item" role="listitem"
+              style="background-image:url('https://felipetruthcommerce.github.io/sopy-main/assets/images/Como_usar_03.jpg')">
               <div class="slider-content">
                 <div class="slider-name">Coloque as roupas no tambor</div>
-                <div class="slider-des"> É essencial que a roupa esteja em cima da cápsula para que ela fique 100% submersa durante a lavagem</div>
+                <div class="slider-des">É essencial que a roupa esteja em cima da cápsula para que ela fique 100% submersa durante a lavagem</div>
                 <a class="slider-seeMore" href="https://www.sopy.com.br/capsulas-lava-roupa/"><button>Ver Produtos</button></a>
               </div>
             </div>
+
           </div>
 
           <div class="slider-button">
@@ -254,46 +381,65 @@
       </section>
 
 
-    <!-- ===================== COMPARAÇÃO SOPY X SABÃO EM PÓ ===================== -->
-    <section id="comparison-section">
-      <div class="comparison-intro">
-        <h2>SOPY x Sabão em pó/ Líquido</h2>
-      </div>
-    </section>
+      <!-- ============================================================
+        SEÇÃO: COMPARATIVO SOPY x SABÃO EM PÓ
+      ============================================================ -->
+      <section id="comparison-section">
+        <div class="comparison-intro">
+          <h2>SOPY x Sabão em pó/ Líquido</h2>
+        </div>
+      </section>
 
       <section id="clean-slate-section">
-      <div class="pinned-container">
-        <div class="card card-sopy-way">
-          <img class="sopy-card-image" 
-             src="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy.webp" 
-             data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy.webp"
-             data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy-azul.webp"
-             alt="Método Sopy">
-          <h3>Cápsulas Sopy</h3>
-          <ul class="card-features">
-            <li>Dose perfeita em 1 cápsula (sem medir, sem erro)</li>
-            <li>Zero sujeira: película hidrossolúvel que dissolve 100%</li>
-            <li>Embalagem compacta e ultra leve</li>
-            <li>Protege cores e fibras com limpeza profunda</li>
-            <li>Qualquer ciclo, qualquer velocidade, qualquer temperatura - a Sopy limpa!</li>
-          </ul>
+        <div class="pinned-container">
+
+          <!-- CARD ESQUERDO — Cápsulas Sopy
+               ┌──────────────────────────────────────────────┐
+               │ TROCAR IMAGEM:                                │
+               │ • src="..."        → imagem padrão (Aqua)  │
+               │ • data-aqua="..."  → tema Aqua (azul)        │
+               │ • data-citrus="..." → tema Citrus (verde)    │
+               └──────────────────────────────────────────────┘ -->
+          <div class="card card-sopy-way">
+            <img class="sopy-card-image"
+              src="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy-azul.webp"
+              data-citrus="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy.webp"
+              data-aqua="https://felipetruthcommerce.github.io/sopy-main/assets/images/sabao-sopy-azul.webp"
+              alt="Método Sopy">
+            <h3>Cápsulas Sopy</h3>
+            <ul class="card-features">
+              <li>Dose perfeita em 1 cápsula (sem medir, sem erro)</li>
+              <li>Zero sujeira: película hidrossolúvel que dissolve 100%</li>
+              <li>Embalagem compacta e ultra leve</li>
+              <li>Protege cores e fibras com limpeza profunda</li>
+              <li>Qualquer ciclo, qualquer velocidade, qualquer temperatura - a Sopy limpa!</li>
+            </ul>
+          </div>
+
+          <!-- CARD DIREITO — Sabão tradicional
+               ┌──────────────────────────────────────────────┐
+               │ TROCAR IMAGEM: edite o src="..." abaixo      │
+               │ Imagem fixa, sem variante por tema.           │
+               └──────────────────────────────────────────────┘ -->
+          <div class="card card-old-way">
+            <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/banner_comparativo_modelos_tradicionais.webp" alt="Método antigo">
+            <h3>Sabão em Pó & Líquido</h3>
+            <ul class="card-features">
+              <li>Dosagem imprecisa e desperdício frequente</li>
+              <li>Faz sujeira e deixa resíduos na gaveta da máquina</li>
+              <li>Embalagens volumosas com muito plástico</li>
+              <li>Pode agredir fibras e desbotar cores</li>
+              <li>Resultados irregulares em ciclos curtos</li>
+            </ul>
+          </div>
+
         </div>
-        <div class="card card-old-way">
-          <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/banner_comparativo_modelos_tradicionais.webp" alt="Método antigo">
-          <h3>Sabão em Pó & Líquido</h3>
-          <ul class="card-features">
-            <li>Dosagem imprecisa e desperdício frequente</li>
-            <li>Faz sujeira e deixa resíduos na gaveta da máquina</li>
-            <li>Embalagens volumosas com muito plástico</li>
-            <li>Pode agredir fibras e desbotar cores</li>
-            <li>Resultados irregulares em ciclos curtos</li>
-          </ul>
-        </div>
-      </div>
       </section>
-    
-      
-      <!-- ===================== DEPOIMENTOS (tc-testimonials) ===================== -->
+
+
+      <!-- ============================================================
+        SEÇÃO: DEPOIMENTOS
+      ============================================================ -->
       <section id="testemunhos" class="tc-testimonials" aria-label="Depoimentos de clientes">
     <div class="tc-wrap">
         <div class="tc-left">
@@ -307,9 +453,17 @@
 
         <div class="tc-right">
             <div class="tc-testimonials-track">
+
+                <!-- DEPOIMENTO 1
+                     ┌──────────────────────────────────────────────┐
+                     │ TROCAR FOTO: edite o src="..." do <img>      │
+                     │ TROCAR TEXTO: edite o <p class="tc-quote">   │
+                     │ TROCAR NOME: edite o <span class="tc-name">  │
+                     │ TROCAR CIDADE: edite o <span class="tc-role">│
+                     └──────────────────────────────────────────────┘ -->
                 <div class="tc-testimonial-card">
                     <article class="tc-card" aria-live="polite">
-                        <div class="tc-quoteMark" aria-hidden="true">“</div>
+                        <div class="tc-quoteMark" aria-hidden="true">"</div>
                         <p class="tc-quote">Simplificou minha vida. Jogo a cápsula e pronto! O cheiro que fica na roupa é maravilhoso.</p>
                         <footer class="tc-cardFoot">
                             <div class="tc-author">
@@ -323,9 +477,16 @@
                     </article>
                 </div>
 
+                <!-- DEPOIMENTO 2
+                     ┌──────────────────────────────────────────────┐
+                     │ TROCAR FOTO: edite o src="..." do <img>      │
+                     │ TROCAR TEXTO: edite o <p class="tc-quote">   │
+                     │ TROCAR NOME: edite o <span class="tc-name">  │
+                     │ TROCAR CIDADE: edite o <span class="tc-role">│
+                     └──────────────────────────────────────────────┘ -->
                 <div class="tc-testimonial-card">
                     <article class="tc-card" aria-live="polite">
-                        <div class="tc-quoteMark" aria-hidden="true">“</div>
+                        <div class="tc-quoteMark" aria-hidden="true">"</div>
                         <p class="tc-quote">Muito prático! Acabou a bagunça de sabão em pó pela lavanderia. Recomendo demais!</p>
                         <footer class="tc-cardFoot">
                             <div class="tc-author">
@@ -339,9 +500,16 @@
                     </article>
                 </div>
 
+                <!-- DEPOIMENTO 3
+                     ┌──────────────────────────────────────────────┐
+                     │ TROCAR FOTO: edite o src="..." do <img>      │
+                     │ TROCAR TEXTO: edite o <p class="tc-quote">   │
+                     │ TROCAR NOME: edite o <span class="tc-name">  │
+                     │ TROCAR CIDADE: edite o <span class="tc-role">│
+                     └──────────────────────────────────────────────┘ -->
                 <div class="tc-testimonial-card">
                     <article class="tc-card" aria-live="polite">
-                        <div class="tc-quoteMark" aria-hidden="true">“</div>
+                        <div class="tc-quoteMark" aria-hidden="true">"</div>
                         <p class="tc-quote">Perfume ótimo e a roupa fica super limpa, mesmo no ciclo rápido da máquina. Vale muito a pena!</p>
                         <footer class="tc-cardFoot">
                             <div class="tc-author">
@@ -357,7 +525,6 @@
 
             </div>
 
-            <!-- Botões de navegação. -->
             <div class="tc-nav-buttons">
                 <button class="tc-nav-prev" aria-label="Depoimento anterior">◁</button>
                 <button class="tc-nav-next" aria-label="Próximo depoimento">▷</button>
@@ -366,8 +533,13 @@
     </div>
 </section>
 
-      <!-- ===================== FAQ ===================== -->
-      <section id="faq" class="sopy-faq sopy-section"  aria-label="Perguntas frequentes">
+
+      <!-- ============================================================
+        SEÇÃO: FAQ (perguntas frequentes)
+        Para editar perguntas/respostas: edite o texto diretamente
+        nos blocos <h3> e <p> abaixo. Não há imagens nesta seção.
+      ============================================================ -->
+      <section id="faq" class="sopy-faq sopy-section" aria-label="Perguntas frequentes">
         <header class="sopy-section-header">
           <h2>Perguntas frequentes</h2>
         </header>
@@ -382,7 +554,7 @@
         </section>
 
         <section class="sopy-faq-accordion" id="faq-q2">
-          <h3 class="sopy-title"><a href="#faq-q2">Vai sobrar o “plástico” da cápsula dentro da máquina?</a></h3>
+          <h3 class="sopy-title"><a href="#faq-q2">Vai sobrar o "plástico" da cápsula dentro da máquina?</a></h3>
           <div class="sopy-content">
             <div class="sopy-wrapper">
               <p>Não. A cápsula se dissolve 100% na água.</p>
@@ -417,12 +589,9 @@
           </div>
         </section>
 
-
     </main>
 
-    <!-- Page-specific: hide product-toggle and header by default; header reveal controlled by global script on scroll -->
     <style>
-      /* when body.nav-hidden is present, hide the toggle on this page */
       body.nav-hidden .product-toggle-container {
         opacity: 0;
         transform: translateY(12px);
@@ -430,28 +599,21 @@
         visibility: hidden;
         transition: opacity .25s ease, transform .25s ease;
       }
-
-      /* Override toggle colors per user request */
       .pod-toggle-label {
-        background-color: #25d16f !important; /* Citrus Green */
+        background-color: #25d16f !important;
         border-color: #25d16f !important;
       }
       .pod-toggle-checkbox:checked + .pod-toggle-label {
-        background-color: #25a6e0 !important; /* Blue */
+        background-color: #25a6e0 !important;
         border-color: #25a6e0 !important;
       }
     </style>
 
     <script>
-      // Ensure header and toggle are hidden on first page load for this section.
-      // The global autoHideHeader (in index.html) will remove `nav-hidden` when the user scrolls up.
       (function(){
         try {
-          // Esconde imediatamente
           document.body.classList.add('nav-hidden');
-          // E também após o autoHideHeader do index.html rodar (ele usa showNav() no início)
           requestAnimationFrame(() => document.body.classList.add('nav-hidden'));
-          // Reforço adicional após DOMContentLoaded para garantir
           if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
               setTimeout(() => document.body.classList.add('nav-hidden'), 50);
@@ -463,11 +625,21 @@
       })();
     </script>
 
+    <!-- ============================================================
+      TOGGLE FLUTUANTE (botão fixo na tela para trocar tema)
+      ┌──────────────────────────────────────────────────────┐
+      │ TROCAR IMAGEM DA CÁPSULA VERDE (tema Citrus):        │
+      │   edite o src="..." da <img class="pod-image green"> │
+      │                                                      │
+      │ TROCAR IMAGEM DA CÁPSULA AZUL (tema Aqua):           │
+      │   edite o src="..." da <img class="pod-image blue">  │
+      └──────────────────────────────────────────────────────┘ -->
     <div class="product-toggle-container">
       <input type="checkbox" id="product-toggle" class="pod-toggle-checkbox">
       <label for="product-toggle" class="pod-toggle-label">
         <div class="pod-toggle-handle">
-          <div class="pod-image-wrapper">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-verde.webp" alt="Produto Verde" class="pod-image green">
+          <div class="pod-image-wrapper">
+            <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-verde.webp" alt="Produto Verde" class="pod-image green">
             <img src="https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula-azul.webp" alt="Produto Azul" class="pod-image blue">
           </div>
         </div>
