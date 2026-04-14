@@ -724,6 +724,7 @@ function initCapsuleBubbles() {
         for (let i = 0; i < bubbleCount; i++) {
             createBubble();
         }
+        animRunning = true;
         animate();
         console.log('[BUBBLES] Animação iniciada com', bubbleCount, 'bolhas');
     }
@@ -830,8 +831,11 @@ function initCapsuleBubbles() {
 
     // --- ANIMAÇÃO ---
     const clock = new THREE.Clock();
+    let isVisible = true;  // começa true pois as bolhas só iniciam quando a seção já está visível
+    let animRunning = false;
 
     function animate() {
+        if (!isVisible) { animRunning = false; return; }
         requestAnimationFrame(animate);
 
         const delta = clock.getDelta();
@@ -907,6 +911,16 @@ function initCapsuleBubbles() {
         renderer.setSize(r.width, Math.max(1, r.height));
     }
     window.addEventListener('resize', onWindowResize);
+
+    // Pausa o loop quando a seção sai da viewport, retoma quando volta
+    new IntersectionObserver((entries) => {
+        isVisible = entries[0].isIntersecting;
+        if (isVisible && !animRunning) {
+            animRunning = true;
+            clock.getDelta(); // descarta delta acumulado durante a pausa
+            animate();
+        }
+    }, { threshold: 0.1 }).observe(container);
 }
 
 // ===================================================
