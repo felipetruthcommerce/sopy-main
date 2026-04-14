@@ -2421,7 +2421,9 @@ function bootAnimations() {
                 const startThree = () => {
                     THREE_READY = true;
                     initThree();
-                    initCapsuleBubbles();
+                    // TESTE DE PERFORMANCE: bolhas comentadas para verificar impacto no travamento
+                    // Para reativar: remova o comentário da linha abaixo
+                    // initCapsuleBubbles();
                 };
                 if (typeof THREE !== 'undefined') {
                     // Three.js já carregado (ex: via tema Nuvemshop)
