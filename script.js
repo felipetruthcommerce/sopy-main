@@ -1,3 +1,7 @@
+// --- PRODUÇÃO: desativa todos os logs de debug ---
+console.log = function(){};
+console.warn = function(){};
+
 // --- PRELOAD: Download capsule 2D images early so they appear instantly on scroll ---
 (function () {
     var imgs = [
@@ -2410,6 +2414,15 @@ function bootAnimations() {
 
             updateDots();
             startAutoPlay();
+
+            // Pausa o autoplay quando a seção não está visível, retoma quando volta
+            new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    startAutoPlay();
+                } else {
+                    clearInterval(autoInterval);
+                }
+            }, { threshold: 0.3 }).observe(testimonialsSection);
 
             // Dots sempre visíveis 100% do tempo
             tcProgressWrap.classList.add('visible');
