@@ -661,44 +661,28 @@ function initCapsuleBubbles() {
     // --- OBJETOS (AS BOLHAS) ---
     const bubbles = [];
     const bubbleCount = 5;
-    const bubbleGeometry = new THREE.SphereGeometry(1, 64, 64);
 
-    const bubbleMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xFFFFFF,
-        metalness: 0.0,
-        roughness: 0.06,
-        transmission: 0.55,
+    // Geometria leve: 16 segmentos (vs 64 antes) — visualmente igual em esferas pequenas
+    const bubbleGeometry = new THREE.SphereGeometry(1, 16, 16);
+
+    // Material leve: MeshPhongMaterial (vs MeshPhysicalMaterial antes)
+    // Sem transmission, clearcoat, IOR — apenas brilho simples
+    const bubbleMaterial = new THREE.MeshPhongMaterial({
+        color: 0xffffff,
         transparent: true,
-        opacity: 0.92,
-        ior: 1.33,
-        envMapIntensity: 2.2,
-        thickness: 0.6,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.06
+        opacity: 0.22,
+        shininess: 90,
+        specular: 0xffffff,
+        depthWrite: false
     });
 
     function createBubble() {
-        const material = bubbleMaterial.clone();
-        if (envMap) {
-            material.envMap = envMap;
-            material.transmission = 1.0;
-            material.opacity = 0.85;
-        } else {
-            // fallback sem envMap
-            material.transmission = 0.0;
-            material.opacity = 0.35;
-            material.roughness = 0.15;
-            material.metalness = 0.0;
-            material.clearcoat = 0.6;
-            material.clearcoatRoughness = 0.2;
-        }
-
-        const bubble = new THREE.Mesh(bubbleGeometry, material);
+        const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial);
         bubble.position.x = THREE.MathUtils.randFloatSpread(40);
         bubble.position.y = THREE.MathUtils.randFloat(-25, -15);
         bubble.position.z = THREE.MathUtils.randFloatSpread(10);
 
-        const scale = THREE.MathUtils.randFloat(0.3, 1.2); // Reduzido de 0.4-2.0 para bolhas menores
+        const scale = THREE.MathUtils.randFloat(0.3, 1.2);
         bubble.scale.set(scale, scale, scale);
 
         bubble.userData = {
@@ -719,107 +703,6 @@ function initCapsuleBubbles() {
         }
         animRunning = true;
         animate();
-        console.log('[BUBBLES] Animação iniciada com', bubbleCount, 'bolhas');
-    }
-
-    // --- INTERAÇÃO (CLIQUE E EXPLOSÃO) ---
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let particleSystems = [];
-
-    const particleTexture = new THREE.CanvasTexture(generateParticleTexture());
-
-    function generateParticleTexture() {
-        const canvas = document.createElement('canvas');
-        canvas.width = 128;
-        canvas.height = 128;
-        const context = canvas.getContext('2d');
-        const gradient = context.createRadialGradient(
-            canvas.width / 2, canvas.height / 2, 0,
-            canvas.width / 2, canvas.height / 2, canvas.width / 2
-        );
-        gradient.addColorStop(0, 'rgba(255,255,255,1)');
-        gradient.addColorStop(0.2, 'rgba(255,255,255,0.7)');
-        gradient.addColorStop(0.5, 'rgba(255,255,255,0.3)');
-        gradient.addColorStop(1, 'rgba(255,255,255,0)');
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, canvas.width, canvas.height);
-        return canvas;
-    }
-
-    function onMouseClick(event) {
-        const rect = container.getBoundingClientRect();
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
-        mouse.x = (x / rect.width) * 2 - 1;
-        mouse.y = -(y / rect.height) * 2 + 1;
-
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(bubbles);
-
-        if (intersects.length > 0) {
-            const clickedBubble = intersects[0].object;
-            createExplosion(clickedBubble.position, clickedBubble.scale.x);
-            scene.remove(clickedBubble);
-            bubbles.splice(bubbles.indexOf(clickedBubble), 1);
-            setTimeout(createBubble, 500);
-        }
-    }
-
-    container.addEventListener('click', onMouseClick);
-
-    function createExplosion(position, bubbleScale) {
-        const particleCount = 30;
-
-        const particleMaterial = new THREE.PointsMaterial({
-            size: 0.15 * bubbleScale, // Reduzido de 0.3 para partículas menores
-            map: particleTexture,
-            transparent: true,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false,
-            vertexColors: true
-        });
-
-        const particleGeometry = new THREE.BufferGeometry();
-        const positions = [];
-        const velocities = [];
-        const lives = [];
-        const maxLives = [];
-        const colors = [];
-        const sizes = [];
-
-        const baseColor = new THREE.Color(0xADD8E6);
-        const white = new THREE.Color(0xFFFFFF);
-
-        for (let i = 0; i < particleCount; i++) {
-            positions.push(position.x, position.y, position.z);
-
-            const speed = THREE.MathUtils.randFloat(0.2, 0.5) * bubbleScale; // Reduzido de 0.3-0.8 para explosão mais contida
-            velocities.push(
-                (Math.random() - 0.5) * speed,
-                (Math.random() - 0.5) * speed,
-                (Math.random() - 0.5) * speed
-            );
-
-            const life = THREE.MathUtils.randFloat(0.8, 1.5);
-            lives.push(life);
-            maxLives.push(life);
-
-            const particleColor = baseColor.clone().lerp(white, THREE.MathUtils.randFloat(0.2, 0.8));
-            colors.push(particleColor.r, particleColor.g, particleColor.b);
-            sizes.push(THREE.MathUtils.randFloat(0.5, 1.5) * particleMaterial.size);
-        }
-
-        particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        particleGeometry.setAttribute('velocity', new THREE.Float32BufferAttribute(velocities, 3));
-        particleGeometry.setAttribute('life', new THREE.Float32BufferAttribute(lives, 1));
-        particleGeometry.setAttribute('maxLife', new THREE.Float32BufferAttribute(maxLives, 1));
-        particleGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-        particleGeometry.setAttribute('size', new THREE.Float32BufferAttribute(sizes, 1));
-
-        const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particleSystem);
-        particleSystems.push(particleSystem);
     }
 
     // --- ANIMAÇÃO ---
@@ -847,49 +730,6 @@ function initCapsuleBubbles() {
                 bubble.position.x = THREE.MathUtils.randFloatSpread(40);
                 bubble.userData.originalX = bubble.position.x;
                 bubble.userData.oscillationOffset = Math.random() * Math.PI * 2;
-            }
-        });
-
-        // Animação das partículas de explosão
-        particleSystems.forEach((system, systemIndex) => {
-            const positions = system.geometry.attributes.position.array;
-            const velocities = system.geometry.attributes.velocity.array;
-            const lives = system.geometry.attributes.life.array;
-            const maxLives = system.geometry.attributes.maxLife.array;
-            const colors = system.geometry.attributes.color.array;
-
-            let allParticlesDead = true;
-
-            for (let i = 0; i < positions.length; i += 3) {
-                const particleIndex = i / 3;
-                lives[particleIndex] -= delta;
-
-                if (lives[particleIndex] > 0) {
-                    allParticlesDead = false;
-
-                    positions[i] += velocities[i] * delta * 60;
-                    positions[i + 1] += velocities[i + 1] * delta * 60;
-                    positions[i + 2] += velocities[i + 2] * delta * 60;
-
-                    const lifeRatio = lives[particleIndex] / maxLives[particleIndex];
-                    system.material.opacity = Math.max(0, lifeRatio);
-
-                    const initialColor = new THREE.Color(colors[i], colors[i + 1], colors[i + 2]);
-                    const finalColor = new THREE.Color(0x000000);
-                    initialColor.lerp(finalColor, 1 - lifeRatio);
-                    system.geometry.attributes.color.setXYZ(particleIndex, initialColor.r, initialColor.g, initialColor.b);
-                } else {
-                    positions[i] = positions[i + 1] = positions[i + 2] = 10000;
-                }
-            }
-
-            system.geometry.attributes.position.needsUpdate = true;
-            system.geometry.attributes.life.needsUpdate = true;
-            system.geometry.attributes.color.needsUpdate = true;
-
-            if (allParticlesDead) {
-                scene.remove(system);
-                particleSystems.splice(systemIndex, 1);
             }
         });
 
