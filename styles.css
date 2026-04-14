@@ -1488,6 +1488,11 @@ body.theme-aqua #beneficios .sopy-benefits-card {
   isolation: isolate;
   contain: layout style;
   /* Força cálculo de layout upfront */
+  /* TESTE — imagem de bolhas de fundo */
+  background-image: url('https://felipetruthcommerce.github.io/sopy-main/assets/images/fundo-bolhas.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 #capsula-3d::before {
