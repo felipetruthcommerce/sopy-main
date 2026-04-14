@@ -361,17 +361,6 @@ function setTheme(theme) {
         console.warn('[TEMA] Falha ao sincronizar toggle:', e);
     }
 
-    const pal = theme === "citrus" ? COLORS.citrus : COLORS.aqua;
-    if (gelA && gelB && gelC) {
-        const toCol = (mat, hex) => {
-            const c = new THREE.Color(hex);
-            gsap.to(mat.color, { r: c.r, g: c.g, b: c.b, duration: 0.6, ease: "power2.out" });
-        };
-        toCol(gelA, pal.a);
-        toCol(gelB, pal.b);
-        toCol(gelC, pal.c);
-    }
-
     // Atualiza a imagem do card da Sopy dependendo do tema
     try {
         const sopyCardImage = document.querySelector('.sopy-card-image');
@@ -1081,22 +1070,8 @@ function initThree() {
     rim.position.set(0, 1.8, -2.4);
     scene.add(rim);
 
-    // ENV MAP (reflexo discreto tipo estúdio)
-    const pmrem = new THREE.PMREMGenerator(renderer);
-    pmrem.compileEquirectangularShader();
-
     capsuleGroup = new THREE.Group();
     scene.add(capsuleGroup);
-
-    new THREE.RGBELoader()
-        .setDataType(THREE.UnsignedByteType)
-        .load('https://dl.polyhaven.org/file/ph-assets/HDRIs/hdr/1k/studio_small_08_1k.hdr', (hdr) => {
-            const tex = pmrem.fromEquirectangular(hdr).texture;
-            scene.environment = tex;   // PBR reflections
-            scene.background = null;  // mantemos teu gradiente da página
-            hdr.dispose();
-            pmrem.dispose();
-        }, undefined, (e) => console.warn('[3D] Falha ao carregar HDRI:', e));
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
     (function setupCapsuleSpinOnScroll() {
