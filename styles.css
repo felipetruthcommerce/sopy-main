@@ -2084,8 +2084,8 @@ body.theme-citrus footer.js-footer {
   60% {
     transform: translateY(-85vh) translateX(-10px);
   }
-  85% {
-    opacity: 0.5;
+  93% {
+    opacity: 0.8;
   }
   100% {
     transform: translateY(-130vh) translateX(6px);
@@ -2107,9 +2107,9 @@ body.theme-citrus footer.js-footer {
   55% {
     transform: translateY(-75vh) translateX(14px);
   }
-  80% {
-    transform: translateY(-108vh) translateX(-10px);
-    opacity: 0.5;
+  93% {
+    transform: translateY(-120vh) translateX(-10px);
+    opacity: 0.8;
   }
   100% {
     transform: translateY(-130vh) translateX(8px);
@@ -2130,7 +2130,7 @@ body.theme-citrus footer.js-footer {
   inset: 0;
   pointer-events: none;
   overflow: visible;
-  z-index: 3;
+  z-index: 1;
 }
 
 .sopy-capsule-bubbles .sopy-bubble {
