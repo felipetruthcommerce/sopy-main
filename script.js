@@ -575,27 +575,33 @@ function initCapsuleBubbles() {
 
     const bubbles = container.querySelectorAll('.sopy-bubble');
 
-    function randomizeBubble(el) {
-        const left    = Math.random() * 94;              // 0–94% da largura
-        const bottom  = Math.random() * 78;              // 0–78% da altura da seção
+    // Chamada apenas uma vez no início — define tudo incluindo delay negativo
+    function initBubble(el) {
         const dur     = 7 + Math.random() * 5;           // 7–12s por ciclo
-        const delay   = -(Math.random() * dur);          // delay negativo = já em movimento
         const shimmer = 3 + Math.random() * 3;           // 3–6s shimmer
+        const delay   = -(Math.random() * dur);          // negativo = já em movimento ao carregar
 
-        el.style.left             = left + '%';
-        el.style.bottom           = bottom + '%';
+        el.style.left              = (Math.random() * 94) + '%';
+        el.style.bottom            = (Math.random() * 78) + '%';
         el.style.animationDuration = dur + 's, ' + shimmer + 's';
-        el.style.animationDelay   = delay + 's, ' + (Math.random() * 2) + 's';
+        el.style.animationDelay    = delay + 's, 0s';
     }
 
-    // Aplica posição inicial aleatória a todas
-    bubbles.forEach(b => randomizeBubble(b));
+    // Chamada a cada ciclo — só muda left para variar posição horizontal
+    // NÃO altera duration nem delay para evitar reinício acidental da animação
+    function relocateBubble(el) {
+        el.style.left   = (Math.random() * 94) + '%';
+        el.style.bottom = (Math.random() * 78) + '%';
+    }
 
-    // A cada ciclo completo, reposiciona a bolha em lugar diferente
+    // Init uma vez
+    bubbles.forEach(b => initBubble(b));
+
+    // Só reposiciona no fim de cada ciclo, sem mexer em timing
     bubbles.forEach(b => {
         b.addEventListener('animationiteration', function(e) {
             if (e.animationName === 'bubbleFloat' || e.animationName === 'bubbleFloatSway') {
-                randomizeBubble(b);
+                relocateBubble(b);
             }
         });
     });
