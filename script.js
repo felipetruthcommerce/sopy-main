@@ -662,22 +662,40 @@ function initCapsuleBubbles() {
     const bubbles = [];
     const bubbleCount = 5;
 
-    // Geometria leve: 16 segmentos (vs 64 antes) — visualmente igual em esferas pequenas
-    const bubbleGeometry = new THREE.SphereGeometry(1, 16, 16);
+    // Geometria: 32 segmentos — boa qualidade visual sem o custo dos 64 originais
+    const bubbleGeometry = new THREE.SphereGeometry(1, 32, 32);
 
-    // Material leve: MeshPhongMaterial (vs MeshPhysicalMaterial antes)
-    // Sem transmission, clearcoat, IOR — apenas brilho simples
-    const bubbleMaterial = new THREE.MeshPhongMaterial({
-        color: 0xffffff,
+    // Material original de alta qualidade (MeshPhysicalMaterial)
+    // Sem clique/explosão — só visual
+    const bubbleMaterial = new THREE.MeshPhysicalMaterial({
+        color: 0xFFFFFF,
+        metalness: 0.0,
+        roughness: 0.06,
+        transmission: 0.55,
         transparent: true,
-        opacity: 0.22,
-        shininess: 90,
-        specular: 0xffffff,
-        depthWrite: false
+        opacity: 0.92,
+        ior: 1.33,
+        envMapIntensity: 2.2,
+        thickness: 0.6,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.06
     });
 
     function createBubble() {
-        const bubble = new THREE.Mesh(bubbleGeometry, bubbleMaterial);
+        const material = bubbleMaterial.clone();
+        if (envMap) {
+            material.envMap = envMap;
+            material.transmission = 1.0;
+            material.opacity = 0.85;
+        } else {
+            material.transmission = 0.0;
+            material.opacity = 0.35;
+            material.roughness = 0.15;
+            material.metalness = 0.0;
+            material.clearcoat = 0.6;
+            material.clearcoatRoughness = 0.2;
+        }
+        const bubble = new THREE.Mesh(bubbleGeometry, material);
         bubble.position.x = THREE.MathUtils.randFloatSpread(40);
         bubble.position.y = THREE.MathUtils.randFloat(-25, -15);
         bubble.position.z = THREE.MathUtils.randFloatSpread(10);
@@ -2261,8 +2279,7 @@ function bootAnimations() {
                 const startThree = () => {
                     THREE_READY = true;
                     initThree();
-                    // BOLHAS REMOVIDAS — para reativar descomente a linha abaixo e o container no sections.html
-                    // initCapsuleBubbles();
+                    initCapsuleBubbles();
                 };
                 if (typeof THREE !== 'undefined') {
                     // Three.js já carregado (ex: via tema Nuvemshop)
