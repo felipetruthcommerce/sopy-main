@@ -575,35 +575,17 @@ function initCapsuleBubbles() {
 
     const bubbles = container.querySelectorAll('.sopy-bubble');
 
-    // Chamada apenas uma vez no início — define tudo incluindo delay negativo
-    function initBubble(el) {
-        const dur     = 7 + Math.random() * 5;           // 7–12s por ciclo
-        const shimmer = 3 + Math.random() * 3;           // 3–6s shimmer
-        const delay   = -(Math.random() * dur);          // negativo = já em movimento ao carregar
+    // Define posição e timing uma única vez — sem listeners, sem modificações em runtime
+    // Com 20 bolhas em velocidades diferentes, a variação natural é suficiente
+    bubbles.forEach(function(el) {
+        var dur     = 7 + Math.random() * 5;       // 7–12s por ciclo
+        var shimmer = 3 + Math.random() * 3;       // 3–6s shimmer
+        var delay   = -(Math.random() * dur);      // negativo = já em movimento ao carregar
 
-        el.style.left              = (Math.random() * 94) + '%';
-        el.style.bottom            = (Math.random() * 78) + '%';
+        el.style.left              = (Math.random() * 90) + '%';
+        el.style.bottom            = (Math.random() * 75) + '%';
         el.style.animationDuration = dur + 's, ' + shimmer + 's';
         el.style.animationDelay    = delay + 's, 0s';
-    }
-
-    // Chamada a cada ciclo — só muda left para variar posição horizontal
-    // NÃO altera duration nem delay para evitar reinício acidental da animação
-    function relocateBubble(el) {
-        el.style.left   = (Math.random() * 94) + '%';
-        el.style.bottom = (Math.random() * 78) + '%';
-    }
-
-    // Init uma vez
-    bubbles.forEach(b => initBubble(b));
-
-    // Só reposiciona no fim de cada ciclo, sem mexer em timing
-    bubbles.forEach(b => {
-        b.addEventListener('animationiteration', function(e) {
-            if (e.animationName === 'bubbleFloat' || e.animationName === 'bubbleFloatSway') {
-                relocateBubble(b);
-            }
-        });
     });
 }
 
