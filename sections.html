@@ -21,39 +21,18 @@
 
       <!-- ============================================================
         SEÇÃO: HERO (vídeo de fundo em tela cheia)
+        TEMPORARIAMENTE DESABILITADA — remova os comentários <!-- e -->
+        para reativar
       ============================================================ -->
+      <!--
       <section id="hero" class="sopy-hero sopy-section--full">
         <div class="sopy-hero-media">
 
-          <!-- ┌─────────────────────────────────────────────────────────┐
-               │  TROCAR POSTER DO VÍDEO (imagem exibida enquanto        │
-               │  o vídeo carrega)                                        │
-               │                                                          │
-               │  1. Faça upload da nova imagem no GitHub Pages em:       │
-               │     assets/images/                                       │
-               │  2. Troque a URL em DOIS lugares abaixo:                 │
-               │     • atributo  poster="..."  na tag <video>             │
-               │     • atributo  src="..."     na tag <img> logo abaixo  │
-               └─────────────────────────────────────────────────────────┘ -->
           <video id="heroVideo" class="sopy-hero-video" autoplay loop muted playsinline preload="metadata"
             poster="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg">
-
-            <!-- ┌─────────────────────────────────────────────────────────┐
-                 │  TROCAR VÍDEO — DESKTOP (telas ≥ 900px)                 │
-                 │                                                          │
-                 │  Formato: WebM, proporção 16:9                           │
-                 │  1. Faça upload do novo vídeo no Cloudflare R2           │
-                 │  2. Copie a URL pública gerada pelo R2                   │
-                 │  3. Substitua a URL no atributo src= abaixo             │
-                 └─────────────────────────────────────────────────────────┘ -->
             <source src="https://pub-26b5fe2727ef4e25bd29a1b60598e331.r2.dev/WhatsApp%20Video%202026-02-05%20at%2014.50.37.webm" type="video/webm" media="(min-width: 900px)" />
-
-            <!-- MOBILE: vídeo mobile é controlado pelo script.js
-                 Para trocar: edite as constantes WEBM_URL e MP4_URL
-                 no início do arquivo script.js -->
           </video>
 
-          <!-- Imagem de fallback — mesma URL do poster acima -->
           <img class="sopy-hero-poster"
             src="https://felipetruthcommerce.github.io/sopy-main/assets/images/video-capa.jpg"
             alt="" aria-hidden="true" fetchpriority="high" width="1280" height="720"
@@ -65,6 +44,7 @@
         </div>
 
       </section>
+      -->
 
 
       <!-- ============================================================
