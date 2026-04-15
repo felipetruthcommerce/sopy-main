@@ -569,209 +569,36 @@ function isLowEndDevice() {
 
 function initCapsuleBubbles() {
     const container = document.querySelector('.sopy-capsule-bubbles');
-    if (!container || typeof THREE === 'undefined') return;
-
-    // ⚠️ SKIP 3D em dispositivos sem WebGL ou muito fracos
-    if (!isWebGLSupported()) {
-        console.warn('[BUBBLES] WebGL não suportado. Pulando bolhas 3D.');
-        return;
-    }
-    if (isLowEndDevice()) {
-        console.warn('[BUBBLES] Dispositivo de baixo desempenho detectado. Pulando bolhas 3D.');
-        return;
-    }
-
-    // Evita inicialização múltipla
+    if (!container) return;
     if (container.__bubblesInitialized) return;
     container.__bubblesInitialized = true;
 
-    console.log('[BUBBLES] Inicializando bolhas 3D...');
+    const bubbles = container.querySelectorAll('.sopy-bubble');
 
-    // --- CONFIGURAÇÃO BÁSICA ---
-    const scene = new THREE.Scene();
-    scene.background = null; // mantém o fundo transparente para integrar com a seção
+    function randomizeBubble(el) {
+        const left    = Math.random() * 94;              // 0–94% da largura
+        const bottom  = Math.random() * 78;              // 0–78% da altura da seção
+        const dur     = 7 + Math.random() * 5;           // 7–12s por ciclo
+        const delay   = -(Math.random() * dur);          // delay negativo = já em movimento
+        const shimmer = 3 + Math.random() * 3;           // 3–6s shimmer
 
-    const rect = container.getBoundingClientRect();
-    const camera = new THREE.PerspectiveCamera(75, rect.width / Math.max(1, rect.height), 0.1, 1000);
-    camera.position.z = 30;
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(rect.width, Math.max(1, rect.height));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.8;
-
-    // insere o canvas dentro do container
-    container.appendChild(renderer.domElement);
-    Object.assign(renderer.domElement.style, {
-        position: 'absolute',
-        inset: '0',
-        width: '100%',
-        height: '100%'
-    });
-
-    // Se o container ainda não tiver tamanho estável, ajusta em seguida
-    if (rect.width < 10 || rect.height < 10) {
-        requestAnimationFrame(() => {
-            const r2 = container.getBoundingClientRect();
-            camera.aspect = r2.width / Math.max(1, r2.height);
-            camera.updateProjectionMatrix();
-            renderer.setSize(r2.width, Math.max(1, r2.height));
-        });
+        el.style.left             = left + '%';
+        el.style.bottom           = bottom + '%';
+        el.style.animationDuration = dur + 's, ' + shimmer + 's';
+        el.style.animationDelay   = delay + 's, ' + (Math.random() * 2) + 's';
     }
 
-    // --- ILUMINAÇÃO E AMBIENTE (HDRI) ---
-    let envMap;
-    const rgbeLoader = THREE.RGBELoader ? new THREE.RGBELoader() : null;
-    let hdrLoaded = false;
+    // Aplica posição inicial aleatória a todas
+    bubbles.forEach(b => randomizeBubble(b));
 
-    if (rgbeLoader) {
-        rgbeLoader
-            .setPath('https://threejs.org/examples/textures/equirectangular/')
-            .load(
-                'venice_sunset_1k.hdr',
-                function (texture) {
-                    texture.mapping = THREE.EquirectangularReflectionMapping;
-                    envMap = texture;
-                    scene.environment = envMap;
-                    hdrLoaded = true;
-                    console.log('[BUBBLES] HDRI carregado com sucesso');
-                    createInitialBubbles();
-                },
-                undefined,
-                function () {
-                    console.warn('[BUBBLES] Falha ao carregar HDRI. Prosseguindo sem environment map.');
-                    createInitialBubbles();
-                }
-            );
-        // Fallback de tempo: se HDRI demorar, inicia mesmo assim
-        setTimeout(() => { if (!hdrLoaded) createInitialBubbles(); }, 2000);
-    } else {
-        console.warn('[BUBBLES] RGBELoader não disponível. Prosseguindo sem HDRI.');
-        createInitialBubbles();
-    }
-
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-    scene.add(ambientLight);
-
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    directionalLight.position.set(5, 10, 7.5);
-    scene.add(directionalLight);
-
-    // --- OBJETOS (AS BOLHAS) ---
-    const bubbles = [];
-    const bubbleCount = 5;
-
-    // Geometria: 32 segmentos — boa qualidade visual sem o custo dos 64 originais
-    const bubbleGeometry = new THREE.SphereGeometry(1, 32, 32);
-
-    // Material original de alta qualidade (MeshPhysicalMaterial)
-    // Sem clique/explosão — só visual
-    const bubbleMaterial = new THREE.MeshPhysicalMaterial({
-        color: 0xFFFFFF,
-        metalness: 0.0,
-        roughness: 0.06,
-        transmission: 0.55,
-        transparent: true,
-        opacity: 0.92,
-        ior: 1.33,
-        envMapIntensity: 2.2,
-        thickness: 0.6,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.06
-    });
-
-    function createBubble() {
-        const material = bubbleMaterial.clone();
-        if (envMap) {
-            material.envMap = envMap;
-            material.transmission = 1.0;
-            material.opacity = 0.85;
-        } else {
-            material.transmission = 0.0;
-            material.opacity = 0.35;
-            material.roughness = 0.15;
-            material.metalness = 0.0;
-            material.clearcoat = 0.6;
-            material.clearcoatRoughness = 0.2;
-        }
-        const bubble = new THREE.Mesh(bubbleGeometry, material);
-        bubble.position.x = THREE.MathUtils.randFloatSpread(40);
-        bubble.position.y = THREE.MathUtils.randFloat(-25, -15);
-        bubble.position.z = THREE.MathUtils.randFloatSpread(10);
-
-        const scale = THREE.MathUtils.randFloat(0.3, 1.2);
-        bubble.scale.set(scale, scale, scale);
-
-        bubble.userData = {
-            speed: THREE.MathUtils.randFloat(0.05, 0.15),
-            amplitudeX: THREE.MathUtils.randFloat(1, 4),
-            frequencyX: THREE.MathUtils.randFloat(0.5, 1.5),
-            oscillationOffset: Math.random() * Math.PI * 2,
-            originalX: bubble.position.x
-        };
-
-        scene.add(bubble);
-        bubbles.push(bubble);
-    }
-
-    function createInitialBubbles() {
-        for (let i = 0; i < bubbleCount; i++) {
-            createBubble();
-        }
-        animRunning = true;
-        animate();
-    }
-
-    // --- ANIMAÇÃO ---
-    const clock = new THREE.Clock();
-    let isVisible = true;  // começa true pois as bolhas só iniciam quando a seção já está visível
-    let animRunning = false;
-
-    function animate() {
-        if (!isVisible) { animRunning = false; return; }
-        requestAnimationFrame(animate);
-
-        const delta = clock.getDelta();
-
-        // Animação das bolhas
-        bubbles.forEach(bubble => {
-            bubble.position.y += bubble.userData.speed * delta * 60;
-
-            const time = performance.now() * 0.001;
-            bubble.position.x = bubble.userData.originalX +
-                Math.sin(time * bubble.userData.frequencyX + bubble.userData.oscillationOffset) *
-                bubble.userData.amplitudeX;
-
-            if (bubble.position.y > 25) {
-                bubble.position.y = -25;
-                bubble.position.x = THREE.MathUtils.randFloatSpread(40);
-                bubble.userData.originalX = bubble.position.x;
-                bubble.userData.oscillationOffset = Math.random() * Math.PI * 2;
+    // A cada ciclo completo, reposiciona a bolha em lugar diferente
+    bubbles.forEach(b => {
+        b.addEventListener('animationiteration', function(e) {
+            if (e.animationName === 'bubbleFloat' || e.animationName === 'bubbleFloatSway') {
+                randomizeBubble(b);
             }
         });
-
-        renderer.render(scene, camera);
-    }
-
-    // --- RESPONSIVIDADE ---
-    function onWindowResize() {
-        const r = container.getBoundingClientRect();
-        camera.aspect = r.width / Math.max(1, r.height);
-        camera.updateProjectionMatrix();
-        renderer.setSize(r.width, Math.max(1, r.height));
-    }
-    window.addEventListener('resize', onWindowResize);
-
-    // Pausa o loop quando a seção sai da viewport, retoma quando volta
-    new IntersectionObserver((entries) => {
-        isVisible = entries[0].isIntersecting;
-        if (isVisible && !animRunning) {
-            animRunning = true;
-            clock.getDelta(); // descarta delta acumulado durante a pausa
-            animate();
-        }
-    }, { threshold: 0.1 }).observe(container);
+    });
 }
 
 // ===================================================
@@ -2279,6 +2106,7 @@ function bootAnimations() {
                 const startThree = () => {
                     THREE_READY = true;
                     initThree();
+                    initCapsuleBubbles();
                 };
                 if (typeof THREE !== 'undefined') {
                     // Three.js já carregado (ex: via tema Nuvemshop)
