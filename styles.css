@@ -1476,6 +1476,7 @@ body.theme-aqua #beneficios .sopy-benefits-card {
 
 #capsula-3d {
   height: 240vh;
+  overflow-x: hidden;
   /* FIXO para forçar o navegador a reservar o espaço imediatamente */
   --capsule-ui-offset: 120px;
   display: flex;
@@ -2129,7 +2130,7 @@ body.theme-citrus footer.js-footer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: visible;
+  overflow: hidden;
   z-index: 1;
 }
 
