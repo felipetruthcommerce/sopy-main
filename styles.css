@@ -2064,48 +2064,108 @@ body.theme-citrus footer.js-footer {
   line-height: 1.6;
 }
 
-/* ==== Decorative bubbles inside the 3D section ====
-   Bubbles rise from the 3D area upward toward the hero. JS will inject
-   bubble elements into `.capsule-bubbles` and animate them with GSAP.
+/* ==== Decorative CSS bubbles inside the 3D section ====
+   Pure CSS animated bubbles — no Three.js dependency.
+   Elements are static HTML inside .sopy-capsule-bubbles.
 */
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  50% {
+    transform: translateY(-45%) translateX(8px) scale(1.05);
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-95%) translateX(-6px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+@keyframes bubbleRiseSway {
+  0% {
+    transform: translateY(0) translateX(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.8;
+  }
+  40% {
+    transform: translateY(-38%) translateX(-10px) scale(1.04);
+  }
+  75% {
+    transform: translateY(-70%) translateX(12px) scale(0.97);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateY(-95%) translateX(-4px) scale(0.88);
+    opacity: 0;
+  }
+}
+
 .sopy-capsule-bubbles {
   position: absolute;
   inset: 0;
-  pointer-events: auto;
-  /* habilita cliques para explodir bolhas 3D */
-  overflow: visible;
+  pointer-events: none;
+  overflow: hidden;
   z-index: 3;
-  /* under CTA (60) and header (50), above background */
 }
 
 .sopy-capsule-bubbles .sopy-bubble {
   position: absolute;
+  bottom: 10%;
   width: 48px;
   height: 48px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.15));
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset 0 2px 8px rgba(255, 255, 255, 0.12);
-  opacity: 0.9;
   mix-blend-mode: screen;
-  transform: translate3d(0, 0, 0) scale(0.9);
+  animation: bubbleRise 7s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 .sopy-capsule-bubbles .sopy-bubble.small {
   width: 28px;
   height: 28px;
-  opacity: 0.8;
 }
 
 .sopy-capsule-bubbles .sopy-bubble.large {
   width: 78px;
   height: 78px;
-  opacity: 0.6;
 }
+
+.sopy-capsule-bubbles .sopy-bubble.sway {
+  animation-name: bubbleRiseSway;
+}
+
+/* Individual bubble positions and timing */
+.sopy-capsule-bubbles .sopy-bubble:nth-child(1)  { left: 12%;  animation-duration: 7.2s; animation-delay: 0s;    bottom: 8%;  }
+.sopy-capsule-bubbles .sopy-bubble:nth-child(2)  { left: 28%;  animation-duration: 9.1s; animation-delay: 1.4s;  bottom: 12%; }
+.sopy-capsule-bubbles .sopy-bubble:nth-child(3)  { left: 48%;  animation-duration: 8.0s; animation-delay: 0.6s;  bottom: 6%;  }
+.sopy-capsule-bubbles .sopy-bubble:nth-child(4)  { left: 65%;  animation-duration: 6.8s; animation-delay: 2.1s;  bottom: 15%; }
+.sopy-capsule-bubbles .sopy-bubble:nth-child(5)  { left: 78%;  animation-duration: 9.5s; animation-delay: 0.3s;  bottom: 9%;  }
+.sopy-capsule-bubbles .sopy-bubble:nth-child(6)  { left: 38%;  animation-duration: 7.7s; animation-delay: 3.0s;  bottom: 5%;  }
+.sopy-capsule-bubbles .sopy-bubble:nth-child(7)  { left: 58%;  animation-duration: 8.4s; animation-delay: 1.8s;  bottom: 18%; }
 
 @media (max-width: 900px) {
   .sopy-capsule-bubbles .sopy-bubble {
     width: 34px;
     height: 34px;
+  }
+  .sopy-capsule-bubbles .sopy-bubble.small {
+    width: 22px;
+    height: 22px;
+  }
+  .sopy-capsule-bubbles .sopy-bubble.large {
+    width: 54px;
+    height: 54px;
   }
 }
 

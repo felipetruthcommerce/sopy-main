@@ -2279,7 +2279,6 @@ function bootAnimations() {
                 const startThree = () => {
                     THREE_READY = true;
                     initThree();
-                    initCapsuleBubbles();
                 };
                 if (typeof THREE !== 'undefined') {
                     // Three.js já carregado (ex: via tema Nuvemshop)
