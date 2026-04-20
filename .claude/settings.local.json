@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '/^@media.*max-width.*768px/{f=1} /^@media[^}]*{f=0} f && /flex.*100vw|width.*100vw/{print NR\": \"$0}' styles.css)"
+    ]
+  }
+}

@@ -151,12 +151,11 @@ body {
 
 body {
   margin: 0;
-  /* Use Montserrat for body/text (non-titles) */
   font-family: 'Montserrat', 'Inter', 'Avant Garde Book BT', sans-serif;
   color: var(--text);
-  /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  overflow-x: hidden;
 }
 
 /* Hide native scrollbars but keep scrolling functional */
@@ -2032,9 +2031,8 @@ body.theme-citrus footer.js-footer {
 @media (max-width: 768px) {
   .benefit-title h2 {
     font-size: clamp(1.4rem, 5vw, 2.8rem);
-    /* Ainda menor para garantir que caiba no mobile */
-    white-space: nowrap;
-    overflow: visible;
+    white-space: normal;
+    overflow: hidden;
   }
 
   .benefit-1 {
