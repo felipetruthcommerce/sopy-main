@@ -2224,8 +2224,12 @@ function bootAnimations() {
 // Observação: a inicialização automática foi removida para permitir que o host controle
 
 // ========== SLIDER FULLSCREEN ==========
-document.addEventListener('DOMContentLoaded', function () {
-(function () {
+(function initSlider() {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSlider);
+        return;
+    }
+    (function () {
     "use strict";
 
     /* refs */
@@ -2473,7 +2477,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Inicializa classe do último slide
     updateLastSlideClass();
 
+    })();
 })();
-}); // DOMContentLoaded
 
 // explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots. a
