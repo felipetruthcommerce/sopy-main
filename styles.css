@@ -1900,10 +1900,9 @@ body.theme-citrus .capsule-3d-cta.opposite {
   gap: 6px;
   position: absolute;
   top: -18px;
-  /* moved down closer to the toggle */
-  left: 50%;
-  transform: translateX(-50%);
-  /* center above toggle */
+  right: 0;
+  left: auto;
+  transform: none;
   white-space: nowrap;
   /* keep on a single line */
   text-align: center;
