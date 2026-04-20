@@ -151,11 +151,12 @@ body {
 
 body {
   margin: 0;
+  /* Use Montserrat for body/text (non-titles) */
   font-family: 'Montserrat', 'Inter', 'Avant Garde Book BT', sans-serif;
   color: var(--text);
+  /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
 }
 
 /* Hide native scrollbars but keep scrolling functional */
@@ -1475,6 +1476,7 @@ body.theme-aqua #beneficios .sopy-benefits-card {
 
 #capsula-3d {
   height: 240vh;
+  /* FIXO para forçar o navegador a reservar o espaço imediatamente */
   --capsule-ui-offset: 120px;
   display: flex;
   flex-direction: column;
@@ -1482,7 +1484,6 @@ body.theme-aqua #beneficios .sopy-benefits-card {
   justify-content: flex-start;
   padding-top: 0;
   position: relative;
-  overflow-x: hidden;
   z-index: 2;
   isolation: isolate;
   contain: layout style;
@@ -2031,8 +2032,9 @@ body.theme-citrus footer.js-footer {
 @media (max-width: 768px) {
   .benefit-title h2 {
     font-size: clamp(1.4rem, 5vw, 2.8rem);
-    white-space: normal;
-    overflow: hidden;
+    /* Ainda menor para garantir que caiba no mobile */
+    white-space: nowrap;
+    overflow: visible;
   }
 
   .benefit-1 {
@@ -2277,9 +2279,6 @@ body.theme-citrus footer.js-footer {
   .toggle-hint {
     font-size: 12px;
     top: -16px;
-    left: auto;
-    right: 0;
-    transform: none;
   }
 }
 
