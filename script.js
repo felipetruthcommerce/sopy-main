@@ -2248,6 +2248,8 @@ function bootAnimations() {
     const totalSlides = track.querySelectorAll(".slider-item").length;
     let isTransitioning = false;
 
+    console.error('[SLIDER DEBUG] totalSlides:', totalSlides, '| track:', track, '| btnNext:', btnNext);
+
     /* HELPER: Verifica se a seção está 100% visível para permitir slide changes */
     function isSliderActive() {
         const rect = section.getBoundingClientRect();
@@ -2279,6 +2281,7 @@ function bootAnimations() {
 
     /* ações */
     function toNext() {
+        console.error('[SLIDER toNext] isTransitioning:', isTransitioning, 'currentIndex:', currentIndex, 'totalSlides:', totalSlides);
         if (isTransitioning) return;
         const items = track.querySelectorAll(".slider-item");
         if (items.length && currentIndex < totalSlides - 1) {
