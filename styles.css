@@ -2277,6 +2277,9 @@ body.theme-citrus footer.js-footer {
   .toggle-hint {
     font-size: 12px;
     top: -16px;
+    left: auto;
+    right: 0;
+    transform: none;
   }
 }
 
