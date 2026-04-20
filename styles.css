@@ -118,7 +118,7 @@ html,
 body {
   min-height: 100%;
   scroll-behavior: auto;
-  /* Lenis cuida do smooth */
+  overflow-x: hidden;
 }
 
 /* Local fonts handled via @font-face below (Avant Garde) */
@@ -1482,7 +1482,6 @@ body.theme-aqua #beneficios .sopy-benefits-card {
   justify-content: flex-start;
   padding-top: 0;
   position: relative;
-  overflow-x: hidden;
   z-index: 2;
   isolation: isolate;
   contain: layout style;
@@ -2126,7 +2125,7 @@ body.theme-citrus footer.js-footer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: visible;
+  overflow: hidden;
   z-index: 1;
 }
 
