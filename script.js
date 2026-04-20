@@ -2232,15 +2232,17 @@ function bootAnimations() {
     (function () {
     "use strict";
 
-    /* refs */
-    const track = document.querySelector(".slider-slide");
-    const btnNext = document.querySelector(".slider-next");
-    const btnPrev = document.querySelector(".slider-prev");
-    const btnContainer = document.querySelector(".slider-button");
+    /* refs - todos escopados dentro da seção correta para evitar conflito com outros sliders */
     const section = document.querySelector(".slider-fullscreen-section");
+    if (!section) { console.warn('[SLIDER] section não encontrada'); return; }
 
-    if (!track || !btnNext || !btnPrev || !section || !btnContainer) {
-        console.warn('[SLIDER] Elementos não encontrados');
+    const track = section.querySelector(".slider-slide");
+    const btnNext = section.querySelector(".slider-next");
+    const btnPrev = section.querySelector(".slider-prev");
+    const btnContainer = section.querySelector(".slider-button");
+
+    if (!track || !btnNext || !btnPrev || !btnContainer) {
+        console.warn('[SLIDER] Elementos internos não encontrados');
         return;
     }
 
@@ -2248,7 +2250,6 @@ function bootAnimations() {
     const totalSlides = track.querySelectorAll(".slider-item").length;
     let isTransitioning = false;
 
-    console.error('[SLIDER DEBUG] totalSlides:', totalSlides, '| track:', track, '| btnNext:', btnNext);
 
     /* HELPER: Verifica se a seção está 100% visível para permitir slide changes */
     function isSliderActive() {
@@ -2281,7 +2282,6 @@ function bootAnimations() {
 
     /* ações */
     function toNext() {
-        console.error('[SLIDER toNext] isTransitioning:', isTransitioning, 'currentIndex:', currentIndex, 'totalSlides:', totalSlides);
         if (isTransitioning) return;
         const items = track.querySelectorAll(".slider-item");
         if (items.length && currentIndex < totalSlides - 1) {
