@@ -2224,6 +2224,7 @@ function bootAnimations() {
 // Observação: a inicialização automática foi removida para permitir que o host controle
 
 // ========== SLIDER FULLSCREEN ==========
+document.addEventListener('DOMContentLoaded', function () {
 (function () {
     "use strict";
 
@@ -2301,19 +2302,16 @@ function bootAnimations() {
     btnNext.addEventListener("click", toNext);
     btnPrev.addEventListener("click", toPrev);
 
-    /* VISIBILIDADE DOS BOTÕES - apenas quando na seção */
-    function updateButtonsVisibility() {
-        const rect = section.getBoundingClientRect();
-        const isInView = rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+    /* VISIBILIDADE DOS BOTÕES - IntersectionObserver é mais confiável que scroll event */
+    const btnObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            btnContainer.style.opacity = entry.isIntersecting ? '1' : '0';
+            btnContainer.style.pointerEvents = entry.isIntersecting ? 'auto' : 'none';
+        });
+    }, { threshold: 0.1 });
+    btnObserver.observe(section);
 
-        if (isInView) {
-            btnContainer.style.opacity = '1';
-            btnContainer.style.pointerEvents = 'auto';
-        } else {
-            btnContainer.style.opacity = '0';
-            btnContainer.style.pointerEvents = 'none';
-        }
-    }
+    function updateButtonsVisibility() { /* mantido para compatibilidade, agora é no-op */ }
 
     /* SCROLL PROGRESS - sistema melhorado */
     let lastKnownIndex = 0;
@@ -2339,8 +2337,8 @@ function bootAnimations() {
         const sectionVisibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
         const visibilityRatio = sectionVisibleHeight / sectionHeight;
 
-        // Só atua se a seção está pelo menos 50% visível E o topo já passou
-        if (sectionTop > viewportHeight * 0.5 || rect.bottom < viewportHeight * 0.3 || visibilityRatio < 0.4) {
+        // Só atua se a seção está na viewport E o topo já passou
+        if (sectionTop > viewportHeight * 0.5 || rect.bottom < viewportHeight * 0.3 || visibilityRatio < 0.1) {
             ticking = false;
             return;
         }
@@ -2472,12 +2470,10 @@ function bootAnimations() {
         }
     }, { passive: true });
 
-    // Inicializa visibilidade dos botões
-    updateButtonsVisibility();
-
     // Inicializa classe do último slide
     updateLastSlideClass();
 
 })();
+}); // DOMContentLoaded
 
 // explicitamente quando chamar bootAnimations(). Isso evita conflitos de múltiplos boots. a
