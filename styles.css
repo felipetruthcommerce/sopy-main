@@ -2248,7 +2248,8 @@ body.theme-citrus footer.js-footer {
 @media (max-width: 768px) {
   .product-toggle-container {
     bottom: 20px;
-    right: 15px;
+    right: auto;
+    left: calc(100vw - 121px);
   }
 
   .pod-toggle-label {
@@ -2274,11 +2275,7 @@ body.theme-citrus footer.js-footer {
   }
 
   .toggle-hint {
-    font-size: 12px;
-    top: -16px;
-    left: auto;
-    right: 0;
-    transform: none;
+    display: none;
   }
 }
 
