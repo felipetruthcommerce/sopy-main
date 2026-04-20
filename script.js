@@ -582,7 +582,8 @@ function initCapsuleBubbles() {
         var shimmer = 3 + Math.random() * 3;       // 3–6s shimmer
         var delay   = -(Math.random() * dur);      // negativo = já em movimento ao carregar
 
-        el.style.left              = (Math.random() * 90) + '%';
+        var maxLeft = window.innerWidth <= 768 ? 75 : 90;
+        el.style.left              = (Math.random() * maxLeft) + '%';
         el.style.bottom            = (Math.random() * 75) + '%';
         el.style.animationDuration = dur + 's, ' + shimmer + 's';
         el.style.animationDelay    = delay + 's, 0s';
