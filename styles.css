@@ -118,7 +118,7 @@ html,
 body {
   min-height: 100%;
   scroll-behavior: auto;
-  overflow-x: hidden;
+  /* Lenis cuida do smooth */
 }
 
 /* Local fonts handled via @font-face below (Avant Garde) */
@@ -1482,6 +1482,7 @@ body.theme-aqua #beneficios .sopy-benefits-card {
   justify-content: flex-start;
   padding-top: 0;
   position: relative;
+  overflow-x: hidden;
   z-index: 2;
   isolation: isolate;
   contain: layout style;
@@ -2125,7 +2126,7 @@ body.theme-citrus footer.js-footer {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  overflow: hidden;
+  overflow: visible;
   z-index: 1;
 }
 
@@ -2247,8 +2248,7 @@ body.theme-citrus footer.js-footer {
 @media (max-width: 768px) {
   .product-toggle-container {
     bottom: 20px;
-    right: auto;
-    left: calc(100vw - 121px);
+    right: 15px;
   }
 
   .pod-toggle-label {
@@ -2274,7 +2274,11 @@ body.theme-citrus footer.js-footer {
   }
 
   .toggle-hint {
-    display: none;
+    font-size: 12px;
+    top: -16px;
+    left: auto;
+    right: 0;
+    transform: none;
   }
 }
 
