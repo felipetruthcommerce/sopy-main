@@ -121,6 +121,12 @@ body {
   /* Lenis cuida do smooth */
 }
 
+@media (max-width: 768px) {
+  body {
+    overflow-x: clip;
+  }
+}
+
 /* Local fonts handled via @font-face below (Avant Garde) */
 
 /* Local Avant Garde fonts (placed in assets/fonts/) */
