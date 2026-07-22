@@ -1,12 +1,18 @@
-// --- PRODUÇÃO: desativa todos os logs de debug ---
-console.log = function(){};
-console.warn = function(){};
+// --- Logger interno da LP: NÃO sobrescreve o console global da loja/apps. ---
+// Vire SOPY_DEBUG para true para reativar os logs de depuração da landing.
+const SOPY_DEBUG = false;
+const sopyLog = function () { if (SOPY_DEBUG) console.log.apply(console, arguments); };
+const sopyWarn = function () { if (SOPY_DEBUG) console.warn.apply(console, arguments); };
+
+const SOPY_ASSET_BASE = (location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? './assets/images/'
+    : 'https://felipetruthcommerce.github.io/sopy-main/assets/images/';
 
 // --- PRELOAD: Download capsule 2D images early so they appear instantly on scroll ---
 (function () {
     var imgs = [
-        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.webp',
-        'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.webp'
+        SOPY_ASSET_BASE + 'sopy-capsula-2d-aqua-blu.webp',
+        SOPY_ASSET_BASE + 'sopy-capsula-2d-citrus-lush.webp'
     ];
     imgs.forEach(function (src) { var i = new Image(); i.src = src; });
 })();
@@ -94,7 +100,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 function setupLenis() {
-    console.log('[SETUP] Inicializando Lenis (Scroll Suave)...');
+    sopyLog('[SETUP] Inicializando Lenis (Scroll Suave)...');
+    // Guard: se as libs de terceiros (Lenis/GSAP/ScrollTrigger) não carregarem —
+    // CDN fora do ar, CSP, ordem de injeção — não derruba o resto do bootAnimations.
+    if (typeof Lenis === 'undefined' || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        sopyWarn('[SETUP] Lenis/GSAP/ScrollTrigger indisponível — scroll suave desativado; conteúdo permanece visível.');
+        return;
+    }
     const lenis = new Lenis();
     window.lenis = lenis; // Deixa o Lenis acessível globalmente
 
@@ -113,7 +125,7 @@ function setupLenis() {
 }
 
 function setupGsapPlugins() {
-    console.log('[SETUP] Registrando plugins e eases do GSAP...');
+    sopyLog('[SETUP] Registrando plugins e eases do GSAP...');
     if (typeof gsap === "undefined" || window.__gsapPluginsRegistered) return;
 
     const plugs = [];
@@ -131,7 +143,7 @@ function setupGsapPlugins() {
 }
 
 function setupButtonRipples() {
-    console.log('[SETUP] Configurando efeito ripple nos botões...');
+    sopyLog('[SETUP] Configurando efeito ripple nos botões...');
     const rippleSelectors = ['.sopy-btn', '.sopy-tc-btn', '.sopy-product-cta'];
     document.querySelectorAll(rippleSelectors.join(',')).forEach(btn => {
         btn.addEventListener('mousemove', (event) => {
@@ -146,7 +158,7 @@ function setupButtonRipples() {
 
 
 function initTextAnimations() {
-    console.log('[SETUP] Inicializando animações de texto (estilo Osmo)...');
+    sopyLog('[SETUP] Inicializando animações de texto (estilo Osmo)...');
 
     // ... (O código do 'style' e dos seletores continua o mesmo)
     const style = document.createElement('style');
@@ -160,17 +172,17 @@ function initTextAnimations() {
     const paragraphs = document.querySelectorAll('p:not(#hero *):not(.colon-list *), .tc-quote, .sopy-subtitle, .sopy-benefits-card-label, .sopy-footer-desc');
     const buttons = document.querySelectorAll('.sopy-btn:not(#hero *), .sopy-tc-btn:not(#hero *)');
 
-    console.log(`[TEXT] Encontrados para animar: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
+    sopyLog(`[TEXT] Encontrados para animar: ${titles.length} títulos, ${paragraphs.length} parágrafos, ${buttons.length} botões.`);
 
     // ✅ VERSÃO "SUPER-DEBUG" DA FUNÇÃO
     function animateElement(element, type = 'lines') {
         if (!element || !element.textContent.trim()) {
-            // console.log(`[DEBUG] Elemento pulado (vazio ou não existe):`, element);
+            // sopyLog(`[DEBUG] Elemento pulado (vazio ou não existe):`, element);
             return;
         }
 
         // ✅ NOVO LOG: Nos diz qual elemento está sendo processado
-        console.log(`[DEBUG] Processando elemento: <${element.tagName.toLowerCase()}> com texto "${element.textContent.substring(0, 20)}..."`);
+        sopyLog(`[DEBUG] Processando elemento: <${element.tagName.toLowerCase()}> com texto "${element.textContent.substring(0, 20)}..."`);
 
         try {
             const split = new SplitType(element, { types: type, lineClass: 'split-line', wordClass: 'split-word' });
@@ -196,36 +208,36 @@ function initTextAnimations() {
                             start: "top 85%",
                             once: true,
                             // ✅ NOVO LOG: Confirma que o ScrollTrigger foi criado
-                            onEnter: () => console.log(`✅ [TRIGGER ATIVADO] Animação de texto em: <${element.tagName.toLowerCase()}>`)
+                            onEnter: () => sopyLog(`✅ [TRIGGER ATIVADO] Animação de texto em: <${element.tagName.toLowerCase()}>`)
                         }
                     });
                 } else {
-                    console.warn(`[DEBUG] WARN: SplitType criou targets, mas não encontrou spans para animar em:`, element);
+                    sopyWarn(`[DEBUG] WARN: SplitType criou targets, mas não encontrou spans para animar em:`, element);
                 }
             } else {
-                console.warn(`[DEBUG] WARN: SplitType não criou 'lines' ou 'words' para o elemento:`, element);
+                sopyWarn(`[DEBUG] WARN: SplitType não criou 'lines' ou 'words' para o elemento:`, element);
             }
         } catch (e) {
             console.error(`[DEBUG] ERRO ao tentar animar o elemento:`, element, e);
         }
     }
 
-    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE TÍTULOS ---');
+    sopyLog('[DEBUG] --- INICIANDO PROCESSAMENTO DE TÍTULOS ---');
     titles.forEach(el => {
         if (!el.closest('#faq')) {
             animateElement(el, 'lines');
         } else {
-            console.log(`[DEBUG] Pulando título do FAQ (intencional): "${el.textContent.substring(0, 20)}..."`);
+            sopyLog(`[DEBUG] Pulando título do FAQ (intencional): "${el.textContent.substring(0, 20)}..."`);
         }
     });
 
-    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE PARÁGRAFOS ---');
+    sopyLog('[DEBUG] --- INICIANDO PROCESSAMENTO DE PARÁGRAFOS ---');
     paragraphs.forEach(el => animateElement(el, 'words'));
 
-    console.log('[DEBUG] --- INICIANDO PROCESSAMENTO DE BOTÕES ---');
+    sopyLog('[DEBUG] --- INICIANDO PROCESSAMENTO DE BOTÕES ---');
     buttons.forEach(el => animateElement(el, 'words'));
 
-    console.log("✅ Animações de texto configuradas!");
+    sopyLog("✅ Animações de texto configuradas!");
 }
 
 
@@ -233,8 +245,7 @@ function initTextAnimations() {
 //  PARTE 2: DEFINIÇÃO DAS FUNÇÕES DO 3D E DO TOGGLE
 // ===================================
 
-let THREE_READY = typeof THREE !== "undefined";
-let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
+// (Three.js removido — a cápsula usa imagem WebP 2D, sem WebGLRenderer nem render loop.)
 
 // const MODELS = {
 //     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/compressed_1758509853615_aqua.glb",
@@ -245,11 +256,6 @@ let renderer, scene, camera, capsuleGroup, gelA, gelB, gelC;
 //     aqua: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Azul-v024.glb",
 //     citrus: "https://felipetruthcommerce.github.io/sopy-main/assets/models/3D-Sopy-Capsula-Verde-v024.glb",
 // };
-
-const COLORS = {
-    aqua: { a: '#076DF2', b: '#0C87F2', c: '#1DDDF2' },
-    citrus: { a: '#5FD97E', b: '#91D9A3', c: '#D7D9D2' },
-};
 
 // Helper: fade-swap for <img> elements
 function fadeSwapImg(imgEl, newSrc, duration = 320) {
@@ -337,13 +343,13 @@ function swapModel(theme) {
     // 3D model loading removed: we no longer load GLTF models.
     // Mantemos a API para chamadas externas (setTheme chama swapModel),
     // mas aqui apenas registramos e garantimos que a imagem 2D seja usada.
-    console.log(`[3D] swapModel chamado para '${theme}', porém carregamento 3D foi desativado. Usando imagem 2D.`);
+    sopyLog(`[3D] swapModel chamado para '${theme}', porém carregamento 3D foi desativado. Usando imagem 2D.`);
     // Marca tema pendente caso a inicialização da UI precise aplicar depois
     window.__pendingTheme = theme;
 }
 
 function setTheme(theme) {
-    console.log(`[TEMA] Trocando para o tema: ${theme}`);
+    sopyLog(`[TEMA] Trocando para o tema: ${theme}`);
     document.body.classList.toggle("theme-citrus", theme === "citrus");
     document.body.classList.toggle("theme-aqua", theme === "aqua");
 
@@ -353,12 +359,12 @@ function setTheme(theme) {
         if (toggleEl) {
             const shouldBeChecked = theme === 'aqua';
             if (toggleEl.checked !== shouldBeChecked) {
-                console.log('[TEMA] Sync toggle → checked:', shouldBeChecked);
+                sopyLog('[TEMA] Sync toggle → checked:', shouldBeChecked);
                 toggleEl.checked = shouldBeChecked;
             }
         }
     } catch (e) {
-        console.warn('[TEMA] Falha ao sincronizar toggle:', e);
+        sopyWarn('[TEMA] Falha ao sincronizar toggle:', e);
     }
 
     // Atualiza a imagem do card da Sopy dependendo do tema
@@ -370,23 +376,23 @@ function setTheme(theme) {
                 : sopyCardImage.getAttribute('data-aqua');
 
             if (newSrc && !sopyCardImage.src.includes(newSrc.split('/').pop())) {
-                console.log(`[TEMA] Trocando imagem do card para ${theme}:`, newSrc);
+                sopyLog(`[TEMA] Trocando imagem do card para ${theme}:`, newSrc);
 
                 // Preload da imagem para evitar flicker
                 const img = new Image();
                 img.onload = () => {
                     fadeSwapImg(sopyCardImage, newSrc, 360);
-                    console.log(`[TEMA] Imagem ${theme} carregada com sucesso`);
+                    sopyLog(`[TEMA] Imagem ${theme} carregada com sucesso`);
                 };
                 img.onerror = () => {
-                    console.warn(`[TEMA] Erro ao carregar imagem ${theme}:`, newSrc);
+                    sopyWarn(`[TEMA] Erro ao carregar imagem ${theme}:`, newSrc);
                     sopyCardImage.src = newSrc;
                 };
                 img.src = newSrc;
             }
         }
     } catch (e) {
-        console.warn('[TEMA] Falha ao trocar imagem do card:', e);
+        sopyWarn('[TEMA] Falha ao trocar imagem do card:', e);
     }
     // Atualiza a imagem 2D da cápsula (se estiver sendo usada)
     try {
@@ -396,7 +402,7 @@ function setTheme(theme) {
             if (newSrc) fadeSwapImg(capsulePhoto, newSrc, 360);
         }
     } catch (e) {
-        console.warn('[TEMA] Falha ao trocar imagem 2D da cápsula:', e);
+        sopyWarn('[TEMA] Falha ao trocar imagem 2D da cápsula:', e);
     }
 
     // Atualiza imagens da seção de benefícios (sustentabilidade) quando houver data attributes
@@ -414,7 +420,7 @@ function setTheme(theme) {
             p.src = newSrc;
         });
     } catch (e) {
-        console.warn('[TEMA] Falha ao atualizar imagens de benefícios:', e);
+        sopyWarn('[TEMA] Falha ao atualizar imagens de benefícios:', e);
     }
 
     // Atualiza imagens do slider (slides 1 e 2) se dados de tema estiverem presentes
@@ -437,7 +443,7 @@ function setTheme(theme) {
             img.src = newBg;
         });
     } catch (e) {
-        console.warn('[TEMA] Falha ao atualizar imagens do slider:', e);
+        sopyWarn('[TEMA] Falha ao atualizar imagens do slider:', e);
     }
 
     // Atualiza imagens CTA (capsule-3d-cta overlay) - MESMO PADRÃO DA SUSTENTABILIDADE
@@ -455,7 +461,7 @@ function setTheme(theme) {
             p.src = newSrc;
         });
     } catch (e) {
-        console.warn('[TEMA] Falha ao atualizar imagens CTA:', e);
+        sopyWarn('[TEMA] Falha ao atualizar imagens CTA:', e);
     }
 
     // ... (seu código para atualizar textos do card de produto) ...
@@ -492,7 +498,7 @@ function setTheme(theme) {
             });
         }
     } catch (e) {
-        console.warn('[TEMA] Falha ao atualizar textos do CTA:', e);
+        sopyWarn('[TEMA] Falha ao atualizar textos do CTA:', e);
     }
 
     // Atualiza as imagens de overlay dentro de cada CTA para o tema atual
@@ -507,7 +513,7 @@ function setTheme(theme) {
                 }
             });
         }
-    } catch (e) { console.warn('[TEMA] Falha ao atualizar overlay images:', e); }
+    } catch (e) { sopyWarn('[TEMA] Falha ao atualizar overlay images:', e); }
 
     // Update benefit titles colors based on theme (CSS handles this via body class)
     // Force a repaint to ensure theme colors are applied immediately
@@ -521,51 +527,27 @@ function setTheme(theme) {
     try {
         if (typeof updateFragranceImage === 'function') updateFragranceImage(theme);
     } catch (e) {
-        console.warn('[TEMA] Falha ao atualizar imagem de fragrância:', e);
+        sopyWarn('[TEMA] Falha ao atualizar imagem de fragrância:', e);
     }
 
     swapModel(theme);
 
-    // Update CTA button click handlers to navigate to correct product URL based on theme
+    // Atualiza o href dos CTAs (que agora são <a>) conforme o tema — navegação nativa,
+    // rastreável pelo Google e com "abrir em nova aba". Sem clonar (não destrói listeners
+    // de apps/tema/pixels ligados ao elemento).
     try {
-        const ctaButtons = document.querySelectorAll('.capsule-3d-cta .sopy-product-cta');
-        ctaButtons.forEach(btn => {
-            // Remove old listeners by cloning
-            const newBtn = btn.cloneNode(true);
-            btn.parentNode.replaceChild(newBtn, btn);
-
-            newBtn.addEventListener('click', () => {
-                const currentTheme = document.body.classList.contains('theme-citrus') ? 'citrus' : 'aqua';
-                const href = currentTheme === 'citrus' ? newBtn.getAttribute('data-href-citrus') : newBtn.getAttribute('data-href-aqua');
-                if (href) window.location.href = href;
-            });
+        const ctaLinks = document.querySelectorAll('.capsule-3d-cta .sopy-product-cta');
+        ctaLinks.forEach(link => {
+            const href = theme === 'citrus' ? link.getAttribute('data-href-citrus') : link.getAttribute('data-href-aqua');
+            if (href) link.setAttribute('href', href);
         });
-    } catch (e) { console.warn('[TEMA] Falha ao configurar links dos CTAs:', e); }
+    } catch (e) { sopyWarn('[TEMA] Falha ao atualizar href dos CTAs:', e); }
 }
 
 // ===================================================
 // FUNCIONALIDADE: BOLHAS INTERATIVAS 3D
 // Bolhas flutuantes com física, explosões de partículas, HDRI lighting
 // ===================================================
-
-// Detecta se o dispositivo suporta WebGL
-function isWebGLSupported() {
-    try {
-        const canvas = document.createElement('canvas');
-        return !!(window.WebGLRenderingContext &&
-            (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-    } catch (e) {
-        return false;
-    }
-}
-
-// Detecta se é dispositivo de baixo desempenho
-function isLowEndDevice() {
-    // Memória < 4GB ou núcleos < 4 indica dispositivo fraco
-    const lowMemory = navigator.deviceMemory && navigator.deviceMemory < 4;
-    const lowCores = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
-    return lowMemory || lowCores;
-}
 
 function initCapsuleBubbles() {
     const container = document.querySelector('.sopy-capsule-bubbles');
@@ -596,11 +578,10 @@ function initCapsuleBubbles() {
 // ===================================================
 function updateFragranceImage(theme) {
     try {
-        const FRAGRANCE_BASE = 'https://felipetruthcommerce.github.io/sopy-main/assets/images/';
+        const FRAGRANCE_BASE = SOPY_ASSET_BASE;
         const FILES = {
-            // use the existing file name in assets/images (jpg version available)
-            citrus: 'perfume-citrus-01.jpg',
-            aqua: 'perfume-aqua-01.png'
+            citrus: 'sopy-fragrancia-citrus-lush.webp',
+            aqua: 'sopy-fragrancia-aqua-blu.webp'
         };
 
         // procura a seção que tem o título relacionado a "Fragrâncias"
@@ -639,113 +620,27 @@ function updateFragranceImage(theme) {
                     media.load();
                     if (media.autoplay) media.play && media.play().catch(() => { });
                 }
-                console.log('[TEMA] Imagem de fragrância atualizada para', theme, newSrc);
+                sopyLog('[TEMA] Imagem de fragrância atualizada para', theme, newSrc);
             } catch (e) {
-                console.warn('[TEMA] Erro ao aplicar imagem de fragrância:', e);
+                sopyWarn('[TEMA] Erro ao aplicar imagem de fragrância:', e);
             }
         };
         img.onerror = () => {
-            console.warn('[TEMA] Erro ao carregar imagem de fragrância:', newSrc);
+            sopyWarn('[TEMA] Erro ao carregar imagem de fragrância:', newSrc);
         };
         img.src = newSrc;
     } catch (e) {
-        console.warn('[TEMA] updateFragranceImage falhou:', e);
+        sopyWarn('[TEMA] updateFragranceImage falhou:', e);
     }
 }
 
-// === ROTATING BANNER: simples alternador entre 2 imagens ===
-function initRotatingBanner() {
-    const section = document.getElementById('rotating-banner');
-    if (!section) return;
 
-    const slides = Array.from(section.querySelectorAll('.banner-slide'));
-    if (slides.length < 2) return;
-
-    let current = 0;
-    let timeoutId = null;
-    const interval = 5000; // 5s
-
-    function show(index) {
-        slides.forEach((s, i) => {
-            const isActive = i === index;
-            s.classList.toggle('active', isActive);
-            s.setAttribute('aria-hidden', isActive ? 'false' : 'true');
-        });
-        current = index;
-    }
-
-    function next() { show((current + 1) % slides.length); }
-    function prev() { show((current - 1 + slides.length) % slides.length); }
-
-    const btnNext = section.querySelector('.rb-next');
-    const btnPrev = section.querySelector('.rb-prev');
-    if (btnNext) btnNext.addEventListener('click', () => { next(); restart(); });
-    if (btnPrev) btnPrev.addEventListener('click', () => { prev(); restart(); });
-
-    function restart() {
-        if (timeoutId) clearInterval(timeoutId);
-        timeoutId = setInterval(next, interval);
-    }
-
-    // iniciar
-    show(0);
-    restart();
-
-    // pausar a rotação quando a aba estiver oculta
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            if (timeoutId) clearInterval(timeoutId);
-        } else {
-            restart();
-        }
-    });
-}
-
-// inicializa quando o DOM estiver pronto
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initRotatingBanner);
-} else {
-    initRotatingBanner();
-}
-
-function initThree() {
+// Interações da seção da cápsula: giro da foto 2D no scroll + cards de produto.
+// O modelo 3D (Three.js) foi removido — a cápsula agora é uma imagem WebP 2D.
+function initCapsuleInteractions() {
     const threeWrap = document.getElementById("three-container");
-    if (!THREE_READY || !threeWrap || threeWrap.__initialized) return;
+    if (!threeWrap || threeWrap.__initialized) return;
     threeWrap.__initialized = true;
-
-    console.log("[3D] Inicializando cena Three.js...");
-
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, threeWrap.clientWidth / threeWrap.clientHeight, 0.1, 100);
-    camera.position.set(0, 0, 3.2);
-
-    // RENDERER
-    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-    renderer.setSize(threeWrap.clientWidth, threeWrap.clientHeight);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1; // um tiquinho mais claro que 1.0
-    renderer.outputEncoding = THREE.SRGBColorSpace; // use sRGBEncoding se sua versão for antiga
-    threeWrap.appendChild(renderer.domElement);
-
-    // LUZES (look “foto”: key forte, fill leve, rim suave)
-    const amb = new THREE.AmbientLight(0xffffff, 0.9);
-    scene.add(amb);
-
-    const key = new THREE.DirectionalLight(0xffffff, 1.6); // brilho principal
-    key.position.set(2.8, 3.5, 2.2);
-    scene.add(key);
-
-    const fill = new THREE.DirectionalLight(0xffffff, 0.5); // suaviza sombras
-    fill.position.set(-2.2, 0.6, 2.0);
-    scene.add(fill);
-
-    const rim = new THREE.DirectionalLight(0xffffff, 0.35); // recorte por trás
-    rim.position.set(0, 1.8, -2.4);
-    scene.add(rim);
-
-    capsuleGroup = new THREE.Group();
-    scene.add(capsuleGroup);
 
     // === SPIN ON SCROLL (giro por scroll – sem pin) ===
     (function setupCapsuleSpinOnScroll() {
@@ -759,16 +654,15 @@ function initThree() {
             if (threeContainer && !document.querySelector('.capsule-2d-photo')) {
                 const img = document.createElement('img');
                 img.className = 'capsule-2d-photo';
-                // caminhos absolutos no GitHub Pages (usar arquivos finais do repo)
-                img.setAttribute('data-aqua', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_azul_small.webp');
-                img.setAttribute('data-citrus', 'https://felipetruthcommerce.github.io/sopy-main/assets/images/capsula_verde_small.webp');
+                img.setAttribute('data-aqua', SOPY_ASSET_BASE + 'sopy-capsula-2d-aqua-blu.webp');
+                img.setAttribute('data-citrus', SOPY_ASSET_BASE + 'sopy-capsula-2d-citrus-lush.webp');
                 img.alt = 'Cápsula Sopy';
                 // define src inicial baseado na classe do body
                 img.src = document.body.classList.contains('theme-citrus') ? img.getAttribute('data-citrus') : img.getAttribute('data-aqua');
                 threeContainer.appendChild(img);
             }
         } catch (e) {
-            console.warn('[3D->2D] Falha ao injetar imagem 2D:', e);
+            sopyWarn('[3D->2D] Falha ao injetar imagem 2D:', e);
         }
 
         const TWO_PI = Math.PI * 2;
@@ -790,24 +684,15 @@ function initThree() {
             const SPIN_START = 0.05;  // começa a girar depois de 5% da seção
             const SPIN_END = 0.65;  // termina o giro em 65% da seção
 
-            // memoriza o yaw inicial do modelo na primeira atualização (se existir)
-            if (window.__capsuleBaseYaw == null) {
-                window.__capsuleBaseYaw = (capsuleGroup && capsuleGroup.rotation && typeof capsuleGroup.rotation.y === 'number') ? capsuleGroup.rotation.y : 0;
-            }
-
             // normaliza o progresso p para o intervalo [SPIN_START..SPIN_END]
             let t = (p - SPIN_START) / (SPIN_END - SPIN_START);
             t = Math.max(0, Math.min(1, t)); // clamp 0..1
 
-            // faz exatamente 360° nesse intervalo e PARA
-            // Se a foto 2D estiver presente, animamos ela via CSS (rotação no sentido horário)
+            // faz exatamente 360° nesse intervalo e PARA (foto 2D animada via CSS)
             const photoEl = document.querySelector('.capsule-2d-photo');
             if (photoEl) {
                 const deg = t * 360; // 0..360 graus
                 photoEl.style.transform = `translate(-50%,-50%) rotate(${deg}deg)`;
-            } else {
-                const yaw = window.__capsuleBaseYaw + t * (Math.PI * 2);
-                if (capsuleGroup && capsuleGroup.rotation) capsuleGroup.rotation.y = yaw;
             }
 
             // Revelar títulos de benefícios baseado no progresso do scroll
@@ -1068,20 +953,6 @@ function initThree() {
     })();
 
 
-    function animate() {
-        requestAnimationFrame(animate);
-        renderer.render(scene, camera);
-    }
-    animate();
-
-    // Aplica o tema pendente se houver, ou detecta o tema atual
-    const currentTheme = window.__pendingTheme ||
-        (document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus');
-    console.log(`[3D] Aplicando tema inicial no 3D: ${currentTheme}`);
-    swapModel(currentTheme);
-
-    // Limpa o tema pendente
-    window.__pendingTheme = null;
 }
 
 
@@ -1092,13 +963,13 @@ function initThree() {
 
 
 function bootAnimations() {
-    console.log('Iniciando reconstrução das animações...');
+    sopyLog('Iniciando reconstrução das animações...');
 
     // One-time guard to prevent double initialization
     if (window.__sopyBooted) return;
     window.__sopyBooted = true;
 
-    console.log('[TEMA] Aplicando tema inicial (apenas se não houver tema)');
+    sopyLog('[TEMA] Aplicando tema inicial (apenas se não houver tema)');
     if (!document.body.classList.contains('theme-aqua') && !document.body.classList.contains('theme-citrus')) {
         document.body.classList.add("theme-citrus");
     }
@@ -1116,17 +987,17 @@ function bootAnimations() {
     // 4. Configurar toggle de tema (SEMPRE EXECUTA)
     const productToggle = document.getElementById('product-toggle');
     if (productToggle) {
-        console.log('[TEMA] Toggle encontrado, estado inicial checked =', productToggle.checked);
+        sopyLog('[TEMA] Toggle encontrado, estado inicial checked =', productToggle.checked);
         productToggle.addEventListener('change', () => {
             const newTheme = productToggle.checked ? 'aqua' : 'citrus';
-            console.log('[TEMA] Toggle change →', { checked: productToggle.checked, newTheme });
+            sopyLog('[TEMA] Toggle change →', { checked: productToggle.checked, newTheme });
             setTheme(newTheme);
         });
         // Aplica o tema inicial baseado no estado do toggle ou body
         const initialTheme = document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus';
         setTheme(initialTheme);
     } else {
-        console.warn('[TEMA] Toggle #product-toggle não encontrado!');
+        sopyWarn('[TEMA] Toggle #product-toggle não encontrado!');
         // Aplica tema padrão se não houver toggle
         const initialTheme = document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus';
         setTheme(initialTheme);
@@ -1144,7 +1015,7 @@ function bootAnimations() {
         const revealVideo = () => {
             // Checa se a classe já foi adicionada para não repetir a lógica
             if (!heroPoster.classList.contains('is-hidden')) {
-                console.log('[HERO] Garantindo a remoção do poster.');
+                sopyLog('[HERO] Garantindo a remoção do poster.');
                 heroPoster.classList.add('is-hidden');
             }
         };
@@ -1223,7 +1094,7 @@ function bootAnimations() {
     // ===================================
     const parallaxContainer = document.querySelector('#sustentabilidade.scroll-container');
     if (parallaxContainer && window.lenis) { // Só executa se a seção e o Lenis existirem
-        console.log('[PARALLAX] Seção #sustentabilidade encontrada. Inicializando efeito.');
+        sopyLog('[PARALLAX] Seção #sustentabilidade encontrada. Inicializando efeito.');
 
         const panels = Array.from(parallaxContainer.querySelectorAll('.fullscreen-panel'));
         let viewportH = window.innerHeight;
@@ -1278,7 +1149,7 @@ function bootAnimations() {
 
         updateAnimation(); // Roda uma vez no início
     } else {
-        console.warn('[PARALLAX] Seção #sustentabilidade ou Lenis não encontrados.');
+        sopyWarn('[PARALLAX] Seção #sustentabilidade ou Lenis não encontrados.');
     }
 
 
@@ -1287,7 +1158,7 @@ function bootAnimations() {
     //  BLOCO DO FAQ
     // ===================================
     const allAccordions = document.querySelectorAll('#faq .sopy-faq-accordion');
-    console.log(`[FAQ] Encontrados ${allAccordions.length} itens de accordion.`);
+    sopyLog(`[FAQ] Encontrados ${allAccordions.length} itens de accordion.`);
 
     allAccordions.forEach(accordion => {
         const titleLink = accordion.querySelector('.sopy-title a');
@@ -1322,572 +1193,17 @@ function bootAnimations() {
         }
     });
 
-    // ===================================
-    //  INICIALIZAÇÃO DA IMAGEM DO CARD
-    // ===================================
-    function initCardImage() {
-        try {
-            const sopyCardImage = document.querySelector('.sopy-card-image');
-            if (sopyCardImage) {
-                const currentTheme = document.body.classList.contains('theme-aqua') ? 'aqua' : 'citrus';
-                const correctSrc = currentTheme === 'citrus'
-                    ? sopyCardImage.getAttribute('data-citrus')
-                    : sopyCardImage.getAttribute('data-aqua');
+    // (Removidos: initCardImage — redundante, setTheme() já troca a .sopy-card-image por tema;
+    //  e initBenefitsAnimations — estava desativada, corpo comentado, só fazia return.)
 
-                if (correctSrc && !sopyCardImage.src.includes(correctSrc.split('/').pop())) {
-                    console.log(`[BENEFÍCIOS] Definindo imagem inicial para tema ${currentTheme}:`, correctSrc);
-                    fadeSwapImg(sopyCardImage, correctSrc, 360);
-                }
-            }
-        } catch (e) {
-            console.warn('[BENEFÍCIOS] Erro ao inicializar imagem do card:', e);
-        }
-    }
 
-    // ===================================
-    //  BLOCO DOS BENEFÍCIOS - CLEAN SLATE ANIMATION (COM PIN CONTROLADO)
-    // ===================================
-    function initBenefitsAnimations() {
-        // Animação desativada: função comentada para exibir ambos os cards lado a lado.
-        // Para reativar, remova o 'return' abaixo e restaure o corpo original (mantido em comentário).
-        console.log('[BENEFÍCIOS] Animação clean-slate DESATIVADA (comentada pelo dev).');
-        return;
-
-        /*
-        // Verificação de dependências
-        if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-        
-        console.log('[BENEFÍCIOS] Inicializando Clean Slate Animation (com pin controlado)...');
-        
-        // Inicializa a imagem correta baseada no tema atual
-        initCardImage();
-        
-        const cleanSlateTimeline = gsap.timeline({
-            scrollTrigger: {
-                trigger: "#clean-slate-section",
-                pin: true,
-                scrub: 1.2,
-                start: "top top",
-                end: "+=1200"
-            }
-        });
-
-        cleanSlateTimeline
-            .to(".green-wave", { 
-                transform: "translate(-50%, -50%) translateX(0%)", 
-                ease: "none"
-            })
-            .to(".card-old-way", {
-                opacity: 0,
-                scale: 0.9,
-                ease: "power1.in"
-            }, "<0.2")
-            .to(".card-sopy-way", {
-                opacity: 1,
-                ease: "power2.out"
-            }, ">-0.5")
-            // EXATAMENTE igual ao teste.html
-            .to({}, { duration: 1 });
-
-        console.log('[BENEFÍCIOS] Clean Slate Timeline (com pin controlado) configurada com sucesso!');
-        */
-    }
-
-
-    // ===================================
-    //  BLOCO COMO USAR (Slider estilo referência, animado pelo scroll)
-    // ===================================
-
-    (function initComoUsar() {
-        const howSection = document.querySelector('.sopy-how-section.how-fullscreen');
-        if (!howSection) return;
-        const track = howSection.querySelector('.how-slides-track');
-        const slides = track ? Array.from(track.querySelectorAll('.how-slide')) : [];
-        const textEl = howSection.querySelector('#how-text');
-        const navEl = howSection.querySelector('#how-nav');
-        const nextBtn = howSection.querySelector('#how-next');
-        if (!track || !slides.length || !navEl || !textEl || !slides) return;
-
-        // Dados dos slides com títulos e textos de apoio
-        const slideData = [
-            {
-                label: '01 Passo',
-                title: '01. DOSE ÚNICA, SEM MEDIÇÃO',
-                support: 'Sem medir, sem sujar. Apenas pegue uma cápsula Sopy para cargas normais, ou duas para lavagens extra grandes e muito sujas. Simples assim.'
-            },
-            {
-                label: '02 Passo',
-                title: '02. DIRETO NO TAMBOR, ANTES DAS ROUPAS',
-                support: 'Nada de gavetas ou medidores. Jogue a cápsula diretamente no fundo do tambor da sua máquina de lavar, antes de adicionar as roupas. Praticidade total.'
-            },
-            {
-                label: '03 Passo',
-                title: '03. APENAS APERTE O START',
-                support: 'Agora é só colocar suas roupas e iniciar seu ciclo de lavagem preferido. Água fria, quente, ciclo rápido... a película 100% solúvel e a fórmula inteligente da Sopy cuidam de tudo.'
-            },
-            {
-                label: '04 Resultado',
-                title: '04. RESULTADO IMPECÁVEL',
-                support: 'Sinta a maciez que abraça cada fibra, respire o perfume duradouro que permanece por dias, e desfrute da confiança de roupas impecavelmente limpas. Sopy oferece muito mais que limpeza: é puro conforto.'
-            }
-        ];
-
-        // Nav items com labels personalizados
-        navEl.innerHTML = '';
-        slideData.slice(0, slides.length).forEach((data, i) => {
-            const item = document.createElement('div');
-            item.className = 'how-nav-item';
-            item.setAttribute('data-index', i);
-            item.innerHTML = `<span>${data.label}</span><div class="how-nav-bar"></div>`;
-            navEl.appendChild(item);
-        });
-        const navItems = Array.from(navEl.querySelectorAll('.how-nav-item'));
-
-        // Setup inicial - apenas configurações básicas de CSS aqui
-        slides.forEach((s, i) => {
-            s.style.position = 'absolute';
-            s.style.top = '0';
-            s.style.left = '0';
-            s.style.width = '100%';
-            s.style.height = '100vh';
-
-            // Debug: verificar qual imagem está sendo aplicada
-            const bgImage = getComputedStyle(s).backgroundImage;
-            // Guardar background original para referência futura (protege contra reordenações DOM)
-            try { s.dataset.origBg = bgImage || ''; } catch (e) { /* silent */ }
-            const slideNum = s.getAttribute('data-slide');
-            console.log(`[SLIDE INDEX ${i}, DATA-SLIDE ${slideNum}] BgImage: ${bgImage}`);
-        });
-
-        // Criar dots de progresso (igual aos depoimentos)
-        let howProgressWrap = howSection.querySelector('.sopy-how-progress');
-        if (!howProgressWrap) {
-            howProgressWrap = document.createElement('div');
-            howProgressWrap.className = 'sopy-how-progress visible';
-            howProgressWrap.style.cssText = `
-                position: absolute;
-                left: 50%;
-                bottom: 40px;
-                transform: translateX(-50%);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 14px;
-                z-index: 50;
-                opacity: 1;
-                pointer-events: auto;
-            `;
-            howSection.appendChild(howProgressWrap);
-        }
-
-        // Criar dots dinâmicos
-        howProgressWrap.innerHTML = '';
-        slides.forEach((_, i) => {
-            const dot = document.createElement('div');
-            dot.className = 'sopy-how-progress-dot';
-            dot.setAttribute('data-index', i);
-            howProgressWrap.appendChild(dot);
-        });
-
-        const howDots = howProgressWrap.querySelectorAll('.sopy-how-progress-dot');
-        navItems[0]?.classList.add('active');
-        textEl.textContent = slideData[0].title;
-        if (nextBtn) { nextBtn.setAttribute('aria-label', 'Próximo slide'); nextBtn.innerHTML = '<span></span>'; }
-
-        // Referência ao elemento de texto de apoio
-        const supportTextEl = howSection.querySelector('#how-text-support');
-        let lastIdx = -1;
-        const applyActive = (idx) => {
-            if (idx === lastIdx) return;
-            lastIdx = idx;
-            navItems.forEach((n, i) => n.classList.toggle('active', i === idx));
-            // Atualizar dots também
-            howDots.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-
-            const currentSlide = slideData[idx] || slideData[0];
-
-            if (textEl) {
-                textEl.style.transition = 'opacity .45s, transform .45s';
-                textEl.style.opacity = '0';
-                setTimeout(() => {
-                    textEl.textContent = currentSlide.title;
-                    textEl.style.transform = 'translateY(50px)';
-                    requestAnimationFrame(() => {
-                        textEl.style.opacity = '1';
-                        textEl.style.transform = 'translateY(0)';
-                    });
-                }, 150);
-            }
-
-            if (supportTextEl) {
-                supportTextEl.style.transition = 'opacity .45s, transform .45s';
-                supportTextEl.style.opacity = '0';
-                setTimeout(() => {
-                    supportTextEl.textContent = currentSlide.support;
-                    supportTextEl.style.transform = 'translateY(50px)';
-                    requestAnimationFrame(() => {
-                        supportTextEl.style.opacity = '1';
-                        supportTextEl.style.transform = 'translateY(0)';
-                    });
-                }, 200); // Ligeiramente atrasado para efeito escalonado
-            }
-            // Ajuste do PREVIEW: somente quando estivermos no PENÚLTIMO slide, trocar a foto do preview
-            try {
-                if (slides && slides.length > 3) {
-                    const previewEl = slides[2]; // terceiro item é o preview único
-                    const lastIndex = slides.length - 1;
-                    // Se o índice ativo for o penúltimo, force o preview para a imagem ORIGINAL do último slide
-                    if (idx === lastIndex - 1) {
-                        const lastBg = slides[lastIndex].dataset?.origBg || getComputedStyle(slides[lastIndex]).backgroundImage;
-                        if (lastBg) previewEl.style.backgroundImage = lastBg;
-                    } else {
-                        // Caso contrário, restaura o preview ao seu background original (se existir)
-                        const orig = previewEl.dataset?.origBg || getComputedStyle(previewEl).backgroundImage;
-                        if (orig) previewEl.style.backgroundImage = orig;
-                    }
-                }
-            } catch (e) {
-                console.warn('[HOW] Falha ao ajustar preview do penúltimo slide:', e);
-            }
-        };
-
-        const isMobile = window.matchMedia('(max-width: 900px)').matches;
-        if (isMobile) {
-            howSection.classList.add('mobile-swipe');
-        } else {
-            howSection.classList.remove('mobile-swipe');
-        }
-
-        if (isMobile || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-            // Mobile: touch/drag slider left/right
-            let currentIndex = 0;
-            let isAnimating = false;
-            let isDragging = false;
-            let startX = 0;
-            let deltaX = 0;
-
-            const slideTo = (targetIndex) => {
-                if (isAnimating) return;
-                if (targetIndex >= slides.length) targetIndex = 0;
-                if (targetIndex < 0) targetIndex = slides.length - 1;
-                if (targetIndex === currentIndex) return;
-
-                console.log(`[SLIDE TO] De ${currentIndex} para ${targetIndex}`);
-
-                isAnimating = true;
-                const direction = targetIndex > currentIndex || (currentIndex === slides.length - 1 && targetIndex === 0) ? 1 : -1;
-                const currentSlide = slides[currentIndex];
-                const nextSlide = slides[targetIndex];
-
-                console.log(`[SLIDE TO] Current slide:`, currentSlide.getAttribute('data-slide'));
-                console.log(`[SLIDE TO] Next slide:`, nextSlide.getAttribute('data-slide'));
-
-                // Sanitizar: garantir que todos os outros slides estejam fora da tela à direita
-                slides.forEach((s, i) => {
-                    if (i !== currentIndex && i !== targetIndex) {
-                        gsap.set(s, { x: '100%', zIndex: 0, opacity: 1 });
-                    }
-                });
-
-                // Zerar x (px) para evitar conflito com xPercent
-                gsap.set([currentSlide, nextSlide], { x: 0 });
-
-                // Primeiro, posicionar o próximo slide em xPercent e z-index correto
-                gsap.set(nextSlide, { xPercent: direction * 100, opacity: 1, zIndex: 2, visibility: 'visible' });
-                gsap.set(currentSlide, { zIndex: 1 });
-
-                const tl = gsap.timeline({
-                    defaults: { duration: 0.5, ease: 'power2.inOut' },
-                    onComplete: () => {
-                        currentIndex = targetIndex;
-                        isAnimating = false;
-                        applyActive(currentIndex);
-                        console.log(`[SLIDE TO] Animação completa, currentIndex agora é: ${currentIndex}`);
-                    }
-                });
-
-                // Importante: mover o slide atual para fora e trazer o próximo para 0%
-                tl.to(currentSlide, { xPercent: direction * -100 }, 0)
-                    .to(nextSlide, { xPercent: 0 }, 0)
-                    .add(() => {
-                        // Após a animação: garantir que somente o slide atual esteja por cima
-                        slides.forEach((s, i) => gsap.set(s, { zIndex: i === targetIndex ? 2 : 0, x: 0, xPercent: i === targetIndex ? 0 : 100, visibility: i === targetIndex ? 'visible' : 'hidden' }));
-                    });
-            };
-
-            const handleStart = (e) => {
-                if (isAnimating) return;
-                isDragging = true;
-                startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                deltaX = 0;
-                track.classList.add('is-grabbing');
-            };
-            const handleMove = (e) => {
-                if (!isDragging) return;
-                if (e.cancelable) e.preventDefault(); // impede scroll vertical durante o swipe
-                const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
-                deltaX = currentX - startX;
-
-                // Efeito "divisão" como no desktop: mostrar próximo slide durante o drag
-                const currentSlide = slides[currentIndex];
-                let nextSlide;
-
-                if (deltaX > 0) {
-                    // Arrastando para direita (slide anterior)
-                    const prevIndex = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
-                    nextSlide = slides[prevIndex];
-                    // Posicionar slide anterior à esquerda e tornar visível
-                    gsap.set(nextSlide, { xPercent: -100, visibility: 'visible', zIndex: 1 });
-                    // Mover ambos para direita
-                    gsap.set(currentSlide, { x: deltaX, zIndex: 2 });
-                    gsap.set(nextSlide, { x: deltaX });
-                } else if (deltaX < 0) {
-                    // Arrastando para esquerda (próximo slide)
-                    const nextIndex = currentIndex === slides.length - 1 ? 0 : currentIndex + 1;
-                    nextSlide = slides[nextIndex];
-                    // Posicionar próximo slide à direita e tornar visível
-                    gsap.set(nextSlide, { xPercent: 100, visibility: 'visible', zIndex: 1 });
-                    // Mover ambos para esquerda
-                    gsap.set(currentSlide, { x: deltaX, zIndex: 2 });
-                    gsap.set(nextSlide, { x: deltaX });
-                } else {
-                    // deltaX = 0, apenas mover o slide atual
-                    gsap.set(currentSlide, { x: deltaX });
-                }
-            };
-            const handleEnd = () => {
-                if (!isDragging) return;
-                isDragging = false;
-                track.classList.remove('is-grabbing');
-                const threshold = howSection.offsetWidth * 0.2;
-                if (Math.abs(deltaX) > threshold) {
-                    const direction = deltaX > 0 ? -1 : 1;
-                    slideTo(currentIndex + direction);
-                } else {
-                    // Voltar ao estado original - esconder slides que ficaram visíveis durante drag
-                    gsap.to(slides[currentIndex], { x: 0, duration: 0.3 });
-                    slides.forEach((slide, i) => {
-                        if (i !== currentIndex) {
-                            gsap.set(slide, { visibility: 'hidden', x: 0 });
-                        }
-                    });
-                }
-            };
-
-            // Listeners
-            track.addEventListener('mousedown', handleStart);
-            document.addEventListener('mousemove', handleMove);
-            document.addEventListener('mouseup', handleEnd);
-            track.addEventListener('touchstart', handleStart, { passive: false });
-            track.addEventListener('touchmove', handleMove, { passive: false });
-            track.addEventListener('touchend', handleEnd);
-
-            // Nav clicks
-            navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
-            nextBtn?.addEventListener('click', () => slideTo(currentIndex + 1));
-
-            // Dots clicks
-            howDots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
-
-            // Setup inicial dos slides para MOBILE (horizontal swipe)
-            slides.forEach((slide, index) => {
-                if (index === 0) {
-                    gsap.set(slide, { xPercent: 0, x: 0, opacity: 1, zIndex: 2, visibility: 'visible' });
-                } else {
-                    gsap.set(slide, { xPercent: 100, x: 0, opacity: 1, zIndex: 1, visibility: 'hidden' });
-                }
-                // Se for o preview do 3º slide, force o background-image igual ao do último slide
-                if (index === 2 && slides.length > 3) {
-                    const lastBg = getComputedStyle(slides[slides.length - 1]).backgroundImage;
-                    slide.style.backgroundImage = lastBg;
-                }
-                console.log(`[MOBILE SETUP SLIDE ${index}] xPercent=${index === 0 ? 0 : 100}, opacity=1, zIndex=${index === 0 ? 2 : 1}`);
-            });
-
-            // Initial
-            applyActive(0);
-        } else {
-            if (howSection.__desktopInited) {
-                applyActive(0);
-                return;
-            }
-            howSection.__desktopInited = true;
-
-            // Desktop: replica a lógica "one scroll = one slide" do exemplo de referência
-            let currentIndex = 0;
-            let isAnimating = false;
-            let sectionActive = false;
-
-            const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const wheelCooldown = prefersReduced ? 700 : 500;
-            let wheelLocked = false;
-
-            const stopLenis = () => {
-                if (window.lenis && typeof window.lenis.stop === 'function') {
-                    window.lenis.stop();
-                }
-            };
-            const startLenis = () => {
-                if (window.lenis && typeof window.lenis.start === 'function') {
-                    window.lenis.start();
-                }
-            };
-
-            const activateSection = () => {
-                if (sectionActive) return;
-                sectionActive = true;
-                stopLenis();
-                console.log('[HOW] Entrou na seção desktop. Lenis pausado.');
-            };
-
-            const releaseSection = () => {
-                if (!sectionActive) return;
-                sectionActive = false;
-                wheelLocked = false;
-                startLenis();
-                console.log('[HOW] Liberando scroll geral.');
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.target !== howSection) return;
-                    if (entry.isIntersecting && entry.intersectionRatio >= 0.65) {
-                        activateSection();
-                    } else {
-                        releaseSection();
-                    }
-                });
-            }, { threshold: [0.35, 0.5, 0.65, 0.85, 1] });
-            observer.observe(howSection);
-
-            const withLock = (fn) => {
-                if (wheelLocked) return;
-                wheelLocked = true;
-                fn();
-                setTimeout(() => { wheelLocked = false; }, wheelCooldown);
-            };
-
-            const slideTo = (targetIndex) => {
-                if (isAnimating || targetIndex === currentIndex) return;
-
-                console.log(`[DESKTOP SLIDE] ${currentIndex} -> ${targetIndex}`);
-                isAnimating = true;
-
-                const direction = targetIndex > currentIndex ? 1 : -1;
-                const currentSlide = slides[currentIndex];
-                const nextSlide = slides[targetIndex];
-
-                gsap.set(nextSlide, { xPercent: direction * 100, zIndex: 2 });
-
-                gsap.timeline({
-                    defaults: { duration: 0.75, ease: 'power2.inOut' },
-                    onComplete: () => {
-                        currentIndex = targetIndex;
-                        isAnimating = false;
-                        applyActive(currentIndex);
-                    }
-                })
-                    .to(currentSlide, { xPercent: direction * -100 }, 0)
-                    .to(nextSlide, { xPercent: 0 }, 0)
-                    .set(currentSlide, { zIndex: 1 });
-            };
-
-            const toNext = () => {
-                if (currentIndex >= slides.length - 1) {
-                    releaseSection();
-                    return;
-                }
-                slideTo(currentIndex + 1);
-            };
-
-            const toPrev = () => {
-                if (currentIndex <= 0) {
-                    releaseSection();
-                    return;
-                }
-                slideTo(currentIndex - 1);
-            };
-
-            const relevantDelta = (e) => {
-                const absY = Math.abs(e.deltaY);
-                const absX = Math.abs(e.deltaX);
-                return absY >= absX ? e.deltaY : e.deltaX;
-            };
-
-            const wheelHandler = (e) => {
-                if (!sectionActive) return;
-
-                const delta = relevantDelta(e);
-                if (Math.abs(delta) < 18) return;
-
-                const canForward = delta > 0 && currentIndex < slides.length - 1;
-                const canBackward = delta < 0 && currentIndex > 0;
-
-                if (!canForward && !canBackward) {
-                    releaseSection();
-                    return;
-                }
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                withLock(delta > 0 ? toNext : toPrev);
-            };
-
-            window.addEventListener('wheel', wheelHandler, { passive: false });
-
-            const keyHandler = (e) => {
-                if (!sectionActive) return;
-                const k = e.key;
-                if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(k)) {
-                    e.preventDefault();
-                    withLock(toNext);
-                } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(k)) {
-                    e.preventDefault();
-                    withLock(toPrev);
-                }
-            };
-            window.addEventListener('keydown', keyHandler);
-
-            // Nav e botões
-            navItems.forEach((item, i) => item.addEventListener('click', () => slideTo(i)));
-            nextBtn?.addEventListener('click', () => toNext());
-            howDots.forEach((dot, i) => dot.addEventListener('click', () => slideTo(i)));
-
-            // Setup inicial das posições
-            slides.forEach((slide, index) => {
-                gsap.set(slide, { xPercent: index === 0 ? 0 : 100, opacity: 1, zIndex: index === 0 ? 2 : 1 });
-            });
-
-            applyActive(0);
-        }
-    })();
-
-    // --- Parte 2: Lógica para a Barra de Progresso Global ---
-    // Atualiza tanto a barra linear quanto o círculo (se existirem), usando Lenis quando disponível
-    const pageBar = document.querySelector('.page-progress-bar');
-    const pageCirc = document.querySelector('.progress-circle-bar');
-    if (pageBar || pageCirc) {
-        const CIRCUMFERENCE = 2 * Math.PI * 45; // raio 45 do SVG
-        const updatePageProgress = () => {
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const y = (window.lenis && typeof window.lenis.scroll === 'number') ? window.lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop || 0);
-            const p = docHeight > 0 ? Math.max(0, Math.min(1, y / docHeight)) : 0;
-            if (pageBar) pageBar.style.transform = `scaleX(${p})`;
-            if (pageCirc) pageCirc.style.strokeDashoffset = `${CIRCUMFERENCE * (1 - p)}`;
-        };
-        try { if (window.lenis) window.lenis.on('scroll', updatePageProgress); } catch (e) { }
-        window.addEventListener('resize', updatePageProgress);
-        // init
-        updatePageProgress();
-    }
 
     // ===================================
     //  BLOCO DOS DEPOIMENTOS 
     // ===================================
     const testimonialsSection = document.getElementById('testemunhos');
     if (testimonialsSection) {
-        console.log('[DEPOIMENTOS] Seção encontrada. Inicializando slider...');
+        sopyLog('[DEPOIMENTOS] Seção encontrada. Inicializando slider...');
 
         const track = testimonialsSection.querySelector('.tc-testimonials-track');
         const cards = track ? Array.from(track.querySelectorAll('.tc-testimonial-card')) : [];
@@ -1919,23 +1235,7 @@ function bootAnimations() {
 
         const dots = tcProgressWrap.querySelectorAll('.tc-progress-dot');
 
-        // Populate avatar images (if placeholders exist) with public images
-        try {
-            const avatarUrls = [
-                'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop&auto=format&q=60',
-                'https://images.unsplash.com/photo-1545996124-1b3b0a1b6f3d?w=200&h=200&fit=crop&auto=format&q=60',
-                'https://images.unsplash.com/photo-1554151228-14d9def656e4?w=200&h=200&fit=crop&auto=format&q=60',
-                'https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=200&h=200&fit=crop&auto=format&q=60',
-                'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=200&h=200&fit=crop&auto=format&q=60'
-            ];
-            const avatars = testimonialsSection.querySelectorAll('img.tc-avatar');
-            avatars.forEach((img, i) => {
-                const url = avatarUrls[i % avatarUrls.length];
-                if (img && !img.getAttribute('src')) img.setAttribute('src', url);
-            });
-        } catch (e) {
-            console.warn('[DEPOIMENTOS] Falha ao popular avatares:', e);
-        }
+        // (Avatares por iniciais no HTML — não injetamos mais fotos de terceiros.)
 
         if (track && cards.length > 0) {
             let currentIndex = 0;
@@ -2080,140 +1380,33 @@ function bootAnimations() {
             tcProgressWrap.style.pointerEvents = 'auto';
 
         } else {
-            console.warn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
+            sopyWarn('[DEPOIMENTOS] Elementos do slider (.tc-testimonials-track ou .tc-testimonial-card) não encontrados.');
         }
     } else {
-        console.log('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
+        sopyLog('[DEPOIMENTOS] Seção #testemunhos não encontrada.');
     }
 
-    // 3. Inicializador do 3D (Lazy Load)
-    const threeSection = document.getElementById("capsula-3d");
-    if (threeSection) {
+    // 3. Inicializador da seção da cápsula (Lazy Load) — sem Three.js
+    const capsuleSection = document.getElementById("capsula-3d");
+    if (capsuleSection) {
         new IntersectionObserver((entries, observer) => {
             if (entries[0].isIntersecting) {
-                observer.unobserve(threeSection);
-                const startThree = () => {
-                    THREE_READY = true;
-                    initThree();
-                    initCapsuleBubbles();
-                };
-                if (typeof THREE !== 'undefined') {
-                    // Three.js já carregado (ex: via tema Nuvemshop)
-                    startThree();
-                } else {
-                    // Carrega Three.js dinamicamente, só agora que o usuário chegou na seção
-                    const s = document.createElement('script');
-                    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-                    s.onload = startThree;
-                    document.head.appendChild(s);
-                }
+                observer.unobserve(capsuleSection);
+                initCapsuleInteractions();
+                initCapsuleBubbles();
             }
-        }, { threshold: 0.1 }).observe(threeSection);
+        }, { threshold: 0.1 }).observe(capsuleSection);
     }
 
-    // ===================================
-    //  BLOCO COMO USAR (Horizontal Scroll com efeito Flickity)
-    // ===================================
-    const comoUsarSection = document.querySelector('.sopy-how-section');
-    if (comoUsarSection && !comoUsarSection.classList.contains('how-fullscreen')) {
-        console.log('[COMO USAR] Seção encontrada. Inicializando efeito Flickity...');
 
-        const track = comoUsarSection.querySelector('.sopy-how-track');
-        const panels = track ? Array.from(track.querySelectorAll('.sopy-how-panel')) : [];
-        const progressDots = comoUsarSection.querySelectorAll('.sopy-how-progress-dot');
-
-        if (track && panels.length > 0 && typeof ScrollTrigger !== 'undefined') {
-
-            // Função para atualizar qual card está ativo baseado no progresso
-            const updateActiveCard = (progress) => {
-                // Calcula qual painel deve estar ativo baseado no progresso (0-1)
-                const totalPanels = panels.length;
-                const currentFloat = progress * (totalPanels - 1);
-                const activeIndex = Math.round(currentFloat);
-
-                // Sistema de proximidade suave para blur/opacity
-                panels.forEach((panel, index) => {
-                    const distance = Math.abs(index - currentFloat);
-                    const isActive = distance < 0.5;
-
-                    // Aplica classe is-selected baseado na proximidade
-                    if (isActive) {
-                        panel.classList.add('is-selected');
-                    } else {
-                        panel.classList.remove('is-selected');
-                    }
-                });
-
-                // Atualiza dots de progresso (só o mais próximo fica ativo)
-                progressDots.forEach((dot, index) => {
-                    dot.classList.toggle('active', index === activeIndex);
-                });
-            };
-
-            // Aplica estado inicial (primeiro card ativo)
-            updateActiveCard(0);
-
-            // ScrollTrigger para animar o scroll horizontal e controlar qual card está ativo
-            ScrollTrigger.create({
-                trigger: comoUsarSection,
-                start: 'top top',
-                end: 'bottom bottom',
-                pin: true,
-                scrub: 1,
-                onUpdate: (self) => {
-                    // Move o track horizontalmente
-                    const progress = self.progress;
-                    const moveDistance = -(panels.length - 1) * 100; // Move 100% * (num panels - 1)
-                    gsap.set(track, {
-                        xPercent: progress * moveDistance
-                    });
-
-                    // Atualiza qual card está ativo
-                    updateActiveCard(progress);
-                },
-                onEnter: () => {
-                    // Mostra progress dots quando entra na seção
-                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
-                    if (progressEl) {
-                        progressEl.classList.add('visible');
-                    }
-                },
-                onLeave: () => {
-                    // Esconde progress dots quando sai da seção
-                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
-                    if (progressEl) {
-                        progressEl.classList.remove('visible');
-                    }
-                },
-                onEnterBack: () => {
-                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
-                    if (progressEl) {
-                        progressEl.classList.add('visible');
-                    }
-                },
-                onLeaveBack: () => {
-                    const progressEl = comoUsarSection.querySelector('.sopy-how-progress');
-                    if (progressEl) {
-                        progressEl.classList.remove('visible');
-                    }
-                }
-            });
-        } else {
-            console.warn('[COMO USAR] Elementos necessários não encontrados ou ScrollTrigger não disponível.');
-        }
-    } else {
-        console.log('[COMO USAR] Seção horizontal não encontrada.');
-    }
-
-    // 4. Após montar seções com pin, iniciamos reveals e benefícios, depois refresh geral
+    // 4. Após montar seções com pin, iniciamos os reveals de texto, depois refresh geral
     try {
-        initBenefitsAnimations();
         initTextAnimations();
     } catch (e) { console.error('[BOOT] Erro ao iniciar reveals:', e); }
 
     setTimeout(() => {
         if (window.ScrollTrigger) {
-            console.log('✅ Forçando refresh final do ScrollTrigger.');
+            sopyLog('✅ Forçando refresh final do ScrollTrigger.');
             ScrollTrigger.refresh();
         }
     }, 200);
@@ -2235,7 +1428,7 @@ function bootAnimations() {
 
     /* refs - todos escopados dentro da seção correta para evitar conflito com outros sliders */
     const section = document.querySelector(".slider-fullscreen-section");
-    if (!section) { console.warn('[SLIDER] section não encontrada'); return; }
+    if (!section) { sopyWarn('[SLIDER] section não encontrada'); return; }
 
     const track = section.querySelector(".slider-slide");
     const btnNext = section.querySelector(".slider-next");
@@ -2243,7 +1436,7 @@ function bootAnimations() {
     const btnContainer = section.querySelector(".slider-button");
 
     if (!track || !btnNext || !btnPrev || !btnContainer) {
-        console.warn('[SLIDER] Elementos internos não encontrados');
+        sopyWarn('[SLIDER] Elementos internos não encontrados');
         return;
     }
 
@@ -2359,30 +1552,32 @@ function bootAnimations() {
         const scrolled = -Math.min(Math.max(sectionTop, -totalScrollable), 0);
         const progress = scrolled / totalScrollable;
 
-        // LOGS DETALHADOS
-        console.log('📊 SLIDER DEBUG:', {
-            progress: (progress * 100).toFixed(1) + '%',
-            currentIndex: currentIndex,
-            sectionTop: sectionTop.toFixed(0) + 'px',
-            sectionHeight: sectionHeight + 'px',
-            viewportHeight: viewportHeight + 'px',
-            baseScrollable: baseScrollable + 'px',
-            totalScrollable: totalScrollable + 'px',
-            scrolled: scrolled.toFixed(0) + 'px',
-            multiplier: SCROLL_MULTIPLIER + 'x'
-        });
+        // LOGS DETALHADOS (só monta o objeto se o debug estiver ligado — hot path por frame)
+        if (SOPY_DEBUG) {
+            sopyLog('📊 SLIDER DEBUG:', {
+                progress: (progress * 100).toFixed(1) + '%',
+                currentIndex: currentIndex,
+                sectionTop: sectionTop.toFixed(0) + 'px',
+                sectionHeight: sectionHeight + 'px',
+                viewportHeight: viewportHeight + 'px',
+                baseScrollable: baseScrollable + 'px',
+                totalScrollable: totalScrollable + 'px',
+                scrolled: scrolled.toFixed(0) + 'px',
+                multiplier: SCROLL_MULTIPLIER + 'x'
+            });
+        }
 
         // Divisão LINEAR simples entre os slides (muito mais previsível)
         const slideProgress = progress * (totalSlides - 1);
         const targetIndex = Math.min(Math.floor(slideProgress), totalSlides - 1);
 
-        console.log('🎯 Target Index:', targetIndex, '| Slide Progress:', slideProgress.toFixed(2), '| Last Known:', lastKnownIndex);
+        sopyLog('🎯 Target Index:', targetIndex, '| Slide Progress:', slideProgress.toFixed(2), '| Last Known:', lastKnownIndex);
 
         // Só muda se passou para outro índice
         if (targetIndex !== lastKnownIndex && !isTransitioning) {
             const diff = targetIndex - lastKnownIndex;
 
-            console.log('🔄 Mudando slide! Diff:', diff);
+            sopyLog('🔄 Mudando slide! Diff:', diff);
 
             if (diff > 0) {
                 // Avançar
@@ -2439,6 +1634,8 @@ function bootAnimations() {
     /* TECLADO */
     window.addEventListener("keydown", (e) => {
         if (!isSliderActive()) return;
+        // não sequestrar o teclado quando o usuário digita num campo (busca, cupom, CEP…)
+        if (e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable=""], [contenteditable="true"]')) return;
 
         const k = e.key;
         if (k === "ArrowRight" || k === "ArrowDown" || k === "PageDown") {

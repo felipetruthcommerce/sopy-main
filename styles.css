@@ -1,3 +1,8 @@
+/* Nota: o corpo do texto usa Inter/fallback (igual à produção), não Montserrat.
+   O @import do Montserrat foi deixado de fora de propósito, a pedido, para manter
+   a aparência atual da loja. Para ativar o Montserrat, reinserir um @import válido
+   como PRIMEIRA regra deste arquivo. */
+
 /* =========================================
    FORCE LIGHT MODE - Prevent dark mode from changing colors
    ========================================= */
@@ -8,19 +13,15 @@
 html,
 body {
   color-scheme: light only;
-  -webkit-appearance: none;
-  appearance: none;
 }
 
-/* Override any forced dark mode */
+/* Override any forced dark mode (sem inherit, que dava fundo/cor imprevisíveis) */
 @media (prefers-color-scheme: dark) {
 
   :root,
   html,
   body {
     color-scheme: light only !important;
-    background-color: inherit !important;
-    color: inherit !important;
   }
 }
 
@@ -32,7 +33,6 @@ body {
   padding-right: 2.2em;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
 /* Use local Houschka Pro for titles (replaces Nunito). */
 
 /* Houschka Pro - local files in assets/fonts/houschkapro/ */
@@ -107,10 +107,11 @@ body {
    (HTML: a estrutura que te enviei)
 ------------------------------------------------------- */
 
-/* ========== RESET BÁSICO ========== */
-*,
-*::before,
-*::after {
+/* ========== RESET BÁSICO (escopado à .sopy-main para não vazar na loja) ========== */
+.sopy-main,
+.sopy-main *,
+.sopy-main *::before,
+.sopy-main *::after {
   box-sizing: border-box;
 }
 
@@ -161,12 +162,14 @@ body {
 
 body {
   margin: 0;
-  /* Use Montserrat for body/text (non-titles) */
-  font-family: 'Montserrat', 'Inter', 'Avant Garde Book BT', sans-serif;
-  color: var(--text);
-  /* match FAQ section background to avoid white behind footer */
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Tipografia base da LP — aplicada ao container, não ao <body> da loja */
+.sopy-main {
+  font-family: 'Montserrat', 'Inter', 'Avant Garde Book BT', sans-serif;
+  color: var(--text);
 }
 
 /* Hide native scrollbars but keep scrolling functional */
@@ -192,13 +195,13 @@ body.is-loading {
   height: 100vh;
 }
 
-/* Links e botões */
-a {
+/* Links e botões — escopados à LP para não desfigurar o tema da loja */
+.sopy-main a {
   color: inherit;
   text-decoration: none;
 }
 
-button {
+.sopy-main button {
   font: inherit;
   color: inherit;
   background: none;
@@ -206,8 +209,8 @@ button {
   cursor: pointer;
 }
 
-img,
-video {
+.sopy-main img,
+.sopy-main video {
   display: block;
   max-width: 100%;
 }
@@ -281,19 +284,19 @@ body.theme-aqua {
 
 /* Tipos */
 /* Headings: use Houschka Pro for titles (no fallbacks so the font shows directly) */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+.sopy-main h1,
+.sopy-main h2,
+.sopy-main h3,
+.sopy-main h4,
+.sopy-main h5,
+.sopy-main h6 {
   font-family: 'Houschka Pro', sans-serif;
   font-weight: 700;
   letter-spacing: 0;
 }
 
 /* Paragraphs use Montserrat for better readability */
-p {
+.sopy-main p {
   font-family: 'Montserrat', 'Avant Garde Book BT', sans-serif;
 }
 
@@ -307,7 +310,7 @@ p {
 
 /* Stronger display for H2 specifically */
 /* Headings should keep their font but not be forced uppercase */
-h2 {
+.sopy-main h2 {
   text-transform: none;
   font-size: clamp(2.75rem, 6vw, 5rem);
   line-height: 1.02;
@@ -315,28 +318,28 @@ h2 {
 }
 
 /* H3 slightly larger but not uppercase */
-h3 {
+.sopy-main h3 {
   font-size: clamp(1.4rem, 2.4vw, 2rem);
 }
 
-h1 {
+.sopy-main h1 {
   font-size: clamp(2.25rem, 6vw, 4rem);
   line-height: 1.02;
   margin: 0 0 0.5rem;
 }
 
-h2 {
+.sopy-main h2 {
   font-size: clamp(1.75rem, 3.6vw, 2.5rem);
   line-height: 1.06;
   margin: 0 0 .5rem;
 }
 
-h3 {
+.sopy-main h3 {
   font-size: clamp(1.25rem, 2.4vw, 1.4rem);
   margin: 0;
 }
 
-p {
+.sopy-main p {
   font-family: 'Montserrat', 'Inter', sans-serif;
   font-size: clamp(1rem, 1.3vw, 1.06rem);
   line-height: 1.55;
@@ -472,14 +475,14 @@ p {
 }
 
 /* Fix para parágrafos */
-p .split-word {
+.sopy-main p .split-word {
   margin-right: 0.25em;
 }
 
 /* Evitar problemas de alinhamento */
-h1 .split-line,
-h2 .split-line,
-h3 .split-line {
+.sopy-main h1 .split-line,
+.sopy-main h2 .split-line,
+.sopy-main h3 .split-line {
   width: 100%;
   display: block;
 }
@@ -1394,90 +1397,6 @@ body.theme-aqua #beneficios .sopy-benefits-card {
   opacity: .25;
   pointer-events: none;
 }
-
-/* ========== LOADER ========== */
-#loader {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: transparent;
-  /* fundo vem do ::before mascarado */
-  color: #fff;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-}
-
-/* Máscara tipo "gota": cria um furo circular que revela o vídeo ao fundo */
-#loader {
-  /* variáveis controladas via JS/GSAP */
-  --r: 0px;
-  /* raio da gota */
-  --cx: 50vw;
-  /* centro X */
-  --cy: 50vh;
-  /* centro Y */
-}
-
-#loader::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  /* fica atrás do conteúdo do loader */
-  background: var(--brand-dark);
-  /* Dentro do raio -> transparente (revela o vídeo); fora -> sólido (escuro) */
-  -webkit-mask: radial-gradient(circle at var(--cx) var(--cy), transparent 0 var(--r), black calc(var(--r) + 1px) 100%);
-  mask: radial-gradient(circle at var(--cx) var(--cy), transparent 0 var(--r), black calc(var(--r) + 1px) 100%);
-  pointer-events: none;
-}
-
-.loader-overlay {
-  position: absolute;
-  inset: 0;
-  display: none;
-  grid-template-columns: 1fr 1fr;
-  z-index: 1;
-}
-
-.loader-block {
-  background: rgba(255, 255, 255, .06);
-}
-
-.loader-center {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  gap: 18px;
-}
-
-.loader-counter {
-  font-family: 'Syne', 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.25rem, 10vw, 8rem);
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-/* Remove a linha vertical do loader */
-.loader-divider {
-  display: none;
-}
-
-.loader-circle {
-  width: 240px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, .35);
-  box-shadow: inset 0 0 80px rgba(255, 255, 255, .06), 0 10px 30px rgba(0, 0, 0, .2);
-  transform: scale(0);
-  /* não usamos mais para o reveal, só efeito visual se quiser */
-  display: none;
-  /* oculto para evitar segundo círculo visível */
-}
-
-/* custom cursor removed to use default system cursor */
 
 /* ========== 3D (CAPSULE PIN) ========== */
 .sopy-capsule3d {
@@ -4236,6 +4155,16 @@ body.theme-citrus .tc-testimonials .sopy-tc-btn--primary:hover {
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid rgba(255, 255, 255, 0.15);
+  /* avatar por iniciais (sem foto de terceiros) */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand, #25a6e0);
+  color: #fff;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 1;
+  flex: 0 0 auto;
 }
 
 .tc-name {
@@ -4767,6 +4696,23 @@ body.theme-citrus .head-main .badge {
   background-color: #083DA6 !important;
 }
 
+/* ---------------------------------------------------------------
+   FIX overflow horizontal no MOBILE.
+   O menu de navegação de DESKTOP do tema (.js-menu-and-banners-row,
+   marcado como "d-none d-md-block" = oculto no mobile) estava sendo
+   forçado a display:flex no celular por uma regra do tema, aparecendo
+   e esticando a página (~634px → scroll horizontal + faixa branca).
+   Restauramos o comportamento pretendido: oculto abaixo de 768px.
+   Nota: mira o markup do TEMA de propósito (exceção ao escopo .sopy-main),
+   usando a mesma cadeia de 5 classes das regras de cor do header acima.
+   Validado no site real: docScrollWidth 512px → 390px no mobile.
+   --------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .js-menu-and-banners-row.container-fluid.menu-and-banners-row.d-none.d-md-block {
+    display: none !important;
+  }
+}
+
 /* ========== SLIDER FULLSCREEN ========== */
 .slider-fullscreen-section {
   position: relative;
@@ -5267,8 +5213,8 @@ body.theme-citrus .head-main .badge {
    SECTION REORDERING: Flexbox Order for Desktop vs Mobile
    =========================================== */
 
-/* Make sections.html <main> a flex container for reordering */
-main {
+/* Make sections.html <main> a flex container for reordering (escopado à LP) */
+.sopy-main main {
   display: flex;
   flex-direction: column;
 }
