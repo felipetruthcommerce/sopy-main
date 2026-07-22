@@ -662,24 +662,24 @@ body.theme-aqua #clean-slate-section {
     padding: 24px;
   }
 
-  .card h3 {
+  .sopy-main .card h3 {
     font-size: 1.6rem;
     margin-bottom: 1rem;
   }
 
-  .card .card-features li {
+  .sopy-main .card .card-features li {
     font-size: 0.9rem;
     line-height: 1.4;
   }
 
-  .card img {
+  .sopy-main .card img {
     height: 160px;
     margin-bottom: 1rem;
   }
 }
 
 
-.card {
+.sopy-main .card {
   width: 90%;
   max-width: 550px;
   min-height: 600px;
@@ -713,13 +713,13 @@ body.theme-aqua #clean-slate-section {
   /* Adiciona sombra para destacar */
 }
 
-.card h3 {
+.sopy-main .card h3 {
   font-size: 2.2rem;
   margin-top: 0;
   margin-bottom: 2rem;
 }
 
-.card p {
+.sopy-main .card p {
   font-size: 1.1rem;
   line-height: 1.6;
   color: #555;
@@ -730,7 +730,7 @@ body.theme-aqua #clean-slate-section {
   color: #FFF;
 }
 
-.card img {
+.sopy-main .card img {
   width: 100%;
   height: 200px;
   /* Altura fixa para todas as imagens */
@@ -753,7 +753,7 @@ body.theme-aqua #clean-slate-section {
 }
 
 /* Comparative lists inside cards */
-.card .card-features {
+.sopy-main .card .card-features {
   margin: 0;
   padding: 0;
   flex-grow: 1;
@@ -762,7 +762,7 @@ body.theme-aqua #clean-slate-section {
   /* Remove dots de ambos os cards */
 }
 
-.card .card-features li {
+.sopy-main .card .card-features li {
   margin: 0.4rem 0;
   font-size: 1rem;
   line-height: 1.5;
@@ -933,7 +933,7 @@ body.theme-aqua #clean-slate-section {
   }
 
   /* Cards menores no mobile */
-  .card {
+  .sopy-main .card {
     width: 95%;
     max-width: 420px;
     /* Menor que antes (era 500px) */
@@ -943,19 +943,19 @@ body.theme-aqua #clean-slate-section {
     /* Menor que antes (era 2.5rem) */
   }
 
-  .card h3 {
+  .sopy-main .card h3 {
     font-size: 1.6rem;
     /* Menor que antes (era 1.8rem) */
     margin-bottom: 1.5rem;
   }
 
-  .card img {
+  .sopy-main .card img {
     height: 160px;
     /* Menor que antes (era 200px) */
     margin-bottom: 1.5rem;
   }
 
-  .card .card-features li {
+  .sopy-main .card .card-features li {
     font-size: 0.9rem;
     /* Menor para caber melhor */
     margin: 0.3rem 0;
